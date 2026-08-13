@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
   const fallback = process.env.SITE_URL ?? "http://localhost:3000";
   const metadataBase = new URL(host ? `${protocol}://${host}` : fallback);
-  const locale = requestHeaders.get(UI_LANGUAGE_HEADER) === "en" ? "en" : "de";
+  const locale = requestHeaders.get(UI_LANGUAGE_HEADER) === "de" ? "de" : "en";
   const description = locale === "de"
     ? "Inventarisieren in Sekunden statt Stunden: Foto aufnehmen, KI-Vorschlag prüfen und speichern. MIT Open Source, selbst hostbar und mit nativer iOS-App."
     : "Inventory in seconds instead of hours: take a photo, review the proposed data and save it. MIT-licensed, self-hostable and available with a native iOS app.";
@@ -83,10 +83,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const requestHeaders = await headers();
-  const requestedLanguage = requestHeaders.get(UI_LANGUAGE_HEADER) ?? "de";
+  const requestedLanguage = requestHeaders.get(UI_LANGUAGE_HEADER) ?? "en";
   const language = UI_LANGUAGES.includes(requestedLanguage as "en" | "de")
     ? requestedLanguage
-    : "de";
+    : "en";
 
   return (
     <html lang={language} suppressHydrationWarning>

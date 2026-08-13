@@ -266,7 +266,7 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:64px_64px] opacity-45 [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
           <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 sm:px-8 sm:pb-28 sm:pt-12">
             <Link
-              href="/use-cases"
+              href="/de/use-cases"
               className="inline-flex items-center gap-2 rounded-lg text-xs font-semibold text-muted transition hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
@@ -286,7 +286,7 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/docs#docker"
+                    href="/de/docs#docker"
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.24)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
                   >
                     <Container className="size-4" />
@@ -550,14 +550,14 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <Link
-                  href="/docs#docker"
+                  href="/de/docs#docker"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5 hover:bg-brand-hover"
                 >
                   <Container className="size-4" />
                   Docker-Anleitung öffnen
                 </Link>
                 <Link
-                  href={`/use-cases/${nextUseCase.slug}`}
+                  href={`/de/use-cases/${nextUseCase.slug}`}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-border-strong"
                 >
                   Nächster Use Case: {nextUseCase.name}

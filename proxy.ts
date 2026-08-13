@@ -68,15 +68,24 @@ export function proxy(request: NextRequest) {
     return localizedResponse(request, rewrittenLanguage);
   }
 
+  if (pathname === "/de" || pathname.startsWith("/de/")) {
+    const pathWithoutLocale = pathname.slice(3) || "/";
+    if (isMarketingPath(pathWithoutLocale)) {
+      return localizedResponse(request, "de", pathWithoutLocale);
+    }
+  }
+
+  // Preserve old shared links while making English the canonical default.
   if (pathname === "/en" || pathname.startsWith("/en/")) {
     const pathWithoutLocale = pathname.slice(3) || "/";
     if (isMarketingPath(pathWithoutLocale)) {
-      return localizedResponse(request, "en", pathWithoutLocale);
+      const redirectUrl = new URL(pathWithoutLocale + request.nextUrl.search, request.url);
+      return NextResponse.redirect(redirectUrl, 308);
     }
   }
 
   if (isMarketingPath(pathname)) {
-    return localizedResponse(request, "de");
+    return localizedResponse(request, "en");
   }
 
   return NextResponse.next();
@@ -86,6 +95,7 @@ export const config = {
   matcher: [
     "/",
     "/en/:path*",
+    "/de/:path*",
     "/features/:path*",
     "/use-cases/:path*",
     "/ios",

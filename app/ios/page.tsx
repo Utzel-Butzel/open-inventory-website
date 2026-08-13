@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: locale === "de" ? "/ios" : "/en/ios",
+      url: locale === "de" ? "/de/ios" : "/ios",
       images: ["/marketing/ios-app-icon-current.png"],
       ...marketingOgLocale(locale),
     },
@@ -630,7 +630,7 @@ export default async function IOSPage() {
                 <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
               <Link
-                href={isEnglish ? "/en/docs" : "/docs"}
+                href={isEnglish ? "/docs" : "/de/docs"}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
               >
                 {isEnglish ? "Server documentation" : "Server-Dokumentation"}

@@ -21,8 +21,9 @@ The default local addresses are:
 - website: `http://localhost:3000`
 - web application: `http://localhost:3001`
 
-Set `NEXT_PUBLIC_APP_URL` to the public origin of the web application. Links
-from the website to sign-in use this value.
+Set `SITE_URL` to the website origin and `APP_URL` to the public origin of the
+web application. Both are read at runtime, so the same Docker image can be used
+with different Dokploy domains.
 
 ## Languages
 

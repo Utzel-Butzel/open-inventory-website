@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { connection } from "next/server";
 
 const useCases = [
   "makerspace",
@@ -26,7 +27,8 @@ const posts = [
   "iphone-lidar-inventarisierung",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  await connection();
   const baseUrl = process.env.SITE_URL ?? "http://localhost:3000";
   const routes = [
     "",

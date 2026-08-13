@@ -91,5 +91,6 @@ test("the web-app link is configured as an external origin", async () => {
   ]);
 
   assert.match(chrome, /href=\{appHref\("\/login"\)\}/);
+  assert.match(config, /process\.env\.APP_URL/);
   assert.match(config, /NEXT_PUBLIC_APP_URL/);
 });

@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates: marketingPathAlternates(locale, "/"),
-    openGraph: { title, description, url: locale === "de" ? "/" : "/en", ...marketingOgLocale(locale) },
+    openGraph: { title, description, url: marketingHref(locale, "/"), ...marketingOgLocale(locale) },
   };
 }
 
@@ -238,7 +238,7 @@ export default async function HomePage() {
                 </p>
 
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                  <Link href="/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.25)] transition hover:-translate-y-0.5 hover:bg-brand-hover">
+                  <Link href="/de/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.25)] transition hover:-translate-y-0.5 hover:bg-brand-hover">
                     <Container className="size-[17px]" />
                     Mit Docker starten
                   </Link>
@@ -323,12 +323,12 @@ export default async function HomePage() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Für echte Inventare</p>
                 <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">Vom Keller bis zum Prototypenlabor.</h2>
               </div>
-              <Link href="/use-cases" className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">Alle Use Cases <ArrowRight className="size-4" /></Link>
+              <Link href="/de/use-cases" className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">Alle Use Cases <ArrowRight className="size-4" /></Link>
             </div>
 
             <div className="mt-12 grid gap-5 lg:grid-cols-3">
               {useCases.map((item) => (
-                <Link key={item.slug} href={`/use-cases/${item.slug}`} className="group overflow-hidden rounded-[26px] border border-border bg-surface transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                <Link key={item.slug} href={`/de/use-cases/${item.slug}`} className="group overflow-hidden rounded-[26px] border border-border bg-surface transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                   <div className="relative aspect-[3/2] overflow-hidden bg-surface-muted">
                     <Image src={item.image} fill sizes="(max-width: 1024px) 100vw, 33vw" alt="" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
                   </div>
@@ -354,7 +354,7 @@ export default async function HomePage() {
                   Von der ersten Aufnahme bis zur offenen API: Jede Funktion
                   löst einen konkreten Schritt im Inventaralltag.
                 </p>
-                <Link href="/features" className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-strong px-4 text-sm font-semibold text-on-strong">Alle Funktionen entdecken <ArrowRight className="size-4" /></Link>
+                <Link href="/de/features" className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-strong px-4 text-sm font-semibold text-on-strong">Alle Funktionen entdecken <ArrowRight className="size-4" /></Link>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -410,7 +410,7 @@ export default async function HomePage() {
                 })}
               </div>
               <div className="mt-7 flex flex-wrap items-center gap-4">
-                <Link href="/ios" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Die iOS-App kennenlernen <ArrowRight className="size-4" /></Link>
+                <Link href="/de/ios" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Die iOS-App kennenlernen <ArrowRight className="size-4" /></Link>
                 <span className="text-xs text-muted">iOS 17+ · Einrichtung über Xcode · Quellcode im Repository</span>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default async function HomePage() {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href="/open-source" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#8ff0cc] px-5 text-sm font-semibold text-[#17382d]">Warum Open Source? <ArrowRight className="size-4" /></Link>
+                <Link href="/de/open-source" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#8ff0cc] px-5 text-sm font-semibold text-[#17382d]">Warum Open Source? <ArrowRight className="size-4" /></Link>
                 <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold text-white"><Github className="size-4" />Auf GitHub ansehen</a>
               </div>
             </div>
@@ -447,7 +447,7 @@ export default async function HomePage() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Aus dem Blog</p>
                 <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">Inventar, praktisch gedacht.</h2>
               </div>
-              <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Alle Beiträge <ArrowRight className="size-4" /></Link>
+              <Link href="/de/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Alle Beiträge <ArrowRight className="size-4" /></Link>
             </div>
             <div className="mt-10 grid gap-4 lg:grid-cols-3">
               {[
@@ -475,8 +475,8 @@ export default async function HomePage() {
             <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">Das nächste Objekt ist in Sekunden erfasst.</h2>
             <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-muted">Open Inventory ist MIT-lizenziert, selbst hostbar und ohne künstliche Produktgrenzen offen für deinen Workflow.</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link href="/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand"><Container className="size-4" />Mit Docker starten</Link>
-              <Link href="/features" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-background px-5 text-sm font-semibold">Alle Funktionen <ArrowRight className="size-4" /></Link>
+              <Link href="/de/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand"><Container className="size-4" />Mit Docker starten</Link>
+              <Link href="/de/features" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-background px-5 text-sm font-semibold">Alle Funktionen <ArrowRight className="size-4" /></Link>
             </div>
           </div>
         </section>

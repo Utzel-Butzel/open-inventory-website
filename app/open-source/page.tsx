@@ -58,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: locale === "de" ? "/open-source" : "/en/open-source",
+      url: locale === "de" ? "/de/open-source" : "/open-source",
       images: ["/og.png"],
       ...marketingOgLocale(locale),
     },
@@ -439,7 +439,7 @@ function EnglishOpenSourcePage() {
                   Open repository
                 </a>
                 <Link
-                  href="/en/docs#docker"
+                  href="/docs#docker"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/10"
                 >
                   Start self-hosting
@@ -769,7 +769,7 @@ function EnglishOpenSourcePage() {
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-start">
                 <Link
-                  href="/en/api-docs"
+                  href="/api-docs"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-[13px] bg-white px-4 text-sm font-semibold text-[#17181d] transition hover:-translate-y-0.5"
                 >
                   Interactive API reference
@@ -832,7 +832,7 @@ function EnglishOpenSourcePage() {
                 <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
               <Link
-                href="/en/docs"
+                href="/docs"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
               >
                 <BookOpenText className="size-4" aria-hidden="true" />
@@ -889,7 +889,7 @@ export default async function OpenSourcePage() {
                   Repository öffnen
                 </a>
                 <Link
-                  href="/docs#docker"
+                  href="/de/docs#docker"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/10"
                 >
                   Self-hosting starten
@@ -1212,7 +1212,7 @@ export default async function OpenSourcePage() {
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-start">
                 <Link
-                  href="/api-docs"
+                  href="/de/api-docs"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-[13px] bg-white px-4 text-sm font-semibold text-[#17181d] transition hover:-translate-y-0.5"
                 >
                   Interaktive API-Referenz
@@ -1276,7 +1276,7 @@ export default async function OpenSourcePage() {
                 <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
               <Link
-                href="/docs"
+                href="/de/docs"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
               >
                 <BookOpenText className="size-4" aria-hidden="true" />

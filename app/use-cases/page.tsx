@@ -203,7 +203,7 @@ export default async function UseCasesPage() {
               {useCases.map((useCase, index) => (
                 <Link
                   key={useCase.slug}
-                  href={`/use-cases/${useCase.slug}`}
+                  href={`/de/use-cases/${useCase.slug}`}
                   className={`group overflow-hidden rounded-[28px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
@@ -335,7 +335,7 @@ export default async function UseCasesPage() {
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                   <Link
-                    href="/docs#docker"
+                    href="/de/docs#docker"
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#675ee5] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#756de8]"
                   >
                     <Container className="size-4" />

@@ -8,6 +8,7 @@ import {
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
 import {
+  marketingHref,
   marketingOgLocale,
   marketingPathAlternates,
 } from "@/lib/marketing-i18n";
@@ -23,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates: marketingPathAlternates(locale, "/api-docs"),
-    openGraph: { title, description, url: locale === "de" ? "/api-docs" : "/en/api-docs", ...marketingOgLocale(locale) },
+    openGraph: { title, description, url: marketingHref(locale, "/api-docs"), ...marketingOgLocale(locale) },
   };
 }
 

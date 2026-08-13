@@ -13,18 +13,19 @@ import {
   UI_LANGUAGES,
 } from "../i18n.config.ts";
 
-test("marketing URLs use stable German routes and an English prefix", () => {
-  assert.equal(marketingHref("de", "/features"), "/features");
-  assert.equal(marketingHref("en", "/features"), "/en/features");
-  assert.equal(marketingHref("en", "/docs#docker"), "/en/docs#docker");
-  assert.equal(marketingHref("en", "/openapi.yaml"), "/openapi.yaml");
+test("marketing URLs use stable English routes and a German prefix", () => {
+  assert.equal(marketingHref("en", "/features"), "/features");
+  assert.equal(marketingHref("de", "/features"), "/de/features");
+  assert.equal(marketingHref("de", "/docs#docker"), "/de/docs#docker");
+  assert.equal(marketingHref("en", "/de/features"), "/features");
+  assert.equal(marketingHref("de", "/openapi.yaml"), "/openapi.yaml");
   assert.equal(marketingHref("en", "https://example.com"), "https://example.com");
 
-  assert.deepEqual(marketingPathAlternates("en", "/blog/example"), {
-    canonical: "/en/blog/example",
+  assert.deepEqual(marketingPathAlternates("de", "/blog/example"), {
+    canonical: "/de/blog/example",
     languages: {
-      de: "/blog/example",
-      en: "/en/blog/example",
+      de: "/de/blog/example",
+      en: "/blog/example",
       "x-default": "/blog/example",
     },
   });
@@ -44,6 +45,7 @@ test("the website proxy handles only public marketing routes", async () => {
   assert.deepEqual(configuredPaths, [
     "/",
     "/en/:path*",
+    "/de/:path*",
     "/features/:path*",
     "/use-cases/:path*",
     "/ios",
@@ -56,6 +58,7 @@ test("the website proxy handles only public marketing routes", async () => {
   assert.doesNotMatch(source, /next-i18next/);
   assert.match(source, /x-inventory-marketing-rewrite-language/);
   assert.match(source, /localizedResponse\(request, rewrittenLanguage\)/);
+  assert.match(source, /NextResponse\.redirect\(redirectUrl, 308\)/);
   assert.equal(UI_LANGUAGE_COOKIE, "inventory-ui-language");
   assert.equal(UI_LANGUAGE_HEADER, "x-inventory-ui-language");
   assert.deepEqual(UI_LANGUAGES, ["en", "de"]);

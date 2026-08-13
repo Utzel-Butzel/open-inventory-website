@@ -191,7 +191,7 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
 
           <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 sm:px-8 sm:pb-28 sm:pt-12">
             <Link
-              href="/features"
+              href="/de/features"
               className="inline-flex items-center gap-2 rounded-lg text-xs font-semibold text-muted transition hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" aria-hidden="true" />
@@ -211,7 +211,7 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/docs#docker"
+                    href="/de/docs#docker"
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.24)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
                   >
                     <Container className="size-4" aria-hidden="true" />
@@ -422,7 +422,7 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
                 ))}
               </div>
               <Link
-                href="/ios"
+                href="/de/ios"
                 className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:gap-3"
               >
                 Native iOS-App im Detail
@@ -483,7 +483,7 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
                       OpenAPI 3.1
                     </a>
                     <Link
-                      href="/open-source"
+                      href="/de/open-source"
                       className="inline-flex h-10 items-center gap-2 rounded-xl bg-strong px-3.5 text-xs font-semibold text-on-strong transition hover:opacity-90"
                     >
                       Open-Source-Basis
@@ -500,7 +500,7 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
             <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
               <Link
-                href={`/features/${nextGroup.slug}`}
+                href={`/de/features/${nextGroup.slug}`}
                 className="group rounded-[28px] border border-border bg-surface p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] sm:p-9"
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-brand">
@@ -535,14 +535,14 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/docs#docker"
+                    href="/de/docs#docker"
                     className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 text-xs font-semibold text-[#17181d] transition hover:-translate-y-0.5"
                   >
                     <Container className="size-4" aria-hidden="true" />
                     Docker-Anleitung
                   </Link>
                   <Link
-                    href="/use-cases"
+                    href="/de/use-cases"
                     className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 px-4 text-xs font-semibold transition hover:bg-white/10"
                   >
                     Use Cases ansehen

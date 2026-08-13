@@ -27,8 +27,8 @@ with different Dokploy domains.
 
 ## Languages
 
-German uses unprefixed routes such as `/features`. English uses matching
-`/en/features` routes. Canonical URLs, `hreflang`, Open Graph metadata and the
+English uses unprefixed routes such as `/features`. German uses matching
+`/de/features` routes. Canonical URLs, `hreflang`, Open Graph metadata and the
 sitemap are generated for both languages.
 
 ## API documentation

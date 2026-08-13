@@ -5,5 +5,5 @@ import type { MarketingLocale } from "@/lib/marketing-i18n";
 
 export async function getMarketingLocale(): Promise<MarketingLocale> {
   const requestHeaders = await headers();
-  return requestHeaders.get(UI_LANGUAGE_HEADER) === "en" ? "en" : "de";
+  return requestHeaders.get(UI_LANGUAGE_HEADER) === "de" ? "de" : "en";
 }

@@ -7,12 +7,12 @@ import { useEffect } from "react";
 import type { MarketingLocale } from "@/lib/marketing-i18n";
 
 function localizedPath(pathname: string, locale: MarketingLocale) {
-  const pathWithoutEnglishPrefix = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
-  return locale === "en"
-    ? pathWithoutEnglishPrefix === "/"
-      ? "/en"
-      : `/en${pathWithoutEnglishPrefix}`
-    : pathWithoutEnglishPrefix;
+  const pathWithoutLocalePrefix = pathname.replace(/^\/(?:de|en)(?=\/|$)/, "") || "/";
+  return locale === "de"
+    ? pathWithoutLocalePrefix === "/"
+      ? "/de"
+      : `/de${pathWithoutLocalePrefix}`
+    : pathWithoutLocalePrefix;
 }
 
 export function MarketingDocumentLanguage({

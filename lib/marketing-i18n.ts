@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 export const MARKETING_LOCALES = ["de", "en"] as const;
 export type MarketingLocale = (typeof MARKETING_LOCALES)[number];
 
-export const DEFAULT_MARKETING_LOCALE: MarketingLocale = "de";
+export const DEFAULT_MARKETING_LOCALE: MarketingLocale = "en";
 
 export function marketingHref(locale: MarketingLocale, href: string) {
   const pathname = href.split(/[?#]/, 1)[0] || href;
+  const suffix = href.slice(pathname.length);
   const applicationRoots = [
     "/api",
     "/batch",
@@ -24,7 +25,6 @@ export function marketingHref(locale: MarketingLocale, href: string) {
     "/stock",
   ];
   if (
-    locale === "de" ||
     !href.startsWith("/") ||
     href.startsWith("//") ||
     applicationRoots.some(
@@ -36,8 +36,15 @@ export function marketingHref(locale: MarketingLocale, href: string) {
     return href;
   }
 
-  if (href === "/en" || href.startsWith("/en/")) return href;
-  return href === "/" ? "/en" : `/en${href}`;
+  const unprefixedPath =
+    pathname === "/en" || pathname === "/de"
+      ? "/"
+      : pathname.startsWith("/en/") || pathname.startsWith("/de/")
+        ? pathname.slice(3)
+        : pathname;
+
+  if (locale === "en") return `${unprefixedPath}${suffix}`;
+  return `${unprefixedPath === "/" ? "/de" : `/de${unprefixedPath}`}${suffix}`;
 }
 
 export function marketingPathAlternates(
@@ -45,13 +52,13 @@ export function marketingPathAlternates(
   path: string,
 ): Metadata["alternates"] {
   const normalizedPath = path === "/" ? "/" : `/${path.replace(/^\/+|\/+$/g, "")}`;
-  const englishPath = normalizedPath === "/" ? "/en" : `/en${normalizedPath}`;
+  const germanPath = normalizedPath === "/" ? "/de" : `/de${normalizedPath}`;
 
   return {
-    canonical: locale === "de" ? normalizedPath : englishPath,
+    canonical: locale === "en" ? normalizedPath : germanPath,
     languages: {
-      de: normalizedPath,
-      en: englishPath,
+      de: germanPath,
+      en: normalizedPath,
       "x-default": normalizedPath,
     },
   };

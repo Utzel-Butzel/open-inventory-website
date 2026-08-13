@@ -184,7 +184,7 @@ export default async function FeaturesPage() {
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/docs#docker"
+                  href="/de/docs#docker"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.22)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
                 >
                   <Container className="size-[17px]" aria-hidden="true" />
@@ -349,7 +349,7 @@ export default async function FeaturesPage() {
                         {group.intro}
                       </p>
                       <Link
-                        href={`/features/${group.slug}`}
+                        href={`/de/features/${group.slug}`}
                         className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:gap-3"
                       >
                         Bereich im Detail
@@ -405,14 +405,14 @@ export default async function FeaturesPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
               <Link
-                href="/open-source"
+                href="/de/open-source"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-strong px-5 text-sm font-semibold text-on-strong transition hover:-translate-y-0.5 hover:opacity-90"
               >
                 Open Source entdecken
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
               <Link
-                href="/ios"
+                href="/de/ios"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border px-5 text-sm font-semibold transition hover:bg-surface-muted"
               >
                 iOS-App ansehen

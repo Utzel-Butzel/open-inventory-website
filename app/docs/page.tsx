@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates: marketingPathAlternates(locale, "/docs"),
-    openGraph: { title, description, url: locale === "de" ? "/docs" : "/en/docs", ...marketingOgLocale(locale) },
+    openGraph: { title, description, url: locale === "de" ? "/de/docs" : "/docs", ...marketingOgLocale(locale) },
   };
 }
 
@@ -131,7 +131,7 @@ export default async function DocsPage() {
             <div className="pointer-events-none absolute -left-32 bottom-0 size-[360px] rounded-full bg-[#8ff0cc]/10 blur-[100px]" />
             <div className="relative max-w-3xl">
               <Link
-                href="/en"
+                href="/"
                 className="inline-flex items-center gap-2 text-xs font-semibold text-white/65 transition hover:text-white"
               >
                 <ArrowLeft className="size-3.5" aria-hidden="true" />
@@ -391,7 +391,7 @@ export default async function DocsPage() {
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/en/api-docs" className="inline-flex h-11 items-center gap-2 rounded-xl bg-brand-solid px-4 text-sm font-semibold text-on-brand hover:bg-brand-hover">
+                <Link href="/api-docs" className="inline-flex h-11 items-center gap-2 rounded-xl bg-brand-solid px-4 text-sm font-semibold text-on-brand hover:bg-brand-hover">
                   <BookOpenText className="size-4" aria-hidden="true" />
                   Explore API reference
                   <ArrowRight className="size-4" aria-hidden="true" />

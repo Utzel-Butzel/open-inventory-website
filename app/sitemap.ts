@@ -45,12 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   return routes.flatMap((route, index) => {
-    const dePath = route || "/";
-    const enPath = route ? `/en${route}` : "/en";
+    const enPath = route || "/";
+    const dePath = route ? `/de${route}` : "/de";
     const languages = {
       de: new URL(dePath, baseUrl).toString(),
       en: new URL(enPath, baseUrl).toString(),
-      "x-default": new URL(dePath, baseUrl).toString(),
+      "x-default": new URL(enPath, baseUrl).toString(),
     };
     const shared = {
       changeFrequency: (index === 0 ? "weekly" : "monthly") as "weekly" | "monthly",
@@ -59,8 +59,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
 
     return [
-      { url: languages.de, ...shared },
       { url: languages.en, ...shared },
+      { url: languages.de, ...shared },
     ];
   });
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Boxes, Container, Github } from "lucide-react";
+import { ArrowUpRight, Container, Github } from "lucide-react";
 
 import {
   DesktopMarketingNavigation,
@@ -14,7 +14,7 @@ import {
   marketingHref,
 } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
-import { appHref } from "@/lib/site-config";
+import { appHref, publicDemoUrl } from "@/lib/site-config";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
@@ -30,15 +30,33 @@ export function OpenInventoryBrand({
   return (
     <Link
       href={href}
-      className={`group inline-flex items-center gap-2.5 rounded-xl ${
+      className={`group inline-flex shrink-0 items-center gap-2.5 rounded-xl ${
         inverse ? "text-white" : "text-foreground"
       }`}
       aria-label={homeLabel}
     >
-      <span className="grid size-9 place-items-center rounded-xl bg-brand-solid text-on-brand shadow-[0_7px_20px_rgba(102,92,255,0.24)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-[1.04]">
-        <Boxes className="size-[19px]" strokeWidth={2.2} aria-hidden="true" />
+      <span
+        className={`relative h-9 w-10 shrink-0 overflow-hidden rounded-[9px] border shadow-sm transition-transform duration-300 group-hover:-rotate-2 group-hover:-translate-y-0.5 ${
+          inverse
+            ? "border-white/20 bg-white/[0.07] text-white"
+            : "border-border bg-surface text-foreground"
+        }`}
+        aria-hidden="true"
+      >
+        <span className="absolute inset-y-0 left-0 w-[7px] bg-brand-solid" />
+        <span className="absolute left-[13px] top-[7px] h-[3px] w-[15px] rounded-full bg-current opacity-80" />
+        <span className="absolute left-[13px] top-[14px] h-px w-5 bg-current opacity-30" />
+        <span className="absolute bottom-[6px] left-[13px] flex h-[7px] items-stretch gap-[2px] opacity-55">
+          <span className="w-px bg-current" />
+          <span className="w-0.5 bg-current" />
+          <span className="w-px bg-current" />
+          <span className="w-[3px] bg-current" />
+        </span>
+        <span className="absolute bottom-[5px] right-[5px] grid size-[9px] place-items-center border-2 border-brand-solid">
+          <span className="size-0.5 bg-brand-solid" />
+        </span>
       </span>
-      <span className="text-[15px] font-semibold tracking-[-0.025em] sm:text-base">
+      <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.025em] sm:text-base">
         Open Inventory
       </span>
     </Link>
@@ -51,6 +69,7 @@ export async function MarketingHeader() {
     ? {
         home: "Open Inventory Startseite",
         docker: "Mit Docker starten",
+        openApp: "Live-Demo öffnen",
         lightTheme: "Helles Farbschema verwenden",
         darkTheme: "Dunkles Farbschema verwenden",
         toggleTheme: "Farbschema wechseln",
@@ -58,6 +77,7 @@ export async function MarketingHeader() {
     : {
         home: "Open Inventory home",
         docker: "Start with Docker",
+        openApp: "Open live demo",
         lightTheme: "Use light theme",
         darkTheme: "Use dark theme",
         toggleTheme: "Toggle color theme",
@@ -74,7 +94,7 @@ export async function MarketingHeader() {
 
         <DesktopMarketingNavigation locale={locale} />
 
-        <div className="hidden items-center gap-2 xl:flex">
+        <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <MarketingLanguageSwitcher locale={locale} />
           <ThemeToggle
             lightLabel={copy.lightTheme}
@@ -85,18 +105,26 @@ export async function MarketingHeader() {
             href={githubUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-xl px-3 text-[13px] font-semibold text-foreground transition hover:bg-surface-muted"
+            aria-label="GitHub"
+            title="GitHub"
+            className="inline-flex size-10 items-center justify-center rounded-xl text-foreground transition hover:bg-surface-muted"
           >
             <Github className="size-4" aria-hidden="true" />
-            GitHub
           </a>
           <Link
             href={marketingHref(locale, "/docs#docker")}
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-strong px-4 text-[13px] font-semibold text-on-strong shadow-sm transition hover:-translate-y-0.5 hover:opacity-90"
+            className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-xl border border-border bg-surface px-3 text-[13px] font-semibold text-foreground transition hover:-translate-y-0.5 hover:bg-surface-muted"
           >
             <Container className="size-3.5" aria-hidden="true" />
             {copy.docker}
           </Link>
+          <a
+            href={publicDemoUrl}
+            className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-xl bg-brand-solid px-4 text-[13px] font-semibold text-on-brand shadow-sm transition hover:-translate-y-0.5 hover:opacity-90"
+          >
+            {copy.openApp}
+            <ArrowUpRight className="size-3.5" aria-hidden="true" />
+          </a>
         </div>
 
         <div className="flex items-center gap-2 xl:hidden">
@@ -106,7 +134,11 @@ export async function MarketingHeader() {
             darkLabel={copy.darkTheme}
             pendingLabel={copy.toggleTheme}
           />
-          <MobileMarketingNavigation githubUrl={githubUrl} locale={locale} />
+          <MobileMarketingNavigation
+            appUrl={publicDemoUrl}
+            githubUrl={githubUrl}
+            locale={locale}
+          />
         </div>
       </div>
     </header>
@@ -119,7 +151,7 @@ export async function MarketingFooter() {
   const copy = locale === "de"
     ? {
         home: "Open Inventory Startseite",
-        intro: "Inventarisieren in Sekunden statt Stunden. Offen, selbst hostbar und unter der MIT-Lizenz veröffentlicht.",
+        intro: "Gegenstände mit Standorten, Beständen und Buchungen verbinden. MIT-lizenziert und selbst hostbar.",
         product: "Produkt",
         features: "Funktionen",
         docs: "Dokumentation",
@@ -134,11 +166,11 @@ export async function MarketingFooter() {
         license: "MIT-Lizenz",
         openApp: "Web-App öffnen",
         imprint: "Impressum",
-        tagline: "Dein Inventar. Deine Infrastruktur. Dein Code.",
+        tagline: "Gebaut für Werkstatt, Regal und Gerätekoffer.",
       }
     : {
         home: "Open Inventory home",
-        intro: "Inventory in seconds instead of hours. Open, self-hostable and published under the MIT license.",
+        intro: "Connect objects with locations, stock, and movement history. MIT licensed and self-hostable.",
         product: "Product",
         features: "Features",
         docs: "Documentation",
@@ -153,7 +185,7 @@ export async function MarketingFooter() {
         license: "MIT license",
         openApp: "Open web app",
         imprint: "Legal notice",
-        tagline: "Your inventory. Your infrastructure. Your code.",
+        tagline: "Built for workshops, shelves, and tool cases.",
       };
 
   return (

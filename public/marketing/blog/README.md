@@ -1,14 +1,28 @@
 # Blog images
 
-These five blog covers were generated with OpenAI ImageGen on 2026-08-13.
-They are illustrative editorial images, not photographs of real users, real
-deployments, or the Open Inventory UI.
+The active blog covers are real contextual photographs from Pexels stored in
+`../photography/`. Their source pages, photographers, Pexels IDs, dimensions,
+and licence reference are documented in
+[`../photography/README.md`](../photography/README.md).
 
-The prompts deliberately asked for ordinary workshops, visible wear, available
-light, plausible hardware, and no logos or readable interface text. The QR code
-in `qr-labels-makerspace.webp` is illustrative and must not be treated as a
-working Open Inventory label.
+These photographs illustrate the physical setting around an article. They do
+not document real Open Inventory users or deployments, and no visible device,
+code, label, or screen should be described as an Open Inventory feature unless
+it came from the application itself. Keep the corresponding disclosure in each
+article caption when reusing a photograph.
 
-The website repeats this provenance in each article caption. Keep that caption
-when reusing these files so generated material is not presented as documentary
-evidence.
+## Legacy ImageGen assets
+
+The following files were generated with OpenAI ImageGen on 2026-08-13 and are
+no longer referenced by the blog:
+
+- `series-capture.webp`
+- `stock-models.webp`
+- `qr-labels-makerspace.webp`
+- `self-hosting-homelab.webp`
+- `iphone-lidar-room.webp`
+
+They remain in the repository as unused legacy assets. Do not present them as
+photographs of real users, deployments, labels, or Open Inventory interfaces.
+In particular, the QR code in `qr-labels-makerspace.webp` is illustrative, and
+the phone display in `iphone-lidar-room.webp` is not an application screen.

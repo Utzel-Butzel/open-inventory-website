@@ -64,12 +64,12 @@ export const articles: BlogArticle[] = [
     accent: "from-[#665cff] to-[#9088ff]",
     accentSoft: "bg-brand-soft text-brand",
     cover: {
-      src: "/marketing/blog/series-capture.webp",
-      alt: "Eine Person fotografiert ein gebrauchtes Werkzeug in einem Werkstattregal mit dem Smartphone.",
-      width: 1536,
-      height: 1024,
+      src: "/marketing/photography/workshop-team.webp",
+      alt: "Drei Personen mit Schutzbrillen arbeiten gemeinsam an einer Maschine in einer Werkstatt.",
+      width: 1800,
+      height: 1200,
       caption:
-        "Illustratives Bild zur Serienerfassung. Mit ImageGen erstellt; kein Foto einer realen Open-Inventory-Installation.",
+        "Reale Kontextfotografie eines Werkstattteams. Das Motiv zeigt weder Open Inventory noch den beschriebenen Batch-Workflow. Foto: Mikhail Nilov / Pexels.",
     },
     takeaways: [
       "Gemeinsame Felder werden pro Batch wiederverwendet",
@@ -183,12 +183,12 @@ export const articles: BlogArticle[] = [
     accent: "from-[#1eaf82] to-[#8ff0cc]",
     accentSoft: "bg-success-soft text-success",
     cover: {
-      src: "/marketing/blog/stock-models.webp",
-      alt: "Lose Schrauben und Kabelbinder liegen neben einzeln nummerierten Messwerkzeugen auf einer Werkbank.",
-      width: 1536,
-      height: 1024,
+      src: "/marketing/photography/warehouse-scan.webp",
+      alt: "Ein Lagerarbeiter scannt ein verpacktes Produkt am Regal mit einem Handscanner und hält ein Tablet.",
+      width: 1800,
+      height: 1200,
       caption:
-        "Illustratives Bild zu Bulk- und Einzelverfolgung. Mit ImageGen erstellt; kein Foto einer realen Open-Inventory-Installation.",
+        "Reale Kontextfotografie eines manuellen Lager-Scans. Das Motiv zeigt kein Open-Inventory-Interface. Foto: Tiger Lily / Pexels.",
     },
     takeaways: [
       "`trackingMode: bulk` bucht Mengen pro Inventareintrag und Standort",
@@ -300,12 +300,12 @@ export const articles: BlogArticle[] = [
     accent: "from-[#f09b32] to-[#f7c84d]",
     accentSoft: "bg-warning-soft text-warning",
     cover: {
-      src: "/marketing/blog/qr-labels-makerspace.webp",
-      alt: "Zwei Hände kleben ein QR-Etikett auf einen stark benutzten Werkzeugkoffer.",
-      width: 1536,
-      height: 1024,
+      src: "/marketing/photography/qr-package-scan.webp",
+      alt: "Eine Person hält ein Smartphone über einen QR-Aufkleber auf einem Karton.",
+      width: 1800,
+      height: 2700,
       caption:
-        "Illustratives Bild zum Etiketten-Workflow. Mit ImageGen erstellt; der abgebildete QR-Code ist kein Open-Inventory-Code.",
+        "Reale Kontextfotografie eines Paket-Scans. Der sichtbare QR-Code und Bildschirminhalt stammen nicht aus Open Inventory. Foto: Kampus Production / Pexels.",
     },
     takeaways: [
       "Ressourcenlinks verwenden kurze Codes unter `/r/{code}`",
@@ -415,12 +415,12 @@ export const articles: BlogArticle[] = [
     accent: "from-[#272936] to-[#665cff]",
     accentSoft: "bg-surface-muted text-foreground",
     cover: {
-      src: "/marketing/blog/self-hosting-homelab.webp",
-      alt: "Ein kleiner Homelab-Aufbau mit Mini-PC, NAS, Switch und sichtbaren Netzwerkkabeln.",
-      width: 1536,
-      height: 1024,
+      src: "/marketing/photography/server-rack.webp",
+      alt: "Nahaufnahme von verkabelter Rack-Hardware mit orangefarbenen Patchkabeln.",
+      width: 1800,
+      height: 2700,
       caption:
-        "Illustratives Bild eines kleinen Homelabs. Mit ImageGen erstellt; kein Foto einer realen Open-Inventory-Installation.",
+        "Reale Kontextfotografie von Rack-Hardware und Verkabelung. Das Motiv ist keine dokumentierte Open-Inventory-Installation. Foto: Josh Sorenson / Pexels.",
     },
     takeaways: [
       "Anwendung und PostgreSQL laufen im Docker-Compose-Stack",
@@ -540,12 +540,12 @@ export const articles: BlogArticle[] = [
     accent: "from-[#409cff] to-[#8ff0cc]",
     accentSoft: "bg-brand-soft text-brand",
     cover: {
-      src: "/marketing/blog/iphone-lidar-room.webp",
-      alt: "Eine Person hält ein Smartphone vor sich und erfasst damit einen Werkstattraum.",
-      width: 1536,
-      height: 1024,
+      src: "/marketing/photography/home-labels.webp",
+      alt: "Eine Person sortiert gedruckte Kategorienamen vor beschrifteten Umzugskartons und einem Drucker.",
+      width: 1800,
+      height: 2700,
       caption:
-        "Illustratives Bild zur Raumerfassung. Mit ImageGen erstellt; die Displaydarstellung ist keine echte App-Oberfläche.",
+        "Reale Kontextfotografie beim Beschriften von Aufbewahrungsboxen. Das Motiv zeigt weder die Open-Inventory-App noch RoomPlan oder LiDAR. Foto: Blue Bird / Pexels.",
     },
     takeaways: [
       "AVFoundation liefert Fotos sowie QR- und Barcode-Erkennung",

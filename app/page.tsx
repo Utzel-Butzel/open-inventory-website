@@ -4,763 +4,740 @@ import Link from "next/link";
 import {
   ArrowRight,
   Barcode,
-  Boxes,
   Camera,
-  Check,
-  CircleDot,
   Container,
-  Database,
   Github,
-  MapPinned,
+  KeyRound,
+  MapPin,
   PackageCheck,
-  ScanLine,
+  Search,
+  Server,
   ShieldCheck,
   Smartphone,
-  Tags,
-  WandSparkles,
 } from "lucide-react";
 
-import { HeroVideo } from "@/components/marketing/hero-video";
-import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
+import {
+  MarketingFooter,
+  MarketingHeader,
+} from "@/components/marketing/site-chrome";
 import {
   marketingHref,
   marketingOgLocale,
   marketingPathAlternates,
+  type MarketingLocale,
 } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
+import { publicDemoUrl } from "@/lib/site-config";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
+type HomepageCopy = {
+  metadata: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    primary: string;
+    secondary: string;
+    facts: string[];
+    captureLabel: string;
+    captureCaption: string;
+    captureMeta: string;
+  };
+  workflow: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    captureCaption: string;
+    steps: Array<{ number: string; title: string; copy: string }>;
+  };
+  tasks: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    linkLabel: string;
+    items: Array<{
+      title: string;
+      copy: string;
+      href: string;
+      icon: typeof Camera;
+    }>;
+  };
+  audiences: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    linkLabel: string;
+    items: Array<{
+      title: string;
+      copy: string;
+      href: string;
+    }>;
+  };
+  trust: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    iosCaption: string;
+    more: string;
+    items: Array<{
+      title: string;
+      copy: string;
+      icon: typeof Server;
+    }>;
+  };
+  closing: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    primary: string;
+    secondary: string;
+  };
+};
+
+const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
+  de: {
+    metadata: {
+      title: "Open Inventory – Inventar für Werkstatt und Technik",
+      description:
+        "Open Inventory verbindet Gegenstände mit Standorten, Beständen und Buchungen. Selbst hostbar, MIT-lizenziert, mit optionaler Bildanalyse und nativer iOS-App.",
+    },
+    hero: {
+      eyebrow: "Inventar für Werkstatt und Technik",
+      title: "Wo ist der Akkuschrauber?",
+      description:
+        "Open Inventory zeigt seinen hinterlegten Standort und die letzte Buchung. Ein Foto beginnt den Datensatz; auf Wunsch füllt die Bildanalyse Felder vor. Du bestimmst, was gespeichert wird.",
+      primary: "Live-Demo öffnen",
+      secondary: "Mit Docker starten",
+      facts: ["MIT-Lizenz", "Docker & PostgreSQL", "Web + native iOS-App"],
+      captureLabel: "Web-App · Beispieldaten",
+      captureCaption:
+        "Bestand, erwartete Lieferungen und knappe Artikel in einer gemeinsamen Ansicht.",
+      captureMeta: "13 Artikel · 223 Einheiten",
+    },
+    workflow: {
+      eyebrow: "Foto → Entwurf → Datensatz",
+      title: "Ein Vorschlag bleibt ein Entwurf.",
+      description:
+        "Der Ablauf funktioniert mit oder ohne Bildanalyse. Wenn sie aktiv ist, füllt sie das Formular vor. Du änderst und speicherst in der Oberfläche.",
+      captureCaption: "Serienerfassung in der Web-App · Beispieldaten",
+      steps: [
+        {
+          number: "01",
+          title: "Aufnehmen",
+          copy: "Fotografiere den Gegenstand und bei Bedarf sein Typenschild. Standort und Typ lassen sich für eine Serie einmal setzen.",
+        },
+        {
+          number: "02",
+          title: "Entwurf bearbeiten",
+          copy: "Vorgeschlagene Bezeichnung, Typ und Tags stehen in editierbaren Feldern. Vor dem Speichern kannst du sie korrigieren oder entfernen.",
+        },
+        {
+          number: "03",
+          title: "Finden und buchen",
+          copy: "Suche und QR-Etikett öffnen denselben Datensatz. Dort siehst du Standort und Bestand; Ausleihe oder Rückgabe ergänzen die Historie.",
+        },
+      ],
+    },
+    tasks: {
+      eyebrow: "Im Alltag",
+      title: "Was mit dem Eintrag möglich wird.",
+      description:
+        "Vom ersten Foto bis zur nächsten Bestandsbewegung bleibt alles an einem nachvollziehbaren Datensatz.",
+      linkLabel: "Im Detail",
+      items: [
+        {
+          title: "Erfassen",
+          copy: "Bei einer Serie bleibt die Kamera für den nächsten Gegenstand frei. Standort und Typ musst du nicht wiederholt eingeben.",
+          href: "/features/erfassen",
+          icon: Camera,
+        },
+        {
+          title: "Finden",
+          copy: "Suche nach Bezeichnung oder Inventar-ID. Ein QR- oder Code-128-Etikett öffnet den Eintrag direkt am Regal.",
+          href: "/features/strukturieren",
+          icon: Search,
+        },
+        {
+          title: "Bewegen",
+          copy: "Ausleihe und Rückgabe ändern den Status. Verbrauch oder Standortwechsel werden als weitere Bewegung protokolliert.",
+          href: "/features/bestand-ausleihe",
+          icon: PackageCheck,
+        },
+        {
+          title: "Betreiben",
+          copy: "Rollen begrenzen Bearbeitung und Buchung. API-Tokens und OpenAPI 3.1 binden eigene Abläufe an.",
+          href: "/features/betrieb-sicherheit",
+          icon: ShieldCheck,
+        },
+      ],
+    },
+    audiences: {
+      eyebrow: "Für gemeinsam genutzte Ausrüstung",
+      title: "Dort sinnvoll, wo Dinge wandern.",
+      description:
+        "Drei typische Abläufe zeigen konkret, wie Standort, Menge und Rückgabe zusammenarbeiten.",
+      linkLabel: "Ablauf ansehen",
+      items: [
+        {
+          title: "Makerspace",
+          copy: "Maschinen einzeln und Schrauben als Mengenbestand führen. Ein QR-Scan öffnet die Ausleihe direkt am Regal.",
+          href: "/use-cases/makerspace",
+        },
+        {
+          title: "Werkstatt und Service",
+          copy: "Wenn ein Werkzeugkoffer ins Fahrzeug wandert, öffnet ein Scan die Standortbuchung. Die Rückgabe setzt die Historie fort.",
+          href: "/use-cases/handwerk",
+        },
+        {
+          title: "Kleines Technikteam",
+          copy: "Prüfgeräte Personen zuordnen und Prototypteile als Bestand führen. Die Suche zeigt Raum oder Schrank.",
+          href: "/use-cases/startup",
+        },
+      ],
+    },
+    trust: {
+      eyebrow: "Betrieb und Datenfluss",
+      title: "Dein Server bleibt der Mittelpunkt.",
+      description:
+        "Anwendung, Datenbankmigrationen, OpenAPI-Vertrag und iOS-Quellcode stehen gemeinsam unter der MIT-Lizenz.",
+      iosCaption: "Native SwiftUI-App · Beispieldaten",
+      more: "Betrieb und Datenfluss ansehen",
+      items: [
+        {
+          title: "Self-hosting",
+          copy: "Docker Compose startet Anwendung, Migrationen und PostgreSQL. TLS, Backups und Updates bleiben Teil deines Betriebs.",
+          icon: Server,
+        },
+        {
+          title: "Optionale KI",
+          copy: "Ohne Provider-Schlüssel bleibt die Bildanalyse aus. Bei Nutzung gehen benötigte Inhalte an den konfigurierten Dienst.",
+          icon: KeyRound,
+        },
+        {
+          title: "Native iOS-App",
+          copy: "Der SwiftUI-Client nimmt Fotos auf, scannt Codes und hält ausstehende Uploads in einer dauerhaften Warteschlange.",
+          icon: Smartphone,
+        },
+      ],
+    },
+    closing: {
+      eyebrow: "Erster Test",
+      title: "Fang mit dem Gegenstand an, den alle suchen.",
+      description:
+        "Starte Docker, fotografiere ihn, trage seinen Standort ein und drucke das QR-Etikett. So merkst du, ob Open Inventory zu deinem Team passt.",
+      primary: "Docker-Anleitung öffnen",
+      secondary: "Quellcode auf GitHub",
+    },
+  },
+  en: {
+    metadata: {
+      title: "Open Inventory – Inventory for workshops and technical teams",
+      description:
+        "Open Inventory connects objects with locations, stock, and movement history. Self-hostable and MIT licensed, with optional image analysis and a native iOS app.",
+    },
+    hero: {
+      eyebrow: "Inventory for workshops and technical teams",
+      title: "Where is the cordless drill?",
+      description:
+        "Open Inventory shows its recorded location and most recent movement. A photo starts the record; optional image analysis prefills fields. You decide what gets saved.",
+      primary: "Open live demo",
+      secondary: "Start with Docker",
+      facts: ["MIT licensed", "Docker & PostgreSQL", "Web + native iOS app"],
+      captureLabel: "Web app · German sample data",
+      captureCaption:
+        "Stock, incoming orders, and items needing attention in one view.",
+      captureMeta: "13 items · 223 units",
+    },
+    workflow: {
+      eyebrow: "Photo → draft → record",
+      title: "A suggestion stays a draft.",
+      description:
+        "The workflow works with or without image analysis. When enabled, it prefills the form. You edit and save in the interface.",
+      captureCaption: "Batch capture in the web app · German sample data",
+      steps: [
+        {
+          number: "01",
+          title: "Capture",
+          copy: "Photograph the object and, when useful, its nameplate. Set location and type once for a batch.",
+        },
+        {
+          number: "02",
+          title: "Edit the draft",
+          copy: "Suggested names, types, and tags appear in editable fields. Correct or remove them before saving.",
+        },
+        {
+          number: "03",
+          title: "Find and record changes",
+          copy: "Search and the QR label open the same record. It shows location and stock; a checkout or return adds to its history.",
+        },
+      ],
+    },
+    tasks: {
+      eyebrow: "Day to day",
+      title: "What the record lets you do.",
+      description:
+        "From the first photo to the next stock movement, the work stays attached to one traceable record.",
+      linkLabel: "View details",
+      items: [
+        {
+          title: "Capture",
+          copy: "During a batch, the camera stays ready for the next object. Location and type do not need repeated entry.",
+          href: "/features/erfassen",
+          icon: Camera,
+        },
+        {
+          title: "Find",
+          copy: "Search by name or inventory ID. A QR or Code 128 label opens the record at the shelf.",
+          href: "/features/strukturieren",
+          icon: Search,
+        },
+        {
+          title: "Move",
+          copy: "Checkout and return change the status. Consumption or a location change is recorded as another movement.",
+          href: "/features/bestand-ausleihe",
+          icon: PackageCheck,
+        },
+        {
+          title: "Operate",
+          copy: "Roles limit editing and stock bookings. API tokens and OpenAPI 3.1 connect your own workflows.",
+          href: "/features/betrieb-sicherheit",
+          icon: ShieldCheck,
+        },
+      ],
+    },
+    audiences: {
+      eyebrow: "For shared equipment",
+      title: "Useful wherever objects move.",
+      description:
+        "Three typical workflows show how location, quantities, and returns work together.",
+      linkLabel: "See the workflow",
+      items: [
+        {
+          title: "Makerspace",
+          copy: "Track machines individually and screws as bulk stock. A QR scan opens checkout at the shelf.",
+          href: "/use-cases/makerspace",
+        },
+        {
+          title: "Workshop and field service",
+          copy: "When a tool case moves to a van, a scan opens the location change. Its return continues the history.",
+          href: "/use-cases/handwerk",
+        },
+        {
+          title: "Small technical team",
+          copy: "Assign test equipment to a person and manage prototype parts as stock. Search shows the recorded room or cabinet.",
+          href: "/use-cases/startup",
+        },
+      ],
+    },
+    trust: {
+      eyebrow: "Operations and data flow",
+      title: "Your server remains at the centre.",
+      description:
+        "The application, database migrations, OpenAPI contract, and iOS source are published together under the MIT license.",
+      iosCaption: "Native SwiftUI app · German sample data",
+      more: "Review operations and data flow",
+      items: [
+        {
+          title: "Self-hosting",
+          copy: "Docker Compose starts the application, migrations, and PostgreSQL. TLS, backups, and updates remain your responsibility.",
+          icon: Server,
+        },
+        {
+          title: "Optional AI",
+          copy: "Without provider keys, image analysis stays off. When used, required content goes to the service configured for the instance.",
+          icon: KeyRound,
+        },
+        {
+          title: "Native iOS app",
+          copy: "The SwiftUI client captures photos, scans codes, and keeps pending uploads in a persistent outbox.",
+          icon: Smartphone,
+        },
+      ],
+    },
+    closing: {
+      eyebrow: "First test",
+      title: "Start with the thing everyone keeps looking for.",
+      description:
+        "Run the Docker setup, photograph it, record its location, and print the QR label. That small workflow will tell you whether Open Inventory fits your team.",
+      primary: "Open the Docker guide",
+      secondary: "View source on GitHub",
+    },
+  },
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
-  const title = locale === "de"
-    ? "Open Inventory — Inventarisieren in Sekunden statt Stunden"
-    : "Open Inventory — Inventory in seconds, not hours";
-  const description = locale === "de"
-    ? "Foto aufnehmen, KI-Vorschlag prüfen, speichern. Open Inventory ist eine schnelle, selbst hostbare und MIT-lizenzierte Inventarlösung mit nativer iOS-App."
-    : "Take a photo, review the proposed data, and save it. Open Inventory is a fast, self-hostable, MIT-licensed inventory system with a native iOS app.";
+  const copy = homepageCopy[locale].metadata;
+
   return {
-    title: { absolute: title },
-    description,
+    title: { absolute: copy.title },
+    description: copy.description,
     alternates: marketingPathAlternates(locale, "/"),
-    openGraph: { title, description, url: marketingHref(locale, "/"), ...marketingOgLocale(locale) },
+    openGraph: {
+      title: copy.title,
+      description: copy.description,
+      url: marketingHref(locale, "/"),
+      images: ["/og.png"],
+      ...marketingOgLocale(locale),
+    },
   };
 }
 
-const flow = [
-  {
-    number: "01",
-    icon: Camera,
-    title: "Fotografieren",
-    copy: "Ein Objekt oder gleich eine ganze Serie aufnehmen. Nach jedem Absenden ist die Kamera direkt wieder frei.",
-  },
-  {
-    number: "02",
-    icon: WandSparkles,
-    title: "Vorschlag prüfen",
-    copy: "Die KI schlägt Name, Beschreibung, Typ, Tags und Alt-Text vor. Du entscheidest, was gespeichert wird.",
-  },
-  {
-    number: "03",
-    icon: ScanLine,
-    title: "Sofort wiederfinden",
-    copy: "Über Suche, QR-Code, Standort, Kategorie oder die native iOS-App landet alles wieder in deiner Hand.",
-  },
-];
-
-const useCases = [
-  {
-    slug: "makerspace",
-    image: "/marketing/usecase-makerspace-v2.webp",
-    label: "Makerspace",
-    title: "Werkzeuge finden. Ausleihen nachvollziehen.",
-    copy: "Maschinen serialisieren, Verbrauchsmaterial im Blick behalten und QR-Etiketten direkt am Regal nutzen.",
-  },
-  {
-    slug: "familie",
-    image: "/marketing/usecase-family-v2.webp",
-    label: "Familie",
-    title: "Wissen, was ihr habt – und wo es liegt.",
-    copy: "Kisten, Keller, Dachboden und Garantien gemeinsam ordnen, ohne eine Tabellenpflege daraus zu machen.",
-  },
-  {
-    slug: "startup",
-    image: "/marketing/usecase-startup-v2.webp",
-    label: "Startup",
-    title: "Assets und Teile ohne Tabellenchaos.",
-    copy: "Geräte zuweisen, Prototypteile zählen, Wareneingänge buchen und Abläufe über die offene API verbinden.",
-  },
-];
-
-const featureGroups = [
-  {
-    icon: WandSparkles,
-    title: "Schnellerfassung & KI",
-    copy: "Serienerfassung, Bildanalyse, Titelbilder, Fotozählung, Duplikate und prüfbare Übersetzungen.",
-  },
-  {
-    icon: Boxes,
-    title: "Inventar & Medien",
-    copy: "Suche, Typen, eigene Felder, Beziehungen, Bilder, Videos, PDFs und öffentliche Leselinks.",
-  },
-  {
-    icon: PackageCheck,
-    title: "Bestand & Abläufe",
-    copy: "Bulk und serialisiert, Bewegungen, Lagerorte, Ausleihen, Bestellungen, Stücklisten und Forecasts.",
-  },
-  {
-    icon: Barcode,
-    title: "Etiketten & Austausch",
-    copy: "QR und Code 128, visueller Labeldesigner, sichere Kurzlinks sowie geprüfter CSV-Import und -Export.",
-  },
-  {
-    icon: MapPinned,
-    title: "Karte & 3D-Räume",
-    copy: "Punkte, Polygone, Raumstrukturen und optionale LiDAR-/RoomPlan-Erfassung mit dem iPhone.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Team & Integration",
-    copy: "Eigene Rollen, bedingte Rechte, Sharing, API-Token, OpenAPI, Docker und PostgreSQL.",
-  },
-];
-
-const englishFlow = [
-  {
-    number: "01",
-    icon: Camera,
-    title: "Take photos",
-    copy: "Capture one object or a whole series. After each submission, the camera is immediately ready for the next item.",
-  },
-  {
-    number: "02",
-    icon: WandSparkles,
-    title: "Review the proposal",
-    copy: "The AI proposes a name, description, type, tags and alt text. You decide exactly what gets saved.",
-  },
-  {
-    number: "03",
-    icon: ScanLine,
-    title: "Find it again",
-    copy: "Search by text, scan a QR code, browse a location or category, or use the native iOS app.",
-  },
-];
-
-const englishUseCases = [
-  {
-    slug: "makerspace",
-    image: "/marketing/usecase-makerspace-v2.webp",
-    label: "Makerspace",
-    title: "Find tools. Keep track of loans.",
-    copy: "Assign serial numbers to machines, monitor consumables, and put QR labels directly on shelves and equipment.",
-  },
-  {
-    slug: "familie",
-    image: "/marketing/usecase-family-v2.webp",
-    label: "Family",
-    title: "Know what you own — and where it is.",
-    copy: "Organize boxes, the basement, the attic, and warranties together without turning it into a spreadsheet project.",
-  },
-  {
-    slug: "startup",
-    image: "/marketing/usecase-startup-v2.webp",
-    label: "Startup",
-    title: "Assets and parts without spreadsheet drift.",
-    copy: "Assign devices, count prototype parts, book incoming goods, and connect workflows through the open API.",
-  },
-];
-
-const englishFeatureGroups = [
-  {
-    icon: WandSparkles,
-    title: "Fast capture & AI",
-    copy: "Batch capture, image analysis, cover images, photo-based counting, duplicate detection, and reviewable translations.",
-  },
-  {
-    icon: Boxes,
-    title: "Inventory & media",
-    copy: "Search, types, custom fields, relationships, images, videos, PDFs, and public read-only links.",
-  },
-  {
-    icon: PackageCheck,
-    title: "Stock & workflows",
-    copy: "Bulk and serialized stock, movements, storage locations, loans, orders, bills of materials, and forecasts.",
-  },
-  {
-    icon: Barcode,
-    title: "Labels & data exchange",
-    copy: "QR and Code 128 labels, a visual label designer, secure short links, and validated CSV import and export.",
-  },
-  {
-    icon: MapPinned,
-    title: "Maps & 3D spaces",
-    copy: "Points, polygons, room structures, and optional LiDAR/RoomPlan capture with an iPhone.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Teams & integrations",
-    copy: "Custom roles, conditional permissions, sharing, API tokens, OpenAPI, Docker, and PostgreSQL.",
-  },
-];
-
-export default async function HomePage() {
-  const locale = await getMarketingLocale();
-  if (locale === "en") return <EnglishHomePage />;
-
+function SectionIntro({
+  eyebrow,
+  title,
+  description,
+  inverse = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  inverse?: boolean;
+}) {
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <MarketingHeader />
-
-      <main>
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:56px_56px] opacity-55 [mask-image:linear-gradient(to_bottom,black,transparent_86%)]" />
-          <div className="pointer-events-none absolute left-[2%] top-24 size-[340px] rounded-full bg-[#8ff0cc]/30 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[2%] top-16 size-[430px] rounded-full bg-[#8175ff]/20 blur-[130px]" />
-
-          <div className="relative mx-auto max-w-[980px] px-5 pb-20 pt-14 text-center sm:px-8 sm:pb-28 sm:pt-20 lg:pt-24">
-            <div className="relative z-10 mx-auto max-w-[820px] animate-fade-up">
-                <span className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand">
-                  <Github className="size-3.5" />
-                  MIT Open Source · Self-hosted
-                </span>
-
-                <h1 className="mt-6 text-[clamp(3.35rem,6.5vw,6.5rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-foreground">
-                  Inventarisieren
-                  <span className="block text-brand">in Sekunden.</span>
-                </h1>
-                <p className="mx-auto mt-6 max-w-[590px] text-[20px] font-medium leading-8 tracking-[-0.02em] text-foreground/80 sm:text-[23px]">
-                  Statt Stunden mit Tabellen zu verlieren.
-                </p>
-                <p className="mx-auto mt-3 max-w-[570px] text-[16px] leading-7 text-muted sm:text-[18px] sm:leading-8">
-                  Foto aufnehmen, KI-Vorschlag prüfen, speichern. Open Inventory
-                  macht Gegenstände schnell strukturiert, durchsuchbar und im
-                  Alltag wirklich nutzbar.
-                </p>
-
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                  <Link href="/de/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.25)] transition hover:-translate-y-0.5 hover:bg-brand-hover">
-                    <Container className="size-[17px]" />
-                    Mit Docker starten
-                  </Link>
-                  <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface/80 px-5 text-sm font-semibold text-foreground shadow-sm transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface">
-                    <Github className="size-[17px]" />
-                    Quellcode ansehen
-                  </a>
-                </div>
-
-                <div className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px] font-semibold text-muted">
-                  {["MIT-lizenziert", "Eigene Infrastruktur", "Native iOS-App", "Offene REST API"].map((item) => (
-                    <span key={item} className="flex items-center gap-1.5">
-                      <Check className="size-3 text-success" strokeWidth={2.5} />
-                      {item}
-                    </span>
-                  ))}
-                </div>
-            </div>
-          </div>
-        </section>
-
-        <HeroVideo />
-
-        <section className="bg-surface py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">So einfach geht es</p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">
-                Ein Foto. Ein prüfbarer Eintrag.
-              </h2>
-              <p className="mt-5 max-w-2xl text-[16px] leading-7 text-muted">
-                Die Automatisierung arbeitet im Hintergrund. Die Entscheidung
-                bleibt bei dir – ohne Formulare auszufüllen, bevor du überhaupt
-                anfangen kannst.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-4 lg:grid-cols-3">
-              {flow.map((step) => {
-                const Icon = step.icon;
-                return (
-                  <article key={step.title} className="group rounded-[26px] border border-border bg-background p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-8">
-                    <div className="flex items-center justify-between">
-                      <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand"><Icon className="size-5" /></span>
-                      <span className="font-mono text-[10px] text-muted">{step.number}</span>
-                    </div>
-                    <h3 className="mt-12 text-[26px] font-semibold tracking-[-0.045em]">{step.title}</h3>
-                    <p className="mt-3 text-[15px] leading-6 text-muted">{step.copy}</p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">Echte Oberfläche · Beispieldaten</p>
-                <h2 className="mt-4 text-[44px] font-semibold leading-[0.96] tracking-[-0.06em] sm:text-[62px]">Alles sichtbar. Nichts abstrakt.</h2>
-              </div>
-              <p className="max-w-lg text-[16px] leading-7 text-white/60 lg:justify-self-end">
-                Vier Demo-Einträge, sieben Einheiten und konkrete Standorte zeigen,
-                wie Open Inventory im Alltag aussieht – nicht nur in einer Feature-Liste.
-              </p>
-            </div>
-
-            <div className="relative mt-12 overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] p-2 shadow-2xl sm:p-3">
-              <span className="absolute right-5 top-5 z-10 rounded-full border border-white/15 bg-[#17181d]/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70 backdrop-blur">Beispieldaten</span>
-              <div className="overflow-hidden rounded-[20px] bg-[#f4f5f7]">
-                <Image src="/marketing/dashboard-mock-data.jpg" width={1440} height={960} alt="Open Inventory Dashboard mit vier Demo-Einträgen, sieben Einheiten und 7.924 Euro Inventarwert" className="h-auto w-full" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-background py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Für echte Inventare</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">Vom Keller bis zum Prototypenlabor.</h2>
-              </div>
-              <Link href="/de/use-cases" className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">Alle Use Cases <ArrowRight className="size-4" /></Link>
-            </div>
-
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {useCases.map((item) => (
-                <Link key={item.slug} href={`/de/use-cases/${item.slug}`} className="group overflow-hidden rounded-[26px] border border-border bg-surface transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
-                  <div className="relative aspect-[3/2] overflow-hidden bg-surface-muted">
-                    <Image src={item.image} fill sizes="(max-width: 1024px) 100vw, 33vw" alt="" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-                  </div>
-                  <div className="p-6 sm:p-7">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-brand">{item.label}</p>
-                    <h3 className="mt-3 text-[25px] font-semibold leading-[1.05] tracking-[-0.045em]">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted">{item.copy}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">Use Case ansehen <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-surface py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr]">
-              <div className="max-w-lg">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Mehr als eine Liste</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">Alle Funktionen, verständlich erklärt.</h2>
-                <p className="mt-5 text-[16px] leading-7 text-muted">
-                  Von der ersten Aufnahme bis zur offenen API: Jede Funktion
-                  löst einen konkreten Schritt im Inventaralltag.
-                </p>
-                <Link href="/de/features" className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-strong px-4 text-sm font-semibold text-on-strong">Alle Funktionen entdecken <ArrowRight className="size-4" /></Link>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                {featureGroups.map((feature) => {
-                  const Icon = feature.icon;
-                  return (
-                    <article key={feature.title} className="rounded-2xl border border-border bg-background p-5">
-                      <Icon className="size-5 text-brand" />
-                      <h3 className="mt-5 text-base font-semibold tracking-[-0.025em]">{feature.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-muted">{feature.copy}</p>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden bg-background py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1140px] gap-14 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-            <div className="relative mx-auto w-full max-w-[390px] pb-8">
-              <div className="absolute inset-10 rounded-full bg-brand-soft blur-[70px]" />
-              <div className="relative overflow-hidden rounded-[42px] border border-border bg-surface-subtle p-3 shadow-[var(--shadow-md)]">
-                <Image src="/marketing/ios-app-icon-current.png" width={1024} height={1024} alt="Aktuelles App-Icon der nativen Inventory iOS-App" className="h-auto w-full rounded-[31px]" />
-              </div>
-              <div className="absolute -bottom-1 -right-4 w-[220px] rounded-2xl border border-border bg-surface p-3.5 shadow-[var(--shadow-md)]">
-                <div className="flex items-center gap-2.5">
-                  <span className="grid size-9 place-items-center rounded-xl bg-success-soft text-success"><CircleDot className="size-4" /></span>
-                  <div><p className="text-[9px] font-semibold">Upload-Warteschlange</p><p className="mt-0.5 text-[8px] text-muted">gesichert · wiederholbar</p></div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-strong">
-                <Smartphone className="size-3.5 text-brand" /> Native SwiftUI-App · Open Source
-              </span>
-              <h2 className="mt-5 max-w-2xl text-[44px] font-semibold leading-[0.97] tracking-[-0.06em] sm:text-[62px]">Inventar dort erfassen, wo es steht.</h2>
-              <p className="mt-6 max-w-xl text-[16px] leading-7 text-muted">
-                Fotografieren, QR und Barcodes scannen, suchen, bearbeiten,
-                Bestände buchen und optional Räume mit LiDAR erfassen. Die
-                native App verbindet sich mit deinem eigenen Server.
-              </p>
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {[
-                  [Camera, "Bis zu 12 Fotos pro Erfassung"],
-                  [Barcode, "QR, EAN, Code 128 und mehr"],
-                  [PackageCheck, "Bestand direkt zu- oder abbuchen"],
-                  [MapPinned, "Optional RoomPlan und LiDAR"],
-                ].map(([Icon, text]) => {
-                  const ItemIcon = Icon as typeof Camera;
-                  return <div key={String(text)} className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-sm font-medium text-muted-strong"><ItemIcon className="size-4 shrink-0 text-brand" />{String(text)}</div>;
-                })}
-              </div>
-              <div className="mt-7 flex flex-wrap items-center gap-4">
-                <Link href="/de/ios" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Die iOS-App kennenlernen <ArrowRight className="size-4" /></Link>
-                <span className="text-xs text-muted">iOS 17+ · Einrichtung über Xcode · Quellcode im Repository</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-brand-solid px-5 py-8 sm:px-8 sm:py-12">
-          <div className="relative mx-auto max-w-[1180px] overflow-hidden rounded-[30px] bg-[#17181d] px-6 py-16 text-white sm:px-12 sm:py-20">
-            <div className="pointer-events-none absolute left-1/2 top-0 h-60 w-[620px] -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(143,240,204,0.24),transparent_68%)]" />
-            <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8ff0cc]">
-                  <Github className="size-3.5" /> MIT Open Source
-                </span>
-                <h2 className="mt-6 max-w-3xl text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">Dein Inventar. Deine Infrastruktur. Dein Code.</h2>
-                <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/55">
-                  Next.js, PostgreSQL, Docker, OpenAPI und die native iOS-App in
-                  einem offenen Repository. Optionale KI- und Speicheranbieter
-                  bestimmst du in deiner Installation.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href="/de/open-source" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#8ff0cc] px-5 text-sm font-semibold text-[#17382d]">Warum Open Source? <ArrowRight className="size-4" /></Link>
-                <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold text-white"><Github className="size-4" />Auf GitHub ansehen</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-background py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Aus dem Blog</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">Inventar, praktisch gedacht.</h2>
-              </div>
-              <Link href="/de/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Alle Beiträge <ArrowRight className="size-4" /></Link>
-            </div>
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {[
-                { icon: Camera, title: "Vom Foto zum Eintrag", copy: "Wie Serienerfassung und prüfbare KI-Vorschläge zusammenspielen.", href: "/blog/serienerfassung-in-sekunden" },
-                { icon: Tags, title: "Bulk oder serialisiert?", copy: "Welches Bestandsmodell für Verbrauchsteile, Werkzeuge und Geräte passt.", href: "/blog/mengenbestand-oder-serialisiert" },
-                { icon: Database, title: "Warum selbst hosten?", copy: "Was offene Software und die eigene Infrastruktur bei Inventardaten bedeuten.", href: "/blog/warum-inventar-selbst-hosten" },
-              ].map((article) => {
-                const Icon = article.icon;
-                return (
-                  <Link key={article.href} href={article.href} className="group rounded-[24px] border border-border bg-surface p-6 transition hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
-                    <Icon className="size-5 text-brand" />
-                    <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.04em]">{article.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted">{article.copy}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">Weiterlesen <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-surface px-5 py-16 sm:px-8 sm:py-20">
-          <div className="mx-auto max-w-[960px] text-center">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Offen anfangen. Schnell weitermachen.</p>
-            <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">Das nächste Objekt ist in Sekunden erfasst.</h2>
-            <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-muted">Open Inventory ist MIT-lizenziert, selbst hostbar und ohne künstliche Produktgrenzen offen für deinen Workflow.</p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link href="/de/docs#docker" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand"><Container className="size-4" />Mit Docker starten</Link>
-              <Link href="/de/features" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-background px-5 text-sm font-semibold">Alle Funktionen <ArrowRight className="size-4" /></Link>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <MarketingFooter />
+    <div className="max-w-3xl">
+      <p
+        className={`font-mono text-[12px] font-semibold tracking-[-0.01em] ${
+          inverse ? "text-[#8ff0cc]" : "text-brand"
+        }`}
+      >
+        {eyebrow}
+      </p>
+      <h2 className="mt-4 text-[clamp(2.55rem,5vw,4.7rem)] font-semibold leading-[0.98] tracking-[-0.058em]">
+        {title}
+      </h2>
+      <p
+        className={`mt-5 max-w-2xl text-[16px] leading-7 sm:text-[18px] sm:leading-8 ${
+          inverse ? "text-white/68" : "text-muted"
+        }`}
+      >
+        {description}
+      </p>
     </div>
   );
 }
 
-async function EnglishHomePage() {
-  const href = (path: string) => marketingHref("en", path);
+function ProductFigure({ copy }: { copy: HomepageCopy["hero"] }) {
+  return (
+    <figure className="relative overflow-hidden border border-border-strong bg-surface p-2 shadow-[0_26px_80px_rgba(28,25,45,0.14)] sm:p-3">
+      <div className="flex min-h-10 items-center justify-between border-b border-border px-2 pb-2 font-mono text-[10px] text-muted sm:px-3">
+        <span>{copy.captureLabel}</span>
+        <span>INV-2026-08</span>
+      </div>
+      <div className="overflow-hidden bg-surface-muted">
+        <Image
+          src="/marketing/screenshots/web-stock-home.png"
+          width={1148}
+          height={735}
+          sizes="(max-width: 1024px) 100vw, 58vw"
+          alt={copy.captureCaption}
+          loading="eager"
+          fetchPriority="high"
+          className="h-auto w-full"
+        />
+      </div>
+      <figcaption className="grid gap-2 border-t border-border px-3 py-3 text-[12px] leading-5 text-muted sm:grid-cols-[1fr_auto] sm:px-4">
+        <span>{copy.captureCaption}</span>
+        <span className="font-mono">{copy.captureMeta}</span>
+      </figcaption>
+    </figure>
+  );
+}
+
+function HomePageContent({
+  locale,
+  copy,
+}: {
+  locale: MarketingLocale;
+  copy: HomepageCopy;
+}) {
+  const href = (path: string) => marketingHref(locale, path);
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
       <main>
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:56px_56px] opacity-55 [mask-image:linear-gradient(to_bottom,black,transparent_86%)]" />
-          <div className="pointer-events-none absolute left-[2%] top-24 size-[340px] rounded-full bg-[#8ff0cc]/30 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[2%] top-16 size-[430px] rounded-full bg-[#8175ff]/20 blur-[130px]" />
-
-          <div className="relative mx-auto max-w-[980px] px-5 pb-20 pt-14 text-center sm:px-8 sm:pb-28 sm:pt-20 lg:pt-24">
-            <div className="relative z-10 mx-auto max-w-[820px] animate-fade-up">
-              <span className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand">
-                <Github className="size-3.5" />
-                MIT Open Source · Self-hosted
-              </span>
-
-              <h1 className="mt-6 text-[clamp(3.35rem,6.5vw,6.5rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-foreground">
-                Inventory
-                <span className="block text-brand">in seconds.</span>
+        <section className="overflow-hidden border-b border-border">
+          <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-16 lg:py-24">
+            <div className="animate-fade-up">
+              <p className="font-mono text-[12px] font-semibold text-brand">
+                {copy.hero.eyebrow}
+              </p>
+              <h1 className="mt-5 max-w-[720px] text-[clamp(3.5rem,6.8vw,6.8rem)] font-semibold leading-[0.88] tracking-[-0.075em]">
+                {copy.hero.title}
               </h1>
-              <p className="mx-auto mt-6 max-w-[590px] text-[20px] font-medium leading-8 tracking-[-0.02em] text-foreground/80 sm:text-[23px]">
-                Instead of losing hours to spreadsheets.
-              </p>
-              <p className="mx-auto mt-3 max-w-[570px] text-[16px] leading-7 text-muted sm:text-[18px] sm:leading-8">
-                Take a photo, review the proposed fields, and save. Open
-                Inventory turns physical objects into structured, searchable
-                records you can actually use day to day.
+              <p className="mt-7 max-w-[620px] text-[17px] leading-8 text-muted sm:text-[19px]">
+                {copy.hero.description}
               </p>
 
-              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link href={href("/docs#docker")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.25)] transition hover:-translate-y-0.5 hover:bg-brand-hover">
-                  <Container className="size-[17px]" />
-                  Start with Docker
-                </Link>
-                <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface/80 px-5 text-sm font-semibold text-foreground shadow-sm transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface">
-                  <Github className="size-[17px]" />
-                  View the source
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={publicDemoUrl}
+                  className="inline-flex h-12 items-center justify-center gap-2 bg-strong px-5 text-sm font-semibold text-on-strong transition hover:-translate-y-0.5 hover:opacity-90"
+                >
+                  {copy.hero.primary}
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </a>
+                <Link
+                  href={href("/docs#docker")}
+                  className="inline-flex h-12 items-center justify-center gap-2 border border-border-strong bg-surface px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-surface-muted"
+                >
+                  <Container className="size-4" aria-hidden="true" />
+                  {copy.hero.secondary}
+                </Link>
               </div>
 
-              <div className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px] font-semibold text-muted">
-                {["MIT licensed", "Your infrastructure", "Native iOS app", "Open REST API"].map((item) => (
-                  <span key={item} className="flex items-center gap-1.5">
-                    <Check className="size-3 text-success" strokeWidth={2.5} />
-                    {item}
-                  </span>
+              <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[12px] text-muted">
+                {copy.hero.facts.map((fact) => (
+                  <li key={fact} className="flex items-center gap-2">
+                    <span className="size-1.5 bg-success" aria-hidden="true" />
+                    {fact}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="lg:-mr-20 xl:-mr-28">
+              <ProductFigure copy={copy.hero} />
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="workflow"
+          className="scroll-mt-24 border-b border-border bg-surface py-20 sm:py-28"
+        >
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <SectionIntro
+              eyebrow={copy.workflow.eyebrow}
+              title={copy.workflow.title}
+              description={copy.workflow.description}
+            />
+
+            <div className="mt-12 grid gap-10 lg:grid-cols-[1.18fr_0.82fr] lg:items-start lg:gap-16">
+              <figure className="border border-border-strong bg-[#11130f] p-2 sm:p-3">
+                <Image
+                  src="/marketing/screenshots/web-batch-home.png"
+                  width={1148}
+                  height={640}
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  alt={copy.workflow.captureCaption}
+                  className="h-auto w-full"
+                />
+                <figcaption className="border-t border-white/10 px-3 py-3 text-[12px] text-white/62 sm:px-4">
+                  {copy.workflow.captureCaption}
+                </figcaption>
+              </figure>
+
+              <ol className="border-t border-border-strong">
+                {copy.workflow.steps.map((step) => (
+                  <li
+                    key={step.number}
+                    className="grid gap-3 border-b border-border-strong py-7 sm:grid-cols-[44px_1fr]"
+                  >
+                    <span className="font-mono text-[11px] text-brand">
+                      {step.number}
+                    </span>
+                    <div>
+                      <h3 className="text-[21px] font-semibold tracking-[-0.035em]">
+                        {step.title}
+                      </h3>
+                      <p className="mt-2 text-[14px] leading-6 text-muted">
+                        {step.copy}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border py-20 sm:py-28">
+          <div className="mx-auto grid max-w-[1240px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <SectionIntro
+              eyebrow={copy.tasks.eyebrow}
+              title={copy.tasks.title}
+              description={copy.tasks.description}
+            />
+
+            <div className="border-t border-border-strong">
+              {copy.tasks.items.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.title}
+                    href={href(item.href)}
+                    className="group grid gap-4 border-b border-border-strong py-6 sm:grid-cols-[42px_150px_1fr_auto] sm:items-start"
+                  >
+                    <span className="font-mono text-[11px] text-muted">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="flex items-center gap-3 text-[18px] font-semibold tracking-[-0.025em]">
+                      <Icon className="size-4 text-brand" aria-hidden="true" />
+                      {item.title}
+                    </span>
+                    <span className="text-[14px] leading-6 text-muted">
+                      {item.copy}
+                    </span>
+                    <span className="flex items-center gap-2 text-[12px] font-semibold text-brand">
+                      {copy.tasks.linkLabel}
+                      <ArrowRight
+                        className="size-3.5 transition group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border bg-surface py-20 sm:py-28">
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
+              <SectionIntro
+                eyebrow={copy.audiences.eyebrow}
+                title={copy.audiences.title}
+                description={copy.audiences.description}
+              />
+              <div className="border-t border-border-strong">
+                {copy.audiences.items.map((item, index) => (
+                  <Link
+                    key={item.title}
+                    href={href(item.href)}
+                    className="group grid gap-4 border-b border-border-strong py-7 sm:grid-cols-[42px_180px_1fr_auto] sm:items-start"
+                  >
+                    <p className="font-mono text-[11px] text-brand">
+                      {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="text-[20px] font-semibold leading-[1.1] tracking-[-0.035em]">
+                      {item.title}
+                    </h3>
+                    <p className="text-[14px] leading-6 text-muted">
+                      {item.copy}
+                    </p>
+                    <span className="inline-flex items-center gap-2 text-[12px] font-semibold text-foreground">
+                      {copy.audiences.linkLabel}
+                      <ArrowRight
+                        className="size-4 transition group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Link>
                 ))}
               </div>
             </div>
           </div>
         </section>
 
-        <HeroVideo locale="en" />
+        <section className="bg-[#15171a] py-20 text-white sm:py-28">
+          <div className="mx-auto grid max-w-[1240px] gap-14 px-5 sm:px-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-20">
+            <div>
+              <SectionIntro
+                eyebrow={copy.trust.eyebrow}
+                title={copy.trust.title}
+                description={copy.trust.description}
+                inverse
+              />
 
-        <section className="bg-surface py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">How capture works</p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">
-                One photo. One reviewable record.
-              </h2>
-              <p className="mt-5 max-w-2xl text-[16px] leading-7 text-muted">
-                Automation runs in the background. You stay in control of the
-                result, without filling out a long form before you can even
-                start.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-4 lg:grid-cols-3">
-              {englishFlow.map((step) => {
-                const Icon = step.icon;
-                return (
-                  <article key={step.title} className="group rounded-[26px] border border-border bg-background p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-8">
-                    <div className="flex items-center justify-between">
-                      <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand"><Icon className="size-5" /></span>
-                      <span className="font-mono text-[10px] text-muted">{step.number}</span>
-                    </div>
-                    <h3 className="mt-12 text-[26px] font-semibold tracking-[-0.045em]">{step.title}</h3>
-                    <p className="mt-3 text-[15px] leading-6 text-muted">{step.copy}</p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">Real interface · sample data</p>
-                <h2 className="mt-4 text-[44px] font-semibold leading-[0.96] tracking-[-0.06em] sm:text-[62px]">Everything visible. Nothing hand-wavy.</h2>
-              </div>
-              <p className="max-w-lg text-[16px] leading-7 text-white/60 lg:justify-self-end">
-                Four sample records, seven units, and concrete storage
-                locations show what Open Inventory looks like in use, beyond a
-                feature checklist.
-              </p>
-            </div>
-
-            <div className="relative mt-12 overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] p-2 shadow-2xl sm:p-3">
-              <span className="absolute right-5 top-5 z-10 rounded-full border border-white/15 bg-[#17181d]/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70 backdrop-blur">Sample data</span>
-              <div className="overflow-hidden rounded-[20px] bg-[#f4f5f7]">
-                <Image src="/marketing/dashboard-mock-data.jpg" width={1440} height={960} alt="Open Inventory dashboard containing four sample records, seven units, and an inventory value of €7,924" className="h-auto w-full" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-background py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">For real inventories</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">From the basement to the prototype lab.</h2>
-              </div>
-              <Link href={href("/use-cases")} className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">All use cases <ArrowRight className="size-4" /></Link>
-            </div>
-
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {englishUseCases.map((item) => (
-                <Link key={item.slug} href={href(`/use-cases/${item.slug}`)} className="group overflow-hidden rounded-[26px] border border-border bg-surface transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
-                  <div className="relative aspect-[3/2] overflow-hidden bg-surface-muted">
-                    <Image src={item.image} fill sizes="(max-width: 1024px) 100vw, 33vw" alt="" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-                  </div>
-                  <div className="p-6 sm:p-7">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-brand">{item.label}</p>
-                    <h3 className="mt-3 text-[25px] font-semibold leading-[1.05] tracking-[-0.045em]">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted">{item.copy}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">View use case <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-surface py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr]">
-              <div className="max-w-lg">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">More than a list</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">Every feature, explained in context.</h2>
-                <p className="mt-5 text-[16px] leading-7 text-muted">
-                  From the first capture to the open API, each feature maps to
-                  a concrete step in an inventory workflow.
-                </p>
-                <Link href={href("/features")} className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-strong px-4 text-sm font-semibold text-on-strong">Explore all features <ArrowRight className="size-4" /></Link>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                {englishFeatureGroups.map((feature) => {
-                  const Icon = feature.icon;
+              <div className="mt-10 border-t border-white/18">
+                {copy.trust.items.map((item) => {
+                  const Icon = item.icon;
                   return (
-                    <article key={feature.title} className="rounded-2xl border border-border bg-background p-5">
-                      <Icon className="size-5 text-brand" />
-                      <h3 className="mt-5 text-base font-semibold tracking-[-0.025em]">{feature.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-muted">{feature.copy}</p>
-                    </article>
+                    <div
+                      key={item.title}
+                      className="grid gap-3 border-b border-white/18 py-5 sm:grid-cols-[36px_150px_1fr]"
+                    >
+                      <Icon
+                        className="size-4 text-[#8ff0cc]"
+                        aria-hidden="true"
+                      />
+                      <h3 className="text-[15px] font-semibold">
+                        {item.title}
+                      </h3>
+                      <p className="text-[13px] leading-6 text-white/62">
+                        {item.copy}
+                      </p>
+                    </div>
                   );
                 })}
               </div>
-            </div>
-          </div>
-        </section>
 
-        <section className="overflow-hidden bg-background py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1140px] gap-14 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-            <div className="relative mx-auto w-full max-w-[390px] pb-8">
-              <div className="absolute inset-10 rounded-full bg-brand-soft blur-[70px]" />
-              <div className="relative overflow-hidden rounded-[42px] border border-border bg-surface-subtle p-3 shadow-[var(--shadow-md)]">
-                <Image src="/marketing/ios-app-icon-current.png" width={1024} height={1024} alt="Current app icon for the native Open Inventory iOS app" className="h-auto w-full rounded-[31px]" />
-              </div>
-              <div className="absolute -bottom-1 -right-4 w-[220px] rounded-2xl border border-border bg-surface p-3.5 shadow-[var(--shadow-md)]">
-                <div className="flex items-center gap-2.5">
-                  <span className="grid size-9 place-items-center rounded-xl bg-success-soft text-success"><CircleDot className="size-4" /></span>
-                  <div><p className="text-[9px] font-semibold">Upload queue</p><p className="mt-0.5 text-[8px] text-muted">durable · retryable</p></div>
-                </div>
-              </div>
+              <Link
+                href={href("/open-source")}
+                className="mt-7 inline-flex items-center gap-2 text-[13px] font-semibold text-[#8ff0cc]"
+              >
+                {copy.trust.more}
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
             </div>
 
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-strong">
-                <Smartphone className="size-3.5 text-brand" /> Native SwiftUI app · Open Source
-              </span>
-              <h2 className="mt-5 max-w-2xl text-[44px] font-semibold leading-[0.97] tracking-[-0.06em] sm:text-[62px]">Capture inventory where it actually lives.</h2>
-              <p className="mt-6 max-w-xl text-[16px] leading-7 text-muted">
-                Take photos, scan QR codes and barcodes, search and edit
-                records, book stock movements, and optionally capture rooms
-                with LiDAR. The native app connects to your own server.
-              </p>
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {[
-                  [Camera, "Up to 12 photos per capture"],
-                  [Barcode, "QR, EAN, Code 128, and more"],
-                  [PackageCheck, "Book stock in or out on the spot"],
-                  [MapPinned, "Optional RoomPlan and LiDAR"],
-                ].map(([Icon, text]) => {
-                  const ItemIcon = Icon as typeof Camera;
-                  return <div key={String(text)} className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-sm font-medium text-muted-strong"><ItemIcon className="size-4 shrink-0 text-brand" />{String(text)}</div>;
-                })}
+            <figure className="mx-auto w-full max-w-[560px] border border-white/16 bg-[#0d0f11] p-3 sm:p-4">
+              <div className="flex items-center justify-between border-b border-white/12 px-1 pb-3 font-mono text-[10px] text-white/54">
+                <span>{copy.trust.iosCaption}</span>
+                <span>iOS 17+</span>
               </div>
-              <div className="mt-7 flex flex-wrap items-center gap-4">
-                <Link href={href("/ios")} className="inline-flex items-center gap-2 text-sm font-semibold text-brand">Explore the iOS app <ArrowRight className="size-4" /></Link>
-                <span className="text-xs text-muted">iOS 17+ · Set up through Xcode · Source included in the repository</span>
+              <div className="mt-4 overflow-hidden border border-white/12 bg-black">
+                <Image
+                  src="/marketing/screenshots/ios-search-home.png"
+                  width={1206}
+                  height={980}
+                  sizes="(max-width: 1024px) 100vw, 560px"
+                  alt={copy.trust.iosCaption}
+                  className="h-auto w-full"
+                />
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-brand-solid px-5 py-8 sm:px-8 sm:py-12">
-          <div className="relative mx-auto max-w-[1180px] overflow-hidden rounded-[30px] bg-[#17181d] px-6 py-16 text-white sm:px-12 sm:py-20">
-            <div className="pointer-events-none absolute left-1/2 top-0 h-60 w-[620px] -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(143,240,204,0.24),transparent_68%)]" />
-            <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8ff0cc]">
-                  <Github className="size-3.5" /> MIT Open Source
+              <figcaption className="mt-4 grid grid-cols-2 gap-3 border-t border-white/12 pt-4 font-mono text-[10px] text-white/52">
+                <span className="flex items-center gap-2">
+                  <Barcode className="size-3.5" aria-hidden="true" />
+                  QR · EAN · Code 128
                 </span>
-                <h2 className="mt-6 max-w-3xl text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">Your inventory. Your infrastructure. Your code.</h2>
-                <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/55">
-                  Next.js, PostgreSQL, Docker, OpenAPI, and the native iOS app
-                  live in one public repository. You choose which optional AI
-                  and storage providers your installation uses.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href={href("/open-source")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#8ff0cc] px-5 text-sm font-semibold text-[#17382d]">Why Open Source? <ArrowRight className="size-4" /></Link>
-                <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold text-white"><Github className="size-4" />View on GitHub</a>
-              </div>
-            </div>
+                <span className="flex items-center gap-2">
+                  <MapPin className="size-3.5" aria-hidden="true" />
+                  GPS · RoomPlan
+                </span>
+              </figcaption>
+            </figure>
           </div>
         </section>
 
-        <section className="bg-background py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">From the blog</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">Practical notes on inventory systems.</h2>
-              </div>
-              <Link href={href("/blog")} className="inline-flex items-center gap-2 text-sm font-semibold text-brand">All articles <ArrowRight className="size-4" /></Link>
+        <section className="border-b border-border bg-brand-solid px-5 py-14 text-on-brand sm:px-8 sm:py-20">
+          <div className="mx-auto grid max-w-[1120px] gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <p className="font-mono text-[12px] font-semibold text-white/74">
+                {copy.closing.eyebrow}
+              </p>
+              <h2 className="mt-4 text-[clamp(2.8rem,5.7vw,5.5rem)] font-semibold leading-[0.94] tracking-[-0.065em]">
+                {copy.closing.title}
+              </h2>
+              <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/76">
+                {copy.closing.description}
+              </p>
             </div>
-            <div className="mt-10 grid gap-4 lg:grid-cols-3">
-              {[
-                { icon: Camera, title: "From a photo to a record", copy: "How batch capture and reviewable AI proposals work together.", href: "/blog/serienerfassung-in-sekunden" },
-                { icon: Tags, title: "Bulk or serialized stock?", copy: "Choosing a stock model for consumables, tools, and devices.", href: "/blog/mengenbestand-oder-serialisiert" },
-                { icon: Database, title: "Why self-host inventory?", copy: "What open software and your own infrastructure mean for inventory data.", href: "/blog/warum-inventar-selbst-hosten" },
-              ].map((article) => {
-                const Icon = article.icon;
-                return (
-                  <Link key={article.href} href={href(article.href)} className="group rounded-[24px] border border-border bg-surface p-6 transition hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
-                    <Icon className="size-5 text-brand" />
-                    <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.04em]">{article.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted">{article.copy}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">Read article <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-surface px-5 py-16 sm:px-8 sm:py-20">
-          <div className="mx-auto max-w-[960px] text-center">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Start in the open. Keep moving quickly.</p>
-            <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">Capture the input in seconds. Review the result when it is ready.</h2>
-            <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-muted">Photo intake is deliberately short; analysis continues in the background. Open Inventory is MIT licensed, self-hostable, and its source code and documented interfaces remain available to adapt.</p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link href={href("/docs#docker")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand"><Container className="size-4" />Start with Docker</Link>
-              <Link href={href("/features")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-background px-5 text-sm font-semibold">All features <ArrowRight className="size-4" /></Link>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link
+                href={href("/docs#docker")}
+                className="inline-flex h-12 items-center justify-center gap-2 bg-white px-5 text-sm font-semibold text-[#202127]"
+              >
+                <Container className="size-4" aria-hidden="true" />
+                {copy.closing.primary}
+              </Link>
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 border border-white/28 px-5 text-sm font-semibold text-white"
+              >
+                <Github className="size-4" aria-hidden="true" />
+                {copy.closing.secondary}
+              </a>
             </div>
           </div>
         </section>
@@ -769,4 +746,9 @@ async function EnglishHomePage() {
       <MarketingFooter />
     </div>
   );
+}
+
+export default async function HomePage() {
+  const locale = await getMarketingLocale();
+  return <HomePageContent locale={locale} copy={homepageCopy[locale]} />;
 }

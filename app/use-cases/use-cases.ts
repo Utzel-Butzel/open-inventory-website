@@ -57,6 +57,28 @@ export type UseCase = {
   openSourceCopy: string;
 };
 
+export const useCaseIOSCaptures: Record<string, string> = {
+  makerspace: "/marketing/screenshots/ios-stock-management.png",
+  familie: "/marketing/screenshots/ios-search.png",
+  startup: "/marketing/screenshots/ios-permissions.png",
+  verein: "/marketing/screenshots/ios-inventory.png",
+  sammlung: "/marketing/screenshots/ios-item-detail.png",
+  schule: "/marketing/screenshots/ios-settings.png",
+  handwerk: "/marketing/screenshots/ios-map.png",
+  labor: "/marketing/screenshots/ios-system-status.png",
+};
+
+export const useCaseWebCaptures: Record<string, string> = {
+  makerspace: "/marketing/screenshots/web-stock.png",
+  familie: "/marketing/screenshots/web-inventory.png",
+  startup: "/marketing/screenshots/web-api-tokens.png",
+  verein: "/marketing/screenshots/web-orders.png",
+  sammlung: "/marketing/screenshots/web-item-detail.png",
+  schule: "/marketing/screenshots/web-settings-access.png",
+  handwerk: "/marketing/screenshots/web-locations.png",
+  labor: "/marketing/screenshots/web-dashboard.png",
+};
+
 export const useCases: UseCase[] = [
   {
     slug: "makerspace",
@@ -67,9 +89,9 @@ export const useCases: UseCase[] = [
       "Maschinen, Handwerkzeug und Verbrauchsmaterial mit QR-Codes, Standorten und nachvollziehbaren Bewegungen organisieren.",
     description:
       "Open Inventory verbindet Werkzeugkatalog, Lagerbestand und Ausgabe in einem selbst gehosteten System. Neue Gegenstände starten mit einem Foto; Mitglieder finden anschließend das richtige Werkzeug, den Lagerort und den aktuellen Bestand.",
-    image: "/marketing/usecase-makerspace-v2.webp",
+    image: "/marketing/photography/workshop-team.webp",
     imageAlt:
-      "Mitarbeitende in einer gut genutzten offenen Werkstatt mit beschrifteten Werkzeugen",
+      "Ein Team arbeitet gemeinsam an einem realen Werkstatttisch",
     visual: "makerspace",
     accent: "text-[#5f55e8]",
     softAccent: "bg-[#eeedff] text-[#5147d9]",
@@ -178,9 +200,9 @@ export const useCases: UseCase[] = [
       "Keller, Dachboden, Dokumente und geteilte Dinge ohne komplizierte Listen gemeinsam übersichtlich halten.",
     description:
       "Open Inventory macht aus Fotos ein durchsuchbares Familieninventar. Orte, Behälter, Bilder und eigene Felder schaffen Ordnung, ohne dass jedes Familienmitglied zuerst ein Warenwirtschaftssystem lernen muss.",
-    image: "/marketing/usecase-family-v2.webp",
+    image: "/marketing/photography/home-labels.webp",
     imageAlt:
-      "Familie beim gemeinsamen Sortieren und Beschriften von Aufbewahrungsboxen",
+      "Ein Mann prüft gedruckte Beschriftungen an Umzugskartons",
     visual: "family",
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",
@@ -289,9 +311,9 @@ export const useCases: UseCase[] = [
       "Laptops, Testgeräte, Büroausstattung und Einkauf mit Rollen, Seriennummern und offener API skalierbar organisieren.",
     description:
       "Open Inventory gibt jungen Teams früh einen belastbaren Überblick: Wer nutzt welches Gerät? Was ist unterwegs? Was kommt mit der nächsten Bestellung? Der Einstieg bleibt schnell, die Struktur wächst mit.",
-    image: "/marketing/usecase-startup-v2.webp",
+    image: "/marketing/photography/server-rack.webp",
     imageAlt:
-      "Kleines Startup-Team bei der Erfassung von Laptops und technischer Ausstattung",
+      "Reale Netzwerkverkabelung in einem bestückten Serverschrank",
     visual: "startup",
     accent: "text-[#aa4b08]",
     softAccent: "bg-[#fff1df] text-[#9a4308]",
@@ -400,9 +422,9 @@ export const useCases: UseCase[] = [
       "Vom Veranstaltungskabel bis zum Trikot: Ausgabe, Lagerorte und Berechtigungen so dokumentieren, dass Ehrenamt einfach bleibt.",
     description:
       "Open Inventory schafft einen gemeinsamen, durchsuchbaren Materialstand für Vereinsheim, Lager und Veranstaltungen. Einfache Scan-Abläufe helfen bei der Ausgabe; Rollen schützen sensible Änderungen.",
-    image: "/marketing/usecase-club-v2.webp",
+    image: "/marketing/photography/qr-package-scan.webp",
     imageAlt:
-      "Ehrenamtliche prüfen gemeinsam gebrauchte Veranstaltungstechnik in einem Vereinslager",
+      "Ein Mann fotografiert das Etikett eines realen Pakets mit seinem Smartphone",
     visual: "club",
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",
@@ -511,9 +533,9 @@ export const useCases: UseCase[] = [
       "Fotos, Zustand, Standort, Beziehungen und eigene Metadaten in einem offenen, durchsuchbaren Katalog bewahren.",
     description:
       "Open Inventory verbindet visuelle Dokumentation mit frei konfigurierbaren Daten. So entsteht aus vielen Einzelobjekten ein konsistenter Katalog, der privat bleiben oder gezielt lesbar geteilt werden kann.",
-    image: "/marketing/usecase-collection-v2.webp",
+    image: "/marketing/photography/home-labels.webp",
     imageAlt:
-      "Sammler dokumentiert gebrauchte Kameras und Alltagsobjekte an einem einfachen Arbeitstisch",
+      "Ein Mann ordnet gedruckte Beschriftungen für reale Aufbewahrungsboxen",
     visual: "collection",
     accent: "text-[#aa4b08]",
     softAccent: "bg-[#fff1df] text-[#9a4308]",
@@ -622,9 +644,9 @@ export const useCases: UseCase[] = [
       "Tablets, Experimentierkoffer und Fachraumausstattung schnell erfassen, ausgeben und regelmäßig prüfen.",
     description:
       "Open Inventory verbindet Fotodokumentation, Gerätewagen, Etiketten und Inventurzyklen in einer selbst gehosteten Anwendung. Lehrkräfte finden Ausstattung schnell, während Verwaltung und Technik verlässliche Bestandsdaten behalten.",
-    image: "/marketing/usecase-school-v2.webp",
+    image: "/marketing/photography/workshop-team.webp",
     imageAlt:
-      "Zwei Schulmitarbeitende prüfen einen sichtbar gebrauchten Wagen mit gemeinsam genutzten Tablets",
+      "Mehrere Personen arbeiten gemeinsam an einem Werkstattprojekt",
     visual: "school",
     accent: "text-[#3f5fc7]",
     softAccent: "bg-[#e8edff] text-[#3955b8]",
@@ -675,9 +697,9 @@ export const useCases: UseCase[] = [
       "Fahrzeugbestände, Elektrowerkzeuge und Verbrauchsmaterial mobil erfassen und verlässlich nachbestellen.",
     description:
       "Open Inventory macht Servicefahrzeuge und Lager zu nachvollziehbaren Standorten. Mitarbeitende scannen oder fotografieren vor Ort; Bestand, Ausgabe und Nachbestellung greifen im selbst gehosteten System zusammen.",
-    image: "/marketing/usecase-trades-v2.webp",
+    image: "/marketing/photography/warehouse-scan.webp",
     imageAlt:
-      "Servicetechniker dokumentiert Werkzeugkoffer in den gebrauchten Regalen eines Arbeitsfahrzeugs",
+      "Ein Lagermitarbeiter scannt einen realen Artikel direkt am Regal",
     visual: "trades",
     accent: "text-[#a54c0b]",
     softAccent: "bg-[#fff0df] text-[#914108]",
@@ -728,9 +750,9 @@ export const useCases: UseCase[] = [
       "Geräte, Komponenten und Prototypteile mit Seriennummer, Standort, Stückliste und offenen Schnittstellen organisieren.",
     description:
       "Open Inventory ist kein LIMS, sondern ein offener Inventarbaustein für technische Labore und Prototyping. Messgeräte, Teileboxen und Baugruppen werden fotografiert, strukturiert und nachvollziehbar bewegt.",
-    image: "/marketing/usecase-lab-v2.webp",
+    image: "/marketing/photography/lab-pipette.webp",
     imageAlt:
-      "Mitarbeiter dokumentiert ein sichtbar gebrauchtes Messgerät an einem realistischen Elektronikarbeitsplatz",
+      "Nahaufnahme einer Person bei der Arbeit mit realer Laborausstattung",
     visual: "lab",
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",

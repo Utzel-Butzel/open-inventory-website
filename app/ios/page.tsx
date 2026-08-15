@@ -9,24 +9,18 @@ import {
   Box,
   Camera,
   Check,
-  ChevronRight,
-  CircleDot,
-  CloudUpload,
   Code2,
   Github,
-  Hammer,
   KeyRound,
   Map,
   MapPin,
   PackagePlus,
-  QrCode,
   RefreshCw,
   ScanLine,
   Search,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  Warehouse,
   WifiOff,
 } from "lucide-react";
 
@@ -135,178 +129,159 @@ const everydayFeaturesEn: AppFeature[] = [
   },
 ];
 
-function InventoryRow({
-  icon: Icon,
-  name,
-  meta,
-  amount,
-  tone,
-}: {
-  icon: LucideIcon;
-  name: string;
-  meta: string;
-  amount: string;
-  tone: string;
-}) {
+function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
+  const isEnglish = locale === "en";
+  const captures = [
+    {
+      src: "/marketing/screenshots/ios-inventory.png",
+      label: isEnglish ? "Inventory" : "Inventarliste",
+      alt: isEnglish
+        ? "Real capture of the native Open Inventory iOS app showing inventory records with demo data"
+        : "Echte Aufnahme der nativen Open-Inventory-iOS-App mit Inventareinträgen und Demo-Daten",
+    },
+    {
+      src: "/marketing/screenshots/ios-item-detail.png",
+      label: isEnglish ? "Item detail" : "Eintragsdetail",
+      alt: isEnglish
+        ? "Real capture of the native Open Inventory iOS app showing an item detail with demo data"
+        : "Echte Aufnahme der nativen Open-Inventory-iOS-App mit einem Eintragsdetail und Demo-Daten",
+    },
+  ];
+
   return (
-    <div className="flex items-center gap-3 border-b border-[#d9d9de] px-4 py-3.5 last:border-0">
-      <span className={`grid size-11 shrink-0 place-items-center rounded-[12px] ${tone}`}>
-        <Icon className="size-5" strokeWidth={1.9} aria-hidden="true" />
-      </span>
-      <div className="min-w-0">
-        <p className="truncate text-[12px] font-semibold tracking-[-0.02em] text-[#16171a]">
-          {name}
-        </p>
-        <p className="mt-0.5 truncate text-[9px] text-[#74777e]">{meta}</p>
+    <figure className="mx-auto w-full max-w-[570px]">
+      <div className="grid grid-cols-2 items-end gap-3 sm:gap-5">
+        {captures.map((capture, index) => (
+          <div
+            key={capture.src}
+            className={index === 1 ? "translate-y-6 sm:translate-y-10" : undefined}
+          >
+            <div className="relative rounded-[clamp(1.65rem,5vw,3.25rem)] border-[clamp(4px,0.8vw,7px)] border-[#2c2d31] bg-black p-[clamp(3px,0.6vw,5px)] shadow-[0_35px_80px_rgba(0,0,0,0.38),inset_0_0_0_1px_rgba(255,255,255,0.18)]">
+              <span className="absolute -left-[9px] top-[18%] h-[11%] w-[3px] rounded-l bg-[#424349]" />
+              <span className="absolute -right-[9px] top-[24%] h-[13%] w-[3px] rounded-r bg-[#424349]" />
+              <div className="relative aspect-[1206/2622] overflow-hidden rounded-[clamp(1.25rem,4vw,2.65rem)] bg-[#f2f2f7]">
+                <Image
+                  src={capture.src}
+                  alt={capture.alt}
+                  fill
+                  sizes="(max-width: 639px) 45vw, (max-width: 1023px) 260px, 220px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-white/40 sm:text-[10px]">
+              {capture.label}
+            </p>
+          </div>
+        ))}
       </div>
-      <div className="ml-auto flex items-center gap-1.5">
-        <span className="rounded-full bg-[#e8f7f0] px-2 py-1 text-[8px] font-bold text-[#11734d]">
-          {amount}
-        </span>
-        <ChevronRight className="size-3.5 text-[#b2b4ba]" aria-hidden="true" />
-      </div>
-    </div>
+      <figcaption className="mt-10 text-center text-[10px] font-medium text-white/45 sm:mt-14">
+        {isEnglish
+          ? "Real app captures with demo data"
+          : "Echte App-Aufnahmen mit Demo-Daten"}
+      </figcaption>
+    </figure>
   );
 }
 
-function IPhoneMockup({ locale }: { locale: "de" | "en" }) {
+function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
   const isEnglish = locale === "en";
+  const captures = [
+    {
+      src: "/marketing/screenshots/ios-search.png",
+      label: isEnglish ? "Search" : "Suche",
+      alt: isEnglish
+        ? "Actual native Open Inventory search with demo records"
+        : "Echte native Open-Inventory-Suche mit Demo-Einträgen",
+    },
+    {
+      src: "/marketing/screenshots/ios-stock-management.png",
+      label: isEnglish ? "Stock" : "Bestand",
+      alt: isEnglish
+        ? "Actual native Open Inventory stock management with demo data"
+        : "Echte native Open-Inventory-Bestandsverwaltung mit Demo-Daten",
+    },
+    {
+      src: "/marketing/screenshots/ios-map.png",
+      label: isEnglish ? "Map" : "Karte",
+      alt: isEnglish
+        ? "Actual native Open Inventory map with purpose-built demo locations"
+        : "Echte native Open-Inventory-Karte mit eigens angelegten Demo-Orten",
+    },
+    {
+      src: "/marketing/screenshots/ios-settings.png",
+      label: isEnglish ? "Workspace" : "Arbeitsbereich",
+      alt: isEnglish
+        ? "Actual native Open Inventory workspace settings"
+        : "Echte native Open-Inventory-Einstellungen für den Arbeitsbereich",
+    },
+    {
+      src: "/marketing/screenshots/ios-permissions.png",
+      label: isEnglish ? "Permissions" : "Berechtigungen",
+      alt: isEnglish
+        ? "Actual native Open Inventory permissions screen for a demo administrator"
+        : "Echte native Open-Inventory-Berechtigungsansicht eines Demo-Administrators",
+    },
+    {
+      src: "/marketing/screenshots/ios-system-status.png",
+      label: isEnglish ? "System status" : "Systemstatus",
+      alt: isEnglish
+        ? "Actual native Open Inventory system-status screen for the local demo server"
+        : "Echte native Open-Inventory-Systemstatusansicht des lokalen Demo-Servers",
+    },
+  ];
 
   return (
-    <figure className="mx-auto w-full max-w-[370px]">
-      <div className="relative rounded-[58px] border-[7px] border-[#2c2d31] bg-black p-[5px] shadow-[0_45px_100px_rgba(0,0,0,0.38),inset_0_0_0_1px_rgba(255,255,255,0.18)]">
-        <div className="absolute -left-[10px] top-32 h-20 w-[3px] rounded-l bg-[#424349]" />
-        <div className="absolute -right-[10px] top-40 h-24 w-[3px] rounded-r bg-[#424349]" />
-        <div className="relative min-h-[720px] overflow-hidden rounded-[46px] bg-[#f2f2f7] text-[#16171a]">
-          <div className="absolute left-1/2 top-3 z-20 h-[27px] w-[92px] -translate-x-1/2 rounded-full bg-black" />
-
-          <div className="flex h-12 items-end justify-between px-7 pb-1.5 text-[9px] font-bold">
-            <span>09:41</span>
-            <div className="flex items-center gap-1">
-              <span className="flex h-2.5 items-end gap-px">
-                {[4, 6, 8, 10].map((height) => (
-                  <span key={height} className="w-[2px] rounded-sm bg-[#16171a]" style={{ height }} />
-                ))}
-              </span>
-              <span className="h-2.5 w-4 rounded-[3px] border border-[#16171a] p-px">
-                <span className="block h-full w-[85%] rounded-[1px] bg-[#16171a]" />
-              </span>
-            </div>
+    <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+        <div className="grid gap-7 lg:grid-cols-[1fr_0.68fr] lg:items-end">
+          <div className="max-w-4xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+              {isEnglish ? "More actual app states" : "Mehr echte App-Zustände"}
+            </p>
+            <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
+              {isEnglish
+                ? "Six workflows. Directly from the native app."
+                : "Sechs Abläufe. Direkt aus der nativen App."}
+            </h2>
           </div>
-
-          <div className="px-4 pb-2 pt-2">
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-[10px] font-semibold text-[#6d45d8]">
-                  {isEnglish ? "Workshop" : "Werkstatt"}
-                </p>
-                <h2 className="mt-0.5 text-[27px] font-bold tracking-[-0.05em]">
-                  {isEnglish ? "Inventory" : "Inventar"}
-                </h2>
-              </div>
-              <div className="flex gap-2">
-                <span className="grid size-9 place-items-center rounded-full bg-white text-[#6d45d8] shadow-sm">
-                  <Camera className="size-[17px]" aria-hidden="true" />
-                </span>
-                <span className="grid size-9 place-items-center rounded-full bg-[#6d45d8] text-white shadow-sm">
-                  <QrCode className="size-[17px]" aria-hidden="true" />
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-4 flex h-9 items-center gap-2 rounded-[11px] bg-[#e3e3e8] px-3 text-[10px] text-[#7a7d84]">
-              <Search className="size-3.5" aria-hidden="true" />
-              {isEnglish ? "Name, SKU, tag, or location" : "Name, SKU, Tag oder Ort"}
-            </div>
-
-            <div className="mt-3 flex gap-2 overflow-hidden text-[9px] font-semibold">
-              <span className="rounded-full bg-[#6d45d8] px-3 py-1.5 text-white">
-                {isEnglish ? "All 248" : "Alle 248"}
-              </span>
-              <span className="rounded-full bg-white px-3 py-1.5 text-[#54575d]">
-                {isEnglish ? "Tools" : "Werkzeuge"}
-              </span>
-              <span className="rounded-full bg-white px-3 py-1.5 text-[#54575d]">
-                {isEnglish ? "On loan" : "Verliehen"}
-              </span>
-            </div>
-          </div>
-
-          <div className="mx-3 mt-2 overflow-hidden rounded-[17px] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-            <InventoryRow
-              icon={Hammer}
-              name={isEnglish ? "18 V cordless drill" : "Akku-Bohrschrauber 18 V"}
-              meta={isEnglish ? "Shelf B · TOOL-0042" : "Regal B · WERK-0042"}
-              amount={isEnglish ? "6 pcs" : "6 Stk."}
-              tone="bg-[#fff2e2] text-[#9b5300]"
-            />
-            <InventoryRow
-              icon={Box}
-              name={isEnglish ? "Parts organizer M4–M8" : "Sortimentskasten M4–M8"}
-              meta={isEnglish ? "Workbench · BOX-0018" : "Werkbank · BOX-0018"}
-              amount={isEnglish ? "1 pc" : "1 Stk."}
-              tone="bg-[#eeedff] text-[#5147d9]"
-            />
-            <InventoryRow
-              icon={Warehouse}
-              name={isEnglish ? "25 m cable reel" : "Kabeltrommel 25 m"}
-              meta={isEnglish ? "North storage · ELEC-0061" : "Lager Nord · ELEK-0061"}
-              amount={isEnglish ? "4 pcs" : "4 Stk."}
-              tone="bg-[#eaf4ff] text-[#2670b8]"
-            />
-            <InventoryRow
-              icon={MapPin}
-              name={isEnglish ? "Label printer" : "Etikettendrucker"}
-              meta={isEnglish ? "Office · DEV-0023" : "Büro · SER-0023"}
-              amount={isEnglish ? "1 pc" : "1 Stk."}
-              tone="bg-[#e8f7f0] text-[#11734d]"
-            />
-          </div>
-
-          <div className="mx-3 mt-3 flex items-center gap-3 rounded-[15px] bg-[#17181d] p-3 text-white">
-            <span className="grid size-9 place-items-center rounded-[11px] bg-[#2d294b] text-[#a9a2ff]">
-              <CloudUpload className="size-4" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="text-[10px] font-semibold">
-                {isEnglish ? "Uploading 3 jobs" : "3 Aufträge werden übertragen"}
-              </p>
-              <p className="mt-0.5 text-[8px] text-white/48">
-                {isEnglish
-                  ? "Persisted locally · resumes automatically"
-                  : "Absturzsicher · automatisch fortsetzen"}
-              </p>
-            </div>
-            <CircleDot className="ml-auto size-3.5 text-[#8ff0cc]" aria-hidden="true" />
-          </div>
-
-          <div className="absolute inset-x-0 bottom-0 border-t border-[#d6d6dc] bg-white/95 px-5 pb-5 pt-2 backdrop-blur">
-            <div className="grid grid-cols-4 gap-2 text-center text-[8px] font-semibold text-[#7b7d84]">
-              {[
-                [Box, isEnglish ? "Inventory" : "Inventar", true],
-                [Map, isEnglish ? "Map" : "Karte", false],
-                [ScanLine, isEnglish ? "Rooms" : "Räume", false],
-                [ShieldCheck, isEnglish ? "Settings" : "Einstellungen", false],
-              ].map(([Icon, label, active]) => {
-                const TabIcon = Icon as LucideIcon;
-                return (
-                  <span key={label as string} className={active ? "text-[#6d45d8]" : undefined}>
-                    <TabIcon className="mx-auto mb-1 size-[18px]" aria-hidden="true" />
-                    {label as string}
-                  </span>
-                );
-              })}
-            </div>
-            <div className="mx-auto mt-4 h-1 w-28 rounded-full bg-[#17181d]" />
-          </div>
+          <p className="text-[15px] leading-7 text-muted">
+            {isEnglish
+              ? "These are unaltered Simulator captures of the compiled SwiftUI client connected to a separate local demo instance. The records and locations were created specifically for these screenshots."
+              : "Das sind unveränderte Simulatoraufnahmen des kompilierten SwiftUI-Clients, verbunden mit einer getrennten lokalen Demo-Instanz. Einträge und Orte wurden eigens für diese Screenshots angelegt."}
+          </p>
         </div>
+
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-6">
+          {captures.map((capture, index) => (
+            <figure
+              key={capture.src}
+              className={`group ${index % 2 === 1 ? "sm:translate-y-6" : ""}`}
+            >
+              <div className="overflow-hidden rounded-[28px] border-[5px] border-[#17181d] bg-[#17181d] p-1 shadow-[0_18px_48px_rgba(28,25,45,0.17)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_64px_rgba(28,25,45,0.24)] sm:rounded-[36px] sm:border-[6px]">
+                <Image
+                  src={capture.src}
+                  width={1206}
+                  height={2622}
+                  sizes="(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 180px"
+                  alt={capture.alt}
+                  className="h-auto w-full rounded-[20px] sm:rounded-[27px]"
+                />
+              </div>
+              <figcaption className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.13em] text-muted sm:text-[10px]">
+                {capture.label}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <p className="mt-10 text-center text-[10px] font-medium text-muted sm:mt-16">
+          {isEnglish
+            ? "Actual SwiftUI app captures · purpose-built demo data · no generated interfaces"
+            : "Echte SwiftUI-App-Aufnahmen · eigens angelegte Demo-Daten · keine generierten Oberflächen"}
+        </p>
       </div>
-      <figcaption className="mt-4 text-center text-[10px] text-white/45">
-        {isEnglish
-          ? "Illustrative app view with mock data"
-          : "Illustrative App-Ansicht mit Mockdaten"}
-      </figcaption>
-    </figure>
+    </section>
   );
 }
 
@@ -393,7 +368,7 @@ export default async function IOSPage() {
               </div>
             </div>
 
-            <IPhoneMockup locale={locale} />
+            <IPhoneCaptures locale={locale} />
           </div>
         </section>
 
@@ -467,6 +442,8 @@ export default async function IOSPage() {
             </div>
           </div>
         </section>
+
+        <NativeWorkflowCaptures locale={locale} />
 
         <section className="border-y border-border bg-[#17181d] py-20 text-white sm:py-28">
           <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">

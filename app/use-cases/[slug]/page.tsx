@@ -19,7 +19,6 @@ import {
   MapPinned,
   Network,
   PackageCheck,
-  PackageSearch,
   ScanLine,
   Share2,
   ShieldCheck,
@@ -44,6 +43,8 @@ import { getMarketingLocale } from "@/lib/marketing-locale";
 
 import {
   getUseCase,
+  useCaseIOSCaptures,
+  useCaseWebCaptures,
   useCases,
   type UseCase,
   type UseCaseIcon,
@@ -120,122 +121,48 @@ function HeroVisual({ useCase }: { useCase: UseCase }) {
 
 function MockInventory({ useCase }: { useCase: UseCase }) {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-border bg-[#17181d] p-2.5 shadow-[0_30px_80px_rgba(18,20,28,0.2)]">
+    <figure className="overflow-hidden rounded-[28px] border border-border bg-[#17181d] p-2.5 shadow-[0_30px_80px_rgba(18,20,28,0.2)]">
       <div className="flex h-9 items-center gap-1.5 px-3">
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
         <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.14em] text-white/45">
-          Beispieldaten · keine Echtdaten
+          Echte Web-App-Aufnahme · Demo-Daten
         </span>
       </div>
-      <div className="rounded-[20px] bg-background p-4 sm:p-5">
-        <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-brand">
-              {useCase.name}-Inventar
-            </p>
-            <p className="mt-1 text-lg font-semibold tracking-[-0.035em]">
-              Zuletzt aktualisiert
-            </p>
-          </div>
-          <span className="rounded-full bg-success-soft px-2.5 py-1.5 text-[8px] font-semibold text-success">
-            3 Einträge
-          </span>
-        </div>
-        <div className="mt-3 grid gap-2">
-          {useCase.mockData.map((row, index) => (
-            <div
-              key={row.name}
-              className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3"
-            >
-              <span
-                className={`grid size-10 place-items-center rounded-xl ${
-                  index === 0
-                    ? "bg-brand-soft text-brand"
-                    : index === 1
-                      ? "bg-success-soft text-success"
-                      : "bg-warning-soft text-warning"
-                }`}
-              >
-                <Boxes className="size-4" />
-              </span>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-semibold">{row.name}</p>
-                <p className="mt-1 truncate text-[9px] text-muted">{row.meta}</p>
-              </div>
-              <span className="hidden rounded-full bg-surface-muted px-2 py-1 text-[8px] font-semibold text-muted-strong sm:block">
-                {row.status}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-3 flex gap-2">
-          <span className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-solid text-[9px] font-semibold text-on-brand">
-            <Camera className="size-3" /> Neues Foto
-          </span>
-          <span className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-surface text-[9px] font-semibold">
-            <ScanLine className="size-3" /> Code scannen
-          </span>
-        </div>
-      </div>
-    </div>
+      <Image
+        src={useCaseWebCaptures[useCase.slug] ?? "/marketing/screenshots/web-inventory.png"}
+        width={1440}
+        height={960}
+        sizes="(max-width: 1024px) 100vw, 58vw"
+        alt={`Echte Open-Inventory-Inventaransicht mit Foto-Demo-Daten für ${useCase.name}`}
+        className="h-auto w-full rounded-[20px]"
+      />
+      <figcaption className="px-3 pb-2 pt-3 text-[10px] leading-5 text-white/55">
+        Unveränderter Screenshot der laufenden Web-App. Die sichtbaren Einträge
+        wurden ausschließlich für diese Demo angelegt.
+      </figcaption>
+    </figure>
   );
 }
 
 function IosPhone({ useCase }: { useCase: UseCase }) {
-  const item = useCase.mockData[0];
-
   return (
-    <div className="relative mx-auto w-[260px] rounded-[46px] border-[7px] border-[#090a0c] bg-[#090a0c] p-2 shadow-[0_35px_90px_rgba(0,0,0,0.45)]">
-      <div className="absolute left-1/2 top-3 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-[#090a0c]" />
-      <div className="min-h-[510px] overflow-hidden rounded-[35px] bg-[#f4f5f7] text-[#17181d]">
-        <div className="px-4 pb-4 pt-10">
-          <div className="flex items-center justify-between">
-            <Image
-              src="/marketing/ios-app-icon-current.png"
-              width={34}
-              height={34}
-              alt="Open Inventory App-Icon"
-              className="rounded-[9px]"
-            />
-            <span className="rounded-full bg-[#e7e5ff] px-2.5 py-1 text-[8px] font-semibold text-[#5147d9]">
-              Verbunden
-            </span>
-          </div>
-          <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#777b84]">
-            {useCase.name}
-          </p>
-          <h3 className="mt-1 text-[24px] font-semibold leading-none tracking-[-0.05em]">
-            Schnell erfassen
-          </h3>
-          <div className="relative mt-5 aspect-[3/4] overflow-hidden rounded-[24px] bg-[linear-gradient(145deg,#292c32,#17191d)] p-4 text-white">
-            <div className="absolute inset-x-0 top-1/3 h-px bg-white/10" />
-            <div className="absolute inset-y-0 left-1/3 w-px bg-white/10" />
-            <div className="absolute inset-y-0 right-1/3 w-px bg-white/10" />
-            <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-3xl border border-white/15 bg-white/10">
-              <PackageSearch className="size-7 text-[#8ff0cc]" />
-            </span>
-            <span className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-black/35 p-3 backdrop-blur">
-              <span className="block truncate text-[10px] font-semibold">{item.name}</span>
-              <span className="mt-1 block truncate text-[8px] text-white/50">{item.meta}</span>
-            </span>
-          </div>
-          <div className="mt-4 flex items-center justify-around">
-            {[Camera, ScanLine, Boxes].map((Icon, index) => (
-              <span
-                key={index}
-                className={`grid size-10 place-items-center rounded-full ${
-                  index === 0 ? "bg-[#675ee5] text-white" : "bg-white text-[#6d717a]"
-                }`}
-              >
-                <Icon className="size-4" />
-              </span>
-            ))}
-          </div>
-        </div>
+    <figure className="mx-auto w-[270px]">
+      <div className="overflow-hidden rounded-[49px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_35px_90px_rgba(0,0,0,0.45)]">
+        <Image
+          src={useCaseIOSCaptures[useCase.slug] ?? "/marketing/screenshots/ios-inventory.png"}
+          width={1206}
+          height={2622}
+          sizes="270px"
+          alt={`Echte native Open-Inventory-App-Aufnahme mit Demo-Daten für ${useCase.name}`}
+          className="h-auto w-full rounded-[37px]"
+        />
       </div>
-    </div>
+      <figcaption className="mt-4 text-center text-[10px] leading-5 text-white/50">
+        Echte App-Aufnahme aus dem iOS-Simulator · Demo-Daten
+      </figcaption>
+    </figure>
   );
 }
 

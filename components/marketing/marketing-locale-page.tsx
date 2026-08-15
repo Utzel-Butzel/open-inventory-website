@@ -135,7 +135,7 @@ const pageCopy: Record<MarketingPageKind, MarketingPageCopy> = {
       { title: "QR labels in a makerspace", copy: "Short links, print dimensions and the preview/diff/execute scan workflow.", href: "/blog/qr-etiketten-im-makerspace" },
       { title: "Operating a self-hosted inventory", copy: "Next.js, PostgreSQL, media storage, backups, TLS and restore testing.", href: "/blog/warum-inventar-selbst-hosten" },
       { title: "iOS, outbox, RoomPlan and LiDAR", copy: "Native capture components, persistent jobs and the limits of spatial reconstruction.", href: "/blog/iphone-lidar-inventarisierung" },
-      { title: "Images and examples", copy: "Article images are explicitly marked as illustrative. Screenshots use mock data rather than real inventory records." },
+      { title: "Images and examples", copy: "Article images use credited real-world contextual photography. Product views are direct captures of the web and native iOS applications with purpose-built demo records, not generated interfaces." },
     ],
   },
   docs: {

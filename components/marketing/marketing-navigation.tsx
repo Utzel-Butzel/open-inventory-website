@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Archive,
   ArrowRight,
+  ArrowUpRight,
   Camera,
   ChevronDown,
   Container,
@@ -207,7 +208,7 @@ function DesktopDropdown({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={onToggle}
-        className={`inline-flex h-10 items-center gap-1 rounded-lg px-1.5 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+        className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-lg px-1.5 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
           isOpen ? "text-foreground" : "text-muted hover:text-foreground"
         }`}
       >
@@ -349,7 +350,7 @@ export function DesktopMarketingNavigation({
   return (
     <nav
       ref={navigationRef}
-      className="hidden items-center gap-4 xl:flex"
+      className="hidden items-center gap-3 xl:flex"
       aria-label={copy.navigation}
     >
       <DesktopDropdown
@@ -391,7 +392,7 @@ export function DesktopMarketingNavigation({
           key={link.href}
           href={link.href}
           onClick={closeDropdown}
-          className="rounded-lg text-[13px] font-medium text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="whitespace-nowrap rounded-lg text-[13px] font-medium text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {link.label}
         </Link>
@@ -465,9 +466,11 @@ function MobileAccordion({
 }
 
 export function MobileMarketingNavigation({
+  appUrl,
   githubUrl,
   locale,
 }: {
+  appUrl: string;
   githubUrl: string;
   locale: MarketingLocale;
 }) {
@@ -494,6 +497,7 @@ export function MobileMarketingNavigation({
         allFeatures: "Alle Funktionen",
         useCases: "Use Cases",
         allUseCases: "Alle Use Cases",
+        openApp: "Live-Demo öffnen",
         docker: "Mit Docker starten",
       }
     : {
@@ -504,6 +508,7 @@ export function MobileMarketingNavigation({
         allFeatures: "All features",
         useCases: "Use cases",
         allUseCases: "All use cases",
+        openApp: "Open live demo",
         docker: "Start with Docker",
       };
 
@@ -567,6 +572,14 @@ export function MobileMarketingNavigation({
         <div className="mb-1 flex items-center justify-end px-2 py-1">
           <MarketingLanguageSwitcher locale={locale} />
         </div>
+        <a
+          href={appUrl}
+          onClick={closeNavigation}
+          className="mb-2 flex items-center justify-between rounded-xl bg-brand-solid px-3 py-3 text-sm font-semibold text-on-brand shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+        >
+          {copy.openApp}
+          <ArrowUpRight className="size-4" aria-hidden="true" />
+        </a>
         <MobileAccordion
           accordionKey="features"
           label={copy.features}

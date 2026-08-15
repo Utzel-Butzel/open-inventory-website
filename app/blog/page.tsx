@@ -139,7 +139,9 @@ export default async function BlogPage() {
                 <span className="rounded-full border border-white/25 bg-black/35 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm">
                   {featured.category}
                 </span>
-                <span className="text-[10px] text-white/70">Illustratives Bild</span>
+                <span className="text-[10px] text-white/70">
+                  Reales Kontextfoto · Pexels
+                </span>
               </div>
             </div>
 

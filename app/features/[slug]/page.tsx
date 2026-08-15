@@ -30,6 +30,7 @@ import {
 import { getMarketingLocale } from "@/lib/marketing-locale";
 
 import {
+  featureIOSCaptures,
   featureGroups,
   getFeatureGroup,
   type FeatureGroup,
@@ -389,15 +390,21 @@ export default async function FeatureDetailPage({ params }: FeaturePageProps) {
 
         <section className="border-b border-border bg-surface py-20 sm:py-28">
           <div className="mx-auto grid max-w-[1240px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
-            <div className="relative mx-auto grid aspect-square w-full max-w-[340px] place-items-center rounded-[34px] border border-border bg-[radial-gradient(circle_at_30%_20%,var(--color-brand-soft),var(--color-surface)_62%)] shadow-[var(--shadow-md)]">
-              <div className="absolute inset-8 rounded-[28px] border border-border/70" />
-              <span className="relative grid size-24 place-items-center rounded-[28px] bg-brand-solid text-on-brand shadow-[0_22px_50px_rgba(102,92,255,0.28)]">
-                <Smartphone className="size-11" strokeWidth={1.6} aria-hidden="true" />
-              </span>
-              <span className="absolute bottom-8 rounded-full border border-border bg-surface px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-brand shadow-sm">
-                Native SwiftUI-App
-              </span>
-            </div>
+            <figure className="mx-auto w-full max-w-[292px]">
+              <div className="overflow-hidden rounded-[51px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_28px_80px_rgba(18,20,28,0.28)]">
+                <Image
+                  src={featureIOSCaptures[group.slug]}
+                  width={1206}
+                  height={2622}
+                  sizes="292px"
+                  alt="Echte native Open-Inventory-App-Aufnahme mit eigens angelegten Demo-Daten"
+                  className="h-auto w-full rounded-[39px]"
+                />
+              </div>
+              <figcaption className="mt-4 text-center text-[10px] font-semibold uppercase tracking-[0.13em] text-muted">
+                Echte SwiftUI-App-Aufnahme · Demo-Daten
+              </figcaption>
+            </figure>
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand">
                 <Smartphone className="size-3.5" aria-hidden="true" />

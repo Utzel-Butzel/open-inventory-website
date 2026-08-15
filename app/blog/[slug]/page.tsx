@@ -17,6 +17,7 @@ import {
   MarketingFooter,
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
+import { ArticleProductCapture } from "@/components/marketing/article-product-capture";
 import { EnglishBlogArticlePage } from "@/components/marketing/english-blog-pages";
 import {
   marketingHref,
@@ -259,6 +260,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   ))}
                 </ul>
               </section>
+
+              <ArticleProductCapture slug={article.slug} locale="de" />
 
               <div className="mt-4">
                 {article.sections.map((section, sectionIndex) => (

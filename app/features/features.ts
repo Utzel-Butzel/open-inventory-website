@@ -40,6 +40,15 @@ export type FeatureSlug =
   | "orte-raeume"
   | "betrieb-sicherheit";
 
+export const featureIOSCaptures: Record<FeatureSlug, string> = {
+  erfassen: "/marketing/screenshots/ios-inventory.png",
+  strukturieren: "/marketing/screenshots/ios-item-detail.png",
+  "bestand-ausleihe": "/marketing/screenshots/ios-stock-management.png",
+  "labels-api": "/marketing/screenshots/ios-search.png",
+  "orte-raeume": "/marketing/screenshots/ios-map.png",
+  "betrieb-sicherheit": "/marketing/screenshots/ios-permissions.png",
+};
+
 export type FeatureItem = {
   icon: LucideIcon;
   title: string;
@@ -135,9 +144,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/batch-mock-data.jpg",
-      alt: "Serienerfassung in Open Inventory mit Beispieldaten",
-      caption: "Kamera-first Batch-Aufnahme · sämtliche sichtbaren Inhalte sind Beispieldaten",
+      src: "/marketing/screenshots/web-batch.png",
+      alt: "Echte Open-Inventory-Serienerfassung mit einem realen Werkstattfoto in der Fotoablage",
+      caption: "Direkt aus der Web-App · reales Foto und eigens angelegte Demo-Daten",
     },
     ios: {
       title: "Die Kamera ist dort, wo die Dinge sind.",
@@ -237,9 +246,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/inventory-mock-data.jpg",
-      alt: "Strukturierte Inventarübersicht in Open Inventory mit Beispieldaten",
-      caption: "Typen, Status, Tags und Orte in einer Ansicht · Beispieldaten",
+      src: "/marketing/screenshots/web-item-detail.png",
+      alt: "Echte Open-Inventory-Detailansicht mit Objektfoto, strukturierten Feldern und Demo-Daten",
+      caption: "Medien, Stammdaten und Bestandsinformationen direkt am Demo-Eintrag",
     },
     ios: {
       title: "Struktur bleibt auch mobil verständlich.",
@@ -339,9 +348,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/stock-mock-data.jpg",
-      alt: "Bestandsübersicht in Open Inventory mit Beispieldaten",
-      caption: "Verfügbarkeit, Mindestmengen und Lagerorte · Beispieldaten",
+      src: "/marketing/screenshots/web-stock.png",
+      alt: "Echte Open-Inventory-Bestandsverwaltung mit Buchungsformular, Lagerorten und Bewegungshistorie",
+      caption: "Bestand, Zu- und Abgänge sowie Historie in der laufenden Web-App · Demo-Daten",
     },
     ios: {
       title: "Bestand direkt am Regal buchen.",
@@ -451,9 +460,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/inventory-mock-data.jpg",
-      alt: "Inventareinträge in Open Inventory, die über Codes und API aufgelöst werden können",
-      caption: "Dieselben Datensätze für Suche, Scan und API · Beispieldaten",
+      src: "/marketing/screenshots/web-label-designer.png",
+      alt: "Echter Open-Inventory-Labeldesigner mit QR- und Code-128-Vorschau",
+      caption: "Druckbare QR- und Barcode-Vorschau direkt aus der Web-App · Demo-Daten",
     },
     ios: {
       title: "Das iPhone wird zum offenen Scanner.",
@@ -553,9 +562,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/dashboard-mock-data.jpg",
-      alt: "Open-Inventory-Dashboard mit Beispieldaten als Einstieg zu Standorten und Räumen",
-      caption: "Bestand und Standorte in derselben selbst gehosteten Web-App · Beispieldaten",
+      src: "/marketing/screenshots/web-locations.png",
+      alt: "Echte Open-Inventory-Ansicht mit Beständen an drei angelegten Demo-Lagerorten",
+      caption: "Bestandsmengen an konfigurierten Orten in der laufenden Web-App · Demo-Daten",
     },
     ios: {
       title: "Raumerfassung ist nativ – und bewusst optional.",
@@ -645,9 +654,9 @@ export const featureGroups: FeatureGroup[] = [
       ],
     },
     screenshot: {
-      src: "/marketing/dashboard-mock-data.jpg",
-      alt: "Selbst gehostete Open-Inventory-Web-App mit Beispieldaten",
-      caption: "Die Web-App auf dem offenen, selbst betreibbaren Stack · Beispieldaten",
+      src: "/marketing/screenshots/web-settings-access.png",
+      alt: "Echte Open-Inventory-Zugriffsverwaltung mit Rollen und Mitgliedern einer Demo-Organisation",
+      caption: "Rollen, Mitglieder und Zugriffsregeln in der laufenden selbst gehosteten Web-App",
     },
     ios: {
       title: "Auch die iOS-App spricht mit deiner Instanz.",

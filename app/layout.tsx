@@ -14,14 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadataBase = new URL(host ? `${protocol}://${host}` : fallback);
   const locale = requestHeaders.get(UI_LANGUAGE_HEADER) === "de" ? "de" : "en";
   const description = locale === "de"
-    ? "Inventarisieren in Sekunden statt Stunden: Foto aufnehmen, KI-Vorschlag prüfen und speichern. MIT Open Source, selbst hostbar und mit nativer iOS-App."
-    : "Inventory in seconds instead of hours: take a photo, review the proposed data and save it. MIT-licensed, self-hostable and available with a native iOS app.";
+    ? "Open Inventory verbindet Gegenstände mit Standorten, Beständen und Buchungen. Selbst hostbar, MIT-lizenziert, mit optionaler Bildanalyse und nativer iOS-App."
+    : "Open Inventory connects objects with locations, stock, and movement history. Self-hostable and MIT licensed, with optional image analysis and a native iOS app.";
   const title = locale === "de"
-    ? "Open Inventory — Inventarisieren in Sekunden"
-    : "Open Inventory — Inventory in seconds";
-  const socialTitle = locale === "de"
-    ? "Open Inventory — Inventarisieren in Sekunden statt Stunden"
-    : "Open Inventory — Inventory in seconds, not hours";
+    ? "Open Inventory – Inventar für Werkstatt und Technik"
+    : "Open Inventory – Inventory for workshops and technical teams";
 
   return {
     metadataBase,
@@ -33,20 +30,20 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: "Open Inventory",
     openGraph: {
       type: "website",
-      title: socialTitle,
+      title,
       description,
       images: [
         {
           url: "/og.png",
-          width: 1731,
-          height: 909,
-          alt: socialTitle,
+          width: 1200,
+          height: 630,
+          alt: title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: socialTitle,
+      title,
       description,
       images: ["/og.png"],
     },

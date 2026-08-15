@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import {
+  featureIOSCaptures,
   featureGroups,
   getFeatureGroup,
   type FeatureGroup,
@@ -180,9 +181,9 @@ const englishFeatureCopy = {
       ],
     },
     screenshot: {
-      alt: "Structured Open Inventory list with mock records",
+      alt: "Actual Open Inventory item detail with an object photo, structured fields, and demo data",
       caption:
-        "Types, states, tags and locations in one view · mock data from a German-configured demo instance",
+        "Media, master data, and stock information on an actual demo record",
     },
     ios: {
       title: "The same structure is available on iOS.",
@@ -275,9 +276,9 @@ const englishFeatureCopy = {
       ],
     },
     screenshot: {
-      alt: "Open Inventory stock view with mock quantities and locations",
+      alt: "Actual Open Inventory stock management with a booking form, locations, and movement history",
       caption:
-        "Availability, minimum quantities and stock locations · mock data from a German-configured demo instance",
+        "Stock, incoming and outgoing movements, and history in the running web app · demo data",
     },
     ios: {
       title: "Write stock movements at the shelf.",
@@ -473,9 +474,9 @@ const englishFeatureCopy = {
       ],
     },
     screenshot: {
-      alt: "Open Inventory dashboard with mock records linked to locations",
+      alt: "Actual Open Inventory stock-locations view with quantities distributed across three demo locations",
       caption:
-        "Inventory and locations in the same self-hosted application · mock data from a German-configured demo instance",
+        "Stock distributed across configured locations in the running web app · demo data",
     },
     ios: {
       title: "Room capture is native and optional.",
@@ -560,9 +561,9 @@ const englishFeatureCopy = {
       ],
     },
     screenshot: {
-      alt: "Self-hosted Open Inventory web interface with mock records",
+      alt: "Actual Open Inventory access settings with roles and members in a demo organization",
       caption:
-        "The application running on the open self-hostable stack · mock data from a German-configured demo instance",
+        "Roles, members, and access rules in the running self-hosted web app",
     },
     ios: {
       title: "The iOS client connects to the operator's instance.",
@@ -612,95 +613,25 @@ export function getEnglishFeatureCopy(
 
 function EnglishInventoryPreview() {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_28px_80px_rgba(24,20,38,0.14)]">
-      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
-        <span className="size-2.5 rounded-full bg-[#ff6a64]" />
-        <span className="size-2.5 rounded-full bg-[#f7c84d]" />
-        <span className="size-2.5 rounded-full bg-[#67d68c]" />
-        <span className="ml-3 rounded-lg bg-surface-muted px-3 py-1.5 font-mono text-[9px] text-muted">
-          Workshop · Inventory
-        </span>
-        <span className="ml-auto rounded-full bg-success-soft px-2.5 py-1 text-[9px] font-semibold text-success">
-          248 records
+    <figure className="overflow-hidden rounded-[28px] border border-border bg-surface p-2 shadow-[0_28px_80px_rgba(24,20,38,0.14)] sm:p-3">
+      <div className="relative overflow-hidden rounded-[20px] border border-border bg-surface-muted">
+        <Image
+          src="/marketing/screenshots/web-dashboard.png"
+          alt="Actual Open Inventory dashboard capture with real object photographs and purpose-built demo data"
+          width={1440}
+          height={960}
+          priority
+          sizes="(max-width: 1024px) 100vw, 55vw"
+          className="h-auto w-full"
+        />
+        <span className="absolute left-3 top-3 rounded-full border border-white/25 bg-[#17181d]/90 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
+          Actual app capture · demo data
         </span>
       </div>
-      <div className="grid gap-4 p-4 sm:grid-cols-[1fr_0.72fr] sm:p-5">
-        <div className="rounded-2xl border border-border bg-surface-subtle p-4">
-          <div className="flex items-center gap-3">
-            <div className="grid size-12 place-items-center rounded-xl bg-warning-soft text-warning">
-              <Boxes className="size-5" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">
-                18 V cordless drill
-              </p>
-              <p className="mt-0.5 text-[10px] text-muted">
-                Tool · TOOL-0042
-              </p>
-            </div>
-            <span className="ml-auto rounded-full bg-success-soft px-2 py-1 text-[9px] font-semibold text-success">
-              Available
-            </span>
-          </div>
-          <div className="mt-5 grid grid-cols-3 gap-2">
-            {[
-              ["Stock", "6 units"],
-              ["Location", "Shelf B · 2"],
-              ["Last count", "12 Aug"],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-xl bg-surface p-2.5">
-                <p className="text-[8px] uppercase tracking-[0.12em] text-muted">
-                  {label}
-                </p>
-                <p className="mt-1 text-[10px] font-semibold text-foreground">
-                  {value}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {["18 V", "Power tool", "Battery system A"].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-brand-soft px-2.5 py-1 text-[8px] font-medium text-brand"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-2xl bg-[#17181d] p-4 text-white">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/45">
-            Captured today
-          </p>
-          <p className="mt-2 text-3xl font-semibold tracking-[-0.06em]">17</p>
-          <div className="mt-5 space-y-2">
-            {[
-              ["Photo analyzed", "Work light"],
-              ["Code resolved", "Cable reel"],
-              ["Movement written", "+24 screws"],
-            ].map(([action, item]) => (
-              <div
-                key={item}
-                className="flex gap-2 rounded-xl bg-white/[0.06] p-2.5"
-              >
-                <Check
-                  className="mt-0.5 size-3 shrink-0 text-[#8ff0cc]"
-                  aria-hidden="true"
-                />
-                <div>
-                  <p className="text-[9px] font-semibold">{item}</p>
-                  <p className="mt-0.5 text-[8px] text-white/45">{action}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <p className="border-t border-border px-5 py-3 text-[9px] text-muted">
-        Illustrative interface with mock records · no real inventory data
-      </p>
-    </div>
+      <figcaption className="px-3 pb-1 pt-3 text-[10px] leading-5 text-muted">
+        Unaltered screenshot of the running web app with real object photographs and purpose-built demo records.
+      </figcaption>
+    </figure>
   );
 }
 
@@ -795,57 +726,94 @@ export function EnglishFeaturesPage() {
                   Interface examples
                 </p>
                 <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">
-                  Mock records in the actual web interface.
+                  Real captures from the running web app.
                 </h2>
               </div>
               <p className="text-[15px] leading-7 text-muted">
-                These screenshots use deliberately created example records. The
-                captured demo instance is configured in German, so embedded UI
-                labels are not an English translation of the page around them.
+                These unaltered screenshots use deliberately created demo
+                records and real object photographs. The captured instance is
+                configured in German, so its embedded labels remain German.
               </p>
             </div>
 
             <div className="mt-12 grid gap-5 lg:grid-cols-2">
               {[
                 {
-                  src: "/marketing/inventory-mock-data.jpg",
+                  src: "/marketing/screenshots/web-dashboard.png",
+                  title: "Review the dashboard",
+                  copy: "Inspect metrics and recent records with real object photographs.",
+                },
+                {
+                  src: "/marketing/screenshots/web-inventory.png",
                   title: "Search inventory records",
                   copy: "Inspect records, states, tags and locations in one list.",
                 },
                 {
-                  src: "/marketing/stock-mock-data.jpg",
-                  title: "Review stock state",
-                  copy: "See availability, minimum quantities and replenishment context.",
+                  src: "/marketing/screenshots/web-item-detail.png",
+                  title: "Inspect an item in detail",
+                  copy: "Bring real object photographs, master data, media, and stock status together.",
                 },
                 {
-                  src: "/marketing/batch-mock-data.jpg",
-                  title: "Process a capture batch",
-                  copy: "Keep capture separate from queued uploads and optional analysis.",
+                  src: "/marketing/screenshots/web-stock.png",
+                  title: "Record stock movements",
+                  copy: "See incoming and outgoing movements, locations, and history on the record.",
                 },
-              ].map((screenshot, index) => (
+                {
+                  src: "/marketing/screenshots/web-label-designer.png",
+                  title: "Design printable labels",
+                  copy: "Generate QR and Code 128 previews from a selected demo record.",
+                },
+                {
+                  src: "/marketing/screenshots/web-batch.png",
+                  title: "Process a capture batch",
+                  copy: "Use the photo tray and shared capture settings in the running web app.",
+                },
+                {
+                  src: "/marketing/screenshots/web-locations.png",
+                  title: "Distribute stock by location",
+                  copy: "Review quantities, incoming stock, minimum levels, and coverage for each storage location.",
+                },
+                {
+                  src: "/marketing/screenshots/web-notifications.png",
+                  title: "Catch maintenance and shortages",
+                  copy: "Review concrete maintenance dates and low-stock warnings in one event list.",
+                },
+                {
+                  src: "/marketing/screenshots/web-settings-access.png",
+                  title: "Control shared access",
+                  copy: "Manage members, roles, and permissions in the self-hosted instance.",
+                },
+                {
+                  src: "/marketing/screenshots/web-inventory-types.png",
+                  title: "Define inventory types",
+                  copy: "Configure rooms, vehicles, tools, and custom types with explicit behavior.",
+                },
+                {
+                  src: "/marketing/screenshots/web-custom-fields.png",
+                  title: "Structure custom fields",
+                  copy: "Add typed information such as calibration dates to the records it applies to.",
+                },
+                {
+                  src: "/marketing/screenshots/web-data-transfer.png",
+                  title: "Exchange data deliberately",
+                  copy: "Use validated CSV import or export to CSV, a formatted Excel workbook, or a PDF report.",
+                },
+              ].map((screenshot) => (
                 <figure
                   key={screenshot.src}
-                  className={`overflow-hidden rounded-[24px] border border-border bg-surface shadow-[var(--shadow-md)] ${
-                    index === 2
-                      ? "lg:col-span-2 lg:mx-auto lg:w-[calc(50%-0.625rem)]"
-                      : ""
-                  }`}
+                  className="overflow-hidden rounded-[24px] border border-border bg-surface shadow-[var(--shadow-md)]"
                 >
                   <div className="relative overflow-hidden border-b border-border bg-surface-muted">
                     <Image
                       src={screenshot.src}
-                      alt={`${screenshot.title} in Open Inventory with mock records`}
+                      alt={`${screenshot.title} in a real Open Inventory capture with demo records`}
                       width={1440}
                       height={960}
-                      sizes={
-                        index === 2
-                          ? "(max-width: 1024px) 100vw, 600px"
-                          : "(max-width: 1024px) 100vw, 50vw"
-                      }
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       className="h-auto w-full"
                     />
                     <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-[#17181d]/85 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-                      Mock data
+                      Real capture · demo data
                     </span>
                   </div>
                   <figcaption className="p-5">
@@ -1277,15 +1245,21 @@ export function EnglishFeatureDetailPage({ slug }: { slug: string }) {
 
         <section className="border-b border-border bg-surface py-20 sm:py-28">
           <div className="mx-auto grid max-w-[1240px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
-            <div className="relative mx-auto grid aspect-square w-full max-w-[340px] place-items-center rounded-[34px] border border-border bg-[radial-gradient(circle_at_30%_20%,var(--color-brand-soft),var(--color-surface)_62%)] shadow-[var(--shadow-md)]">
-              <div className="absolute inset-8 rounded-[28px] border border-border/70" />
-              <span className="relative grid size-24 place-items-center rounded-[28px] bg-brand-solid text-on-brand shadow-[0_22px_50px_rgba(102,92,255,0.28)]">
-                <Smartphone className="size-11" strokeWidth={1.6} aria-hidden="true" />
-              </span>
-              <span className="absolute bottom-8 rounded-full border border-border bg-surface px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-brand shadow-sm">
-                Native SwiftUI client
-              </span>
-            </div>
+            <figure className="mx-auto w-full max-w-[292px]">
+              <div className="overflow-hidden rounded-[51px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_28px_80px_rgba(18,20,28,0.28)]">
+                <Image
+                  src={featureIOSCaptures[source.slug]}
+                  width={1206}
+                  height={2622}
+                  sizes="292px"
+                  alt="Real native Open Inventory app capture with purpose-built demo data"
+                  className="h-auto w-full rounded-[39px]"
+                />
+              </div>
+              <figcaption className="mt-4 text-center text-[10px] font-semibold uppercase tracking-[0.13em] text-muted">
+                Real SwiftUI app capture · demo data
+              </figcaption>
+            </figure>
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand">
                 <Smartphone className="size-3.5" aria-hidden="true" />

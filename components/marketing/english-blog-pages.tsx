@@ -23,6 +23,7 @@ import {
   MarketingFooter,
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
+import { ArticleProductCapture } from "@/components/marketing/article-product-capture";
 import { marketingHref } from "@/lib/marketing-i18n";
 
 import { githubUrl } from "@/app/blog/articles";
@@ -160,7 +161,7 @@ export function EnglishBlogOverviewPage() {
                   {featured.category}
                 </span>
                 <span className="text-[10px] text-white/70">
-                  Illustrative image
+                  Real contextual photo · Pexels
                 </span>
               </div>
             </div>
@@ -457,6 +458,8 @@ export function EnglishBlogArticlePage({
                   ))}
                 </ul>
               </section>
+
+              <ArticleProductCapture slug={article.slug} locale="en" />
 
               <div className="mt-4">
                 {article.sections.map((section, sectionIndex) => (

@@ -17,7 +17,6 @@ import {
   MapPinned,
   Network,
   PackageCheck,
-  PackageSearch,
   ScanLine,
   Share2,
   ShieldCheck,
@@ -32,6 +31,8 @@ import {
 import { marketingHref } from "@/lib/marketing-i18n";
 import {
   useCases as germanUseCases,
+  useCaseIOSCaptures,
+  useCaseWebCaptures,
   type UseCase,
   type UseCaseIcon,
 } from "@/app/use-cases/use-cases";
@@ -958,26 +959,130 @@ const cardSpans = [
   "md:col-span-2 lg:col-span-4",
 ];
 
+type EnglishOverviewPhoto = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+};
+
+type EnglishOverviewGalleryItem = EnglishOverviewPhoto & {
+  caption: string;
+  kind: "photo" | "capture";
+  layout: string;
+  sizes: string;
+};
+
+const englishOverviewPhotographyBySlug: Record<string, EnglishOverviewPhoto> = {
+  makerspace: {
+    src: "/marketing/photography/workshop-team.webp",
+    alt: "A team working together at a real workshop bench",
+  },
+  familie: {
+    src: "/marketing/photography/home-labels.webp",
+    alt: "A man checking printed labels on moving boxes",
+  },
+  startup: {
+    src: "/marketing/photography/office-device-audit.webp",
+    alt: "A laptop, smartphone, payment terminal, calculator, and documents on a real office desk",
+  },
+  verein: {
+    src: "/marketing/photography/parts-storage-bins.webp",
+    alt: "Sorted small-parts containers in a real workshop",
+  },
+  sammlung: {
+    src: "/marketing/photography/camera-collection.webp",
+    alt: "Several cameras arranged on a real collection shelf",
+    objectPosition: "50% 42%",
+  },
+  schule: {
+    src: "/marketing/photography/school-tablet-cart.webp",
+    alt: "Several tablets on desks in a real classroom",
+    objectPosition: "50% 35%",
+  },
+  handwerk: {
+    src: "/marketing/photography/trades-tool-case.webp",
+    alt: "A person opening or closing a robust tool case",
+  },
+  labor: {
+    src: "/marketing/photography/lab-pipette.webp",
+    alt: "A person using a pipette at a real laboratory bench",
+  },
+};
+
+const englishOverviewGallery: EnglishOverviewGalleryItem[] = [
+  {
+    src: "/marketing/photography/electronics-soldering.webp",
+    alt: "A real electronics workbench with a soldering iron and circuit board",
+    caption: "Electronics workbench",
+    kind: "photo",
+    layout:
+      "min-h-[420px] sm:col-span-2 lg:col-span-7 lg:row-span-2 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 58vw",
+  },
+  {
+    src: "/marketing/screenshots/web-batch.png",
+    alt: "Direct capture of batch entry in the Open Inventory web application with demo content",
+    caption: "Batch entry in the web application",
+    kind: "capture",
+    layout:
+      "min-h-[300px] sm:col-span-2 lg:col-span-5 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 42vw",
+  },
+  {
+    src: "/marketing/photography/parcel-inspection.webp",
+    alt: "A person checking parcels in a real warehouse setting",
+    caption: "Parcel inspection in a warehouse",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-5 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw",
+  },
+  {
+    src: "/marketing/screenshots/web-item-detail.png",
+    alt: "Direct capture of an inventory detail page in the Open Inventory web application with demo content",
+    caption: "Inventory detail with stock and location",
+    kind: "capture",
+    layout:
+      "min-h-[360px] sm:col-span-2 lg:col-span-8 lg:row-span-2 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 67vw",
+  },
+  {
+    src: "/marketing/photography/service-van-tools.webp",
+    alt: "Tools arranged inside a real service vehicle",
+    caption: "Tools in a service vehicle",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-4 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 34vw",
+    objectPosition: "50% 52%",
+  },
+  {
+    src: "/marketing/photography/parts-storage-bins.webp",
+    alt: "Sorting boxes containing screws, nails, and wall plugs in a real workshop",
+    caption: "Organised parts storage",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-4 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 34vw",
+  },
+];
+
 function EnglishOverviewVisual({ useCase }: { useCase: UseCase }) {
-  if (useCase.image) {
-    return (
+  const photo = englishOverviewPhotographyBySlug[useCase.slug];
+
+  return (
+    <>
       <Image
-        src={useCase.image}
-        alt={useCase.imageAlt ?? ""}
+        src={photo.src}
+        alt={photo.alt}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 700px"
         className="object-cover transition duration-700 group-hover:scale-[1.025]"
+        style={
+          photo.objectPosition
+            ? { objectPosition: photo.objectPosition }
+            : undefined
+        }
       />
-    );
-  }
-
-  return (
-    <div
-      className="grid h-full min-h-[260px] place-items-center bg-[linear-gradient(145deg,#253735,#111d1c)] text-white"
-      aria-hidden="true"
-    >
-      <PackageSearch className="size-12 text-[#8ff0cc]" />
-    </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+    </>
   );
 }
 
@@ -1035,6 +1140,72 @@ export function EnglishUseCasesPage() {
           </div>
         </section>
 
+        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                  Real-world views
+                </p>
+                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+                  Physical context. Actual interface.
+                </h2>
+              </div>
+              <div className="lg:justify-self-end">
+                <p className="max-w-xl text-[16px] leading-7 text-white/60 sm:text-[18px]">
+                  The photographs show real working environments. The interface
+                  images are direct captures from the running web application
+                  with purpose-made demo content — no generated scenes and no
+                  recreated mockups.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Real photography
+                  </span>
+                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Real capture · demo content
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12 grid grid-flow-dense gap-4 sm:grid-cols-2 lg:auto-rows-[250px] lg:grid-cols-12">
+              {englishOverviewGallery.map((item) => (
+                <figure
+                  key={item.src}
+                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] shadow-2xl ${item.layout}`}
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes={item.sizes}
+                    className={`transition duration-700 group-hover:scale-[1.015] ${
+                      item.kind === "photo"
+                        ? "object-cover"
+                        : "bg-[#eef0f3] object-contain p-2 sm:p-3"
+                    }`}
+                    style={
+                      item.objectPosition
+                        ? { objectPosition: item.objectPosition }
+                        : undefined
+                    }
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+                    {item.kind === "photo"
+                      ? "Real photography"
+                      : "Real capture · demo content"}
+                  </span>
+                  <figcaption className="absolute inset-x-5 bottom-5 text-sm font-semibold text-white">
+                    {item.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 sm:py-28">
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
             <div className="max-w-3xl">
@@ -1060,7 +1231,10 @@ export function EnglishUseCasesPage() {
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <EnglishOverviewVisual useCase={useCase} />
-                    <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+                    <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+                      Real photography
+                    </span>
+                    <span className="absolute bottom-4 left-4 right-4 text-[9px] font-semibold uppercase tracking-[0.15em] text-white/85">
                       {useCase.eyebrow}
                     </span>
                   </div>
@@ -1200,98 +1374,48 @@ function EnglishHeroVisual({ useCase }: { useCase: UseCase }) {
 
 function EnglishMockInventory({ useCase }: { useCase: UseCase }) {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-border bg-[#17181d] p-2.5 shadow-[0_30px_80px_rgba(18,20,28,0.2)]">
+    <figure className="overflow-hidden rounded-[28px] border border-border bg-[#17181d] p-2.5 shadow-[0_30px_80px_rgba(18,20,28,0.2)]">
       <div className="flex h-9 items-center gap-1.5 px-3">
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
         <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.14em] text-white/45">
-          Mock data · no production records
+          Real web app capture · demo data
         </span>
       </div>
-      <div className="rounded-[20px] bg-background p-4 sm:p-5">
-        <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-brand">
-              {useCase.name} inventory
-            </p>
-            <p className="mt-1 text-lg font-semibold tracking-[-0.035em]">Recently updated</p>
-          </div>
-          <span className="rounded-full bg-success-soft px-2.5 py-1.5 text-[8px] font-semibold text-success">
-            3 records
-          </span>
-        </div>
-        <div className="mt-3 grid gap-2">
-          {useCase.mockData.map((row, index) => (
-            <div key={row.name} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3">
-              <span className={`grid size-10 place-items-center rounded-xl ${
-                index === 0
-                  ? "bg-brand-soft text-brand"
-                  : index === 1
-                    ? "bg-success-soft text-success"
-                    : "bg-warning-soft text-warning"
-              }`}>
-                <Boxes className="size-4" aria-hidden="true" />
-              </span>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-semibold">{row.name}</p>
-                <p className="mt-1 truncate text-[9px] text-muted">{row.meta}</p>
-              </div>
-              <span className="hidden rounded-full bg-surface-muted px-2 py-1 text-[8px] font-semibold text-muted-strong sm:block">
-                {row.status}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-3 flex gap-2">
-          <span className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-solid text-[9px] font-semibold text-on-brand">
-            <Camera className="size-3" aria-hidden="true" /> New photo
-          </span>
-          <span className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-surface text-[9px] font-semibold">
-            <ScanLine className="size-3" aria-hidden="true" /> Scan code
-          </span>
-        </div>
-      </div>
-    </div>
+      <Image
+        src={useCaseWebCaptures[useCase.slug] ?? "/marketing/screenshots/web-inventory.png"}
+        width={1440}
+        height={960}
+        sizes="(max-width: 1024px) 100vw, 58vw"
+        alt={`Real Open Inventory web capture with photo-rich demo records for ${useCase.name}`}
+        className="h-auto w-full rounded-[20px]"
+      />
+      <figcaption className="px-3 pb-2 pt-3 text-[10px] leading-5 text-white/55">
+        Unaltered capture from the running web app. Every visible record was
+        created specifically for this demo.
+      </figcaption>
+    </figure>
   );
 }
 
 function EnglishIosPhone({ useCase }: { useCase: UseCase }) {
-  const item = useCase.mockData[0];
-
   return (
-    <div className="relative mx-auto w-[260px] rounded-[46px] border-[7px] border-[#090a0c] bg-[#090a0c] p-2 shadow-[0_35px_90px_rgba(0,0,0,0.45)]">
-      <div className="absolute left-1/2 top-3 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-[#090a0c]" />
-      <div className="min-h-[510px] overflow-hidden rounded-[35px] bg-[#f4f5f7] text-[#17181d]">
-        <div className="px-4 pb-4 pt-10">
-          <div className="flex items-center justify-between">
-            <Image src="/marketing/ios-app-icon-current.png" width={34} height={34} alt="Open Inventory app icon" className="rounded-[9px]" />
-            <span className="rounded-full bg-[#e7e5ff] px-2.5 py-1 text-[8px] font-semibold text-[#5147d9]">Connected</span>
-          </div>
-          <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#777b84]">{useCase.name}</p>
-          <h3 className="mt-1 text-[24px] font-semibold leading-none tracking-[-0.05em]">Quick capture</h3>
-          <div className="relative mt-5 aspect-[3/4] overflow-hidden rounded-[24px] bg-[linear-gradient(145deg,#292c32,#17191d)] p-4 text-white">
-            <div className="absolute inset-x-0 top-1/3 h-px bg-white/10" />
-            <div className="absolute inset-y-0 left-1/3 w-px bg-white/10" />
-            <div className="absolute inset-y-0 right-1/3 w-px bg-white/10" />
-            <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-3xl border border-white/15 bg-white/10">
-              <PackageSearch className="size-7 text-[#8ff0cc]" aria-hidden="true" />
-            </span>
-            <span className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-black/35 p-3 backdrop-blur">
-              <span className="block truncate text-[10px] font-semibold">{item?.name}</span>
-              <span className="mt-1 block truncate text-[8px] text-white/50">{item?.meta}</span>
-            </span>
-          </div>
-          <div className="mt-4 flex items-center justify-around">
-            {[Camera, ScanLine, Boxes].map((Icon, index) => (
-              <span key={index} className={`grid size-10 place-items-center rounded-full ${index === 0 ? "bg-[#675ee5] text-white" : "bg-white text-[#6d717a]"}`}>
-                <Icon className="size-4" aria-hidden="true" />
-              </span>
-            ))}
-          </div>
-        </div>
+    <figure className="mx-auto w-[270px]">
+      <div className="overflow-hidden rounded-[49px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_35px_90px_rgba(0,0,0,0.45)]">
+        <Image
+          src={useCaseIOSCaptures[useCase.slug] ?? "/marketing/screenshots/ios-inventory.png"}
+          width={1206}
+          height={2622}
+          sizes="270px"
+          alt={`Real native Open Inventory app capture with demo data for ${useCase.name}`}
+          className="h-auto w-full rounded-[37px]"
+        />
       </div>
-    </div>
+      <figcaption className="mt-4 text-center text-[10px] leading-5 text-white/50">
+        Real app capture from the iOS Simulator · demo data
+      </figcaption>
+    </figure>
   );
 }
 

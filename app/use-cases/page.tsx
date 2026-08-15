@@ -7,12 +7,10 @@ import {
   Check,
   Container,
   Github,
-  PackageSearch,
   ScanLine,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  Users,
 } from "lucide-react";
 
 import {
@@ -27,7 +25,7 @@ import {
 } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
 
-import { useCases, type UseCase } from "./use-cases";
+import { useCases } from "./use-cases";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
@@ -46,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title,
         description,
         url: marketingHref(locale, "/use-cases"),
-        images: ["/marketing/usecase-makerspace-v2.webp"],
+        images: ["/marketing/photography/workshop-team.webp"],
         ...marketingOgLocale(locale),
       },
     };
@@ -62,58 +60,116 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Inventarisieren in Sekunden statt Stunden — mit nativer iOS-App, Docker und einer offenen MIT-lizenzierten Codebasis.",
       url: marketingHref(locale, "/use-cases"),
-      images: ["/marketing/usecase-makerspace-v2.webp"],
+      images: ["/marketing/photography/workshop-team.webp"],
       ...marketingOgLocale(locale),
     },
   };
 }
 
-function VisualPlaceholder({ useCase }: { useCase: UseCase }) {
-  const isClub = useCase.visual === "club";
-  const Icon = isClub ? Users : PackageSearch;
+type OverviewPhoto = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+};
 
-  return (
-    <div
-      className={`relative h-full min-h-[260px] overflow-hidden ${
-        isClub
-          ? "bg-[linear-gradient(145deg,#173e36,#0b2220)]"
-          : "bg-[linear-gradient(145deg,#34240f,#17130d)]"
-      }`}
-      aria-hidden="true"
-    >
-      <div className="absolute -right-12 -top-12 size-52 rounded-full bg-white/10 blur-2xl" />
-      <div className="absolute bottom-8 left-8 right-8 rounded-[22px] border border-white/15 bg-white/10 p-5 text-white shadow-2xl backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <span className="grid size-11 place-items-center rounded-2xl bg-white/15">
-            <Icon className="size-5" />
-          </span>
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-white/55">
-              Beispieldaten
-            </p>
-            <p className="mt-1 text-sm font-semibold">
-              {isClub ? "Materialausgabe" : "Sammlungskatalog"}
-            </p>
-          </div>
-        </div>
-        <div className="mt-5 grid gap-2">
-          {useCase.mockData.slice(0, 2).map((row) => (
-            <div
-              key={row.name}
-              className="flex items-center gap-3 rounded-xl bg-black/15 px-3 py-2.5"
-            >
-              <span className="size-2 rounded-full bg-[#8ff0cc]" />
-              <span className="min-w-0 flex-1 truncate text-xs text-white/85">
-                {row.name}
-              </span>
-              <span className="text-[9px] text-white/45">{row.status}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+type OverviewGalleryItem = OverviewPhoto & {
+  caption: string;
+  kind: "photo" | "capture";
+  layout: string;
+  sizes: string;
+};
+
+const overviewPhotographyBySlug: Record<string, OverviewPhoto> = {
+  makerspace: {
+    src: "/marketing/photography/workshop-team.webp",
+    alt: "Ein Team arbeitet gemeinsam an einem realen Werkstatttisch",
+  },
+  familie: {
+    src: "/marketing/photography/home-labels.webp",
+    alt: "Ein Mann prüft gedruckte Beschriftungen an Umzugskartons",
+  },
+  startup: {
+    src: "/marketing/photography/office-device-audit.webp",
+    alt: "Laptop, Smartphone, Kartenterminal, Taschenrechner und Unterlagen liegen auf einem realen Bürotisch",
+  },
+  verein: {
+    src: "/marketing/photography/parts-storage-bins.webp",
+    alt: "Sortierte Kleinteilebehälter in einer realen Werkstatt",
+  },
+  sammlung: {
+    src: "/marketing/photography/camera-collection.webp",
+    alt: "Mehrere Kameras stehen in einem realen Sammlungsregal",
+    objectPosition: "50% 42%",
+  },
+  schule: {
+    src: "/marketing/photography/school-tablet-cart.webp",
+    alt: "Mehrere Tablets liegen auf Tischen in einem realen Klassenraum",
+    objectPosition: "50% 35%",
+  },
+  handwerk: {
+    src: "/marketing/photography/trades-tool-case.webp",
+    alt: "Eine Person öffnet oder verschließt einen robusten Werkzeugkoffer",
+  },
+  labor: {
+    src: "/marketing/photography/lab-pipette.webp",
+    alt: "Eine Person arbeitet an einem realen Laborarbeitsplatz mit einer Pipette",
+  },
+};
+
+const overviewGallery: OverviewGalleryItem[] = [
+  {
+    src: "/marketing/photography/electronics-soldering.webp",
+    alt: "Ein realer Elektronikarbeitsplatz mit Lötkolben und Platine",
+    caption: "Elektronikarbeitsplatz",
+    kind: "photo",
+    layout:
+      "min-h-[420px] sm:col-span-2 lg:col-span-7 lg:row-span-2 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 58vw",
+  },
+  {
+    src: "/marketing/screenshots/web-batch.png",
+    alt: "Direkte Aufnahme der Serienerfassung in der Open-Inventory-Webanwendung mit Demo-Inhalten",
+    caption: "Serienerfassung in der Webanwendung",
+    kind: "capture",
+    layout:
+      "min-h-[300px] sm:col-span-2 lg:col-span-5 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 42vw",
+  },
+  {
+    src: "/marketing/photography/parcel-inspection.webp",
+    alt: "Eine Person kontrolliert Pakete in einer realen Lagersituation",
+    caption: "Paketprüfung im Lager",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-5 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw",
+  },
+  {
+    src: "/marketing/screenshots/web-item-detail.png",
+    alt: "Direkte Aufnahme einer Inventardetailseite in der Open-Inventory-Webanwendung mit Demo-Inhalten",
+    caption: "Inventardetail mit Bestand und Standort",
+    kind: "capture",
+    layout:
+      "min-h-[360px] sm:col-span-2 lg:col-span-8 lg:row-span-2 lg:min-h-0",
+    sizes: "(max-width: 1024px) 100vw, 67vw",
+  },
+  {
+    src: "/marketing/photography/service-van-tools.webp",
+    alt: "Werkzeuge liegen geordnet in einem realen Servicefahrzeug",
+    caption: "Werkzeug im Servicefahrzeug",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-4 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 34vw",
+    objectPosition: "50% 52%",
+  },
+  {
+    src: "/marketing/photography/parts-storage-bins.webp",
+    alt: "Sortierboxen mit Schrauben, Nägeln und Dübeln in einer realen Werkstatt",
+    caption: "Sortierte Teilelagerung",
+    kind: "photo",
+    layout: "min-h-[280px] lg:col-span-4 lg:min-h-0",
+    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 34vw",
+  },
+];
 
 const cardSpans = [
   "md:col-span-2 lg:col-span-7",
@@ -183,6 +239,72 @@ export default async function UseCasesPage() {
           </div>
         </section>
 
+        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                  Echte Einblicke
+                </p>
+                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+                  Reale Dinge. Eine echte Oberfläche.
+                </h2>
+              </div>
+              <div className="lg:justify-self-end">
+                <p className="max-w-xl text-[16px] leading-7 text-white/60 sm:text-[18px]">
+                  Die Fotografien zeigen reale Arbeitsumgebungen. Die
+                  Oberflächenbilder sind direkte Aufnahmen der laufenden
+                  Webanwendung mit eigens angelegten Demo-Inhalten — keine
+                  generierten Szenen und keine nachgebauten Mockups.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Echte Fotografie
+                  </span>
+                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Echte Aufnahme · Demo-Inhalte
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12 grid grid-flow-dense gap-4 sm:grid-cols-2 lg:auto-rows-[250px] lg:grid-cols-12">
+              {overviewGallery.map((item) => (
+                <figure
+                  key={item.src}
+                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] shadow-2xl ${item.layout}`}
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes={item.sizes}
+                    className={`transition duration-700 group-hover:scale-[1.015] ${
+                      item.kind === "photo"
+                        ? "object-cover"
+                        : "bg-[#eef0f3] object-contain p-2 sm:p-3"
+                    }`}
+                    style={
+                      item.objectPosition
+                        ? { objectPosition: item.objectPosition }
+                        : undefined
+                    }
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+                    {item.kind === "photo"
+                      ? "Echte Fotografie"
+                      : "Echte Aufnahme · Demo-Inhalte"}
+                  </span>
+                  <figcaption className="absolute inset-x-5 bottom-5 text-sm font-semibold text-white">
+                    {item.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 sm:py-28">
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
             <div className="max-w-3xl">
@@ -200,43 +322,52 @@ export default async function UseCasesPage() {
             </div>
 
             <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-12">
-              {useCases.map((useCase, index) => (
-                <Link
-                  key={useCase.slug}
-                  href={`/de/use-cases/${useCase.slug}`}
-                  className={`group overflow-hidden rounded-[28px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden">
-                    {useCase.image ? (
+              {useCases.map((useCase, index) => {
+                const photo = overviewPhotographyBySlug[useCase.slug];
+
+                return (
+                  <Link
+                    key={useCase.slug}
+                    href={`/de/use-cases/${useCase.slug}`}
+                    className={`group overflow-hidden rounded-[28px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
+                  >
+                    <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
-                        src={useCase.image}
-                        alt={useCase.imageAlt ?? ""}
+                        src={photo.src}
+                        alt={photo.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 700px"
                         className="object-cover transition duration-700 group-hover:scale-[1.025]"
+                        style={
+                          photo.objectPosition
+                            ? { objectPosition: photo.objectPosition }
+                            : undefined
+                        }
                       />
-                    ) : (
-                      <VisualPlaceholder useCase={useCase} />
-                    )}
-                    <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">
-                      {useCase.eyebrow}
-                    </span>
-                  </div>
-                  <div className="p-6 sm:p-7">
-                    <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-[28px] font-semibold tracking-[-0.045em]">
-                        {useCase.name}
-                      </h3>
-                      <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted transition group-hover:border-brand-border group-hover:bg-brand-soft group-hover:text-brand">
-                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+                      <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+                        Echte Fotografie
+                      </span>
+                      <span className="absolute bottom-4 left-4 right-4 text-[9px] font-semibold uppercase tracking-[0.15em] text-white/85">
+                        {useCase.eyebrow}
                       </span>
                     </div>
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
-                      {useCase.cardCopy}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+                    <div className="p-6 sm:p-7">
+                      <div className="flex items-center justify-between gap-4">
+                        <h3 className="text-[28px] font-semibold tracking-[-0.045em]">
+                          {useCase.name}
+                        </h3>
+                        <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted transition group-hover:border-brand-border group-hover:bg-brand-soft group-hover:text-brand">
+                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                      </div>
+                      <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
+                        {useCase.cardCopy}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

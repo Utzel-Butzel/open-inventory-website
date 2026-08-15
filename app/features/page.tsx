@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  Boxes,
   Check,
   Container,
   Github,
@@ -61,95 +60,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function InventoryPreview() {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_28px_80px_rgba(24,20,38,0.14)]">
-      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
-        <span className="size-2.5 rounded-full bg-[#ff6a64]" />
-        <span className="size-2.5 rounded-full bg-[#f7c84d]" />
-        <span className="size-2.5 rounded-full bg-[#67d68c]" />
-        <span className="ml-3 rounded-lg bg-surface-muted px-3 py-1.5 font-mono text-[9px] text-muted">
-          Werkstatt · Inventar
-        </span>
-        <span className="ml-auto rounded-full bg-success-soft px-2.5 py-1 text-[9px] font-semibold text-success">
-          248 Einträge
+    <figure className="overflow-hidden rounded-[28px] border border-border bg-surface p-2 shadow-[0_28px_80px_rgba(24,20,38,0.14)] sm:p-3">
+      <div className="relative overflow-hidden rounded-[20px] border border-border bg-surface-muted">
+        <Image
+          src="/marketing/screenshots/web-dashboard.png"
+          alt="Echte Open-Inventory-Dashboardaufnahme mit realen Objektfotos und eigens angelegten Demo-Daten"
+          width={1440}
+          height={960}
+          priority
+          sizes="(max-width: 1024px) 100vw, 55vw"
+          className="h-auto w-full"
+        />
+        <span className="absolute left-3 top-3 rounded-full border border-white/25 bg-[#17181d]/90 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
+          Echte App-Aufnahme · Demo-Daten
         </span>
       </div>
-      <div className="grid gap-4 p-4 sm:grid-cols-[1fr_0.72fr] sm:p-5">
-        <div className="rounded-2xl border border-border bg-surface-subtle p-4">
-          <div className="flex items-center gap-3">
-            <div className="grid size-12 place-items-center rounded-xl bg-warning-soft text-warning">
-              <Boxes className="size-5" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">
-                Akku-Bohrschrauber 18 V
-              </p>
-              <p className="mt-0.5 text-[10px] text-muted">
-                Werkzeug · WERK-0042
-              </p>
-            </div>
-            <span className="ml-auto rounded-full bg-success-soft px-2 py-1 text-[9px] font-semibold text-success">
-              Verfügbar
-            </span>
-          </div>
-          <div className="mt-5 grid grid-cols-3 gap-2">
-            {[
-              ["Bestand", "6 Stück"],
-              ["Standort", "Regal B · 2"],
-              ["Letzte Inventur", "12. Aug."],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-xl bg-surface p-2.5">
-                <p className="text-[8px] uppercase tracking-[0.12em] text-muted">
-                  {label}
-                </p>
-                <p className="mt-1 text-[10px] font-semibold text-foreground">
-                  {value}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {["18 V", "Elektrowerkzeug", "Akkusystem A"].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-brand-soft px-2.5 py-1 text-[8px] font-medium text-brand"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-2xl bg-[#17181d] p-4 text-white">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/45">
-            Heute erfasst
-          </p>
-          <p className="mt-2 text-3xl font-semibold tracking-[-0.06em]">17</p>
-          <div className="mt-5 space-y-2">
-            {[
-              ["Foto erkannt", "Akku-Lampe"],
-              ["Code gescannt", "Kabeltrommel"],
-              ["Bestand gebucht", "+ 24 Schrauben"],
-            ].map(([action, item]) => (
-              <div
-                key={item}
-                className="flex gap-2 rounded-xl bg-white/[0.06] p-2.5"
-              >
-                <Check
-                  className="mt-0.5 size-3 shrink-0 text-[#8ff0cc]"
-                  aria-hidden="true"
-                />
-                <div>
-                  <p className="text-[9px] font-semibold">{item}</p>
-                  <p className="mt-0.5 text-[8px] text-white/45">{action}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <p className="border-t border-border px-5 py-3 text-[9px] text-muted">
-        Beispielansicht mit Mockdaten · keine echten Bestandsdaten
-      </p>
-    </div>
+      <figcaption className="px-3 pb-1 pt-3 text-[10px] leading-5 text-muted">
+        Unveränderter Screenshot der laufenden Web-App mit realen Objektfotos und eigens angelegten Beispieldaten.
+      </figcaption>
+    </figure>
   );
 }
 
@@ -257,28 +186,69 @@ export default async function FeaturesPage() {
             <div className="mt-12 grid gap-5 lg:grid-cols-2">
               {[
                 {
-                  src: "/marketing/inventory-mock-data.jpg",
+                  src: "/marketing/screenshots/web-dashboard.png",
+                  title: "Dashboard überblicken",
+                  copy: "Kennzahlen und die neuesten Einträge mit realen Objektfotos.",
+                },
+                {
+                  src: "/marketing/screenshots/web-inventory.png",
                   title: "Inventar durchsuchen",
                   copy: "Objekte, Status, Tags und Orte auf einen Blick.",
                 },
                 {
-                  src: "/marketing/stock-mock-data.jpg",
-                  title: "Bestände steuern",
-                  copy: "Verfügbarkeit, Mindestmengen und Nachbestellung im Kontext.",
+                  src: "/marketing/screenshots/web-item-detail.png",
+                  title: "Einträge im Detail prüfen",
+                  copy: "Reale Objektfotos, Stammdaten, Medien und Bestandsstatus zusammen.",
                 },
                 {
-                  src: "/marketing/batch-mock-data.jpg",
-                  title: "Mehrere Dinge schnell erfassen",
-                  copy: "Kamera-first Batch-Aufnahme für Sekunden statt Stunden.",
+                  src: "/marketing/screenshots/web-stock.png",
+                  title: "Bestand und Bewegungen buchen",
+                  copy: "Zu- und Abgänge, Lagerorte und Historie direkt am Datensatz.",
                 },
-              ].map((screenshot, index) => (
+                {
+                  src: "/marketing/screenshots/web-label-designer.png",
+                  title: "Etiketten gestalten",
+                  copy: "QR-Code und Code 128 direkt aus einem ausgewählten Datensatz.",
+                },
+                {
+                  src: "/marketing/screenshots/web-batch.png",
+                  title: "Mehrere Dinge schnell erfassen",
+                  copy: "Fotoablage und gemeinsame Vorgaben in der laufenden Web-App.",
+                },
+                {
+                  src: "/marketing/screenshots/web-locations.png",
+                  title: "Bestand auf Orte verteilen",
+                  copy: "Mengen, Zulauf, Mindestbestand und Reichweite je Lagerort nachvollziehen.",
+                },
+                {
+                  src: "/marketing/screenshots/web-notifications.png",
+                  title: "Wartung und Engpässe erkennen",
+                  copy: "Konkrete Wartungstermine und niedrige Bestände als gemeinsame Ereignisliste prüfen.",
+                },
+                {
+                  src: "/marketing/screenshots/web-settings-access.png",
+                  title: "Zugriff gemeinsam steuern",
+                  copy: "Mitglieder, Rollen und Rechte in der selbst gehosteten Instanz verwalten.",
+                },
+                {
+                  src: "/marketing/screenshots/web-inventory-types.png",
+                  title: "Inventartypen definieren",
+                  copy: "Räume, Fahrzeuge, Werkzeuge und eigene Typen mit klaren Funktionen konfigurieren.",
+                },
+                {
+                  src: "/marketing/screenshots/web-custom-fields.png",
+                  title: "Eigene Felder strukturieren",
+                  copy: "Typisierte Zusatzdaten wie Kalibrierdaten gezielt für passende Einträge anlegen.",
+                },
+                {
+                  src: "/marketing/screenshots/web-data-transfer.png",
+                  title: "Daten kontrolliert austauschen",
+                  copy: "Validierter CSV-Import sowie Export als CSV, Excel-Arbeitsmappe oder PDF-Bericht.",
+                },
+              ].map((screenshot) => (
                 <figure
                   key={screenshot.src}
-                  className={`overflow-hidden rounded-[24px] border border-border bg-surface shadow-[var(--shadow-md)] ${
-                    index === 2
-                      ? "lg:col-span-2 lg:mx-auto lg:w-[calc(50%-0.625rem)]"
-                      : ""
-                  }`}
+                  className="overflow-hidden rounded-[24px] border border-border bg-surface shadow-[var(--shadow-md)]"
                 >
                   <div className="relative overflow-hidden border-b border-border bg-surface-muted">
                     <Image
@@ -286,15 +256,11 @@ export default async function FeaturesPage() {
                       alt={`${screenshot.title} in der Open-Inventory-Web-App mit Beispieldaten`}
                       width={1440}
                       height={960}
-                      sizes={
-                        index === 2
-                          ? "(max-width: 1024px) 100vw, 600px"
-                          : "(max-width: 1024px) 100vw, 50vw"
-                      }
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       className="h-auto w-full"
                     />
                     <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-[#17181d]/85 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-                      Beispieldaten
+                      Echte Aufnahme · Demo-Daten
                     </span>
                   </div>
                   <figcaption className="p-5">
@@ -309,8 +275,8 @@ export default async function FeaturesPage() {
               ))}
             </div>
             <p className="mt-4 text-[10px] text-muted">
-              Screenshots der Web-App · sämtliche sichtbaren Inhalte sind
-              Beispieldaten
+              Unveränderte Screenshots der laufenden Web-App · sämtliche
+              sichtbaren Inhalte sind eigens angelegte Demo-Daten
             </p>
           </div>
         </section>

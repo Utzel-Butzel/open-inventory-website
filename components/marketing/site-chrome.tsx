@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Container, Github } from "lucide-react";
+import { ArrowUpRight, Boxes, Container, Github } from "lucide-react";
 
 import {
   DesktopMarketingNavigation,
@@ -35,26 +35,8 @@ export function OpenInventoryBrand({
       }`}
       aria-label={homeLabel}
     >
-      <span
-        className={`relative h-9 w-10 shrink-0 overflow-hidden rounded-[9px] border shadow-sm transition-transform duration-300 group-hover:-rotate-2 group-hover:-translate-y-0.5 ${
-          inverse
-            ? "border-white/20 bg-white/[0.07] text-white"
-            : "border-border bg-surface text-foreground"
-        }`}
-        aria-hidden="true"
-      >
-        <span className="absolute inset-y-0 left-0 w-[7px] bg-brand-solid" />
-        <span className="absolute left-[13px] top-[7px] h-[3px] w-[15px] rounded-full bg-current opacity-80" />
-        <span className="absolute left-[13px] top-[14px] h-px w-5 bg-current opacity-30" />
-        <span className="absolute bottom-[6px] left-[13px] flex h-[7px] items-stretch gap-[2px] opacity-55">
-          <span className="w-px bg-current" />
-          <span className="w-0.5 bg-current" />
-          <span className="w-px bg-current" />
-          <span className="w-[3px] bg-current" />
-        </span>
-        <span className="absolute bottom-[5px] right-[5px] grid size-[9px] place-items-center border-2 border-brand-solid">
-          <span className="size-0.5 bg-brand-solid" />
-        </span>
+      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-solid text-on-brand shadow-[0_7px_20px_rgba(102,92,255,0.24)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-[1.04]">
+        <Boxes className="size-[19px]" strokeWidth={2.2} aria-hidden="true" />
       </span>
       <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.025em] sm:text-base">
         Open Inventory

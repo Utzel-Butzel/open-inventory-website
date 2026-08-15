@@ -4,14 +4,14 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  ArrowUpRight,
   Barcode,
   Box,
   Camera,
   Check,
-  Code2,
-  Github,
+  Clock3,
   KeyRound,
+  Link2,
+  LogIn,
   Map,
   MapPin,
   PackagePlus,
@@ -34,15 +34,12 @@ import {
 } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
 
-const githubUrl = "https://github.com/Utzel-Butzel/inventory";
-const iosSourceUrl = `${githubUrl}/tree/main/ios/Inventory`;
-
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
-  const title = locale === "de" ? "Native iOS-App — Open Inventory" : "Native iOS app — Open Inventory";
+  const title = locale === "de" ? "Open Inventory für iPhone" : "Open Inventory for iPhone";
   const description = locale === "de"
-    ? "Mit der nativen, offenen SwiftUI-App Inventar in Sekunden erfassen, QR- und Barcodes scannen und Bestände direkt am Regal buchen."
-    : "Capture inventory with the native open-source SwiftUI app, scan QR codes and barcodes, and book stock movements at the shelf.";
+    ? "Objekte fotografieren, automatisch beschreiben, QR- und Barcodes scannen, Bestände buchen und Räume mit Open Inventory für iPhone erfassen."
+    : "Photograph objects, create useful descriptions, scan QR codes and barcodes, record stock, and capture rooms with Open Inventory for iPhone.";
   return {
     title: { absolute: title },
     description,
@@ -82,7 +79,7 @@ const everydayFeatures: AppFeature[] = [
   {
     icon: Search,
     title: "Inventar in der Tasche",
-    copy: "Suche, filtere, öffne und bearbeite Einträge mit authentifizierten Bildern. Karte, Details und Einstellungen sind nativ in SwiftUI umgesetzt.",
+    copy: "Suche, filtere, öffne und bearbeite Einträge mit geschützten Bildern. Karte, Details und Einstellungen sind direkt auf dem iPhone verfügbar.",
   },
   {
     icon: PackagePlus,
@@ -115,7 +112,7 @@ const everydayFeaturesEn: AppFeature[] = [
   {
     icon: Search,
     title: "Inventory in your pocket",
-    copy: "Search, filter, open, and edit items with authenticated images. The map, details, and settings are implemented natively in SwiftUI.",
+    copy: "Search, filter, open, and edit items with protected images. The map, details, and settings are available directly on your iPhone.",
   },
   {
     icon: PackagePlus,
@@ -247,8 +244,8 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
           </div>
           <p className="text-[15px] leading-7 text-muted">
             {isEnglish
-              ? "These are unaltered Simulator captures of the compiled SwiftUI client connected to a separate local demo instance. The records and locations were created specifically for these screenshots."
-              : "Das sind unveränderte Simulatoraufnahmen des kompilierten SwiftUI-Clients, verbunden mit einer getrennten lokalen Demo-Instanz. Einträge und Orte wurden eigens für diese Screenshots angelegt."}
+              ? "These original captures come directly from the running app. Every record and location was purpose-built as realistic demo data; none of the interfaces were recreated or generated."
+              : "Diese Originalaufnahmen stammen direkt aus der laufenden App. Alle Einträge und Orte wurden als realistische Demo-Daten angelegt; keine Oberfläche wurde nachgebaut oder generiert."}
           </p>
         </div>
 
@@ -277,8 +274,8 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
 
         <p className="mt-10 text-center text-[10px] font-medium text-muted sm:mt-16">
           {isEnglish
-            ? "Actual SwiftUI app captures · purpose-built demo data · no generated interfaces"
-            : "Echte SwiftUI-App-Aufnahmen · eigens angelegte Demo-Daten · keine generierten Oberflächen"}
+            ? "Original app captures · purpose-built demo data · no recreated interfaces"
+            : "Originale App-Aufnahmen · eigens angelegte Demo-Daten · keine nachgebauten Oberflächen"}
         </p>
       </div>
     </section>
@@ -288,6 +285,64 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
 export default async function IOSPage() {
   const locale = await getMarketingLocale();
   const isEnglish = locale === "en";
+  const startSteps: Array<{
+    icon: LucideIcon;
+    number: string;
+    title: string;
+    copy: string;
+  }> = isEnglish
+    ? [
+        {
+          icon: Smartphone,
+          number: "01",
+          title: "Open the app",
+          copy: "Start Open Inventory on your iPhone and allow camera access when prompted.",
+        },
+        {
+          icon: Link2,
+          number: "02",
+          title: "Connect your instance",
+          copy: "Enter the HTTPS address of your Open Inventory instance once.",
+        },
+        {
+          icon: LogIn,
+          number: "03",
+          title: "Sign in",
+          copy: "Use your local account and choose the workspace you want to capture into.",
+        },
+        {
+          icon: Camera,
+          number: "04",
+          title: "Start capturing",
+          copy: "Walk through the workshop, take photos, and let the background workflow do the rest.",
+        },
+      ]
+    : [
+        {
+          icon: Smartphone,
+          number: "01",
+          title: "App öffnen",
+          copy: "Starte Open Inventory auf deinem iPhone und erlaube beim ersten Mal den Kamerazugriff.",
+        },
+        {
+          icon: Link2,
+          number: "02",
+          title: "Instanz verbinden",
+          copy: "Trage einmalig die HTTPS-Adresse deiner Open-Inventory-Instanz ein.",
+        },
+        {
+          icon: LogIn,
+          number: "03",
+          title: "Anmelden",
+          copy: "Melde dich mit deinem lokalen Konto an und wähle den passenden Arbeitsbereich.",
+        },
+        {
+          icon: Camera,
+          number: "04",
+          title: "Erfassen",
+          copy: "Geh durch die Werkstatt, fotografiere deine Dinge und lass den Ablauf im Hintergrund weiterarbeiten.",
+        },
+      ];
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -301,7 +356,7 @@ export default async function IOSPage() {
 
           <div className="relative mx-auto grid max-w-[1240px] items-center gap-16 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1fr_0.78fr] lg:gap-10">
             <div className="max-w-[650px]">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-5 sm:gap-6">
                 <Image
                   src="/marketing/ios-app-icon-current.png"
                   alt={
@@ -309,17 +364,17 @@ export default async function IOSPage() {
                       ? "Open Inventory app icon for iOS"
                       : "App-Icon von Open Inventory für iOS"
                   }
-                  width={76}
-                  height={76}
-                  priority
-                  className="size-[76px] rounded-[18px] shadow-[0_14px_38px_rgba(0,0,0,0.34)] ring-1 ring-white/15"
+                  width={120}
+                  height={120}
+                  preload
+                  className="size-[96px] rounded-[23px] shadow-[0_20px_55px_rgba(0,0,0,0.42)] ring-1 ring-white/15 sm:size-[120px] sm:rounded-[28px]"
                 />
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
-                    {isEnglish ? "Native SwiftUI app" : "Native SwiftUI-App"}
+                    {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
                   </p>
-                  <p className="mt-1 text-sm text-white/45">
-                    {isEnglish ? "Open source · iOS 17+" : "Open Source · iOS 17+"}
+                  <p className="mt-2 text-sm text-white/50">
+                    {isEnglish ? "Native app · iOS 17+" : "Native App · iOS 17+"}
                   </p>
                 </div>
               </div>
@@ -332,33 +387,51 @@ export default async function IOSPage() {
               </h1>
               <p className="mt-7 max-w-[600px] text-[17px] leading-8 text-white/55 sm:text-[19px]">
                 {isEnglish
-                  ? "Take photos, scan labels, and record stock where the objects actually are. The native iPhone app connects to your own Open Inventory instance; per-item input is designed to take seconds while uploads and optional analysis continue in the background."
-                  : "Fotografiere, scanne und buche direkt dort, wo die Dinge sind. Die native iPhone-App verbindet sich mit deiner eigenen Open-Inventory-Instanz – schnell genug für Sekunden statt Stunden."}
+                  ? "Take a photo, scan a code, or record stock right at the shelf. Open Inventory connects to your own instance, while uploads and optional AI processing continue reliably in the background."
+                  : "Foto aufnehmen, Code scannen oder Bestand direkt am Regal buchen: Open Inventory verbindet sich mit deiner eigenen Instanz, während Uploads und optionale KI-Verarbeitung zuverlässig im Hintergrund weiterlaufen."}
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={iosSourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
+              <div className="mt-8 max-w-[590px] rounded-[22px] border border-white/12 bg-white/[0.065] p-4 backdrop-blur-sm sm:p-5">
+                <div className="flex items-start gap-4">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#8ff0cc]/12 text-[#8ff0cc]">
+                    <Clock3 className="size-6" strokeWidth={1.8} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      {isEnglish
+                        ? "App Store release in preparation"
+                        : "App-Store-Veröffentlichung in Vorbereitung"}
+                    </p>
+                    <p className="mt-1 text-[12px] leading-5 text-white/45">
+                      {isEnglish
+                        ? "The public App Store product page is not live yet. We will link it here as soon as it is available."
+                        : "Die öffentliche Produktseite im App Store ist noch nicht freigeschaltet. Sobald sie verfügbar ist, wird sie hier verlinkt."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="#app-workflows"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-white px-5 text-sm font-semibold text-[#17181d] transition hover:-translate-y-0.5 hover:bg-white/90"
                 >
-                  <Github className="size-[17px]" aria-hidden="true" />
-                  {isEnglish ? "Open the iOS source" : "iOS-Quellcode öffnen"}
-                </a>
+                  {isEnglish ? "Explore the workflows" : "Abläufe ansehen"}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
                 <Link
-                  href="#installation"
+                  href="#getting-started"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/10"
                 >
-                  {isEnglish ? "Install with Xcode" : "Installation mit Xcode"}
+                  {isEnglish ? "See how to get started" : "So startest du"}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-white/50">
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-white/50">
                 {(isEnglish
-                  ? ["MIT licensed", "No App Store download", "Your server URL"]
-                  : ["MIT-lizenziert", "Kein App-Store-Download", "Deine Server-URL"]
+                  ? ["Native for iPhone", "iOS 17+", "Your server URL"]
+                  : ["Nativ für iPhone", "iOS 17+", "Deine Server-URL"]
                 ).map((item) => (
                   <span key={item} className="inline-flex items-center gap-1.5">
                     <Check className="size-3 text-[#8ff0cc]" strokeWidth={2.6} aria-hidden="true" />
@@ -374,21 +447,21 @@ export default async function IOSPage() {
 
         <section className="border-b border-border bg-surface py-16 sm:py-20">
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr_1fr]">
               {[
                 {
                   icon: Smartphone,
-                  title: isEnglish ? "Actually native" : "Echt nativ",
+                  title: isEnglish ? "Made for the iPhone" : "Für das iPhone gemacht",
                   copy: isEnglish
-                    ? "SwiftUI and AVFoundation instead of an embedded web interface."
-                    : "SwiftUI und AVFoundation statt eingebetteter Web-Oberfläche.",
+                    ? "SwiftUI and AVFoundation provide a fast camera, fluid scanning, and familiar iPhone controls instead of an embedded web interface."
+                    : "SwiftUI und AVFoundation sorgen für eine schnelle Kamera, flüssiges Scannen und vertraute iPhone-Bedienung statt einer eingebetteten Web-Oberfläche.",
                 },
                 {
-                  icon: Github,
-                  title: isEnglish ? "Fully open source" : "Echt offen",
+                  icon: Link2,
+                  title: isEnglish ? "One shared inventory" : "Ein gemeinsames Inventar",
                   copy: isEnglish
-                    ? "The complete app source is MIT licensed and lives in the same repository as the server."
-                    : "Der gesamte App-Code liegt MIT-lizenziert im selben Repository.",
+                    ? "The iPhone app and web application use the same records, images, permissions, and stock history."
+                    : "iPhone-App und Webanwendung nutzen dieselben Einträge, Bilder, Berechtigungen und Bestandsverläufe.",
                 },
                 {
                   icon: RefreshCw,
@@ -397,18 +470,35 @@ export default async function IOSPage() {
                     ? "Persistent jobs and safe retries resume interrupted uploads."
                     : "Persistente Aufträge und sichere Wiederholungen setzen Uploads fort.",
                 },
-              ].map(({ icon: Icon, title, copy }) => (
-                <article key={title} className="rounded-[22px] border border-border bg-background p-6">
-                  <Icon className="size-5 text-brand" aria-hidden="true" />
-                  <h2 className="mt-5 text-lg font-semibold tracking-[-0.03em]">{title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
+              ].map(({ icon: Icon, title, copy }, index) => (
+                <article
+                  key={title}
+                  className={`rounded-[26px] border p-7 sm:p-8 ${
+                    index === 0
+                      ? "border-brand/15 bg-[linear-gradient(135deg,var(--color-background),var(--color-brand-soft))]"
+                      : "border-border bg-background"
+                  }`}
+                >
+                  <span
+                    className={`grid place-items-center rounded-[22px] bg-brand-soft text-brand ${
+                      index === 0 ? "size-20" : "size-16"
+                    }`}
+                  >
+                    <Icon
+                      className={index === 0 ? "size-10" : "size-8"}
+                      strokeWidth={1.65}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <h2 className="mt-8 text-xl font-semibold tracking-[-0.035em]">{title}</h2>
+                  <p className="mt-3 text-sm leading-6 text-muted">{copy}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="py-20 sm:py-28">
+        <section id="app-workflows" className="scroll-mt-24 py-20 sm:py-28">
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
@@ -421,22 +511,47 @@ export default async function IOSPage() {
               </h2>
               <p className="mt-6 text-[17px] leading-8 text-muted">
                 {isEnglish
-                  ? "The open-source iOS features use the same API and stock rules as the web app."
-                  : "Die offenen iOS-Funktionen nutzen dieselbe API und dieselben Bestandsregeln wie die Web-App."}
+                  ? "The iPhone app uses the same records, permissions, and stock rules as the web application."
+                  : "Die iPhone-App nutzt dieselben Einträge, Berechtigungen und Bestandsregeln wie die Webanwendung."}
               </p>
             </div>
 
             <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {(isEnglish ? everydayFeaturesEn : everydayFeatures).map(({ icon: Icon, title, copy }) => (
+              {(isEnglish ? everydayFeaturesEn : everydayFeatures).map(({ icon: Icon, title, copy }, index) => (
                 <article
                   key={title}
-                  className="rounded-[24px] border border-border bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-7"
+                  className={`relative overflow-hidden rounded-[28px] border border-border bg-surface p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-8 ${
+                    index === 0 ? "min-h-[340px] md:col-span-2 lg:col-span-2" : "min-h-[280px]"
+                  }`}
                 >
-                  <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand">
-                    <Icon className="size-5" strokeWidth={1.9} aria-hidden="true" />
+                  {index === 0 ? (
+                    <Icon
+                      className="pointer-events-none absolute -bottom-12 -right-10 size-56 text-brand opacity-[0.07] sm:size-64"
+                      strokeWidth={1.1}
+                      aria-hidden="true"
+                    />
+                  ) : null}
+                  <span
+                    className={`relative grid place-items-center rounded-[22px] bg-brand-soft text-brand ${
+                      index === 0 ? "size-20" : "size-16"
+                    }`}
+                  >
+                    <Icon
+                      className={index === 0 ? "size-10" : "size-8"}
+                      strokeWidth={1.7}
+                      aria-hidden="true"
+                    />
                   </span>
-                  <h3 className="mt-10 text-xl font-semibold tracking-[-0.035em]">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-muted">{copy}</p>
+                  <h3
+                    className={`relative mt-10 font-semibold tracking-[-0.04em] ${
+                      index === 0 ? "text-3xl sm:text-[38px]" : "text-xl"
+                    }`}
+                  >
+                    {title}
+                  </h3>
+                  <p className={`relative mt-3 leading-7 text-muted ${index === 0 ? "max-w-xl text-base" : "text-sm"}`}>
+                    {copy}
+                  </p>
                 </article>
               ))}
             </div>
@@ -479,10 +594,17 @@ export default async function IOSPage() {
               ).map(([Icon, title, copy]) => {
                 const FeatureIcon = Icon as LucideIcon;
                 return (
-                  <article key={title as string} className="rounded-[20px] border border-white/10 bg-white/[0.045] p-5">
-                    <FeatureIcon className="size-5 text-[#9188ff]" aria-hidden="true" />
-                    <h3 className="mt-5 text-[16px] font-semibold">{title as string}</h3>
-                    <p className="mt-2 text-[13px] leading-6 text-white/48">{copy as string}</p>
+                  <article
+                    key={title as string}
+                    className="flex gap-5 rounded-[22px] border border-white/10 bg-white/[0.045] p-5 sm:p-6"
+                  >
+                    <span className="grid size-14 shrink-0 place-items-center rounded-[20px] bg-[#9188ff]/12 text-[#a39cff]">
+                      <FeatureIcon className="size-7" strokeWidth={1.65} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="text-[16px] font-semibold">{title as string}</h3>
+                      <p className="mt-2 text-[13px] leading-6 text-white/48">{copy as string}</p>
+                    </div>
                   </article>
                 );
               })}
@@ -490,52 +612,62 @@ export default async function IOSPage() {
           </div>
         </section>
 
-        <section id="installation" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] gap-14 px-5 sm:px-8 lg:grid-cols-[0.78fr_1.22fr]">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                {isEnglish ? "Installation" : "Installation"}
-              </p>
-              <h2 className="mt-4 text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[52px]">
-                {isEnglish
-                  ? "Use Xcode for now, not the App Store."
-                  : "Heute per Xcode, nicht per App Store."}
-              </h2>
-              <p className="mt-6 text-[15px] leading-7 text-muted">
-                {isEnglish
-                  ? "There is no App Store download yet. Build the open-source app from the repository and sign it for your iPhone with your Apple development team."
-                  : "Es gibt derzeit keinen App-Store-Download. Die Open-Source-App wird aus dem Repository gebaut und mit deinem Apple-Entwicklerteam auf dem iPhone signiert."}
-              </p>
-              <div className="mt-7 rounded-2xl border border-warning-border bg-warning-soft p-4 text-sm leading-6 text-warning">
-                {isEnglish
-                  ? "Requirements: Xcode 26 or newer and an iPhone running iOS 17 or newer. Test camera and scanner behavior on a physical device; LiDAR is only required for the room features."
-                  : "Benötigt: Xcode 26 oder neuer und ein iPhone mit iOS 17 oder neuer. Kamera- und Scanner-Abnahme erfolgt auf einem physischen Gerät; LiDAR ist nur für die Raumfunktionen nötig."}
+        <section id="getting-started" className="scroll-mt-24 py-20 sm:py-28">
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+              <div className="max-w-3xl">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                  {isEnglish ? "Ready in moments" : "In wenigen Momenten startklar"}
+                </p>
+                <h2 className="mt-4 text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[56px]">
+                  {isEnglish
+                    ? "Open the app. Connect your server. Start capturing."
+                    : "App öffnen. Instanz verbinden. Losfotografieren."}
+                </h2>
+                <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted">
+                  {isEnglish
+                    ? "On first launch, enter the HTTPS address of your Open Inventory instance and sign in. Photos, scanning, search, stock, and rooms are then ready on your iPhone."
+                    : "Beim ersten Start trägst du einmalig die HTTPS-Adresse deiner Open-Inventory-Instanz ein und meldest dich an. Danach stehen Fotos, Scanner, Suche, Bestände und Räume direkt auf dem iPhone bereit."}
+                </p>
+              </div>
+
+              <div className="rounded-[26px] border border-brand-border bg-brand-soft p-6 sm:p-7">
+                <Link2 className="size-9 text-brand" strokeWidth={1.6} aria-hidden="true" />
+                <p className="mt-5 text-[16px] font-semibold tracking-[-0.025em]">
+                  {isEnglish
+                    ? "Your app. Your instance."
+                    : "Deine App. Deine Instanz."}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  {isEnglish
+                    ? "The iPhone connects directly to the HTTPS address of your Open Inventory server and uses the same accounts and permissions."
+                    : "Das iPhone verbindet sich direkt mit der HTTPS-Adresse deines Open-Inventory-Servers und nutzt dieselben Konten und Berechtigungen."}
+                </p>
               </div>
             </div>
 
-            <ol className="space-y-3">
-              {(isEnglish
-                ? [
-                    ["01", "Run the server", "Start a reachable Open Inventory instance and apply all database migrations."],
-                    ["02", "Open the project in Xcode", "Clone the open-source repository and open ios/Inventory/Inventory.xcodeproj with Xcode 26+."],
-                    ["03", "Sign and run", "Select the Inventory target, your Apple development team, and a physical iPhone running iOS 17+."],
-                    ["04", "Connect your instance", "Enter the HTTPS base URL and sign in with a local account. A manually entered API token remains available as an advanced option."],
-                  ]
-                : [
-                    ["01", "Server bereitstellen", "Starte eine erreichbare Open-Inventory-Instanz und führe alle Datenbankmigrationen aus."],
-                    ["02", "Projekt in Xcode öffnen", "Klone das offene Repository und öffne ios/Inventory/Inventory.xcodeproj mit Xcode 26+."],
-                    ["03", "Signieren & starten", "Wähle das Target Inventory, dein Apple-Entwicklerteam und ein physisches iPhone mit iOS 17+."],
-                    ["04", "Mit deiner Instanz verbinden", "Trage die HTTPS-Basis-URL ein und melde dich mit einem lokalen Konto an; ein manueller API-Token bleibt die Expertenoption."],
-                  ]
-              ).map(([number, title, copy]) => (
-                <li key={number} className="grid gap-4 rounded-[20px] border border-border bg-surface p-5 sm:grid-cols-[48px_1fr] sm:p-6">
-                  <span className="grid size-10 place-items-center rounded-xl bg-brand-soft font-mono text-[10px] font-semibold text-brand">
-                    {number}
-                  </span>
-                  <div>
-                    <h3 className="text-[17px] font-semibold tracking-[-0.025em]">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
+            <ol className="mt-14 grid overflow-hidden rounded-[34px] bg-[#17181d] text-white md:grid-cols-2 lg:grid-cols-4">
+              {startSteps.map(({ icon: StepIcon, number, title, copy }, index) => (
+                <li
+                  key={number}
+                  className="relative min-h-[310px] border-b border-white/10 p-7 last:border-b-0 md:[&:nth-child(odd)]:border-r lg:border-b-0 lg:border-r lg:last:border-r-0 lg:p-8"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="grid size-[76px] place-items-center rounded-[26px] bg-white/[0.07] text-[#8ff0cc] ring-1 ring-white/10">
+                      <StepIcon className="size-9" strokeWidth={1.55} aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-white/35">
+                      {number}
+                    </span>
                   </div>
+                  <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.04em]">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-white/48">{copy}</p>
+                  {index < startSteps.length - 1 ? (
+                    <ArrowRight
+                      className="absolute -right-3 top-14 z-10 hidden size-6 rounded-full bg-[#17181d] p-1 text-[#9188ff] lg:block"
+                      aria-hidden="true"
+                    />
+                  ) : null}
                 </li>
               ))}
             </ol>
@@ -568,10 +700,14 @@ export default async function IOSPage() {
                     : "Create, Medien, Analyse und Cover besitzen stabile Schlüssel – Wiederholen heißt nicht duplizieren.",
                 },
               ].map(({ icon: Icon, title, copy }) => (
-                <article key={title} className="rounded-[22px] bg-background p-6">
-                  <Icon className="size-5 text-success" aria-hidden="true" />
-                  <h3 className="mt-5 text-[17px] font-semibold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
+                <article key={title} className="flex gap-5 rounded-[24px] bg-background p-6 sm:p-7">
+                  <span className="grid size-14 shrink-0 place-items-center rounded-[20px] bg-success-soft text-success">
+                    <Icon className="size-7" strokeWidth={1.65} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3 className="text-[17px] font-semibold">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -579,40 +715,53 @@ export default async function IOSPage() {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto flex max-w-[920px] flex-col items-center px-5 text-center sm:px-8">
-            <Image
-              src="/marketing/ios-app-icon-current.png"
-              alt=""
-              width={88}
-              height={88}
-              className="size-[88px] rounded-[21px] shadow-[0_18px_45px_rgba(80,71,217,0.22)]"
-            />
-            <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-              {isEnglish ? "Open source on your Home Screen" : "Open Source auf dem Homescreen"}
-            </p>
-            <h2 className="mt-4 text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[56px]">
-              {isEnglish
-                ? "Build the app. Connect your server. Start scanning."
-                : "Baue die App. Verbinde deinen Server. Fang an zu scannen."}
-            </h2>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={iosSourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5 hover:bg-brand-hover"
-              >
-                <Code2 className="size-4" aria-hidden="true" />
-                {isEnglish ? "View the SwiftUI source" : "SwiftUI-Code ansehen"}
-                <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              </a>
-              <Link
-                href={isEnglish ? "/docs" : "/de/docs"}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
-              >
-                {isEnglish ? "Server documentation" : "Server-Dokumentation"}
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
+          <div className="mx-auto max-w-[1120px] px-5 sm:px-8">
+            <div className="relative overflow-hidden rounded-[38px] border border-brand-border bg-[radial-gradient(circle_at_50%_0%,var(--color-brand-soft),var(--color-background)_64%)] px-6 py-14 text-center sm:px-12 sm:py-20">
+              <div className="pointer-events-none absolute -left-20 top-10 size-64 rounded-full bg-brand/10 blur-[90px]" />
+              <div className="relative flex flex-col items-center">
+                <Image
+                  src="/marketing/ios-app-icon-current.png"
+                  alt=""
+                  width={132}
+                  height={132}
+                  className="size-[112px] rounded-[27px] shadow-[0_24px_60px_rgba(80,71,217,0.25)] sm:size-[132px] sm:rounded-[31px]"
+                />
+                <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                  {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
+                </p>
+                <h2 className="mt-4 max-w-[820px] text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[60px]">
+                  {isEnglish ? "Take a photo. Finish the record." : "Foto aufnehmen. Eintrag fertig."}
+                </h2>
+                <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted sm:text-[17px]">
+                  {isEnglish
+                    ? "Capture objects where they are used. Open Inventory turns photos, codes, stock movements, and optional spatial data into one shared inventory."
+                    : "Erfasse Dinge dort, wo sie genutzt werden. Open Inventory verbindet Fotos, Codes, Bestandsbewegungen und optionale Raumdaten zu einem gemeinsamen Inventar."}
+                </p>
+
+                <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-brand-border bg-background/80 px-5 py-3 text-sm font-semibold shadow-sm backdrop-blur">
+                  <Smartphone className="size-5 text-brand" strokeWidth={1.7} aria-hidden="true" />
+                  {isEnglish
+                    ? "Native app · iOS 17+ · your server URL"
+                    : "Native App · iOS 17+ · deine Server-URL"}
+                </div>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="#app-workflows"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5 hover:bg-brand-hover"
+                  >
+                    <Smartphone className="size-5" aria-hidden="true" />
+                    {isEnglish ? "Explore the app" : "App kennenlernen"}
+                  </Link>
+                  <Link
+                    href="#getting-started"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
+                  >
+                    {isEnglish ? "See how to get started" : "So startest du"}
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>

@@ -133,7 +133,7 @@ export async function MarketingFooter() {
   const copy = locale === "de"
     ? {
         home: "Open Inventory Startseite",
-        intro: "Gegenstände mit Standorten, Beständen und Buchungen verbinden. MIT-lizenziert und selbst hostbar.",
+        intro: "Per Foto erfassen, automatisch beschreiben und mit Bildern, Bestand und Standort verbinden. MIT-lizenziert und selbst hostbar.",
         product: "Produkt",
         features: "Funktionen",
         docs: "Dokumentation",
@@ -148,11 +148,11 @@ export async function MarketingFooter() {
         license: "MIT-Lizenz",
         openApp: "Web-App öffnen",
         imprint: "Impressum",
-        tagline: "Gebaut für Werkstatt, Regal und Gerätekoffer.",
+        tagline: "Ein Foto. Ein vollständiger Eintrag.",
       }
     : {
         home: "Open Inventory home",
-        intro: "Connect objects with locations, stock, and movement history. MIT licensed and self-hostable.",
+        intro: "Capture by photo, generate useful details, and connect each record with images, stock, and location. MIT licensed and self-hostable.",
         product: "Product",
         features: "Features",
         docs: "Documentation",
@@ -167,7 +167,7 @@ export async function MarketingFooter() {
         license: "MIT license",
         openApp: "Open web app",
         imprint: "Legal notice",
-        tagline: "Built for workshops, shelves, and tool cases.",
+        tagline: "One photo. One complete record.",
       };
 
   return (

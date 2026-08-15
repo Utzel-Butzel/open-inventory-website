@@ -1,8 +1,10 @@
-# Pexels photography
+# Real photography
 
-These files are real contextual photographs downloaded from Pexels. They are
+These files are real photographs from Pexels and Wikimedia Commons. They are
 used as editorial and marketing context; they do not document Open Inventory
 users, deployments, interfaces, labels, or endorsements by the people shown.
+
+## Pexels contextual photography
 
 The photographs were downloaded under the
 [Pexels licence](https://www.pexels.com/license/). Keep the source attribution
@@ -29,3 +31,13 @@ into them.
 | `parts-storage-bins.webp` | 1800 × 1202 | 5691658 | Ksenia Chernaya | [Tools and fasteners in storage containers](https://www.pexels.com/photo/various-tools-in-containers-at-home-5691658/) |
 | `service-van-tools.webp` | 1800 × 2700 | 6195877 | Tima Miroshnichenko | [Equipment inside a service van](https://www.pexels.com/photo/housekeeping-equipments-inside-a-service-van-6195877/) |
 | `office-device-audit.webp` | 1800 × 1200 | 8296953 | Mikhail Nilov | [Office tools and equipment on a desk](https://www.pexels.com/photo/office-tools-and-equipment-on-a-desk-8296953/) |
+
+## Wikimedia Commons product photography
+
+| File | Size | Photographer | Source | Licence and changes |
+| --- | --- | --- | --- | --- |
+| `knipex-pliers-wrench.webp` | 1800 × 1013 | Raimond Spekking | [Knipex Zangenschlüssel 86 03 125](https://commons.wikimedia.org/wiki/File:Knipex_Zangenschl%C3%BCssel-8892.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) · resized, metadata stripped and converted from JPEG to WebP; the homepage additionally presents the same photograph with CSS cropping and colour treatment in the first workflow step |
+
+Attribution for the Wikimedia Commons image: © Raimond Spekking / CC BY-SA
+4.0 (via Wikimedia Commons). The adapted WebP is distributed under the same
+CC BY-SA 4.0 licence.

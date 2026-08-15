@@ -4,16 +4,20 @@ import Link from "next/link";
 import {
   ArrowRight,
   Barcode,
+  Box,
   Camera,
   Container,
   Github,
+  ImageIcon,
   KeyRound,
+  MapPinned,
   MapPin,
   PackageCheck,
   Search,
   Server,
-  ShieldCheck,
+  Sparkles,
   Smartphone,
+  Workflow,
 } from "lucide-react";
 
 import {
@@ -101,77 +105,94 @@ type HomepageCopy = {
 const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
   de: {
     metadata: {
-      title: "Open Inventory – Inventar für Werkstatt und Technik",
+      title: "Open Inventory – Inventarisierung in Sekunden",
       description:
-        "Open Inventory verbindet Gegenstände mit Standorten, Beständen und Buchungen. Selbst hostbar, MIT-lizenziert, mit optionaler Bildanalyse und nativer iOS-App.",
+        "Ein Foto genügt: Open Inventory schlägt mit KI Bezeichnung, Beschreibung, Typ und Tags vor und verbindet den Eintrag mit Bildern, Bestand und Standort.",
     },
     hero: {
-      eyebrow: "Inventar für Werkstatt und Technik",
+      eyebrow: "Inventarisierung",
       title: "Wo ist der Akkuschrauber?",
       description:
-        "Open Inventory zeigt seinen hinterlegten Standort und die letzte Buchung. Ein Foto beginnt den Datensatz; auf Wunsch füllt die Bildanalyse Felder vor. Du bestimmst, was gespeichert wird.",
+        "Inventarisierung in Sekunden statt Stunden: Einfache Inventarisierung mit KI – vom automatisch erzeugten Text bis zum perfekten Bild.",
       primary: "Live-Demo öffnen",
       secondary: "Mit Docker starten",
       facts: ["MIT-Lizenz", "Docker & PostgreSQL", "Web + native iOS-App"],
       captureLabel: "Web-App · Beispieldaten",
       captureCaption:
-        "Bestand, erwartete Lieferungen und knappe Artikel in einer gemeinsamen Ansicht.",
+        "Bestände, Orte und nächste Aufgaben in einer gemeinsamen Ansicht.",
       captureMeta: "13 Artikel · 223 Einheiten",
     },
     workflow: {
-      eyebrow: "Foto → Entwurf → Datensatz",
-      title: "Ein Vorschlag bleibt ein Entwurf.",
+      eyebrow: "Ein Foto · vier Ergebnisse",
+      title: "Inventarisierung modern gedacht.",
       description:
-        "Der Ablauf funktioniert mit oder ohne Bildanalyse. Wenn sie aktiv ist, füllt sie das Formular vor. Du änderst und speicherst in der Oberfläche.",
-      captureCaption: "Serienerfassung in der Web-App · Beispieldaten",
+        "Geh durch deine Werkstatt und fotografiere, was da ist. Open Inventory erkennt sichtbare Produktdetails, schreibt den Eintrag, bereitet ein Titelbild vor und verbindet ihn auf Wunsch mit seinem Platz im Raum.",
+      captureCaption: "Vom schnellen Werkstattfoto zum vollständigen Inventareintrag",
       steps: [
         {
           number: "01",
-          title: "Aufnehmen",
-          copy: "Fotografiere den Gegenstand und bei Bedarf sein Typenschild. Standort und Typ lassen sich für eine Serie einmal setzen.",
+          title: "Foto aufnehmen",
+          copy: "Ein schnelles Handyfoto genügt – direkt dort, wo die Zange gerade liegt. Für eine Serie bleiben Typ und Standort bereits vorausgewählt.",
         },
         {
           number: "02",
-          title: "Entwurf bearbeiten",
-          copy: "Vorgeschlagene Bezeichnung, Typ und Tags stehen in editierbaren Feldern. Vor dem Speichern kannst du sie korrigieren oder entfernen.",
+          title: "Daten entstehen automatisch",
+          copy: "Die KI erkennt sichtbare Produktdetails und schlägt Bezeichnung, Beschreibung, Typ und Tags vor. Der Standort kommt aus Serienvorgabe, GPS oder Raumplatzierung.",
         },
         {
           number: "03",
-          title: "Finden und buchen",
-          copy: "Suche und QR-Etikett öffnen denselben Datensatz. Dort siehst du Standort und Bestand; Ausleihe oder Rückgabe ergänzen die Historie.",
+          title: "Titelbild aufbereiten",
+          copy: "Optional entsteht aus dem Ausgangsfoto ein ruhiges, quadratisches Titelbild. Das Original bleibt trotzdem am Eintrag erhalten.",
+        },
+        {
+          number: "04",
+          title: "Im Raum wiederfinden",
+          copy: "GPS, Karte oder eine separate RoomPlan-Platzierung verknüpfen den Eintrag mit seinem Fundort – bis hin zu Raum, Werkbank und Position.",
         },
       ],
     },
     tasks: {
-      eyebrow: "Im Alltag",
-      title: "Was mit dem Eintrag möglich wird.",
+      eyebrow: "Was Open Inventory kann",
+      title: "Alles im Blick. Alles sofort griffbereit.",
       description:
-        "Vom ersten Foto bis zur nächsten Bestandsbewegung bleibt alles an einem nachvollziehbaren Datensatz.",
+        "Vom automatisch erstellten Eintrag bis zur Suche, Ausleihe und Bestandsführung begleitet Open Inventory deine Ausrüstung im gesamten Alltag.",
       linkLabel: "Im Detail",
       items: [
         {
-          title: "Erfassen",
-          copy: "Bei einer Serie bleibt die Kamera für den nächsten Gegenstand frei. Standort und Typ musst du nicht wiederholt eingeben.",
+          title: "Automatisch erfassen",
+          copy: "Fotos werden zu vorgeschlagenen Namen, Beschreibungen, Typen und Tags – einzeln oder als schnelle Serie.",
           href: "/features/erfassen",
-          icon: Camera,
+          icon: Sparkles,
         },
         {
-          title: "Finden",
-          copy: "Suche nach Bezeichnung oder Inventar-ID. Ein QR- oder Code-128-Etikett öffnet den Eintrag direkt am Regal.",
+          title: "Bilder aufbereiten",
+          copy: "Originale bleiben erhalten; optional entsteht zusätzlich ein einheitliches quadratisches Titelbild.",
+          href: "/features/erfassen",
+          icon: ImageIcon,
+        },
+        {
+          title: "Sofort wiederfinden",
+          copy: "Suche, Tags, QR- und Barcodes führen direkt zum Eintrag mit Medien, Zustand, Bestand und Fundort.",
           href: "/features/strukturieren",
           icon: Search,
         },
         {
-          title: "Bewegen",
-          copy: "Ausleihe und Rückgabe ändern den Status. Verbrauch oder Standortwechsel werden als weitere Bewegung protokolliert.",
+          title: "Räumlich verorten",
+          copy: "Strukturierte Orte, GPS, Kartenpunkte und optionale RoomPlan-Räume zeigen, wo etwas wirklich liegt.",
+          href: "/features/orte-raeume",
+          icon: MapPinned,
+        },
+        {
+          title: "Bestand & Ausleihe",
+          copy: "Mengen, Einzelgeräte, Zu- und Abgänge, Reservierungen, Ausgaben und Rückgaben bleiben nachvollziehbar.",
           href: "/features/bestand-ausleihe",
           icon: PackageCheck,
         },
         {
-          title: "Betreiben",
-          copy: "Rollen begrenzen Bearbeitung und Buchung. API-Tokens und OpenAPI 3.1 binden eigene Abläufe an.",
-          href: "/features/betrieb-sicherheit",
-          icon: ShieldCheck,
+          title: "Abläufe verbinden",
+          copy: "Etiketten, Scan-Workflows, Rollen, API-Tokens und OpenAPI 3.1 binden dein Team und eigene Prozesse an.",
+          href: "/features/labels-api",
+          icon: Workflow,
         },
       ],
     },
@@ -235,77 +256,94 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
   },
   en: {
     metadata: {
-      title: "Open Inventory – Inventory for workshops and technical teams",
+      title: "Open Inventory – Inventory in seconds",
       description:
-        "Open Inventory connects objects with locations, stock, and movement history. Self-hostable and MIT licensed, with optional image analysis and a native iOS app.",
+        "One photo is enough: Open Inventory uses AI to suggest a name, description, type, and tags, then connects the record with images, stock, and location.",
     },
     hero: {
-      eyebrow: "Inventory for workshops and technical teams",
+      eyebrow: "Inventory",
       title: "Where is the cordless drill?",
       description:
-        "Open Inventory shows its recorded location and most recent movement. A photo starts the record; optional image analysis prefills fields. You decide what gets saved.",
+        "Inventory in seconds, not hours: simple AI-assisted capture, from automatically written details to a polished product image.",
       primary: "Open live demo",
       secondary: "Start with Docker",
       facts: ["MIT licensed", "Docker & PostgreSQL", "Web + native iOS app"],
       captureLabel: "Web app · German sample data",
       captureCaption:
-        "Stock, incoming orders, and items needing attention in one view.",
+        "Stock, locations, and the next actions in one view.",
       captureMeta: "13 items · 223 units",
     },
     workflow: {
-      eyebrow: "Photo → draft → record",
-      title: "A suggestion stays a draft.",
+      eyebrow: "One photo · four results",
+      title: "Inventory, reimagined.",
       description:
-        "The workflow works with or without image analysis. When enabled, it prefills the form. You edit and save in the interface.",
-      captureCaption: "Batch capture in the web app · German sample data",
+        "Walk through your workshop and photograph what is there. Open Inventory recognises visible product details, writes the record, prepares a cover, and can connect it with its position in the room.",
+      captureCaption: "From a quick workshop photo to a complete inventory record",
       steps: [
         {
           number: "01",
-          title: "Capture",
-          copy: "Photograph the object and, when useful, its nameplate. Set location and type once for a batch.",
+          title: "Take a photo",
+          copy: "A quick phone photo is enough, right where the pliers happen to be. Type and location can stay preselected for a batch.",
         },
         {
           number: "02",
-          title: "Edit the draft",
-          copy: "Suggested names, types, and tags appear in editable fields. Correct or remove them before saving.",
+          title: "Create the details automatically",
+          copy: "AI recognises visible product details and suggests a name, description, type, and tags. Location comes from batch context, GPS, or room placement.",
         },
         {
           number: "03",
-          title: "Find and record changes",
-          copy: "Search and the QR label open the same record. It shows location and stock; a checkout or return adds to its history.",
+          title: "Prepare the cover image",
+          copy: "Optionally, the source photo becomes a calm square cover. The original image remains attached to the record.",
+        },
+        {
+          number: "04",
+          title: "Find it in the room",
+          copy: "GPS, the map, or a separate RoomPlan placement can connect the record with its exact place, down to the room and workbench.",
         },
       ],
     },
     tasks: {
-      eyebrow: "Day to day",
-      title: "What the record lets you do.",
+      eyebrow: "What Open Inventory can do",
+      title: "Everything visible. Everything within reach.",
       description:
-        "From the first photo to the next stock movement, the work stays attached to one traceable record.",
+        "From automatic capture to search, checkout, and stock management, Open Inventory supports your equipment throughout its working life.",
       linkLabel: "View details",
       items: [
         {
-          title: "Capture",
-          copy: "During a batch, the camera stays ready for the next object. Location and type do not need repeated entry.",
+          title: "Capture automatically",
+          copy: "Photos become suggested names, descriptions, types, and tags, one at a time or in a fast batch.",
           href: "/features/erfassen",
-          icon: Camera,
+          icon: Sparkles,
         },
         {
-          title: "Find",
-          copy: "Search by name or inventory ID. A QR or Code 128 label opens the record at the shelf.",
+          title: "Prepare consistent images",
+          copy: "Originals stay attached while an optional square cover creates a calm, consistent inventory grid.",
+          href: "/features/erfassen",
+          icon: ImageIcon,
+        },
+        {
+          title: "Find anything immediately",
+          copy: "Search, tags, QR, and barcodes lead to the record with media, condition, stock, and location.",
           href: "/features/strukturieren",
           icon: Search,
         },
         {
-          title: "Move",
-          copy: "Checkout and return change the status. Consumption or a location change is recorded as another movement.",
+          title: "Place it spatially",
+          copy: "Structured locations, GPS, map features, and optional RoomPlan rooms show where an item actually is.",
+          href: "/features/orte-raeume",
+          icon: MapPinned,
+        },
+        {
+          title: "Manage stock and lending",
+          copy: "Quantities, serialized devices, movements, reservations, checkout, and returns remain traceable.",
           href: "/features/bestand-ausleihe",
           icon: PackageCheck,
         },
         {
-          title: "Operate",
-          copy: "Roles limit editing and stock bookings. API tokens and OpenAPI 3.1 connect your own workflows.",
-          href: "/features/betrieb-sicherheit",
-          icon: ShieldCheck,
+          title: "Connect your workflows",
+          copy: "Labels, scan workflows, roles, API tokens, and OpenAPI 3.1 connect teams and custom processes.",
+          href: "/features/labels-api",
+          icon: Workflow,
         },
       ],
     },
@@ -448,6 +486,175 @@ function ProductFigure({ copy }: { copy: HomepageCopy["hero"] }) {
   );
 }
 
+function InventoryMagicFlow({
+  locale,
+  copy,
+}: {
+  locale: MarketingLocale;
+  copy: HomepageCopy["workflow"];
+}) {
+  const isEnglish = locale === "en";
+  const icons = [Camera, Sparkles, ImageIcon, Box];
+
+  const visual = (index: number) => {
+    if (index === 0) {
+      return (
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#171813]">
+          <Image
+            src="/marketing/photography/knipex-pliers-wrench.webp"
+            alt={
+              isEnglish
+                ? "Real photograph of Knipex pliers, deliberately presented as a quick handheld capture"
+                : "Reales Foto eines Knipex-Zangenschlüssels, bewusst wie eine schnelle Handyaufnahme inszeniert"
+            }
+            fill
+            sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
+            className="scale-[1.42] -rotate-6 object-cover object-center brightness-[0.72] contrast-[0.88] saturate-[0.72]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_32%,rgba(0,0,0,0.62)_100%)]" />
+          <div className="absolute inset-5 border border-white/24">
+            <span className="absolute -left-px -top-px size-5 border-l-2 border-t-2 border-[#d6ff55]" />
+            <span className="absolute -right-px -top-px size-5 border-r-2 border-t-2 border-[#d6ff55]" />
+            <span className="absolute -bottom-px -left-px size-5 border-b-2 border-l-2 border-[#d6ff55]" />
+            <span className="absolute -bottom-px -right-px size-5 border-b-2 border-r-2 border-[#d6ff55]" />
+          </div>
+          <div className="absolute inset-x-4 top-4 flex items-center justify-between font-mono text-[9px] text-white/82">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-[#ff5a5f]" /> REC
+            </span>
+            <span>AUTO · 1×</span>
+          </div>
+          <p className="absolute inset-x-4 bottom-4 font-mono text-[9px] text-white/72">
+            {isEnglish ? "Quick capture · workshop" : "Schnelle Aufnahme · Werkstatt"}
+          </p>
+        </div>
+      );
+    }
+
+    if (index === 1) {
+      return (
+        <div className="flex aspect-[4/3] flex-col bg-[#17181d] p-5 text-white">
+          <div className="flex items-center justify-between">
+            <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[#8ff0cc]">
+              <Sparkles className="size-4" aria-hidden="true" />
+              {isEnglish ? "AI suggestion" : "KI-Vorschlag"}
+            </span>
+            <span className="rounded-full bg-white/8 px-2 py-1 font-mono text-[8px] text-white/54">
+              96%
+            </span>
+          </div>
+          <p className="mt-5 text-[20px] font-semibold leading-[1.05] tracking-[-0.04em]">
+            KNIPEX Zangenschlüssel
+          </p>
+          <p className="mt-1 font-mono text-[10px] text-white/48">86 03 125 · Werkzeug</p>
+          <p className="mt-4 line-clamp-3 text-[11px] leading-5 text-white/64">
+            {isEnglish
+              ? "Compact pliers wrench with parallel jaws and red grips for gripping and turning workpieces."
+              : "Kompakter Zangenschlüssel mit parallelen Backen und roten Griffen zum Greifen und Drehen von Werkstücken."}
+          </p>
+          <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
+            {["KNIPEX", "125 mm", isEnglish ? "Pliers" : "Zange"].map((tag) => (
+              <span key={tag} className="rounded-full border border-white/12 px-2 py-1 font-mono text-[8px] text-white/56">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (index === 2) {
+      return (
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#dfff86] p-4">
+          <div className="relative h-full overflow-hidden bg-white shadow-[0_18px_45px_rgba(33,38,27,0.16)]">
+            <Image
+              src="/marketing/photography/knipex-pliers-wrench.webp"
+              alt={
+                isEnglish
+                  ? "Clean real product photograph of a Knipex pliers wrench"
+                  : "Sauberes reales Produktfoto eines Knipex-Zangenschlüssels"
+              }
+              fill
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
+              className="object-contain p-4"
+            />
+            <span className="absolute left-3 top-3 rounded-full bg-[#17181d] px-2.5 py-1 font-mono text-[8px] text-white">
+              {isEnglish ? "Cover" : "Titelbild"}
+            </span>
+            <p className="absolute inset-x-3 bottom-3 text-[10px] font-semibold text-[#252821]">
+              KNIPEX · 86 03 125
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#11151a] text-white [perspective:700px]">
+        <div className="absolute inset-x-6 bottom-5 top-8 border border-white/18 bg-[linear-gradient(rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.09)_1px,transparent_1px)] bg-[size:28px_28px] [transform:rotateX(58deg)_rotateZ(-8deg)] [transform-origin:bottom]" />
+        <div className="absolute left-[16%] top-[28%] h-[34%] w-[28%] border border-[#9188ff]/70 bg-[#9188ff]/14 [transform:skewY(-8deg)]" />
+        <div className="absolute right-[17%] top-[37%] h-[28%] w-[30%] border border-white/22 bg-white/[0.04] [transform:skewY(7deg)]" />
+        <span className="absolute left-[52%] top-[45%] grid size-12 place-items-center rounded-full bg-[#d6ff55] text-[#17181d] shadow-[0_0_0_10px_rgba(214,255,85,0.13)]">
+          <MapPin className="size-6" strokeWidth={2.2} aria-hidden="true" />
+        </span>
+        <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
+          <div>
+            <p className="font-mono text-[8px] uppercase tracking-[0.12em] text-[#8ff0cc]">
+              {isEnglish ? "Spatial placement" : "Räumliche Platzierung"}
+            </p>
+            <p className="mt-1 text-[11px] font-semibold">
+              {isEnglish ? "Workshop · Bench 2" : "Werkstatt · Werkbank 2"}
+            </p>
+          </div>
+          <Box className="size-7 text-[#9188ff]" aria-hidden="true" />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="mt-12">
+      <ol className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {copy.steps.map((step, index) => {
+          const Icon = icons[index];
+          return (
+            <li key={step.number} className="group relative border-t-2 border-foreground pt-4">
+              {index < copy.steps.length - 1 ? (
+                <span className="absolute -right-[18px] top-[22px] z-10 hidden size-8 place-items-center rounded-full border border-border-strong bg-background text-brand xl:grid">
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </span>
+              ) : null}
+              <div className="mb-4 flex items-center justify-between">
+                <span className="font-mono text-[11px] font-semibold text-brand">{step.number}</span>
+                <Icon className="size-8 text-brand" strokeWidth={1.55} aria-hidden="true" />
+              </div>
+              {visual(index)}
+              <h3 className="mt-5 text-[22px] font-semibold leading-[1.05] tracking-[-0.04em]">{step.title}</h3>
+              <p className="mt-3 text-[14px] leading-6 text-muted">{step.copy}</p>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="mt-9 grid gap-3 border-t border-border-strong pt-5 text-[11px] leading-5 text-muted sm:grid-cols-[1fr_auto]">
+        <p>
+          {isEnglish
+            ? "The example uses the same licensed real photograph in both image stages. AI suggestions, optional cover creation, and room placement remain separate operations."
+            : "Das Beispiel nutzt in beiden Bildschritten dasselbe lizenzierte reale Foto. KI-Vorschläge, optionale Titelbilderstellung und Raumplatzierung bleiben getrennte Schritte."}
+        </p>
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Knipex_Zangenschl%C3%BCssel-8892.jpg"
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold text-foreground underline decoration-border-strong underline-offset-4"
+        >
+          © Raimond Spekking · CC BY-SA 4.0
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function HomePageContent({
   locale,
   copy,
@@ -518,77 +725,52 @@ function HomePageContent({
               title={copy.workflow.title}
               description={copy.workflow.description}
             />
-
-            <div className="mt-12 grid gap-10 lg:grid-cols-[1.18fr_0.82fr] lg:items-start lg:gap-16">
-              <figure className="border border-border-strong bg-[#11130f] p-2 sm:p-3">
-                <Image
-                  src="/marketing/screenshots/web-batch-home.png"
-                  width={1148}
-                  height={640}
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                  alt={copy.workflow.captureCaption}
-                  className="h-auto w-full"
-                />
-                <figcaption className="border-t border-white/10 px-3 py-3 text-[12px] text-white/62 sm:px-4">
-                  {copy.workflow.captureCaption}
-                </figcaption>
-              </figure>
-
-              <ol className="border-t border-border-strong">
-                {copy.workflow.steps.map((step) => (
-                  <li
-                    key={step.number}
-                    className="grid gap-3 border-b border-border-strong py-7 sm:grid-cols-[44px_1fr]"
-                  >
-                    <span className="font-mono text-[11px] text-brand">
-                      {step.number}
-                    </span>
-                    <div>
-                      <h3 className="text-[21px] font-semibold tracking-[-0.035em]">
-                        {step.title}
-                      </h3>
-                      <p className="mt-2 text-[14px] leading-6 text-muted">
-                        {step.copy}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
+            <InventoryMagicFlow locale={locale} copy={copy.workflow} />
           </div>
         </section>
 
         <section className="border-b border-border py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
-            <SectionIntro
-              eyebrow={copy.tasks.eyebrow}
-              title={copy.tasks.title}
-              description={copy.tasks.description}
-            />
+          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_0.62fr] lg:items-end">
+              <SectionIntro
+                eyebrow={copy.tasks.eyebrow}
+                title={copy.tasks.title}
+                description={copy.tasks.description}
+              />
+              <p className="max-w-lg border-l-2 border-brand-border pl-5 text-[14px] leading-6 text-muted lg:justify-self-end">
+                {locale === "en"
+                  ? "One record carries its photographs, generated details, location, stock history, labels, and permissions through every workflow."
+                  : "Ein Datensatz trägt Fotos, erzeugte Details, Standort, Bestandshistorie, Etiketten und Rechte durch jeden weiteren Ablauf."}
+              </p>
+            </div>
 
-            <div className="border-t border-border-strong">
+            <div className="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               {copy.tasks.items.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.title}
                     href={href(item.href)}
-                    className="group grid gap-4 border-b border-border-strong py-6 sm:grid-cols-[42px_150px_1fr_auto] sm:items-start"
+                    className="group relative border-t border-border-strong pt-6"
                   >
-                    <span className="font-mono text-[11px] text-muted">
-                      {String(index + 1).padStart(2, "0")}
+                    <span className="flex items-start justify-between gap-5">
+                      <span className="grid size-16 place-items-center rounded-full bg-brand-soft text-brand transition duration-300 group-hover:scale-105 group-hover:bg-brand-solid group-hover:text-on-brand">
+                        <Icon className="size-8" strokeWidth={1.55} aria-hidden="true" />
+                      </span>
+                      <span className="font-mono text-[10px] text-muted">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
                     </span>
-                    <span className="flex items-center gap-3 text-[18px] font-semibold tracking-[-0.025em]">
-                      <Icon className="size-4 text-brand" aria-hidden="true" />
+                    <h3 className="mt-8 text-[23px] font-semibold tracking-[-0.04em]">
                       {item.title}
-                    </span>
-                    <span className="text-[14px] leading-6 text-muted">
+                    </h3>
+                    <span className="mt-3 block text-[14px] leading-6 text-muted">
                       {item.copy}
                     </span>
-                    <span className="flex items-center gap-2 text-[12px] font-semibold text-brand">
+                    <span className="mt-6 flex items-center gap-2 text-[12px] font-semibold text-brand">
                       {copy.tasks.linkLabel}
                       <ArrowRight
-                        className="size-3.5 transition group-hover:translate-x-1"
+                        className="size-4 transition group-hover:translate-x-1"
                         aria-hidden="true"
                       />
                     </span>
@@ -653,12 +835,11 @@ function HomePageContent({
                   return (
                     <div
                       key={item.title}
-                      className="grid gap-3 border-b border-white/18 py-5 sm:grid-cols-[36px_150px_1fr]"
+                      className="grid gap-4 border-b border-white/18 py-6 sm:grid-cols-[56px_150px_1fr] sm:items-start"
                     >
-                      <Icon
-                        className="size-4 text-[#8ff0cc]"
-                        aria-hidden="true"
-                      />
+                      <span className="grid size-12 place-items-center rounded-full border border-white/14 bg-white/[0.06] text-[#8ff0cc]">
+                        <Icon className="size-6" strokeWidth={1.6} aria-hidden="true" />
+                      </span>
                       <h3 className="text-[15px] font-semibold">
                         {item.title}
                       </h3>

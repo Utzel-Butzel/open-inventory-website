@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   title: Inventory API
-  version: 1.15.0
+  version: 1.20.0
   description: >-
     Organization-scoped API for configurable inventory structures, localized
     content, indoor 3D room scans, location-aware stock, cycle counts,
-    assignments, CSV exchange, typed custom fields, label setups, media, AI,
+    assignments, internal requests, reservation planning, CSV exchange, typed custom fields, label setups, media, AI,
     outgoing integration webhooks, and data quality. User-bound credentials may
     select one of their memberships with X-Organization-ID. Standalone API
     tokens are pinned to their issuing organization.
@@ -25,6 +25,8 @@ tags:
     description: Session-administered roles, granular permissions, and conditional inventory-item access rules.
   - name: Resources
     description: Inventory item creation, lookup, retrieval, and lifecycle.
+  - name: Contacts
+    description: Organization-scoped customers and suppliers with inventory and stock-ledger assignments.
   - name: Inventory structure
     description: Configurable inventory types, relationship types, and directed resource relationships.
   - name: Data exchange
@@ -41,10 +43,14 @@ tags:
     description: Recurring count policies, due-count queues, and stock reconciliation.
   - name: Assignments
     description: Checkout, assignment, reservation, return, and cancellation workflows.
+  - name: Internal requests
+    description: Multi-item inventory requests with approval, reservation, fulfillment, and calendar planning.
   - name: Manufacturing
     description: Bills of materials and atomic assembly builds.
   - name: Purchasing
     description: Purchase orders, incoming quantities, and stock receipts.
+  - name: Orders
+    description: Shared purchase, sales, and multi-item loan workflows with line-linked stock movements.
   - name: Scan workflows
     description: Configurable scan actions and execution.
   - name: Media
@@ -52,11 +58,13 @@ tags:
   - name: Spatial rooms
     description: Versioned RoomPlan scenes, native AR world-map assets, and measured indoor item placements.
   - name: AI
-    description: Visual inventory recognition, counting, item analysis, and generated covers.
+    description: Visual inventory recognition, counting, item analysis, web-grounded enrichment, and generated covers.
   - name: Insights
     description: Workspace statistics and duplicate detection.
   - name: Notifications
     description: Session-scoped in-app inbox, anti-noise preferences, Web Push subscriptions, and preview-only channel tests.
+  - name: Integrations
+    description: Session-administered connections to external inventory and commerce systems.
   - name: Webhooks
     description: Session-administered outgoing integration events with durable at-least-once delivery, HMAC signatures, retry history, and manual replay.
 paths:
@@ -190,6 +198,160 @@ paths:
         "200": { description: Detection and dispatch counters }
         "401": { description: Missing or invalid cron secret or browser session }
         "403": { description: Browser session lacks tokens.manage }
+  /integrations/woocommerce:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Integrations]
+      summary: Read the WooCommerce connection status
+      description: Requires an authenticated browser session with `webhooks.manage`. Credentials are never returned.
+      security: [{ adminSession: [] }]
+      responses:
+        "200":
+          description: Current connection status and encryption readiness
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WooCommerceConnectionStatusResponse" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+    put:
+      tags: [Integrations]
+      summary: Connect or replace a WooCommerce store
+      description: Tests the credentials against WooCommerce REST API v3 before encrypting and storing them. Requires `webhooks.manage`.
+      security: [{ adminSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WooCommerceConnectionInput" }
+      responses:
+        "200":
+          description: Connection tested and stored
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WooCommerceConnectionMutationResponse" }
+        "400": { description: Request body is not valid JSON }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+        "422": { description: Invalid store URL or credential format }
+        "502": { description: WooCommerce rejected the request or returned an invalid response }
+        "503": { description: Integration credential encryption is not configured }
+    patch:
+      tags: [Integrations]
+      summary: Enable or disable WooCommerce order stock sync
+      description: Creates or removes signed order.created and order.updated webhooks in WooCommerce. Enabling requires a public HTTPS AUTH_URL and a Consumer Key with write access.
+      security: [{ adminSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WooCommerceSyncPatch" }
+      responses:
+        "200":
+          description: Stock sync state updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WooCommerceConnectionStatusResponse" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+        "404": { description: No WooCommerce connection is configured }
+        "422": { description: Invalid stock sync setting }
+        "502": { description: WooCommerce webhook registration failed }
+        "503": { description: Public callback URL or integration encryption is not configured }
+    delete:
+      tags: [Integrations]
+      summary: Disconnect the WooCommerce store
+      description: Permanently removes the encrypted credentials for the selected organization. Requires `webhooks.manage`.
+      security: [{ adminSession: [] }]
+      responses:
+        "204": { description: Connection removed, or no connection existed }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+  /integrations/woocommerce/test:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    post:
+      tags: [Integrations]
+      summary: Test the saved WooCommerce connection
+      description: Decrypts the saved credentials only in memory and verifies product read access against WooCommerce REST API v3. Requires `webhooks.manage`.
+      security: [{ adminSession: [] }]
+      responses:
+        "200":
+          description: Connection test succeeded and status was updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WooCommerceConnectionMutationResponse" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+        "404": { description: No WooCommerce connection is configured }
+        "502": { description: WooCommerce rejected the request or returned an invalid response }
+        "503": { description: Integration credential encryption is not configured }
+  /integrations/woocommerce/sync:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    post:
+      tags: [Integrations]
+      summary: Reconcile one WooCommerce order or retry orders with issues
+      description: Fetches canonical order and refund data from WooCommerce, maps exact item or variant SKUs, and writes idempotent issue or return stock movements. Omitting orderId retries up to 20 recorded orders with issues.
+      security: [{ adminSession: [] }]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WooCommerceManualSyncRequest" }
+      responses:
+        "200": { description: Reconciliation results }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: Browser session lacks webhooks.manage }
+        "404": { description: No WooCommerce connection is configured }
+        "422": { description: Invalid order ID }
+        "502": { description: WooCommerce order or refund retrieval failed }
+  /integrations/woocommerce/webhook/{connectionId}:
+    parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Integrations]
+      summary: Receive a signed WooCommerce order webhook
+      description: Public callback registered automatically in WooCommerce. The exact raw body is authenticated with X-WC-Webhook-Signature and the registered webhook ID before canonical order data is fetched.
+      security: []
+      parameters:
+        - name: X-WC-Webhook-Signature
+          in: header
+          required: true
+          schema: { type: string }
+        - name: X-WC-Webhook-Topic
+          in: header
+          required: true
+          schema: { type: string, enum: [order.created, order.updated] }
+        - name: X-WC-Webhook-ID
+          in: header
+          required: true
+          schema: { type: integer }
+        - name: X-WC-Webhook-Delivery-ID
+          in: header
+          required: false
+          schema: { type: string, maxLength: 160 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id: { type: integer, minimum: 1 }
+              additionalProperties: true
+      responses:
+        "200": { description: Delivery authenticated and reconciled, or safely recognized as a duplicate }
+        "400": { description: Invalid JSON or unsupported topic }
+        "401": { description: Invalid signature or unknown WooCommerce webhook ID }
+        "410": { description: Stock sync is disabled }
+        "413": { description: Payload exceeds one megabyte }
+        "422": { description: Payload has no valid order ID }
+        "502": { description: Canonical WooCommerce order retrieval failed and the delivery may be retried }
   /webhooks:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -795,6 +957,12 @@ paths:
               required: [name]
               properties:
                 name: { type: string, minLength: 1, maxLength: 160 }
+                slug:
+                  type: string
+                  minLength: 1
+                  maxLength: 48
+                  pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+                  description: Optional short Webapp URL slug; generated from the name when omitted.
       responses:
         "201":
           description: Organization created with the current user as admin
@@ -805,8 +973,9 @@ paths:
                 required: [organization]
                 properties:
                   organization: { $ref: "#/components/schemas/OrganizationMembership" }
-        "403": { description: A browser session is required }
-        "422": { description: Invalid organization name }
+        "403": { description: A browser session is required, and regular-user organization creation must be enabled unless the user is a superadmin }
+        "409": { description: Requested organization slug is already in use }
+        "422": { description: Invalid organization name or slug }
   /organizations/select:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -844,7 +1013,7 @@ paths:
         schema: { type: string, format: uuid }
     patch:
       tags: [Organizations]
-      summary: Rename an organization
+      summary: Update an organization's settings
       security: [{ adminSession: [] }]
       requestBody:
         required: true
@@ -853,9 +1022,17 @@ paths:
             schema:
               type: object
               additionalProperties: false
-              required: [name]
+              minProperties: 1
               properties:
                 name: { type: string, minLength: 1, maxLength: 160 }
+                slug:
+                  type: string
+                  minLength: 1
+                  maxLength: 48
+                  pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+                allowNegativeStock:
+                  type: boolean
+                  description: Allow bulk stock balances to fall below zero.
       responses:
         "200":
           description: Updated organization
@@ -867,7 +1044,104 @@ paths:
                 properties:
                   organization: { $ref: "#/components/schemas/OrganizationMembership" }
         "403": { description: Browser user lacks organization administration permission }
+        "409": { description: Requested organization slug is already in use }
         "404": { description: Organization not found or not available to this user }
+        "422": { description: Invalid organization name or slug }
+  /admin/organizations:
+    get:
+      tags: [Organizations]
+      summary: List every organization in the deployment
+      description: Requires a browser session whose email is configured in `SUPERADMIN_EMAILS`.
+      security: [{ superadminSession: [] }]
+      responses:
+        "200":
+          description: Every organization in the deployment
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [organizations]
+                properties:
+                  organizations:
+                    type: array
+                    items: { $ref: "#/components/schemas/OrganizationSummary" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: The browser user is not a configured superadmin }
+    post:
+      tags: [Organizations]
+      summary: Create an organization as a deployment superadmin
+      description: Creates an administrator membership for the superadmin who creates the organization.
+      security: [{ superadminSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [name]
+              properties:
+                name: { type: string, minLength: 1, maxLength: 160 }
+                slug:
+                  type: string
+                  minLength: 1
+                  maxLength: 48
+                  pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      responses:
+        "201":
+          description: Organization created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [organization]
+                properties:
+                  organization: { $ref: "#/components/schemas/OrganizationSummary" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: The browser user is not a configured superadmin }
+        "409": { description: Requested organization slug is already in use }
+        "422": { description: Invalid organization name or slug }
+  /admin/organizations/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Organizations]
+      summary: Update any organization as a deployment superadmin
+      security: [{ superadminSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                name: { type: string, minLength: 1, maxLength: 160 }
+                slug:
+                  type: string
+                  minLength: 1
+                  maxLength: 48
+                  pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+                allowNegativeStock: { type: boolean }
+      responses:
+        "200":
+          description: Organization updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [organization]
+                properties:
+                  organization: { $ref: "#/components/schemas/OrganizationSummary" }
+        "401": { description: An authenticated browser session is required }
+        "403": { description: The browser user is not a configured superadmin }
+        "404": { description: Organization not found }
+        "409": { description: Requested organization slug is already in use }
+        "422": { description: Invalid organization name or slug }
   /api/access/roles:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -1791,6 +2065,170 @@ paths:
       responses:
         "200": { description: No target-language jobs were needed }
         "202": { description: Durable translation jobs queued }
+  /contacts:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Contacts]
+      summary: List customers and suppliers
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string, maxLength: 240 }
+        - name: role
+          in: query
+          schema: { type: string, enum: [customer, supplier] }
+        - name: includeArchived
+          in: query
+          schema: { type: boolean, default: false }
+      responses:
+        "200":
+          description: Contacts with linked inventory and movement counts
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [contacts]
+                properties:
+                  contacts: { type: array, items: { $ref: "#/components/schemas/Contact" } }
+    post:
+      tags: [Contacts]
+      summary: Create a customer, supplier, or dual-role contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContactInput" }
+      responses:
+        "201":
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [contact]
+                properties:
+                  contact: { $ref: "#/components/schemas/Contact" }
+        "422": { description: Invalid contact or cross-organization inventory assignment }
+  /contacts/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Contacts]
+      summary: Get one contact
+      responses:
+        "200":
+          description: Contact details
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [contact]
+                properties:
+                  contact: { $ref: "#/components/schemas/Contact" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      tags: [Contacts]
+      summary: Update a contact and its inventory assignments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContactPatch" }
+      responses:
+        "200":
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [contact]
+                properties:
+                  contact: { $ref: "#/components/schemas/Contact" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { description: Invalid contact or cross-organization inventory assignment }
+    delete:
+      tags: [Contacts]
+      summary: Archive a contact
+      description: Historical stock-movement references are retained.
+      responses:
+        "204": { description: Contact archived }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /contacts/{id}/comments:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Contacts]
+      summary: List a contact's comments
+      responses:
+        "200":
+          description: Chronological contact comment thread
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [comments]
+                properties:
+                  comments: { type: array, items: { $ref: "#/components/schemas/ContactComment" } }
+        "404": { $ref: "#/components/responses/NotFound" }
+    post:
+      tags: [Contacts]
+      summary: Add a comment to a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CommentInput" }
+      responses:
+        "201":
+          description: Comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [comment]
+                properties:
+                  comment: { $ref: "#/components/schemas/ContactComment" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { description: Invalid comment body }
+  /contacts/{id}/comments/{commentId}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+      - name: commentId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Contacts]
+      summary: Edit an owned contact comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CommentInput" }
+      responses:
+        "200": { description: Comment updated }
+        "403": { description: Comment belongs to another author }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [Contacts]
+      summary: Delete an owned contact comment
+      responses:
+        "204": { description: Comment deleted }
+        "403": { description: Comment belongs to another author }
+        "404": { $ref: "#/components/responses/NotFound" }
   /resources:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -1802,7 +2240,7 @@ paths:
         - { name: type, in: query, schema: { $ref: "#/components/schemas/InventoryTypeKey" } }
         - { name: status, in: query, schema: { type: string } }
         - { name: page, in: query, schema: { type: integer, minimum: 1 } }
-        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100 } }
+        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 500 } }
         - { name: language, in: query, description: Active BCP 47 content locale. Missing or stale fields fall back individually to canonical content., schema: { type: string, maxLength: 35 } }
       responses:
         "200":
@@ -1947,7 +2385,7 @@ paths:
   /resources/{id}:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
-      - { $ref: "#/components/parameters/ResourceId" }
+      - { $ref: "#/components/parameters/ResourceReference" }
     get:
       tags: [Resources]
       summary: Retrieve an inventory item
@@ -1983,13 +2421,138 @@ paths:
       responses:
         "204": { description: Deleted }
         "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: Primary item still has linked first-class variants }
+  /resources/{id}/family:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - { $ref: "#/components/parameters/ResourceId" }
+    get:
+      tags: [Resources]
+      summary: Retrieve a first-class inventory variant family
+      description: Resolves the primary item and its ordinary resource variants. Every returned member has independent stock, locations, serialization, relationships, and manufacturing history. The request fails rather than exposing a partially authorized family.
+      responses:
+        "200":
+          description: Variant family
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResourceFamily" }
+        "403": { description: One or more family members are outside the caller's inventory access rules }
+        "404": { $ref: "#/components/responses/NotFound" }
+    post:
+      tags: [Resources]
+      summary: Create a first-class variant or connect an existing inventory item
+      description: With identity fields, creates a zero-stock resource linked to this primary by a protected `variant_of` relationship. With `existingResourceId`, connects an existing standalone item without moving its stock, locations, serial units, relationships, assignments, or history. Existing catalog and BOM differences are retained as sparse overrides. Variant families cannot be nested.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - { $ref: "#/components/schemas/ResourceFamilyVariantInput" }
+                - { $ref: "#/components/schemas/ResourceFamilyExistingVariantInput" }
+      responses:
+        "200":
+          description: Existing inventory item connected as a first-class variant
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [variant]
+                properties:
+                  variant: { $ref: "#/components/schemas/ResourceFamilyMember" }
+        "201":
+          description: First-class variant created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [variant]
+                properties:
+                  variant: { $ref: "#/components/schemas/ResourceFamilyMember" }
+        "403": { description: Missing primary-item update access, candidate-item update access, or inventory create permission when creating }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: Identifier conflict, archived item, option-managed family, existing membership, or nested family attempt }
+        "422": { description: Invalid variant identity }
+    delete:
+      tags: [Resources]
+      summary: Detach a first-class variant from its primary item
+      description: Removes only the protected `variant_of` family link. The currently effective inherited bill of materials is materialized onto the same inventory resource first. Stock, locations, serial units, ordinary relationships, assignments, and manufacturing history stay attached to that resource.
+      responses:
+        "200":
+          description: Variant detached and its effective bill of materials materialized
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [detached]
+                properties:
+                  detached: { $ref: "#/components/schemas/ResourceVariantDetachResult" }
+        "403": { description: Missing update access to the variant item }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: Item is not a linked variant or its effective bill of materials cannot be preserved }
+        "422": { description: Invalid resource id }
+  /resources/{id}/options:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - { $ref: "#/components/parameters/ResourceId" }
+    get:
+      tags: [Resources, Manufacturing]
+      summary: Retrieve option groups and the current resource's selections
+      description: The primary item represents the all-default combination. Generated combinations are ordinary first-class resource variants with independent operational data and sparse BOM overrides.
+      responses:
+        "200":
+          description: Option matrix, BOM slots, and current selection
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResourceOptions" }
+        "403": { description: The primary item is outside the caller's inventory access rules }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      tags: [Resources, Manufacturing]
+      summary: Replace option-group definitions before variants are generated
+      description: A group may map to one stable primary BOM slot. Its default component must equal the primary BOM component in that slot. Definitions lock after generation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [groups]
+              properties:
+                groups:
+                  type: array
+                  maxItems: 4
+                  items: { $ref: "#/components/schemas/ResourceOptionGroupInput" }
+      responses:
+        "200":
+          description: Saved option definitions
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResourceOptions" }
+        "409": { description: Definitions are locked, the item is a child variant, or the family already has manual variants }
+        "422": { description: Invalid group, value, component, BOM mapping, or matrix size }
+    post:
+      tags: [Resources, Manufacturing]
+      summary: Generate every non-default option combination
+      description: Atomically creates the Cartesian product as protected first-class variants, copies catalog and stock settings, stores selections, and writes only BOM differences. Maximum 100 total combinations.
+      responses:
+        "201":
+          description: Option variants generated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ResourceOptionGenerationResult" }
+        "403": { description: Missing inventory create or primary-item update access }
+        "409": { description: Variants already exist, generation already ran, or the primary is archived }
+        "422": { description: Invalid option matrix or circular effective BOM }
   /resources/{id}/variants:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
       - { $ref: "#/components/parameters/ResourceId" }
     get:
       tags: [Resources, Stock]
-      summary: List optional bulk-stock variants for an inventory item
+      summary: List legacy bulk-stock variants for an inventory item
+      deprecated: true
       responses:
         "200":
           description: Variants and the allocated/unallocated parent stock summary
@@ -2005,7 +2568,8 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
     post:
       tags: [Resources, Stock]
-      summary: Add a variant and optionally allocate existing parent stock
+      summary: Add a legacy bulk-stock variant and optionally allocate existing parent stock
+      deprecated: true
       description: Variants are bulk-only. `initialAllocation` moves existing unallocated parent stock into the variant without changing the parent total.
       requestBody:
         required: true
@@ -2027,6 +2591,7 @@ paths:
     patch:
       tags: [Resources]
       summary: Update variant identity or price fields
+      deprecated: true
       description: Quantity cannot be patched; use a dated variant stock movement.
       requestBody:
         required: true
@@ -2040,6 +2605,7 @@ paths:
     delete:
       tags: [Resources]
       summary: Delete an unused zero-stock variant
+      deprecated: true
       responses:
         "204": { description: Variant deleted }
         "409": { description: Variant has stock or movement history }
@@ -2054,6 +2620,7 @@ paths:
     post:
       tags: [Stock]
       summary: Book an atomic parent and variant stock movement
+      deprecated: true
       description: The signed delta updates parent and variant quantities together and appends one dated stock-ledger row.
       requestBody:
         required: true
@@ -2341,6 +2908,75 @@ paths:
         "404": { description: Workflow not found }
         "409": { description: Workflow revision changed; reload before deleting }
         "422": { description: The workflow id or required single positive revision is invalid }
+  /stock/scan-workflows/{workflowId}/public-trigger/rotate:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: workflowId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Scan workflows]
+      summary: Replace a workflow's unlisted public action URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [revision]
+              additionalProperties: false
+              properties:
+                revision: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: Public trigger replaced; the previous URL is immediately invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [workflow]
+                properties:
+                  workflow: { $ref: "#/components/schemas/ScanWorkflow" }
+        "404": { description: Workflow not found }
+        "409": { description: Workflow revision changed }
+        "422": { description: Invalid workflow or revision }
+  /stock/scan-workflows/extraction-suggestions:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    post:
+      tags: [Scan workflows]
+      summary: Generate a validated regex extractor from a sample code with AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sampleCode]
+              additionalProperties: false
+              properties:
+                sampleCode: { type: string, minLength: 1, maxLength: 2048 }
+                codeType:
+                  oneOf:
+                    - { $ref: "#/components/schemas/ScanCodeType" }
+                    - { type: "null" }
+                selectedResourceIds:
+                  type: array
+                  maxItems: 24
+                  uniqueItems: true
+                  items: { type: string, format: uuid }
+                desiredValue: { type: string, maxLength: 180 }
+                instruction: { type: string, maxLength: 500 }
+      responses:
+        "200":
+          description: Validated extraction suggestion
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScanExtractionSuggestion" }
+        "402": { description: Organization AI budget exceeded }
+        "422": { description: Invalid sample or extraction goal }
+        "429": { description: AI request limit reached }
   /stock/scans/resolve:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2358,6 +2994,10 @@ paths:
               properties:
                 workflowId: { type: string, format: uuid }
                 code: { type: string, minLength: 1, maxLength: 2048 }
+                codeType:
+                  oneOf:
+                    - { $ref: "#/components/schemas/ScanCodeType" }
+                    - { type: "null" }
       responses:
         "200":
           description: Reviewed scan target and required operator inputs
@@ -2372,7 +3012,7 @@ paths:
       - { $ref: "#/components/parameters/OrganizationId" }
     post:
       tags: [Scan workflows]
-      summary: Atomically apply a previously reviewed stock scan
+      summary: Apply a previously reviewed stock scan to its selected targets
       parameters:
         - { $ref: "#/components/parameters/IdempotencyKey" }
       requestBody:
@@ -2395,6 +3035,62 @@ paths:
         "404": { description: Workflow or target unit not found }
         "409": { description: "Revision, stale resource or unit preview, idempotency, tracking-mode, or stock conflict" }
         "422": { description: Invalid code or operator input }
+  /public/action-flows/{triggerId}:
+    servers:
+      - url: /api
+    parameters:
+      - name: triggerId
+        in: path
+        required: true
+        description: Random bearer identifier embedded in the unlisted public URL.
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Scan workflows]
+      summary: Load the form definition for an enabled public action URL
+      security: []
+      responses:
+        "200":
+          description: Public action form
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [action]
+                properties:
+                  action: { $ref: "#/components/schemas/PublicActionFlow" }
+        "404": { description: Public action URL is disabled, revoked, or unknown }
+  /public/action-flows/{triggerId}/execute:
+    servers:
+      - url: /api
+    parameters:
+      - name: triggerId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Scan workflows]
+      summary: Confirm and execute an unlisted public action
+      security: []
+      parameters:
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PublicActionFlowExecutionInput" }
+      responses:
+        "200": { description: Replayed an earlier execution with the same Idempotency-Key }
+        "201":
+          description: Public action applied
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StockScanExecution" }
+        "400": { description: Missing or invalid Idempotency-Key }
+        "403": { description: Cross-origin request rejected }
+        "404": { description: Public action URL is disabled, revoked, or unknown }
+        "409": { description: Workflow revision, stock, or idempotency conflict }
+        "422": { description: Invalid code, quantity, or form input }
+        "429": { description: Public action rate limit reached }
   /resources/{id}/stock:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2524,6 +3220,130 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
         "409": { description: "Serialized count differs from current unit availability, conflicting idempotency key, or an invalid global count below assigned location stock" }
         "422": { description: Invalid count or structured location }
+  /internal-requests:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Internal requests]
+      summary: List visible internal requests
+      description: Users with request-management access see the workspace queue; other users see only requests they submitted.
+      parameters:
+        - name: status
+          in: query
+          schema: { $ref: "#/components/schemas/InternalRequestStatus" }
+        - name: mine
+          in: query
+          schema: { type: boolean, default: false }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 200, default: 100 }
+      responses:
+        "200":
+          description: Requests visible to the current principal and their available actions
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [requests, capabilities]
+                properties:
+                  requests:
+                    type: array
+                    items: { $ref: "#/components/schemas/InternalRequest" }
+                  capabilities:
+                    type: object
+                    required: [canCreate, canManage]
+                    properties:
+                      canCreate: { type: boolean }
+                      canManage: { type: boolean }
+        "403": { description: Request read access is required }
+    post:
+      tags: [Internal requests]
+      summary: Submit a multi-item inventory request
+      description: Creates a request without changing stock. Policies that require approval leave it submitted; when every item permits automatic approval, availability is checked and the request is approved atomically.
+      parameters:
+        - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InternalRequestCreate" }
+      responses:
+        "200":
+          description: Replayed the original request for this Idempotency-Key
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/InternalRequestMutation" }
+        "201":
+          description: Request submitted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/InternalRequestMutation" }
+        "400": { description: Missing or invalid Idempotency-Key }
+        "403": { description: Request creation and inventory read access are required }
+        "409": { description: Conflicting Idempotency-Key }
+        "422": { description: Invalid request window, items, quantities, or delivery resource }
+  /internal-requests/calendar:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Internal requests]
+      summary: List reservation calendar entries
+      description: Returns submitted, approved, and fulfilled request lines that overlap the range. Active direct reservations are included when the caller may view assignments.
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: to
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Calendar entries in the requested range
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReservationCalendar" }
+        "403": { description: Request read access is required }
+        "422": { description: Invalid or greater-than-370-day range }
+  /internal-requests/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Internal requests]
+      summary: Read one visible internal request
+      responses:
+        "200":
+          description: Request with item lines and lifecycle events
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/InternalRequestMutation" }
+        "403": { description: Request read access is required }
+        "404": { description: Request not found or not visible to this principal }
+        "422": { description: Invalid request id }
+    patch:
+      tags: [Internal requests]
+      summary: Transition an internal request
+      description: Managers may approve, reject, cancel, or fulfill requests. A requester may cancel their own submitted or approved request. Approval atomically checks overlapping availability; fulfillment issues stock and creates active checkouts.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InternalRequestAction" }
+      responses:
+        "200":
+          description: Updated request
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/InternalRequestMutation" }
+        "403": { description: The principal cannot perform this transition }
+        "404": { description: Request not found }
+        "409": { description: Invalid lifecycle transition or unavailable inventory }
+        "422": { description: Invalid request id or action }
   /resources/{id}/assignments:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2542,7 +3362,7 @@ paths:
     post:
       tags: [Assignments]
       summary: Check out, assign, or reserve inventory
-      description: Atomically creates an active allocation, reduces available stock, updates a serialized unit when selected, and appends a stock movement.
+      description: Atomically creates an active loan or assignment and updates stock. A future reservation blocks its time window without changing current stock; its serialized unit is selected during checkout.
       parameters:
         - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
       requestBody:
@@ -2565,6 +3385,50 @@ paths:
         "404": { description: Inventory item or serialized unit not found }
         "409": { description: "Insufficient stock, unavailable unit, or conflicting idempotency key" }
         "422": { description: "Invalid recipient, quantity, dates, or tracking-mode combination" }
+  /resources/{id}/lending:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - { $ref: "#/components/parameters/ResourceId" }
+    get:
+      tags: [Assignments]
+      summary: Read the resource lending policy
+      responses:
+        "200":
+          description: Resource lending policy, with disabled defaults when none has been stored
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [lending]
+                properties:
+                  lending: { $ref: "#/components/schemas/LendingSettings" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      tags: [Assignments]
+      summary: Enable or configure loans for an inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/LendingSettings" }
+      responses:
+        "200": { description: Lending policy updated }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { description: Invalid duration policy }
+  /loans:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Assignments]
+      summary: List loans and direct reservations across the workspace
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 500, default: 500 }
+      responses:
+        "200":
+          description: Loans and reservations with resource context and management capability
+        "403": { description: Assignment read access is required }
   /assignments/{assignmentId}:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2574,15 +3438,18 @@ paths:
         schema: { type: string, format: uuid }
     patch:
       tags: [Assignments]
-      summary: Return or cancel an active assignment
-      description: Atomically completes the assignment, restores stock when applicable, restores an assigned serialized unit to available, and appends a stock movement.
+      summary: Check out, return, or cancel an active assignment
+      description: A checkout action converts a reservation into a stock-affecting loan. Completion restores stock only when the assignment had previously affected stock.
       parameters:
         - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: "#/components/schemas/InventoryAssignmentCompletion" }
+            schema:
+              oneOf:
+                - { $ref: "#/components/schemas/InventoryAssignmentCompletion" }
+                - { $ref: "#/components/schemas/InventoryReservationCheckout" }
       responses:
         "200":
           description: Assignment completed or an identical completion replayed
@@ -2615,7 +3482,8 @@ paths:
       - { $ref: "#/components/parameters/ResourceId" }
     get:
       tags: [Manufacturing]
-      summary: Retrieve an item's bill of materials and current build capacity
+      summary: Retrieve an item's effective bill of materials and current build capacity
+      description: A primary item returns its local BOM. A first-class variant returns the primary BOM with its sparse removals, replacements, and variant-only slots applied.
       responses:
         "200":
           description: Bill of materials with component availability
@@ -2625,7 +3493,8 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
     put:
       tags: [Manufacturing]
-      summary: Replace an item's complete bill of materials
+      summary: Replace an item's effective bill of materials
+      description: Primary items store the submitted recipe as stable BOM slots. Variants compare the submitted effective recipe with the primary and persist only sparse differences.
       requestBody:
         required: true
         content:
@@ -2642,6 +3511,39 @@ paths:
         "200": { description: Bill of materials replaced }
         "409": { description: Circular dependency or concurrent referenced-resource conflict }
         "422": { description: "Invalid, duplicate, missing, or self-referencing component list" }
+    delete:
+      tags: [Manufacturing]
+      summary: Reset a variant's bill of materials to its primary item
+      description: Removes every sparse BOM override for a linked first-class variant. Primary and standalone items cannot use this operation.
+      responses:
+        "200":
+          description: Reset effective bill of materials
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BomDetail" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: Item is not a linked variant }
+  /resources/{id}/bom-parents:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - { $ref: "#/components/parameters/ResourceId" }
+    get:
+      tags: [Manufacturing]
+      summary: List assemblies whose effective bill of materials uses this item
+      description: Includes direct primary-item BOM lines, inherited variant BOM lines, and sparse variant overrides. Parent assemblies that the caller cannot read are omitted.
+      responses:
+        "200":
+          description: Readable parent assemblies using this item
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [parents]
+                properties:
+                  parents:
+                    type: array
+                    items: { $ref: "#/components/schemas/BomParent" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /resources/{id}/stock/builds:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2685,7 +3587,7 @@ paths:
       - { $ref: "#/components/parameters/ResourceId" }
     get:
       tags: [Stock]
-      summary: List the immutable dated stock ledger
+      summary: List the dated stock ledger
       parameters:
         - name: limit
           in: query
@@ -2719,6 +3621,50 @@ paths:
         "201": { description: Movement booked and balance updated }
         "409": { description: "Insufficient stock, serialized mode, or conflicting idempotency key" }
         "422": { description: "Invalid quantity, movement direction, or structured location transfer" }
+  /resources/{id}/stock/movements/{movementId}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - { $ref: "#/components/parameters/ResourceId" }
+      - name: movementId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Stock]
+      summary: Correct a manual bulk stock movement
+      description: System-linked movements and inbound movements whose cost layer has already been consumed cannot be changed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StockMovementInput" }
+      responses:
+        "200":
+          description: Movement and current balance updated atomically
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [resource, movement]
+                properties:
+                  resource:
+                    type: object
+                    required: [id, quantity]
+                    properties:
+                      id: { type: string, format: uuid }
+                      quantity: { type: integer }
+                  movement: { $ref: "#/components/schemas/StockMovement" }
+        "404": { description: Movement not found }
+        "409": { description: Movement is system-linked or cannot be corrected safely }
+        "422": { description: Invalid movement correction }
+    delete:
+      tags: [Stock]
+      summary: Delete a manual bulk stock movement
+      description: Corrects the current quantity and subsequent ledger balances atomically. System-linked movements cannot be deleted.
+      responses:
+        "204": { description: Movement deleted and stock corrected }
+        "404": { description: Movement not found }
+        "409": { description: Movement is system-linked or cannot be deleted safely }
   /resources/{id}/stock/units:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2868,6 +3814,155 @@ paths:
         "201": { description: Receipt and physical stock movements created atomically }
         "400": { description: Missing or invalid Idempotency-Key }
         "409": { description: "Over-receipt, order-state, serialized-unit, or idempotency conflict" }
+  /orders:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    get:
+      tags: [Orders]
+      summary: List purchase, sales, or loan orders from the shared order model
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string, enum: [purchase, sale, loan] }
+        - name: status
+          in: query
+          schema: { $ref: "#/components/schemas/OrderStatus" }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 100 }
+      responses:
+        "200":
+          description: Orders and their embedded lines
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [orders]
+                properties:
+                  orders: { type: array, items: { $ref: "#/components/schemas/Order" } }
+    post:
+      tags: [Orders]
+      summary: Create a purchase, sales, or multi-item loan order
+      parameters:
+        - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderInput" }
+      responses:
+        "200": { description: Replayed original response }
+        "201": { description: Order created }
+        "409": { description: Idempotency conflict }
+        "422": { description: Invalid contact, status, or order line }
+  /orders/{orderId}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: orderId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Orders]
+      summary: Retrieve one shared order with all lines
+      responses:
+        "200":
+          description: Order
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [order]
+                properties:
+                  order: { $ref: "#/components/schemas/Order" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      tags: [Orders]
+      summary: Update common order fields or change lifecycle state
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderPatch" }
+      responses:
+        "200": { description: Order updated }
+        "409": { description: Completed or cancelled orders cannot be reopened }
+        "422": { description: Invalid type-specific status or contact role }
+  /orders/{orderId}/lines/{lineId}/movements:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: orderId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+      - name: lineId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Orders]
+      summary: Issue or return a bulk-tracked sales or loan line
+      description: Creates an idempotent stock movement linked to the order line and recalculates the order status atomically. Bulk-tracked inventory is supported by this endpoint.
+      parameters:
+        - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderLineMovementInput" }
+      responses:
+        "200": { description: Replayed original stock movement }
+        "201": { description: Movement created and order progress updated }
+        "409": { description: Insufficient stock, excessive quantity, or invalid lifecycle state }
+        "422": { description: Invalid movement for the order type }
+  /orders/{orderId}/lines/{lineId}/units:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: orderId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+      - name: lineId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Orders]
+      summary: List available and assigned serialized units for an order line
+      responses:
+        "200":
+          description: Serialized units available to the line and its assignment history
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SerializedOrderLineUnits" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { description: The line does not use serialized stock tracking }
+    post:
+      tags: [Orders]
+      summary: Reserve, release, issue, or return concrete serialized units
+      description: Updates the unit lifecycle, available stock, order progress, cost layers, and immutable stock movement ledger atomically.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderLineUnitActionInput" }
+      responses:
+        "200":
+          description: Unit action applied, including replay-safe no-op actions
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [changed, movementIds, order, units]
+                properties:
+                  changed: { type: integer, minimum: 0 }
+                  movementIds:
+                    type: array
+                    items: { type: string, format: uuid }
+                  order: { $ref: "#/components/schemas/Order" }
+                  units: { $ref: "#/components/schemas/SerializedOrderLineUnits" }
+        "409": { description: Unit state, capacity, assignment, or order lifecycle conflict }
+        "422": { description: Invalid action or non-serialized order line }
   /resources/{id}/media:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2938,16 +4033,50 @@ paths:
               type: object
               properties:
                 overwrite: { type: boolean, default: true }
+                prompt:
+                  type: string
+                  maxLength: 5000
+                  description: Optional replacement for the built-in inventory-analysis prompt. Omit it to use the server default.
       responses:
         "200": { description: Item enriched or completed response replayed }
         "202": { description: An operation with this key is still processing }
         "409": { description: Idempotency key belongs to another resource or payload }
+        "422": { description: Invalid analysis request }
         "429":
           description: AI request limit reached
           headers:
             Retry-After:
               schema: { type: integer, minimum: 1 }
         "502": { description: AI provider error }
+        "503": { description: Shared AI rate limiter unavailable }
+  /resources/{id}/research:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    post:
+      tags: [AI]
+      summary: Add missing item details using saved content, images, and GPT web search
+      description: Preserves existing fields, appends newly researched description details, merges tags and categories, fills tracking identifiers or value only at high confidence, and adds sourced internal notes only when blank.
+      parameters:
+        - { $ref: "#/components/parameters/ResourceId" }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        "200": { description: Missing details added, no reliable additions found, or completed response replayed }
+        "202": { description: An operation with this key is still processing }
+        "403": { description: Proposed changes fall outside the caller's inventory access rules }
+        "409": { description: Idempotency key belongs to another resource or payload }
+        "422": { description: Invalid AI research request }
+        "429":
+          description: AI web-research request limit reached
+          headers:
+            Retry-After:
+              schema: { type: integer, minimum: 1 }
+        "502": { description: AI provider or web-search error }
         "503": { description: Shared AI rate limiter unavailable }
   /resources/{id}/cover:
     parameters:
@@ -2968,11 +4097,19 @@ paths:
                   type: string
                   format: uuid
                   description: Image to use as the visual reference. Defaults to the first non-AI image, then falls back to the first image.
-                prompt: { type: string, maxLength: 5000 }
+                prompt:
+                  type: string
+                  maxLength: 5000
+                  description: Optional replacement for the built-in studio or transparent-cover prompt. Omit it to use the matching server default.
                 modelId:
                   type: string
                   maxLength: 240
                   description: An ID returned by GET /ai/image-models. Omit it to use the deployment default.
+                maximumImageSize:
+                  type: integer
+                  enum: [1024, 2048, 4096]
+                  default: 1024
+                  description: Maximum requested longest edge in pixels. Models use the largest supported standard square size at or below this value; transparent covers are capped at 2048 for safe processing.
                 transparentBackground:
                   type: boolean
                   default: false
@@ -2993,6 +4130,57 @@ paths:
             Retry-After:
               schema: { type: integer, minimum: 1 }
         "502": { description: AI provider error }
+        "503": { description: Shared AI rate limiter unavailable }
+  /resources/{id}/image:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+    post:
+      tags: [AI]
+      summary: Find a reusable web image or generate a new AI image and append it to an item
+      parameters:
+        - { $ref: "#/components/parameters/ResourceId" }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  additionalProperties: false
+                  required: [mode]
+                  properties:
+                    mode: { type: string, const: search }
+                    query:
+                      type: string
+                      minLength: 1
+                      maxLength: 500
+                      description: Optional brand, model, or exact-item search hint. Saved item details are always included.
+                - type: object
+                  additionalProperties: false
+                  required: [mode]
+                  properties:
+                    mode: { type: string, const: generate }
+                    prompt:
+                      type: string
+                      minLength: 1
+                      maxLength: 5000
+                      description: Optional image direction. Omit it for a catalogue-style prompt based on the saved item.
+                    modelId:
+                      type: string
+                      maxLength: 240
+                      description: An ID returned by GET /ai/image-models. Omit it to use the deployment default.
+                    maximumImageSize:
+                      type: integer
+                      enum: [1024, 2048, 4096]
+                      default: 1024
+      responses:
+        "200": { description: Image imported or generated, appended to the item, or completed response replayed }
+        "202": { description: An operation with this key is still processing }
+        "409": { description: Idempotency key belongs to another resource or payload }
+        "422": { description: Invalid request or unavailable image model }
+        "429": { description: AI research or image-generation limit reached }
+        "502": { description: AI provider, web-search, remote-image, or storage error }
         "503": { description: Shared AI rate limiter unavailable }
   /stats:
     parameters:
@@ -3089,6 +4277,11 @@ components:
       in: cookie
       name: authjs.session-token
       description: Auth.js browser session cookie; each operation declares its required administrative permission. HTTPS deployments use the secure-prefixed cookie variant.
+    superadminSession:
+      type: apiKey
+      in: cookie
+      name: authjs.session-token
+      description: Auth.js browser session cookie for an account whose email is listed in the deployment's `SUPERADMIN_EMAILS` environment variable. HTTPS deployments use the secure-prefixed cookie variant.
     cronSecret:
       type: http
       scheme: bearer
@@ -3126,6 +4319,15 @@ components:
       in: path
       required: true
       schema: { type: string, format: uuid }
+    ResourceReference:
+      name: id
+      in: path
+      required: true
+      description: Resource UUID or one of the resource's organization-scoped slugs.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 80
     CustomFieldId:
       name: id
       in: path
@@ -3145,18 +4347,41 @@ components:
     NotFound:
       description: Resource not found
   schemas:
-    OrganizationMembership:
+    OrganizationSummary:
       type: object
       additionalProperties: false
-      required: [id, name, slug, role, roleName]
+      required: [id, name, slug, isReadOnly, allowNegativeStock]
       properties:
         id: { type: string, format: uuid }
         name: { type: string, minLength: 1, maxLength: 160 }
-        slug: { type: string, minLength: 1, maxLength: 180 }
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        isReadOnly: { type: boolean }
+        allowNegativeStock: { type: boolean }
+    OrganizationMembership:
+      type: object
+      additionalProperties: false
+      required: [id, name, slug, isReadOnly, allowNegativeStock, role, roleName]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, minLength: 1, maxLength: 160 }
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          description: Short, editable identifier used as the first Webapp URL segment.
         role:
           type: [string, "null"]
           pattern: '^[a-z][a-z0-9_-]{0,63}$'
         roleName: { type: [string, "null"] }
+        isReadOnly: { type: boolean }
+        allowNegativeStock:
+          type: boolean
+          description: Whether bulk stock balances may fall below zero in this organization.
         canManage:
           type: boolean
           description: Present on organization-list responses; true when the current identity can administer that active organization.
@@ -3203,6 +4428,128 @@ components:
         slackEnabled: { type: boolean, default: false }
         teamsEnabled: { type: boolean, default: false }
         webhookEnabled: { type: boolean, default: false }
+    WooCommerceConnectionInput:
+      type: object
+      additionalProperties: false
+      required: [storeUrl, consumerKey, consumerSecret]
+      properties:
+        storeUrl:
+          type: string
+          format: uri
+          minLength: 1
+          maxLength: 2048
+          description: Public HTTPS WooCommerce store URL, optionally including a WordPress subdirectory. Query strings and fragments are rejected.
+          examples: [https://shop.example.com]
+        consumerKey:
+          type: string
+          minLength: 8
+          maxLength: 200
+          pattern: '^ck_'
+          writeOnly: true
+        consumerSecret:
+          type: string
+          minLength: 8
+          maxLength: 200
+          pattern: '^cs_'
+          writeOnly: true
+    WooCommerceConnection:
+      type: object
+      additionalProperties: false
+      required: [id, storeUrl, consumerKeyHint, status, syncEnabled, lastCheckedAt, lastSuccessAt, lastError, lastWebhookAt, lastSyncAt, lastSyncError, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        storeUrl: { type: string, format: uri }
+        consumerKeyHint:
+          type: string
+          description: Redacted Consumer Key. The complete key and secret are never returned.
+          examples: [ck_1234…cdef]
+        status: { type: string, enum: [connected, error] }
+        syncEnabled: { type: boolean }
+        lastCheckedAt: { type: [string, "null"], format: date-time }
+        lastSuccessAt: { type: [string, "null"], format: date-time }
+        lastError: { type: [string, "null"] }
+        lastWebhookAt: { type: [string, "null"], format: date-time }
+        lastSyncAt: { type: [string, "null"], format: date-time }
+        lastSyncError: { type: [string, "null"] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    WooCommerceConnectionTest:
+      type: object
+      additionalProperties: false
+      required: [productCount, checkedAt]
+      properties:
+        productCount:
+          type: [integer, "null"]
+          minimum: 0
+          description: Product count reported by WooCommerce when available.
+        checkedAt: { type: string, format: date-time }
+    WooCommerceConnectionStatusResponse:
+      type: object
+      additionalProperties: false
+      required: [connection, sync, encryptionConfigured]
+      properties:
+        connection:
+          oneOf:
+            - { $ref: "#/components/schemas/WooCommerceConnection" }
+            - { type: "null" }
+        sync:
+          oneOf:
+            - { $ref: "#/components/schemas/WooCommerceSyncOverview" }
+            - { type: "null" }
+        encryptionConfigured: { type: boolean }
+    WooCommerceSyncPatch:
+      type: object
+      additionalProperties: false
+      required: [syncEnabled]
+      properties:
+        syncEnabled: { type: boolean }
+    WooCommerceManualSyncRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        orderId: { type: integer, minimum: 1 }
+    WooCommerceOrderLineIssue:
+      type: object
+      additionalProperties: false
+      required: [lineItemId, sku, status, error]
+      properties:
+        lineItemId: { type: integer, minimum: 1 }
+        sku: { type: string }
+        status: { type: string, enum: [unmapped, error] }
+        error: { type: [string, "null"] }
+    WooCommerceOrderSync:
+      type: object
+      additionalProperties: false
+      required: [orderId, orderNumber, orderStatus, status, totalLines, syncedLines, lastError, updatedAt, issues]
+      properties:
+        orderId: { type: integer, minimum: 1 }
+        orderNumber: { type: string }
+        orderStatus: { type: string }
+        status: { type: string, enum: [succeeded, partial, failed] }
+        totalLines: { type: integer, minimum: 0 }
+        syncedLines: { type: integer, minimum: 0 }
+        lastError: { type: [string, "null"] }
+        updatedAt: { type: string, format: date-time }
+        issues:
+          type: array
+          items: { $ref: "#/components/schemas/WooCommerceOrderLineIssue" }
+    WooCommerceSyncOverview:
+      type: object
+      additionalProperties: false
+      required: [totalOrders, issueOrders, recentOrders]
+      properties:
+        totalOrders: { type: integer, minimum: 0 }
+        issueOrders: { type: integer, minimum: 0 }
+        recentOrders:
+          type: array
+          items: { $ref: "#/components/schemas/WooCommerceOrderSync" }
+    WooCommerceConnectionMutationResponse:
+      type: object
+      additionalProperties: false
+      required: [connection, test]
+      properties:
+        connection: { $ref: "#/components/schemas/WooCommerceConnection" }
+        test: { $ref: "#/components/schemas/WooCommerceConnectionTest" }
     WebhookEventType:
       type: string
       description: Stable integration event name selected when configuring an endpoint.
@@ -3422,6 +4769,8 @@ components:
         - inventory.delete
         - inventory.import
         - inventory.export
+        - contacts.read
+        - contacts.manage
         - stock.read
         - stock.manage
         - assignments.read
@@ -4128,7 +5477,7 @@ components:
         relationTypeKey: { $ref: "#/components/schemas/RelationTypeKey" }
     ResourceRelationRecord:
       type: object
-      required: [id, sourceResourceId, targetResourceId, relationTypeKey, origin, sourceFeatureId, targetFeatureId, createdBy, createdAt]
+      required: [id, sourceResourceId, targetResourceId, relationTypeKey, origin, sourceFeatureId, targetFeatureId, attributes, createdBy, createdAt]
       properties:
         id: { type: string, format: uuid }
         sourceResourceId: { type: string, format: uuid }
@@ -4137,6 +5486,10 @@ components:
         origin: { type: string, enum: [manual, spatial] }
         sourceFeatureId: { type: [string, "null"] }
         targetFeatureId: { type: [string, "null"] }
+        attributes:
+          type: object
+          additionalProperties: true
+          description: System-managed typed relationship metadata. `variant_of` stores inherited-field overrides here.
         createdBy: { type: [string, "null"] }
         createdAt: { type: string, format: date-time }
     ResourceRelation:
@@ -4376,11 +5729,39 @@ components:
     LabelElement:
       oneOf:
         - type: object
-          title: QR or barcode element
+          title: Custom background element
           required: [type, x, y, width, height, visible]
           additionalProperties: false
           properties:
-            type: { type: string, enum: [qr, barcode] }
+            type: { type: string, const: background }
+            x: { type: number, minimum: 0, maximum: 100 }
+            y: { type: number, minimum: 0, maximum: 100 }
+            width: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            height: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            visible: { type: boolean }
+            source: { type: string, maxLength: 3000000, description: Base64 data URL for a PNG, JPEG, WebP, GIF, AVIF, or SVG image. }
+            fit: { type: string, enum: [cover, contain], default: cover }
+            opacity: { type: number, minimum: 0, maximum: 1, default: 1 }
+        - type: object
+          title: QR element
+          required: [type, x, y, width, height, visible]
+          additionalProperties: false
+          properties:
+            type: { type: string, const: qr }
+            x: { type: number, minimum: 0, maximum: 100 }
+            y: { type: number, minimum: 0, maximum: 100 }
+            width: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            height: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            visible: { type: boolean }
+            foregroundColor: { type: string, pattern: '^#[0-9a-fA-F]{6}$', default: '#000000' }
+            backgroundColor: { type: string, pattern: '^#[0-9a-fA-F]{6}$', default: '#ffffff' }
+            quietZoneModules: { type: integer, minimum: 0, maximum: 4, default: 0 }
+        - type: object
+          title: Barcode element
+          required: [type, x, y, width, height, visible]
+          additionalProperties: false
+          properties:
+            type: { type: string, const: barcode }
             x: { type: number, minimum: 0, maximum: 100 }
             y: { type: number, minimum: 0, maximum: 100 }
             width: { type: number, exclusiveMinimum: 0, maximum: 100 }
@@ -4410,12 +5791,15 @@ components:
             height: { type: number, exclusiveMinimum: 0, maximum: 100 }
             visible: { type: boolean }
             fontSizeMm: { type: number, exclusiveMinimum: 0, maximum: 100 }
+            minFontSizeMm: { type: number, exclusiveMinimum: 0, maximum: 100, description: Smallest font size used when textOverflow is shrink. }
+            fontFamily: { type: string, enum: [sans, serif, monospace, rounded], description: Defaults to sans for names and monospace for other text elements. }
             align: { type: string, enum: [left, center, right], default: left }
+            textOverflow: { type: string, enum: [ellipsis, shrink], default: ellipsis }
       description: A normalized percentage box. The element must fit entirely inside the label; options are restricted by element type.
     LabelElements:
       type: array
-      maxItems: 7
-      description: At most one element of each type. A visible object image may not overlap a visible QR code. The image element prints the resource cover image; QR and URL elements use the compact resource link.
+      maxItems: 8
+      description: At most one element of each type. A visible object image may not overlap a visible QR code. The custom background is stored as a data URL; the object image prints the resource cover image; QR and URL elements use the compact resource link.
       items: { $ref: "#/components/schemas/LabelElement" }
     LabelSetupInput:
       type: object
@@ -4504,6 +5888,14 @@ components:
       required: [resourceId, confidence, reason, evidence, resource]
       properties:
         resourceId: { type: string, format: uuid }
+        resourceIds:
+          type: array
+          maxItems: 24
+          uniqueItems: true
+          description: Configured targets; older clients may omit this to use resourceId as the only target.
+          items: { type: string, format: uuid }
+        targetSelectionMode: { type: string, enum: [all, radio, checkbox], default: all }
+        allowVariantSelection: { type: boolean, default: false }
         confidence: { type: number, minimum: 0, maximum: 1 }
         reason: { type: string, minLength: 1, maxLength: 600 }
         evidence:
@@ -4573,23 +5965,49 @@ components:
       additionalProperties: false
       properties:
         resourceId: { type: string, format: uuid }
-        variantId: { type: [string, "null"], format: uuid }
-        variantDelta: { type: [integer, "null"] }
-        variantBalanceAfter: { type: [integer, "null"], minimum: 0 }
+        resourceIds:
+          type: array
+          maxItems: 24
+          uniqueItems: true
+          items: { type: string, format: uuid }
+        targetSelectionMode: { type: string, enum: [all, radio, checkbox] }
+        allowVariantSelection: { type: boolean }
+        slotKey:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: "^[A-Za-z0-9_-]+$"
+          description: Stable logical BOM slot. Omit only for backward-compatible matching or creation.
         quantityPerAssembly: { type: integer, minimum: 1 }
         position: { type: integer, minimum: 0 }
         note: { type: string, maxLength: 20000 }
+    BomCover:
+      type: object
+      required: [url, altText]
+      additionalProperties: false
+      properties:
+        url: { type: string }
+        altText: { type: string }
     BomComponent:
       allOf:
         - { $ref: "#/components/schemas/BomComponentInput" }
         - type: object
-          required: [id, name, availableQuantity, trackingMode, availableUnits]
+          required: [id, slotKey, origin, name, availableQuantity, trackingMode, cover, availableUnits, choices]
           properties:
             id: { type: string, format: uuid }
+            slotKey: { type: string, minLength: 1, maxLength: 80 }
+            origin:
+              type: string
+              enum: [local, inherited, override, variant]
+              description: Whether this effective row is local, unchanged from the primary, replaces a primary slot, or exists only on the variant.
             name: { type: string }
             sku: { type: [string, "null"] }
             availableQuantity: { type: integer, minimum: 0 }
             trackingMode: { type: string, enum: [bulk, serialized] }
+            cover:
+              oneOf:
+                - { $ref: "#/components/schemas/BomCover" }
+                - { type: "null" }
             availableUnits:
               type: array
               items:
@@ -4599,9 +6017,55 @@ components:
                   id: { type: string, format: uuid }
                   code: { type: string }
                   location: { type: [string, "null"] }
+            choices:
+              type: array
+              minItems: 1
+              description: The BOM component itself followed by readable direct first-class variants that may be consumed for this slot during a build.
+              items:
+                type: object
+                required: [resourceId, name, sku, availableQuantity, trackingMode, cover, availableUnits, isPrimary]
+                properties:
+                  resourceId: { type: string, format: uuid }
+                  name: { type: string }
+                  sku: { type: [string, "null"] }
+                  availableQuantity: { type: integer }
+                  trackingMode: { type: string, enum: [bulk, serialized] }
+                  cover:
+                    oneOf:
+                      - { $ref: "#/components/schemas/BomCover" }
+                      - { type: "null" }
+                  availableUnits:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, code, location]
+                      properties:
+                        id: { type: string, format: uuid }
+                        code: { type: string }
+                        location: { type: [string, "null"] }
+                  isPrimary: { type: boolean }
+    BomParent:
+      type: object
+      required: [id, slotKey, resourceId, name, type, status, quantityPerAssembly, position, note, origin]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Stored BOM row id or a stable inherited-row identifier.
+        slotKey: { type: string, minLength: 1, maxLength: 80 }
+        resourceId: { type: string, format: uuid }
+        name: { type: string }
+        type: { type: string }
+        status: { type: string }
+        quantityPerAssembly: { type: integer, minimum: 1 }
+        position: { type: integer, minimum: 0 }
+        note: { type: string }
+        origin:
+          type: string
+          enum: [local, inherited, override, variant]
     BomDetail:
       type: object
-      required: [resource, components, buildableQuantity]
+      required: [resource, components, buildableQuantity, inheritance]
       properties:
         resource:
           type: object
@@ -4609,10 +6073,22 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
             trackingMode: { type: string, enum: [bulk, serialized] }
         components: { type: array, items: { $ref: "#/components/schemas/BomComponent" } }
         buildableQuantity: { type: integer, minimum: 0 }
+        inheritance:
+          oneOf:
+            - type: object
+              required: [primaryResourceId, primaryName, overrideCount]
+              properties:
+                primaryResourceId: { type: string, format: uuid }
+                primaryName: { type: string }
+                overrideCount:
+                  type: integer
+                  minimum: 0
+                  description: Stored removals, replacements, and variant-only slots.
+            - type: "null"
     AssemblyBuildInput:
       type: object
       required: [quantity]
@@ -4622,6 +6098,14 @@ components:
         occurredAt: { type: string, format: date-time }
         location: { type: [string, "null"], maxLength: 240 }
         note: { type: string, maxLength: 20000 }
+        componentResourceSelections:
+          type: object
+          description: Maps stable BOM slot keys to either that slot's component resource or one of its direct first-class variants. The selected resource is consumed and snapshotted in build history.
+          propertyNames:
+            pattern: "^[A-Za-z0-9_-]{1,80}$"
+          additionalProperties:
+            type: string
+            format: uuid
         componentUnitIds:
           type: object
           additionalProperties:
@@ -4640,19 +6124,30 @@ components:
         occurredAt: { type: string, format: date-time }
         location: { type: [string, "null"] }
         note: { type: string }
+        materialCosts:
+          type: object
+          additionalProperties: { type: integer, minimum: 0 }
+          description: Actual consumed material costs in cents, grouped by ISO currency.
+        unpricedComponentQuantity: { type: integer, minimum: 0 }
+        costEstimated: { type: boolean }
         createdBy: { type: [string, "null"] }
         createdAt: { type: string, format: date-time }
         components:
           type: array
           items:
             type: object
-            required: [resourceId, name, sku, quantityPerAssembly, quantityConsumed, componentUnits, stockMovementIds, outputUnitIds]
+            required: [resourceId, name, sku, quantityPerAssembly, quantityConsumed, componentUnits, stockMovementIds, outputUnitIds, costs, unpricedQuantity, costEstimated]
             properties:
               resourceId: { type: [string, "null"], format: uuid }
               name: { type: string }
               sku: { type: [string, "null"] }
               quantityPerAssembly: { type: integer, minimum: 1 }
               quantityConsumed: { type: integer, minimum: 1 }
+              costs:
+                type: object
+                additionalProperties: { type: integer, minimum: 0 }
+              unpricedQuantity: { type: integer, minimum: 0 }
+              costEstimated: { type: boolean }
               componentUnits:
                 type: array
                 items:
@@ -4675,19 +6170,26 @@ components:
           items: { $ref: "#/components/schemas/StockUnit" }
     PurchaseOrderLineInput:
       type: object
-      required: [resourceId, orderedQuantity]
+      required: [resourceId]
+      oneOf:
+        - required: [orderedQuantity]
+        - required: [purchaseQuantity]
       additionalProperties: false
       properties:
         resourceId: { type: string, format: uuid }
-        orderedQuantity: { type: integer, minimum: 1 }
+        orderedQuantity: { type: integer, minimum: 1, description: Quantity in base stock units. Mutually exclusive with purchaseQuantity. }
+        purchaseQuantity: { type: integer, minimum: 1, description: Quantity in the configured purchase unit. Mutually exclusive with orderedQuantity. }
         expectedAt: { type: [string, "null"], format: date-time }
         note: { type: string, maxLength: 20000 }
+        unitPriceCents: { type: [integer, "null"], minimum: 0, maximum: 2000000000 }
+        priceCurrency: { type: [string, "null"], minLength: 3, maxLength: 3 }
     PurchaseOrderInput:
       type: object
       required: [lines]
       additionalProperties: false
       properties:
         reference: { type: [string, "null"], maxLength: 160 }
+        contactId: { type: [string, "null"], format: uuid }
         supplier: { type: string, maxLength: 240 }
         status: { type: string, enum: [draft, ordered] }
         orderedAt: { type: string, format: date-time }
@@ -4702,14 +6204,22 @@ components:
       allOf:
         - { $ref: "#/components/schemas/PurchaseOrderLineInput" }
         - type: object
-          required: [id, resourceName, receivedQuantity, openQuantity, trackingMode]
+          required: [id, resourceName, resourceCurrency, baseUnitName, orderedQuantity, receivedQuantity, openQuantity, purchaseUnitName, purchaseUnitFactor, orderedPurchaseQuantity, receivedPurchaseQuantity, openPurchaseQuantity, trackingMode, totalPriceCents]
           properties:
             id: { type: string, format: uuid }
             resourceName: { type: string }
             resourceSku: { type: [string, "null"] }
+            resourceCurrency: { type: string, minLength: 3, maxLength: 3 }
+            baseUnitName: { type: string }
+            purchaseUnitName: { type: [string, "null"] }
+            purchaseUnitFactor: { type: integer, minimum: 1 }
+            orderedPurchaseQuantity: { type: [integer, "null"], minimum: 0 }
+            receivedPurchaseQuantity: { type: [integer, "null"], minimum: 0 }
+            openPurchaseQuantity: { type: [integer, "null"], minimum: 0 }
             receivedQuantity: { type: integer, minimum: 0 }
             openQuantity: { type: integer, minimum: 0 }
             trackingMode: { type: string, enum: [bulk, serialized] }
+            totalPriceCents: { type: [integer, "null"], minimum: 0 }
     PurchaseOrder:
       type: object
       required: [id, supplier, status, orderedAt, lines, totalOrdered, totalReceived, totalOpen]
@@ -4726,12 +6236,163 @@ components:
         totalOrdered: { type: integer, minimum: 0 }
         totalReceived: { type: integer, minimum: 0 }
         totalOpen: { type: integer, minimum: 0 }
+    OrderType:
+      type: string
+      enum: [purchase, sale, loan]
+    OrderStatus:
+      type: string
+      enum: [draft, ordered, partially-received, received, confirmed, partially-fulfilled, fulfilled, reserved, partially-issued, issued, partially-returned, returned, overdue, cancelled]
+    OrderLineInput:
+      type: object
+      additionalProperties: false
+      required: [resourceId, quantity]
+      properties:
+        resourceId: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1, maximum: 2000000000 }
+        expectedAt: { type: [string, "null"], format: date-time }
+        note: { type: string, maxLength: 20000 }
+        unitPriceCents: { type: [integer, "null"], minimum: 0, maximum: 2000000000 }
+        priceCurrency: { type: [string, "null"], minLength: 3, maxLength: 3 }
+    OrderInput:
+      type: object
+      additionalProperties: false
+      required: [type, contactId, lines]
+      properties:
+        type: { $ref: "#/components/schemas/OrderType" }
+        contactId: { type: string, format: uuid }
+        reference: { type: [string, "null"], maxLength: 160 }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        orderedAt: { type: string, format: date-time }
+        expectedAt: { type: [string, "null"], format: date-time, description: Required return due date for loans. }
+        note: { type: string, maxLength: 20000 }
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items: { $ref: "#/components/schemas/OrderLineInput" }
+    OrderPatch:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        contactId: { type: string, format: uuid }
+        reference: { type: [string, "null"], maxLength: 160 }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        orderedAt: { type: string, format: date-time }
+        expectedAt: { type: [string, "null"], format: date-time }
+        note: { type: string, maxLength: 20000 }
+    OrderLine:
+      allOf:
+        - { $ref: "#/components/schemas/OrderLineInput" }
+        - type: object
+          required: [id, orderId, resourceName, fulfilledQuantity, returnedQuantity, openQuantity, reservedQuantity, openReservationQuantity, openReturnQuantity, trackingMode, unitName, units]
+          properties:
+            id: { type: string, format: uuid }
+            orderId: { type: string, format: uuid }
+            resourceName: { type: string }
+            resourceSku: { type: [string, "null"] }
+            fulfilledQuantity: { type: integer, minimum: 0 }
+            returnedQuantity: { type: integer, minimum: 0 }
+            openQuantity: { type: integer, minimum: 0 }
+            reservedQuantity: { type: integer, minimum: 0 }
+            openReservationQuantity: { type: integer, minimum: 0 }
+            openReturnQuantity: { type: integer, minimum: 0 }
+            totalPriceCents: { type: [integer, "null"], minimum: 0 }
+            trackingMode: { type: string, enum: [bulk, serialized] }
+            unitName: { type: string }
+            units:
+              type: array
+              items: { $ref: "#/components/schemas/OrderLineUnit" }
+    Order:
+      type: object
+      required: [id, type, contactName, status, orderedAt, lines, totalQuantity, totalFulfilled, totalReturned, totalReserved]
+      properties:
+        id: { type: string, format: uuid }
+        type: { $ref: "#/components/schemas/OrderType" }
+        contactId: { type: [string, "null"], format: uuid }
+        contactName: { type: string }
+        reference: { type: [string, "null"] }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        orderedAt: { type: string, format: date-time }
+        expectedAt: { type: [string, "null"], format: date-time }
+        note: { type: string }
+        lines: { type: array, items: { $ref: "#/components/schemas/OrderLine" } }
+        totalQuantity: { type: integer, minimum: 0 }
+        totalFulfilled: { type: integer, minimum: 0 }
+        totalReturned: { type: integer, minimum: 0 }
+        totalReserved: { type: integer, minimum: 0 }
+    OrderLineMovementInput:
+      type: object
+      additionalProperties: false
+      required: [action, quantity]
+      properties:
+        action: { type: string, enum: [issue, return] }
+        quantity: { type: integer, minimum: 1, maximum: 2000000000 }
+        occurredAt: { type: string, format: date-time }
+        location: { type: [string, "null"], maxLength: 240 }
+        note: { type: string, maxLength: 20000 }
+    OrderLineUnit:
+      type: object
+      required: [id, stockUnitId, code, status, stockStatus, reservedAt, fulfilledAt, returnedAt]
+      properties:
+        id: { type: string, format: uuid }
+        stockUnitId: { type: string, format: uuid }
+        code: { type: string, maxLength: 180 }
+        status: { type: string, enum: [reserved, fulfilled, returned] }
+        stockStatus: { type: string, enum: [available, reserved, in-use, maintenance, consumed, lost, retired] }
+        reservedAt: { type: string, format: date-time }
+        fulfilledAt: { type: [string, "null"], format: date-time }
+        returnedAt: { type: [string, "null"], format: date-time }
+    SerializedOrderLineUnits:
+      type: object
+      required: [line, availableUnits, assignments]
+      properties:
+        line:
+          type: object
+          required: [id, resourceId, resourceName, quantity, fulfilledQuantity, returnedQuantity]
+          properties:
+            id: { type: string, format: uuid }
+            resourceId: { type: string, format: uuid }
+            resourceName: { type: string }
+            quantity: { type: integer, minimum: 1 }
+            fulfilledQuantity: { type: integer, minimum: 0 }
+            returnedQuantity: { type: integer, minimum: 0 }
+        availableUnits:
+          type: array
+          items:
+            type: object
+            required: [id, code, status, location]
+            properties:
+              id: { type: string, format: uuid }
+              code: { type: string, maxLength: 180 }
+              status: { type: string, const: available }
+              location: { type: [string, "null"], maxLength: 240 }
+        assignments:
+          type: array
+          items: { $ref: "#/components/schemas/OrderLineUnit" }
+    OrderLineUnitActionInput:
+      type: object
+      additionalProperties: false
+      required: [action, unitIds]
+      properties:
+        action: { type: string, enum: [reserve, release, issue, return] }
+        unitIds:
+          type: array
+          minItems: 1
+          maxItems: 100
+          uniqueItems: true
+          items: { type: string, format: uuid }
+        occurredAt: { type: string, format: date-time }
+        note: { type: string, maxLength: 20000 }
     PurchaseReceiptInput:
       type: object
-      required: [quantity]
+      oneOf:
+        - required: [quantity]
+        - required: [purchaseQuantity]
       additionalProperties: false
       properties:
-        quantity: { type: integer, minimum: 1, maximum: 1000 }
+        quantity: { type: integer, minimum: 1, maximum: 1000, description: Receipt quantity in base stock units. }
+        purchaseQuantity: { type: integer, minimum: 1, maximum: 1000000, description: Receipt quantity in the purchase unit snapshotted on the order line. }
         receivedAt: { type: string, format: date-time }
         location: { type: [string, "null"], maxLength: 240 }
         note: { type: string, maxLength: 20000 }
@@ -4842,6 +6503,30 @@ components:
           properties:
             mode: { type: string, const: prefix }
             prefix: { type: string, minLength: 1, maxLength: 160 }
+        - type: object
+          required: [mode, pattern, group]
+          additionalProperties: false
+          properties:
+            mode: { type: string, const: regex }
+            pattern: { type: string, minLength: 1, maxLength: 500 }
+            flags: { type: string, maxLength: 4, default: "" }
+            group: { type: string, minLength: 1, maxLength: 64 }
+    ScanCodeType:
+      type: string
+      enum: [qr_code, data_matrix, aztec, pdf417, code_128, code_93, code_39, codabar, ean_13, ean_8, upc_a, upc_e, itf]
+    ScanExtractionSuggestion:
+      type: object
+      required: [suggestion, model]
+      properties:
+        suggestion:
+          type: object
+          required: [pattern, flags, group, explanation]
+          properties:
+            pattern: { type: string }
+            flags: { type: string }
+            group: { type: string }
+            explanation: { type: string }
+        model: { type: string }
     ScanWorkflowFixedProperty:
       type: object
       required: [key, label, value]
@@ -4850,6 +6535,35 @@ components:
         key: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
         label: { type: string, minLength: 1, maxLength: 120 }
         value: { type: string, maxLength: 240 }
+        storage: { type: string, enum: [custom-field, metadata, execution], default: metadata }
+    ScanWorkflowExtractedField:
+      type: object
+      required: [key, label, extraction]
+      additionalProperties: false
+      properties:
+        key: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
+        label: { type: string, minLength: 1, maxLength: 120 }
+        extraction: { $ref: "#/components/schemas/ScanWorkflowExtraction" }
+        storage: { type: string, enum: [custom-field, metadata, execution], default: custom-field }
+    ScanWorkflowOperation:
+      oneOf:
+        - type: object
+          required: [type]
+          additionalProperties: false
+          properties:
+            type: { type: string, const: unit }
+        - type: object
+          required: [type, delta]
+          additionalProperties: false
+          properties:
+            type: { type: string, const: stock-adjustment }
+            delta: { type: integer, minimum: -1000000, maximum: 1000000, not: { const: 0 } }
+        - type: object
+          required: [type, quantity]
+          additionalProperties: false
+          properties:
+            type: { type: string, const: assembly-build }
+            quantity: { type: integer, minimum: 1, maximum: 1000 }
     ScanWorkflowOption:
       type: object
       required: [value, label]
@@ -4860,16 +6574,22 @@ components:
         color: { type: string, minLength: 1, maxLength: 32 }
     ScanWorkflowInputField:
       type: object
-      required: [key, label, required, options]
+      required: [key, label, required]
       additionalProperties: false
       properties:
         key: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
         label: { type: string, minLength: 1, maxLength: 120 }
         required: { type: boolean }
+        type:
+          type: string
+          enum: [text, textarea, number, checkbox, select, radio, media, file]
+          default: select
+        storage: { type: string, enum: [custom-field, metadata, execution], default: metadata }
+        placeholder: { type: string, maxLength: 240, default: "" }
         options:
           type: array
-          minItems: 1
           maxItems: 40
+          default: []
           items: { $ref: "#/components/schemas/ScanWorkflowOption" }
     ScanWorkflowInput:
       type: object
@@ -4879,8 +6599,36 @@ components:
         description: { type: string, maxLength: 5000, default: "" }
         enabled: { type: boolean, default: true }
         resourceId: { type: string, format: uuid }
+        codeTypes:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          default: [qr_code, data_matrix, aztec, pdf417, code_128, code_93, code_39, codabar, ean_13, ean_8, upc_a, upc_e, itf]
+          items: { $ref: "#/components/schemas/ScanCodeType" }
+        publicTriggerEnabled: { type: boolean, default: false }
+        publicTriggerCode:
+          type: [string, "null"]
+          minLength: 1
+          maxLength: 2048
+          description: Optional fixed code used by the public URL; when null the public form asks for a code.
+        quantityInputKey:
+          type: [string, "null"]
+          minLength: 1
+          maxLength: 80
+          pattern: "^[A-Za-z0-9_.-]+$"
+          description: Required number input whose positive integer value replaces the configured operation magnitude.
         extraction: { $ref: "#/components/schemas/ScanWorkflowExtraction" }
         identifierPropertyKey: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
+        identifierStorage: { type: string, enum: [custom-field, metadata, execution], default: metadata }
+        extractedFields:
+          type: array
+          maxItems: 24
+          default: []
+          items: { $ref: "#/components/schemas/ScanWorkflowExtractedField" }
+        operation:
+          allOf:
+            - { $ref: "#/components/schemas/ScanWorkflowOperation" }
+          default: { type: unit }
         createMissingUnit: { type: boolean, default: false }
         unitStatus:
           oneOf:
@@ -4892,8 +6640,10 @@ components:
           items: { $ref: "#/components/schemas/ScanWorkflowFixedProperty" }
         inputFields:
           type: array
-          maxItems: 12
+          maxItems: 24
           items: { $ref: "#/components/schemas/ScanWorkflowInputField" }
+        triggerWebhook: { type: boolean, default: false }
+        webhookEventName: { type: string, minLength: 1, maxLength: 120, default: inventory.action.executed }
     ScanWorkflowPatch:
       type: object
       required: [revision]
@@ -4906,8 +6656,22 @@ components:
         description: { type: string, maxLength: 5000 }
         enabled: { type: boolean }
         resourceId: { type: string, format: uuid }
+        codeTypes:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { $ref: "#/components/schemas/ScanCodeType" }
+        publicTriggerEnabled: { type: boolean }
+        publicTriggerCode: { type: [string, "null"], minLength: 1, maxLength: 2048 }
+        quantityInputKey: { type: [string, "null"], minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
         extraction: { $ref: "#/components/schemas/ScanWorkflowExtraction" }
         identifierPropertyKey: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
+        identifierStorage: { type: string, enum: [custom-field, metadata, execution] }
+        extractedFields:
+          type: array
+          maxItems: 24
+          items: { $ref: "#/components/schemas/ScanWorkflowExtractedField" }
+        operation: { $ref: "#/components/schemas/ScanWorkflowOperation" }
         createMissingUnit: { type: boolean }
         unitStatus:
           oneOf:
@@ -4919,23 +6683,122 @@ components:
           items: { $ref: "#/components/schemas/ScanWorkflowFixedProperty" }
         inputFields:
           type: array
-          maxItems: 12
+          maxItems: 24
           items: { $ref: "#/components/schemas/ScanWorkflowInputField" }
+        triggerWebhook: { type: boolean }
+        webhookEventName: { type: string, minLength: 1, maxLength: 120 }
     ScanWorkflow:
       allOf:
         - { $ref: "#/components/schemas/ScanWorkflowInput" }
         - type: object
-          required: [id, name, description, enabled, resourceId, revision, extraction, identifierPropertyKey, createMissingUnit, unitStatus, fixedProperties, inputFields, createdBy, updatedBy, createdAt, updatedAt]
+          required: [id, name, description, enabled, resourceId, resourceIds, targetSelectionMode, allowVariantSelection, codeTypes, publicTriggerEnabled, publicTriggerId, publicTriggerCode, quantityInputKey, revision, extraction, identifierPropertyKey, identifierStorage, extractedFields, operation, createMissingUnit, unitStatus, fixedProperties, inputFields, triggerWebhook, webhookEventName, createdBy, updatedBy, createdAt, updatedAt]
           properties:
             id: { type: string, format: uuid }
+            publicTriggerId:
+              type: string
+              format: uuid
+              description: Random bearer identifier used in the public action URL.
             revision: { type: integer, minimum: 1 }
             createdBy: { type: [string, "null"] }
             updatedBy: { type: [string, "null"] }
             createdAt: { type: string, format: date-time }
             updatedAt: { type: string, format: date-time }
+    ScanWorkflowTargetOption:
+      type: object
+      additionalProperties: false
+      required: [id, name, quantity, trackingMode, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        quantity: { type: integer }
+        trackingMode: { type: string, enum: [bulk, serialized] }
+        updatedAt: { type: string, format: date-time }
+    ScanWorkflowTargetGroup:
+      type: object
+      additionalProperties: false
+      required: [resourceId, name, options]
+      properties:
+        resourceId: { type: string, format: uuid }
+        name: { type: string }
+        options:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/ScanWorkflowTargetOption" }
+    StockScanExpectedTarget:
+      type: object
+      additionalProperties: false
+      required: [resourceId, resourceUpdatedAt, unitId, unitUpdatedAt]
+      properties:
+        resourceId: { type: string, format: uuid }
+        resourceUpdatedAt: { type: string, format: date-time }
+        unitId: { type: [string, "null"], format: uuid }
+        unitUpdatedAt: { type: [string, "null"], format: date-time }
+    PublicActionFlow:
+      type: object
+      additionalProperties: false
+      required: [triggerId, name, description, resourceName, targetSelectionMode, allowVariantSelection, targetGroups, requiresCode, identifierLabel, quantityInputKey, inputFields, operation]
+      properties:
+        triggerId: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string }
+        resourceName: { type: string }
+        targetSelectionMode: { type: string, enum: [all, radio, checkbox] }
+        allowVariantSelection: { type: boolean }
+        targetGroups:
+          type: array
+          items: { $ref: "#/components/schemas/ScanWorkflowTargetGroup" }
+        requiresCode: { type: boolean }
+        identifierLabel: { type: string }
+        quantityInputKey: { type: [string, "null"] }
+        inputFields:
+          type: array
+          items: { $ref: "#/components/schemas/ScanWorkflowInputField" }
+        operation:
+          oneOf:
+            - type: object
+              required: [type]
+              additionalProperties: false
+              properties:
+                type: { type: string, const: unit }
+            - type: object
+              required: [type, direction, quantity]
+              additionalProperties: false
+              properties:
+                type: { type: string, const: stock-adjustment }
+                direction: { type: string, enum: [in, out] }
+                quantity: { type: integer, minimum: 1 }
+            - type: object
+              required: [type, quantity]
+              additionalProperties: false
+              properties:
+                type: { type: string, const: assembly-build }
+                quantity: { type: integer, minimum: 1 }
+    PublicActionFlowExecutionInput:
+      type: object
+      additionalProperties: false
+      properties:
+        code: { type: string, minLength: 1, maxLength: 2048 }
+        selectedResourceIds:
+          type: array
+          maxItems: 24
+          uniqueItems: true
+          items: { type: string, format: uuid }
+        inputs:
+          type: object
+          default: {}
+          maxProperties: 24
+          propertyNames: { minLength: 1, maxLength: 80 }
+          additionalProperties:
+            oneOf:
+              - { type: string, maxLength: 20000 }
+              - { type: number }
+              - { type: boolean }
+              - type: array
+                maxItems: 12
+                items: { type: string, maxLength: 2048 }
     StockScanResolution:
       type: object
-      required: [workflow, resource, identifier, unit, willCreate, fields, fixedProperties, metadataPreview, statusBefore, statusAfter, quantityBefore, quantityAfter, delta, expectedResourceUpdatedAt, expectedUnitId, expectedUnitUpdatedAt]
+      required: [workflow, resource, resources, targetGroups, selectedResourceIds, expectedTargets, identifier, operation, unit, willCreate, fields, fixedProperties, metadataPreview, customFieldsPreview, executionPreview, statusBefore, statusAfter, quantityBefore, quantityAfter, delta, expectedResourceUpdatedAt, expectedUnitId, expectedUnitUpdatedAt]
       additionalProperties: false
       properties:
         workflow: { $ref: "#/components/schemas/ScanWorkflow" }
@@ -4945,9 +6808,23 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
-            trackingMode: { type: string, const: serialized }
+            quantity: { type: integer }
+            trackingMode: { type: string, enum: [bulk, serialized] }
+        resources:
+          type: array
+          items: { $ref: "#/components/schemas/ScanWorkflowTargetOption" }
+        targetGroups:
+          type: array
+          items: { $ref: "#/components/schemas/ScanWorkflowTargetGroup" }
+        selectedResourceIds:
+          type: array
+          uniqueItems: true
+          items: { type: string, format: uuid }
+        expectedTargets:
+          type: array
+          items: { $ref: "#/components/schemas/StockScanExpectedTarget" }
         identifier: { type: string, minLength: 1, maxLength: 180 }
+        operation: { $ref: "#/components/schemas/ScanWorkflowOperation" }
         unit:
           oneOf:
             - { $ref: "#/components/schemas/StockUnit" }
@@ -4957,10 +6834,13 @@ components:
           oneOf:
             - { type: string, enum: [available, reserved, in-use, maintenance, consumed, lost, retired] }
             - { type: "null" }
-        statusAfter: { type: string, enum: [available, reserved, in-use, maintenance, consumed, lost, retired] }
-        quantityBefore: { type: integer, minimum: 0 }
-        quantityAfter: { type: integer, minimum: 0 }
-        delta: { type: integer, minimum: -1, maximum: 1 }
+        statusAfter:
+          oneOf:
+            - { type: string, enum: [available, reserved, in-use, maintenance, consumed, lost, retired] }
+            - { type: "null" }
+        quantityBefore: { type: integer }
+        quantityAfter: { type: integer }
+        delta: { type: integer }
         expectedResourceUpdatedAt:
           type: string
           format: date-time
@@ -4977,13 +6857,15 @@ components:
             - { type: "null" }
         fields:
           type: array
-          maxItems: 12
+          maxItems: 24
           items: { $ref: "#/components/schemas/ScanWorkflowInputField" }
         fixedProperties:
           type: array
           maxItems: 24
           items: { $ref: "#/components/schemas/ScanWorkflowFixedProperty" }
         metadataPreview: { type: object, additionalProperties: true }
+        customFieldsPreview: { type: object, additionalProperties: true }
+        executionPreview: { type: object, additionalProperties: true }
     StockScanExecutionInput:
       type: object
       required: [workflowId, revision, code, expectedResourceUpdatedAt, expectedUnitId, expectedUnitUpdatedAt]
@@ -4992,6 +6874,10 @@ components:
         workflowId: { type: string, format: uuid }
         revision: { type: integer, minimum: 1 }
         code: { type: string, minLength: 1, maxLength: 2048 }
+        codeType:
+          oneOf:
+            - { $ref: "#/components/schemas/ScanCodeType" }
+            - { type: "null" }
         expectedResourceUpdatedAt:
           type: string
           format: date-time
@@ -5006,17 +6892,33 @@ components:
           oneOf:
             - { type: string, format: date-time }
             - { type: "null" }
+        selectedResourceIds:
+          type: array
+          maxItems: 24
+          uniqueItems: true
+          items: { type: string, format: uuid }
+        expectedTargets:
+          type: array
+          maxItems: 24
+          items: { $ref: "#/components/schemas/StockScanExpectedTarget" }
         inputs:
           type: object
           default: {}
           description: Operator-provided workflow fields. May be omitted when the workflow has no input fields.
-          maxProperties: 12
+          maxProperties: 24
           propertyNames: { minLength: 1, maxLength: 80 }
-          additionalProperties: { type: string, maxLength: 240 }
+          additionalProperties:
+            oneOf:
+              - { type: string, maxLength: 20000 }
+              - { type: number }
+              - { type: boolean }
+              - type: array
+                maxItems: 12
+                items: { type: string, maxLength: 2048 }
     StockScanExecution:
       type: object
-      required: [workflowId, revision, resource, unit, movement, created, metadataBefore, metadataAfter]
-      additionalProperties: false
+      required: [workflowId, revision, operation, resource, unit, movement, created, metadataBefore, metadataAfter]
+      additionalProperties: true
       properties:
         workflowId: { type: string, format: uuid }
         revision: { type: integer, minimum: 1 }
@@ -5026,9 +6928,16 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
-        unit: { $ref: "#/components/schemas/StockUnit" }
-        movement: { $ref: "#/components/schemas/StockMovement" }
+            quantity: { type: integer }
+        operation: { $ref: "#/components/schemas/ScanWorkflowOperation" }
+        unit:
+          oneOf:
+            - { $ref: "#/components/schemas/StockUnit" }
+            - { type: "null" }
+        movement:
+          oneOf:
+            - { $ref: "#/components/schemas/StockMovement" }
+            - { type: "null" }
         created: { type: boolean }
         metadataBefore:
           oneOf:
@@ -5050,7 +6959,7 @@ components:
         locationResourceId: { type: string, format: uuid }
         name: { type: string }
         type: { $ref: "#/components/schemas/InventoryTypeKey" }
-        quantity: { type: integer, minimum: 0 }
+        quantity: { type: integer }
     StockLocationBreakdown:
       type: object
       required: [resource, trackingMode, assignedQuantity, unassignedQuantity, locations]
@@ -5061,11 +6970,11 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
             trackingMode: { type: [string, "null"], enum: [bulk, serialized, null] }
         trackingMode: { type: string, enum: [bulk, serialized] }
-        assignedQuantity: { type: integer, minimum: 0 }
-        unassignedQuantity: { type: integer, minimum: 0 }
+        assignedQuantity: { type: integer }
+        unassignedQuantity: { type: integer }
         locations:
           type: array
           items: { $ref: "#/components/schemas/StockLocationBalance" }
@@ -5139,7 +7048,7 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
             trackingMode: { type: string, enum: [bulk, serialized] }
         policy:
           oneOf:
@@ -5156,10 +7065,142 @@ components:
         resourceId: { type: string, format: uuid }
         name: { type: string }
         type: { $ref: "#/components/schemas/InventoryTypeKey" }
-        quantity: { type: integer, minimum: 0 }
+        quantity: { type: integer }
         intervalDays: { type: integer, minimum: 1, maximum: 3650 }
         nextDueAt: { type: string, format: date-time }
         lastCompletedAt: { type: [string, "null"], format: date-time }
+    InternalRequestStatus:
+      type: string
+      enum: [submitted, approved, rejected, fulfilled, cancelled]
+    InternalRequestCreate:
+      type: object
+      required: [startsAt, dueAt, lines]
+      additionalProperties: false
+      properties:
+        deliveryResourceId: { type: [string, "null"], format: uuid }
+        startsAt: { type: string, format: date-time }
+        dueAt: { type: string, format: date-time }
+        note: { type: string, maxLength: 20000 }
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items:
+            type: object
+            required: [resourceId, quantity]
+            additionalProperties: false
+            properties:
+              resourceId: { type: string, format: uuid }
+              quantity: { type: integer, minimum: 1, maximum: 2000000000 }
+              note: { type: string, maxLength: 20000 }
+    InternalRequestAction:
+      type: object
+      required: [action]
+      additionalProperties: false
+      properties:
+        action: { type: string, enum: [approve, reject, cancel, fulfill] }
+        note: { type: string, maxLength: 20000 }
+    InternalRequestLine:
+      type: object
+      required: [id, resource, quantity, note, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        resource:
+          type: object
+          required: [id, name, sku, status, currentQuantity, trackingMode]
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            sku: { type: [string, "null"] }
+            status: { type: string }
+            currentQuantity: { type: integer }
+            trackingMode: { type: string, enum: [bulk, serialized] }
+        quantity: { type: integer, minimum: 1 }
+        note: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    InternalRequestEvent:
+      type: object
+      required: [id, type, actor, note, occurredAt]
+      properties:
+        id: { type: string, format: uuid }
+        type: { $ref: "#/components/schemas/InternalRequestStatus" }
+        actor: { type: string }
+        note: { type: string }
+        occurredAt: { type: string, format: date-time }
+    InternalRequest:
+      type: object
+      required: [id, reference, status, requester, delivery, startsAt, dueAt, note, decisionNote, decidedBy, decidedAt, fulfilledBy, fulfilledAt, createdBy, createdAt, updatedAt, canCancel, lines, events]
+      properties:
+        id: { type: string, format: uuid }
+        reference: { type: string, example: REQ-A1B2C3D4 }
+        status: { $ref: "#/components/schemas/InternalRequestStatus" }
+        requester:
+          type: object
+          required: [userId, name, email]
+          properties:
+            userId: { type: [string, "null"], format: uuid }
+            name: { type: string }
+            email: { type: [string, "null"], format: email }
+        delivery:
+          oneOf:
+            - type: object
+              required: [resourceId, name]
+              properties:
+                resourceId: { type: string, format: uuid }
+                name: { type: string }
+            - { type: "null" }
+        startsAt: { type: string, format: date-time }
+        dueAt: { type: string, format: date-time }
+        note: { type: string }
+        decisionNote: { type: string }
+        decidedBy: { type: [string, "null"] }
+        decidedAt: { type: [string, "null"], format: date-time }
+        fulfilledBy: { type: [string, "null"] }
+        fulfilledAt: { type: [string, "null"], format: date-time }
+        createdBy: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        canCancel: { type: boolean }
+        lines:
+          type: array
+          items: { $ref: "#/components/schemas/InternalRequestLine" }
+        events:
+          type: array
+          items: { $ref: "#/components/schemas/InternalRequestEvent" }
+    InternalRequestMutation:
+      type: object
+      required: [request]
+      properties:
+        request: { $ref: "#/components/schemas/InternalRequest" }
+    ReservationCalendarEntry:
+      type: object
+      required: [id, source, sourceId, reference, status, title, subtitle, resourceId, quantity, startsAt, dueAt]
+      properties:
+        id: { type: string }
+        source: { type: string, enum: [internal-request, reservation] }
+        sourceId: { type: string, format: uuid }
+        reference: { type: [string, "null"] }
+        status: { type: string, enum: [submitted, approved, fulfilled, reserved] }
+        title: { type: string }
+        subtitle: { type: string }
+        resourceId: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1 }
+        startsAt: { type: string, format: date-time }
+        dueAt: { type: [string, "null"], format: date-time }
+    ReservationCalendar:
+      type: object
+      required: [entries, range]
+      properties:
+        entries:
+          type: array
+          items: { $ref: "#/components/schemas/ReservationCalendarEntry" }
+        range:
+          type: object
+          required: [from, to]
+          properties:
+            from: { type: string, format: date-time }
+            to: { type: string, format: date-time }
     InventoryAssignmentRecipientInput:
       oneOf:
         - type: object
@@ -5202,15 +7243,35 @@ components:
         status: { type: string, enum: [returned, cancelled] }
         completedAt: { type: string, format: date-time }
         note: { type: string, maxLength: 20000 }
+    InventoryReservationCheckout:
+      type: object
+      required: [action]
+      additionalProperties: false
+      properties:
+        action: { type: string, const: checkout }
+        stockUnitId: { type: [string, "null"], format: uuid, description: Required when the reserved item uses serialized tracking. }
+        checkedOutAt: { type: string, format: date-time }
+        note: { type: string, maxLength: 20000 }
+    LendingSettings:
+      type: object
+      required: [enabled, approvalRequired, defaultDurationDays, maxDurationDays]
+      additionalProperties: false
+      properties:
+        enabled: { type: boolean }
+        approvalRequired: { type: boolean }
+        defaultDurationDays: { type: integer, minimum: 1, maximum: 3650 }
+        maxDurationDays: { type: integer, minimum: 1, maximum: 3650 }
     InventoryAssignment:
       type: object
-      required: [id, resourceId, stockUnitId, kind, status, quantity, assignee, stockUnit, startsAt, dueAt, completedAt, note, createdBy, completedBy, createdAt, updatedAt]
+      required: [id, resourceId, stockUnitId, kind, status, stockApplied, overdue, quantity, assignee, stockUnit, startsAt, dueAt, completedAt, note, createdBy, completedBy, createdAt, updatedAt]
       properties:
         id: { type: string, format: uuid }
         resourceId: { type: string, format: uuid }
         stockUnitId: { type: [string, "null"], format: uuid }
         kind: { type: string, enum: [checkout, assignment, reservation] }
         status: { type: string, enum: [active, returned, cancelled] }
+        stockApplied: { type: boolean }
+        overdue: { type: boolean, description: Derived from an active checkout whose due date has passed. }
         quantity: { type: integer, minimum: 1 }
         assignee:
           type: object
@@ -5248,11 +7309,11 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
         movement: { $ref: "#/components/schemas/StockMovement" }
     InventoryAssignmentList:
       type: object
-      required: [resource, trackingMode, availability, availableUnits, assignments]
+      required: [resource, trackingMode, lending, availability, recipients, availableUnits, assignments]
       properties:
         resource:
           type: object
@@ -5260,14 +7321,30 @@ components:
           properties:
             id: { type: string, format: uuid }
             name: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
         trackingMode: { type: string, enum: [bulk, serialized] }
+        lending: { $ref: "#/components/schemas/LendingSettings" }
         availability:
           type: object
-          required: [availableQuantity, activeQuantity]
+          required: [availableQuantity, activeQuantity, reservedQuantity]
           properties:
-            availableQuantity: { type: integer, minimum: 0 }
+            availableQuantity: { type: integer }
             activeQuantity: { type: integer, minimum: 0 }
+            reservedQuantity: { type: integer, minimum: 0 }
+        recipients:
+          type: object
+          required: [users]
+          properties:
+            users:
+              type: array
+              maxItems: 500
+              items:
+                type: object
+                required: [id, name, email]
+                properties:
+                  id: { type: string, format: uuid }
+                  name: { type: string }
+                  email: { type: string, format: email }
         availableUnits:
           type: array
           maxItems: 500
@@ -5291,11 +7368,95 @@ components:
         reorderQuantity: { type: integer, minimum: 0 }
         leadTimeDays: { type: integer, minimum: 0 }
         unitName: { type: string, minLength: 1, maxLength: 80 }
+        purchaseUnitName: { type: [string, "null"], minLength: 1, maxLength: 80 }
+        purchaseUnitFactor: { type: [integer, "null"], minimum: 1, maximum: 2000000000 }
+    ContactFields:
+      type: object
+      properties:
+        name: { type: string, minLength: 1, maxLength: 240 }
+        company: { type: [string, "null"], maxLength: 240 }
+        roles:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, enum: [customer, supplier] }
+        email: { type: [string, "null"], format: email, maxLength: 320 }
+        phone: { type: [string, "null"], maxLength: 80 }
+        website: { type: [string, "null"], format: uri, maxLength: 2048 }
+        customerNumber: { type: [string, "null"], maxLength: 80 }
+        supplierNumber: { type: [string, "null"], maxLength: 80 }
+        taxId: { type: [string, "null"], maxLength: 80 }
+        addressLine1: { type: [string, "null"], maxLength: 240 }
+        addressLine2: { type: [string, "null"], maxLength: 240 }
+        postalCode: { type: [string, "null"], maxLength: 32 }
+        city: { type: [string, "null"], maxLength: 120 }
+        state: { type: [string, "null"], maxLength: 120 }
+        countryCode: { type: [string, "null"], pattern: "^[A-Z]{2}$" }
+        tags:
+          type: array
+          maxItems: 50
+          uniqueItems: true
+          items: { type: string, minLength: 1, maxLength: 80 }
+        notes: { type: string, maxLength: 20000 }
+        resourceIds:
+          type: array
+          maxItems: 500
+          uniqueItems: true
+          items: { type: string, format: uuid }
+    ContactInput:
+      allOf:
+        - { $ref: "#/components/schemas/ContactFields" }
+        - type: object
+          required: [name, roles]
+    ContactPatch:
+      allOf:
+        - { $ref: "#/components/schemas/ContactFields" }
+        - type: object
+          minProperties: 1
+    Contact:
+      allOf:
+        - { $ref: "#/components/schemas/ContactFields" }
+        - type: object
+          required: [id, name, roles, tags, notes, archivedAt, createdAt, updatedAt, resources, movementCount, commentCount]
+          properties:
+            id: { type: string, format: uuid }
+            archivedAt: { type: [string, "null"], format: date-time }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+            resources:
+              type: array
+              items:
+                type: object
+                required: [id, name, sku, type]
+                properties:
+                  id: { type: string, format: uuid }
+                  name: { type: string }
+                  sku: { type: [string, "null"] }
+                  type: { type: string }
+            movementCount: { type: integer, minimum: 0 }
+            commentCount: { type: integer, minimum: 0 }
+    CommentInput:
+      type: object
+      additionalProperties: false
+      required: [body]
+      properties:
+        body: { type: string, minLength: 1, maxLength: 10000 }
+    ContactComment:
+      type: object
+      required: [id, contactId, body, authorName, createdAt, updatedAt, canEdit]
+      properties:
+        id: { type: string, format: uuid }
+        contactId: { type: string, format: uuid }
+        body: { type: string, minLength: 1, maxLength: 10000 }
+        authorName: { type: string, minLength: 1, maxLength: 160 }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        canEdit: { type: boolean }
     StockConfig:
       allOf:
         - { $ref: "#/components/schemas/StockConfigInput" }
         - type: object
-          required: [trackingMode, minimumStock, reorderQuantity, leadTimeDays, unitName]
+          required: [trackingMode, minimumStock, reorderQuantity, leadTimeDays, unitName, purchaseUnitName, purchaseUnitFactor]
     StockForecast:
       type: object
       required: [averageDailyUsage, daysUntilStockout, predictedStockoutAt, isBelowMinimum, suggestedReorderQuantity]
@@ -5318,21 +7479,30 @@ components:
         location: { type: [string, "null"], maxLength: 240 }
         fromLocationResourceId: { type: [string, "null"], format: uuid, description: Structured source location for an issue or transfer. }
         toLocationResourceId: { type: [string, "null"], format: uuid, description: Structured destination location for a receipt or transfer. }
+        contactId: { type: [string, "null"], format: uuid, description: Active customer or supplier associated with this movement. }
         occurredAt: { type: string, format: date-time }
+        totalPriceCents: { type: [integer, "null"], minimum: -2000000000, maximum: 2000000000, description: Signed transaction value; negative values can represent outbound revenue. Inbound prices must be nonnegative. }
+        priceCurrency: { type: [string, "null"], minLength: 3, maxLength: 3 }
     StockMovement:
       type: object
-      required: [id, resourceId, delta, quantity, balanceAfter, fromLocationBalanceAfter, toLocationBalanceAfter, type, note, location, fromLocationResourceId, toLocationResourceId, occurredAt, createdAt, createdBy]
+      required: [id, resourceId, contactId, delta, quantity, balanceAfter, fromLocationBalanceAfter, toLocationBalanceAfter, type, note, location, fromLocationResourceId, toLocationResourceId, occurredAt, createdAt, createdBy]
       properties:
         id: { type: string, format: uuid }
         resourceId: { type: string, format: uuid }
+        contactId: { type: [string, "null"], format: uuid }
         unitId: { type: [string, "null"], format: uuid }
         assemblyBuildId: { type: [string, "null"], format: uuid }
         purchaseReceiptId: { type: [string, "null"], format: uuid }
         delta: { type: integer }
         quantity: { type: integer, minimum: 0 }
-        balanceAfter: { type: integer, minimum: 0 }
-        fromLocationBalanceAfter: { type: [integer, "null"], minimum: 0 }
-        toLocationBalanceAfter: { type: [integer, "null"], minimum: 0 }
+        totalPriceCents: { type: [integer, "null"], minimum: -2000000000 }
+        priceCurrency: { type: [string, "null"] }
+        costCents: { type: [integer, "null"], minimum: 0 }
+        costCurrency: { type: [string, "null"] }
+        costEstimated: { type: boolean }
+        balanceAfter: { type: integer }
+        fromLocationBalanceAfter: { type: [integer, "null"] }
+        toLocationBalanceAfter: { type: [integer, "null"] }
         type:
           type: string
           description: Includes client booking types plus system audit types such as opening_balance, inventory-count, assignment-checkout, assignment-return, unit-created, unit-status, and merge.
@@ -5355,6 +7525,8 @@ components:
         metadata: { type: object, additionalProperties: true }
         customFields: { $ref: "#/components/schemas/CustomFieldValues" }
         acquiredAt: { type: string, format: date-time }
+        totalPriceCents: { type: [integer, "null"], minimum: 0, maximum: 2000000000 }
+        priceCurrency: { type: [string, "null"], minLength: 3, maxLength: 3 }
     StockUnitPatch:
       type: object
       properties:
@@ -5366,6 +7538,8 @@ components:
         occurredAt: { type: string, format: date-time }
         reason: { type: [string, "null"], maxLength: 240 }
         note: { type: string, maxLength: 20000 }
+        totalPriceCents: { type: [integer, "null"], minimum: -2000000000, maximum: 2000000000, description: Signed transaction value; negative values can represent outbound revenue. Inbound prices must be nonnegative. }
+        priceCurrency: { type: [string, "null"], minLength: 3, maxLength: 3 }
     StockUnit:
       allOf:
         - { $ref: "#/components/schemas/StockUnitPatch" }
@@ -5375,20 +7549,33 @@ components:
             id: { type: string, format: uuid }
             resourceId: { type: string, format: uuid }
             code: { type: string }
+            acquisitionCostCents: { type: [integer, "null"], minimum: 0 }
+            costCurrency: { type: [string, "null"] }
             acquiredAt: { type: string, format: date-time }
             lastMovedAt: { type: string, format: date-time }
             createdAt: { type: string, format: date-time }
             updatedAt: { type: string, format: date-time }
+    StockOverviewCover:
+      type: object
+      required: [url, altText]
+      properties:
+        url: { type: string }
+        altText: { type: string }
     StockOverviewItem:
       type: object
-      required: [resourceId, name, type, quantity, onOrder, projectedQuantity, minimumStock, trackingMode, reorderSuggested, unitName]
+      required: [resourceId, variantOfResourceId, name, type, cover, quantity, onOrder, projectedQuantity, minimumStock, trackingMode, reorderSuggested, unitName]
       properties:
         resourceId: { type: string, format: uuid }
+        variantOfResourceId: { type: [string, "null"], format: uuid }
         name: { type: string }
         type: { type: string }
-        quantity: { type: integer, minimum: 0 }
+        cover:
+          oneOf:
+            - { $ref: "#/components/schemas/StockOverviewCover" }
+            - { type: "null" }
+        quantity: { type: integer }
         onOrder: { type: integer, minimum: 0 }
-        projectedQuantity: { type: integer, minimum: 0 }
+        projectedQuantity: { type: integer }
         nextExpectedAt: { type: [string, "null"], format: date-time }
         minimumStock: { type: integer, minimum: 0 }
         trackingMode: { type: string, enum: [bulk, serialized] }
@@ -5416,7 +7603,7 @@ components:
                 properties:
                   name: { type: string }
                   color: { type: string }
-            quantity: { type: integer, minimum: 0 }
+            quantity: { type: integer }
         config: { $ref: "#/components/schemas/StockConfig" }
         forecast: { $ref: "#/components/schemas/StockForecast" }
         procurement:
@@ -5424,7 +7611,7 @@ components:
           required: [onOrder, projectedQuantity, nextExpectedAt, openLines]
           properties:
             onOrder: { type: integer, minimum: 0 }
-            projectedQuantity: { type: integer, minimum: 0 }
+            projectedQuantity: { type: integer }
             nextExpectedAt: { type: [string, "null"], format: date-time }
             openLines:
               type: array
@@ -5447,6 +7634,16 @@ components:
       required: [name]
       properties:
         name: { type: string, minLength: 1, maxLength: 240 }
+        slugs:
+          type: array
+          maxItems: 20
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          description: Ordered organization-scoped URL slugs. The first value is the standard slug; remaining values are aliases. Values are normalized to lowercase; `new` and UUID-shaped values are reserved.
         description: { type: string, maxLength: 20000 }
         type: { $ref: "#/components/schemas/InventoryTypeKey" }
         status: { type: string, enum: [available, in-use, maintenance, archived] }
@@ -5486,6 +7683,16 @@ components:
       description: Any subset of the writable resource fields.
       properties:
         name: { type: string, minLength: 1, maxLength: 240 }
+        slugs:
+          type: array
+          maxItems: 20
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          description: Replaces the ordered URL slugs for this resource. The first value becomes the standard slug; remaining values are aliases.
         description: { type: string, maxLength: 20000 }
         type: { $ref: "#/components/schemas/InventoryTypeKey" }
         status: { type: string, enum: [available, in-use, maintenance, archived] }
@@ -5519,6 +7726,189 @@ components:
           items: { $ref: "#/components/schemas/ResourceMapFeature" }
         notes: { type: string }
         customFields: { $ref: "#/components/schemas/CustomFieldValues" }
+    ResourceFamilyVariantInput:
+      type: object
+      additionalProperties: false
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 240 }
+        sku: { type: [string, "null"], maxLength: 80 }
+        barcode: { type: [string, "null"], maxLength: 180 }
+    ResourceFamilyExistingVariantInput:
+      type: object
+      additionalProperties: false
+      required: [existingResourceId]
+      properties:
+        existingResourceId:
+          type: string
+          format: uuid
+          description: Existing standalone inventory item to connect as the child variant while preserving its operational records.
+    ResourceVariantDetachResult:
+      type: object
+      required: [resourceId, materializedBomLineCount]
+      properties:
+        resourceId: { type: string, format: uuid }
+        materializedBomLineCount: { type: integer, minimum: 0 }
+    ResourceFamilyMember:
+      type: object
+      required: [id, name, type, status, sku, barcode, quantity, trackingMode, updatedAt, overriddenFields]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        type: { $ref: "#/components/schemas/InventoryTypeKey" }
+        status: { type: string, enum: [available, in-use, maintenance, archived] }
+        sku: { type: [string, "null"] }
+        barcode: { type: [string, "null"] }
+        quantity: { type: integer }
+        trackingMode: { type: string, enum: [bulk, serialized] }
+        updatedAt: { type: string, format: date-time }
+        overriddenFields:
+          type: array
+          items:
+            type: string
+            enum: [description, type, valueCents, currency, priority, tags, categories, customFields, notes]
+    ResourceFamily:
+      type: object
+      required: [role, currentResourceId, primary, variants, legacyVariantCount, optionGroupCount, summary]
+      properties:
+        role: { type: string, enum: [primary, variant] }
+        currentResourceId: { type: string, format: uuid }
+        primary: { $ref: "#/components/schemas/ResourceFamilyMember" }
+        variants:
+          type: array
+          items: { $ref: "#/components/schemas/ResourceFamilyMember" }
+        legacyVariantCount: { type: integer, minimum: 0 }
+        optionGroupCount: { type: integer, minimum: 0 }
+        summary:
+          type: object
+          required: [totalQuantity, primaryQuantity, variantQuantity, variantCount, serializedVariantCount]
+          properties:
+            totalQuantity: { type: integer, minimum: 0 }
+            primaryQuantity: { type: integer, minimum: 0 }
+            variantQuantity: { type: integer, minimum: 0 }
+            variantCount: { type: integer, minimum: 0 }
+            serializedVariantCount: { type: integer, minimum: 0 }
+    ResourceOptionValueInput:
+      type: object
+      additionalProperties: false
+      required: [label, code, isDefault]
+      properties:
+        label: { type: string, minLength: 1, maxLength: 120 }
+        code: { type: string, pattern: "^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$" }
+        componentResourceId: { type: [string, "null"], format: uuid }
+        isDefault: { type: boolean }
+        position: { type: integer, minimum: 0 }
+    ResourceOptionGroupInput:
+      type: object
+      additionalProperties: false
+      required: [key, name, values]
+      properties:
+        key: { type: string, pattern: "^[a-z][a-z0-9_-]{0,63}$" }
+        name: { type: string, minLength: 1, maxLength: 120 }
+        bomSlotKey: { type: [string, "null"], maxLength: 80 }
+        position: { type: integer, minimum: 0 }
+        values:
+          type: array
+          minItems: 2
+          maxItems: 8
+          items: { $ref: "#/components/schemas/ResourceOptionValueInput" }
+    ResourceOptionValue:
+      allOf:
+        - { $ref: "#/components/schemas/ResourceOptionValueInput" }
+        - type: object
+          required: [id, componentName, position]
+          properties:
+            id: { type: string, format: uuid }
+            componentName: { type: [string, "null"] }
+    ResourceOptionGroup:
+      type: object
+      required: [id, key, name, bomSlotKey, position, values]
+      properties:
+        id: { type: string, format: uuid }
+        key: { type: string }
+        name: { type: string }
+        bomSlotKey: { type: [string, "null"] }
+        position: { type: integer, minimum: 0 }
+        values:
+          type: array
+          items: { $ref: "#/components/schemas/ResourceOptionValue" }
+    ResourceOptions:
+      type: object
+      required: [role, currentResourceId, primary, groups, configurations, currentSelection, bomSlots, combinationCount, generatedVariantCount, familyVariantCount, definitionsLocked]
+      properties:
+        role: { type: string, enum: [primary, variant] }
+        currentResourceId: { type: string, format: uuid }
+        primary:
+          type: object
+          required: [id, name, sku]
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            sku: { type: [string, "null"] }
+        groups:
+          type: array
+          items: { $ref: "#/components/schemas/ResourceOptionGroup" }
+        configurations:
+          type: array
+          description: Materialized configurations whose inventory items the caller may read.
+          items:
+            type: object
+            required: [resourceId, resourceName, resourceSku, isPrimary, signature, selection]
+            properties:
+              resourceId: { type: string, format: uuid }
+              resourceName: { type: string }
+              resourceSku: { type: [string, "null"] }
+              isPrimary: { type: boolean }
+              signature: { type: string }
+              selection:
+                type: array
+                items:
+                  type: object
+                  required: [groupId, groupName, valueId, valueLabel]
+                  properties:
+                    groupId: { type: string, format: uuid }
+                    groupName: { type: string }
+                    valueId: { type: string, format: uuid }
+                    valueLabel: { type: string }
+        currentSelection:
+          type: array
+          items:
+            type: object
+            required: [groupId, groupName, valueId, valueLabel]
+            properties:
+              groupId: { type: string, format: uuid }
+              groupName: { type: string }
+              valueId: { type: string, format: uuid }
+              valueLabel: { type: string }
+        bomSlots:
+          type: array
+          items:
+            type: object
+            required: [slotKey, position, componentResourceId, componentName]
+            properties:
+              slotKey: { type: string }
+              position: { type: integer, minimum: 0 }
+              componentResourceId: { type: string, format: uuid }
+              componentName: { type: string }
+        combinationCount: { type: integer, minimum: 0, maximum: 100 }
+        generatedVariantCount: { type: integer, minimum: 0 }
+        familyVariantCount: { type: integer, minimum: 0 }
+        definitionsLocked: { type: boolean }
+    ResourceOptionGenerationResult:
+      type: object
+      required: [primaryResourceId, generatedVariantCount, variants]
+      properties:
+        primaryResourceId: { type: string, format: uuid }
+        generatedVariantCount: { type: integer, minimum: 1, maximum: 99 }
+        variants:
+          type: array
+          items:
+            type: object
+            required: [id, name, sku]
+            properties:
+              id: { type: string, format: uuid }
+              name: { type: string }
+              sku: { type: [string, "null"] }
     ResourceVariantInput:
       type: object
       additionalProperties: false
@@ -5556,7 +7946,7 @@ components:
         barcode: { type: [string, "null"] }
         priceCents: { type: [integer, "null"], minimum: 0 }
         currency: { type: string }
-        quantity: { type: integer, minimum: 0 }
+        quantity: { type: integer }
         position: { type: integer, minimum: 0 }
         createdBy: { type: [string, "null"] }
         updatedBy: { type: [string, "null"] }
@@ -5566,9 +7956,9 @@ components:
       type: object
       required: [totalQuantity, allocatedQuantity, unallocatedQuantity, variantCount]
       properties:
-        totalQuantity: { type: integer, minimum: 0 }
-        allocatedQuantity: { type: integer, minimum: 0 }
-        unallocatedQuantity: { type: integer, minimum: 0 }
+        totalQuantity: { type: integer }
+        allocatedQuantity: { type: integer }
+        unallocatedQuantity: { type: integer }
         variantCount: { type: integer, minimum: 0 }
     ResourceVariantStockMovementInput:
       type: object
@@ -5607,7 +7997,7 @@ components:
       allOf:
         - { $ref: "#/components/schemas/ResourceInput" }
         - type: object
-          required: [id, customFields, createdAt, updatedAt, media]
+          required: [id, slugs, customFields, createdAt, updatedAt, media]
           properties:
             id: { type: string, format: uuid }
             createdAt: { type: string, format: date-time }

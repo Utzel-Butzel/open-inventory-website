@@ -35,6 +35,20 @@ cd inventory
 ./scripts/install.sh`;
 const dokployDeployUrl = `${githubUrl}/tree/main/deploy/dokploy`;
 const coolifyDeployUrl = `${githubUrl}/tree/main/deploy/coolify`;
+const authProviderGuideUrl = `${githubUrl}/blob/main/AUTHPROVIDERS.md`;
+const environmentReferenceUrl = `${githubUrl}/blob/main/.env.example`;
+const requiredAuthConfig = `AUTH_URL=https://inventory.example.com
+AUTH_SECRET=replace-with-a-long-random-secret
+AUTH_TRUST_HOST=true`;
+const auth0Config = `AUTH0_CLIENT_ID=your-client-id
+AUTH0_CLIENT_SECRET=your-client-secret
+AUTH0_DOMAIN=your-tenant.eu.auth0.com`;
+const supabaseOidcConfig = `AUTH_OIDC_PROVIDER_ID=supabase
+AUTH_OIDC_PROVIDER_NAME=Supabase
+AUTH_OIDC_ISSUER=https://your-project.supabase.co/auth/v1
+AUTH_OIDC_CLIENT_ID=your-client-id
+AUTH_OIDC_CLIENT_SECRET=your-client-secret
+AUTH_OIDC_SCOPES=openid email profile`;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
@@ -54,6 +68,7 @@ const navigation = [
   { label: "Overview", href: "#overview" },
   { label: "Install & deploy", href: "#docker" },
   { label: "Configuration", href: "#configuration" },
+  { label: "Authentication", href: "#authentication" },
   { label: "API", href: "#api" },
   { label: "Operations", href: "#operations" },
 ];
@@ -200,7 +215,7 @@ export default async function DocsPage() {
                   { icon: Container, title: "Application", text: "A standalone Next.js production image." },
                   { icon: Database, title: "Database", text: "PostgreSQL 16 with migration gating." },
                   { icon: HardDrive, title: "Storage", text: "Persistent local uploads or Openinary." },
-                  { icon: ShieldCheck, title: "Authentication", text: "Local roles with optional Auth0." },
+                  { icon: ShieldCheck, title: "Authentication", text: "Local passwords, Auth0, or standards-based OIDC." },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
@@ -331,14 +346,14 @@ export default async function DocsPage() {
               <SectionHeading eyebrow="02 · Configuration" title="Keep the core local. Add only what you need.">
                 <p>
                   Database and local files can stay on your infrastructure.
-                  Maps, hosted storage, Auth0, and AI providers are explicit
-                  integrations you can configure or leave disabled.
+                  Maps, hosted storage, identity providers, and AI services are
+                  explicit integrations you can configure or leave disabled.
                 </p>
               </SectionHeading>
 
               <div className="mt-9 divide-y divide-border rounded-2xl border border-border bg-surface">
                 {[
-                  { icon: KeyRound, title: "Accounts and roles", copy: "The guided deployment paths generate the first bootstrap login automatically. Change that password after signing in, then manage admin, editor, and viewer accounts from Settings. Auth0 is optional." },
+                  { icon: KeyRound, title: "Accounts and roles", copy: "The guided deployment paths generate the first bootstrap login automatically. Browser sign-in can use local passwords, Auth0, and one generic OpenID Connect provider; roles and memberships stay in Open Inventory." },
                   { icon: HardDrive, title: "File storage", copy: "Use the persistent local upload volume by default, or point Open Inventory at an Openinary service." },
                   { icon: Sparkles, title: "AI assistance", copy: "OpenAI-compatible analysis and OpenAI or Google image editing are optional. Nothing is sent to an AI provider until you configure and use it." },
                   { icon: Database, title: "Maps and location", copy: "Street and satellite defaults require external tile services. Compatible tile URLs can be replaced with your own infrastructure." },
@@ -358,14 +373,120 @@ export default async function DocsPage() {
                 })}
               </div>
 
-              <a href={`${githubUrl}#authentication`} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">
-                Read every environment option in the README
+              <a href={environmentReferenceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">
+                Browse the complete environment reference
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+              </a>
+            </section>
+
+            <section id="authentication" className="scroll-mt-24 border-b border-border py-16">
+              <SectionHeading eyebrow="03 · Authentication" title="Choose the sign-in methods for your deployment.">
+                <p>
+                  Auth.js powers browser authentication. The enabled methods are
+                  selected for the whole container through environment variables,
+                  while organizations, memberships, roles, and permissions remain
+                  in the Open Inventory database.
+                </p>
+              </SectionHeading>
+
+              <div className="mt-9 grid gap-3 sm:grid-cols-3">
+                {[
+                  {
+                    title: "Local password",
+                    label: "Default",
+                    text: "Works immediately and also powers password-to-token login in the native iOS app.",
+                  },
+                  {
+                    title: "Auth0",
+                    label: "Built in",
+                    text: "Add one Auth0 application and expose it beside or instead of local password login.",
+                  },
+                  {
+                    title: "OpenID Connect",
+                    label: "Generic",
+                    text: "Connect one standards-based issuer such as Supabase, Keycloak, or Zitadel.",
+                  },
+                ].map((provider) => (
+                  <article key={provider.title} className="rounded-2xl border border-border bg-surface p-5">
+                    <span className="inline-flex rounded-full bg-brand-soft px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-brand">
+                      {provider.label}
+                    </span>
+                    <h3 className="mt-5 text-sm font-semibold text-foreground">{provider.title}</h3>
+                    <p className="mt-2 text-xs leading-5 text-muted">{provider.text}</p>
+                  </article>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-brand-border bg-brand-soft p-5 text-sm leading-6 text-muted-strong">
+                <p className="font-semibold text-foreground">Identity is external; access stays local.</p>
+                <p className="mt-1.5">
+                  Before an Auth0 or OIDC user can sign in, create an active Open
+                  Inventory user with the same email address. The provider must
+                  return <code className="font-mono text-[12px]">email_verified: true</code>.
+                  Open Inventory then resolves the current organization membership,
+                  role, and permissions from its own database on every request.
+                </p>
+              </div>
+
+              <div className="mt-10">
+                <h3 className="text-xl font-semibold tracking-[-0.03em] text-foreground">
+                  Required application settings
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-muted">
+                  Use the public HTTPS origin that users and the identity provider
+                  can reach. Generate a unique secret for every deployment.
+                </p>
+                <CodeBlock label=".env · required" copy={requiredAuthConfig}>
+                  {requiredAuthConfig}
+                </CodeBlock>
+              </div>
+
+              <div className="grid gap-8 lg:grid-cols-2">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground">Auth0</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">
+                    Register <code className="break-all font-mono text-[12px]">https://inventory.example.com/api/auth/callback/auth0</code> as
+                    an allowed callback URL, then add the application credentials.
+                  </p>
+                  <CodeBlock label=".env · Auth0" copy={auth0Config}>
+                    {auth0Config}
+                  </CodeBlock>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground">Supabase or another OIDC issuer</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">
+                    The provider ID becomes the final callback path. For this
+                    example, register <code className="break-all font-mono text-[12px]">https://inventory.example.com/api/auth/callback/supabase</code>.
+                  </p>
+                  <CodeBlock label=".env · OpenID Connect" copy={supabaseOidcConfig}>
+                    {supabaseOidcConfig}
+                  </CodeBlock>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-warning-border bg-warning-soft p-5 text-sm leading-6 text-warning">
+                <p className="font-semibold">Roll out without locking yourself out</p>
+                <ol className="mt-2 list-decimal space-y-1 pl-5">
+                  <li>Keep <code className="font-mono text-[12px]">AUTH_PASSWORD_ENABLED=true</code>.</li>
+                  <li>Configure the provider and create a matching local user.</li>
+                  <li>Redeploy and test the external login in a private browser window.</li>
+                  <li>Only then disable passwords if the deployment must be external-only.</li>
+                </ol>
+                <p className="mt-3">
+                  The current iOS client uses the password-to-token endpoint and
+                  cannot sign in to an external-only deployment.
+                </p>
+              </div>
+
+              <a href={authProviderGuideUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-strong">
+                Open the complete authentication provider guide
                 <ExternalLink className="size-3.5" aria-hidden="true" />
               </a>
             </section>
 
             <section id="api" className="scroll-mt-24 border-b border-border py-16">
-              <SectionHeading eyebrow="03 · Integration" title="A scoped API, described in the repository.">
+              <SectionHeading eyebrow="04 · Integration" title="A scoped API, described in the repository.">
                 <p>
                   Administrators can issue expiring, revocable bearer tokens.
                   The public OpenAPI 3.1 files document resource, stock, scan,
@@ -408,7 +529,7 @@ export default async function DocsPage() {
             </section>
 
             <section id="operations" className="scroll-mt-24 pt-16">
-              <SectionHeading eyebrow="04 · Operations" title="Make durability part of the deployment.">
+              <SectionHeading eyebrow="05 · Operations" title="Make durability part of the deployment.">
                 <p>
                   Open Inventory keeps database records and stored media as one
                   logical dataset. Back them up together, test recovery, and use

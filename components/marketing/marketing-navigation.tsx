@@ -52,19 +52,19 @@ const featureItemsDe: DropdownItem[] = [
   {
     label: "Inventar strukturieren",
     href: "/features/strukturieren",
-    description: "Typen, Felder und Beziehungen abbilden.",
+    description: "Typen, Varianten, Optionen und Beziehungen abbilden.",
     icon: Tags,
   },
   {
-    label: "Bestand & Ausleihen",
+    label: "Bestand & Vorgänge",
     href: "/features/bestand-ausleihe",
-    description: "Mengen, Geräte und Bewegungen verfolgen.",
+    description: "Bestand, Einkauf, Verkauf und Ausleihe verfolgen.",
     icon: PackageCheck,
   },
   {
     label: "Labels, Scans & API",
     href: "/features/labels-api",
-    description: "QR-Codes, Barcodes und Integrationen nutzen.",
+    description: "Codes, Aktionsabläufe, WooCommerce und API nutzen.",
     icon: QrCode,
   },
   {
@@ -83,9 +83,9 @@ const featureItemsDe: DropdownItem[] = [
 
 const featureItemsEn: DropdownItem[] = [
   { label: "Fast capture & AI", href: "/features/erfassen", description: "Capture by photo and review suggestions.", icon: Camera },
-  { label: "Structure inventory", href: "/features/strukturieren", description: "Model types, fields and relations.", icon: Tags },
-  { label: "Stock & lending", href: "/features/bestand-ausleihe", description: "Track quantities, devices and movements.", icon: PackageCheck },
-  { label: "Labels, scans & API", href: "/features/labels-api", description: "Use QR codes, barcodes and integrations.", icon: QrCode },
+  { label: "Structure inventory", href: "/features/strukturieren", description: "Model types, variants, options and relations.", icon: Tags },
+  { label: "Stock & operations", href: "/features/bestand-ausleihe", description: "Track stock, purchases, sales and loans.", icon: PackageCheck },
+  { label: "Labels, scans & API", href: "/features/labels-api", description: "Use codes, action flows, WooCommerce and the API.", icon: QrCode },
   { label: "Locations & 3D spaces", href: "/features/orte-raeume", description: "Connect maps, rooms and storage locations.", icon: MapPinned },
   { label: "Operations & security", href: "/features/betrieb-sicherheit", description: "Self-hosting, roles and data control.", icon: ShieldCheck },
 ];

@@ -634,7 +634,7 @@ function EnglishOpenSourcePage() {
                 icon={KeyRound}
                 name="Authentication"
                 defaultValue="Local, database-backed accounts and roles work without an external identity provider."
-                optional="Auth0 can be added deliberately; sign-in data then passes through that external service."
+                optional="Auth0 or one standards-based OpenID Connect provider can be added deliberately; sign-in data then passes through that selected service."
               />
             </div>
 
@@ -1079,7 +1079,7 @@ export default async function OpenSourcePage() {
                 icon={KeyRound}
                 name="Anmeldung"
                 defaultValue="Lokale, datenbankgestützte Konten und Rollen funktionieren ohne externen Identity-Provider."
-                optional="Auth0 kann bewusst ergänzt werden; Anmeldeinformationen durchlaufen dann diesen externen Dienst."
+                optional="Auth0 oder ein standardkonformer OpenID-Connect-Provider können bewusst ergänzt werden; Anmeldedaten durchlaufen dann den gewählten Dienst."
               />
             </div>
 

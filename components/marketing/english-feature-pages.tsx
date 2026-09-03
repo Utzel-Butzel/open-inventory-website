@@ -141,7 +141,7 @@ const englishFeatureCopy = {
     intro:
       "Types, typed custom fields, directed relations and content languages let different inventories use one application without forcing one industry schema.",
     description:
-      "Technical overview of inventory types, typed custom fields, relations, media, translated content, search and bulk editing in Open Inventory.",
+      "Technical overview of inventory types, typed custom fields, variant families, options, relations, media, favorites, search and bulk editing.",
     detailIntro:
       "A household store and an equipment lab need different fields. Open Inventory combines stable inventory types, custom fields, relations, locations and media instead of hard-coding an industry model. The same structure is available through the UI and API.",
     outcomes: [
@@ -225,24 +225,32 @@ const englishFeatureCopy = {
       },
       {
         title: "Search, filters and bulk editing",
-        copy: "Use the responsive grid or table, filter records, and update shared fields or append tags across a selected set.",
+        copy: "Use the responsive grid or table, favorite frequently needed records, filter inventory, and update shared fields or tags across a selected set.",
+      },
+      {
+        title: "Variant families and options",
+        copy: "Connect existing records as variants or generate configurations from option groups. Every variant remains a complete record with its own SKU, barcode, and stock.",
+      },
+      {
+        title: "Relationship and cost structure",
+        copy: "Visualize families, bills of materials, containment, and other links across several levels. The optional cost view exposes material contributions through the structure.",
       },
     ],
   },
   "bestand-ausleihe": {
-    menuTitle: "Stock and lending",
+    menuTitle: "Stock and operations",
     eyebrow: "03 · Store and move",
     title: "Stock with an append-only history",
     intro:
-      "Bulk quantities and individually serialized devices use different invariants but share locations, movements, assignments and ordering workflows.",
+      "Bulk quantities and serialized devices use different invariants but share locations, movements, purchasing, sales, lending, and request workflows.",
     description:
-      "Technical overview of bulk and serialized stock, append-only movements, inventory counts, lending, reservations, purchasing and assemblies.",
+      "Technical overview of bulk and serialized stock, movements, inventory counts, internal requests, purchasing, sales, lending, costs, and assemblies.",
     detailIntro:
       "Screws need a quantity; a laptop needs an identity. Open Inventory supports both tracking modes and writes each change as a dated movement. Current availability can therefore be reconciled with the events that produced it.",
     outcomes: [
       "Use bulk tracking for interchangeable parts and serialized units for identifiable devices",
       "Record issues, returns, transfers and corrections without replacing their history",
-      "Connect minimum stock, purchase orders, receipts and assembly consumption",
+      "Connect requests, purchases, sales, loans, costs, and assembly consumption",
     ],
     workflowTitle: "Every stock change records its reason",
     workflowIntro:
@@ -304,7 +312,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Append-only movements",
-        copy: "Receipts, issues, corrections and transfers are dated and appended. Stock cannot fall below zero, and corrections do not rewrite previous events.",
+        copy: "Receipts, issues, corrections, and transfers are dated and recorded. Organization policy decides whether negative stock is allowed; corrections remain visible in the history.",
       },
       {
         title: "Quantity by stock location",
@@ -315,16 +323,24 @@ const englishFeatureCopy = {
         copy: "Schedule recurring counts, process due checks and reconcile quantities by location. Serialized units retain individual traceability.",
       },
       {
-        title: "Lending, assignments and reservations",
-        copy: "Issue quantities or units to users, other inventory records or free-text recipients. Returns and cancellation restore availability through explicit operations.",
+        title: "Loans and multi-line operations",
+        copy: "Bundle several quantities or serialized units per contact. Issue, due date, partial returns, and cancellation remain traceable for every line.",
       },
       {
         title: "Minimum stock and forecast inputs",
         copy: "Minimum quantity, reorder amount, lead time and consumption rate produce warnings, an estimated stock-out date and a documented reorder suggestion.",
       },
       {
-        title: "Purchase orders and receipts",
-        copy: "Record expected quantities and partial deliveries. Receipts are applied through controlled stock movements rather than direct quantity edits.",
+        title: "Purchasing and sales",
+        copy: "Create multi-line purchase and sales orders with contacts, prices, and partial quantities. Receipts and issues are applied through controlled stock movements.",
+      },
+      {
+        title: "Internal requests and calendar",
+        copy: "Plan future demand, approve or reject requests, and reserve stock until fulfilment. The calendar exposes upcoming allocations before approval.",
+      },
+      {
+        title: "Costs and purchase units",
+        copy: "Store prices on movements, review inventory and material costs, and convert purchased rolls, boxes, or canisters into the corresponding base unit.",
       },
       {
         title: "Bills of materials and assemblies",
@@ -403,7 +419,7 @@ const englishFeatureCopy = {
     items: [
       {
         title: "QR and barcode workflows",
-        copy: "Scan from a camera or image, resolve inventory links, UUIDs, SKUs and serial numbers, and review configurable stock operations before idempotent execution.",
+        copy: "Scan from a camera or image, resolve inventory links, UUIDs, SKUs and serial numbers, and design configurable action flows with previews, inputs, and confirmed execution.",
       },
       {
         title: "Reusable label layouts",
@@ -424,6 +440,10 @@ const englishFeatureCopy = {
       {
         title: "Documented REST API",
         copy: "The checked-in OpenAPI 3.1 specification, interactive reference and hashed tokens with expiry and scopes make integrations inspectable.",
+      },
+      {
+        title: "WooCommerce stock sync",
+        copy: "Map store line items to bulk stock by exact SKU. Webhooks issue order quantities and reconcile refunds or cancellations with traceable reversal movements.",
       },
     ],
   },
@@ -512,6 +532,10 @@ const englishFeatureCopy = {
         title: "Navigable 3D room data",
         copy: "The web viewer displays measured RoomPlan geometry, searchable inventory markers and optional photorealistic derivatives with explicit coordinate-system transforms.",
       },
+      {
+        title: "Room photos and estimated placement",
+        copy: "Select specific room photos for optional analysis. Recognized objects and estimated positions remain reviewable suggestions before they are added to the room structure.",
+      },
     ],
   },
   "betrieb-sicherheit": {
@@ -521,7 +545,7 @@ const englishFeatureCopy = {
     intro:
       "Roles, scoped tokens, persistent data and explicit provider boundaries turn inspectable code into a service that can be operated deliberately.",
     description:
-      "Technical overview of self-hosting, roles and access rules, Docker Compose, PostgreSQL, persistent uploads and the MIT-licensed codebase.",
+      "Technical overview of organizations, roles, OIDC, controlled offline copies, AI cost limits, Docker Compose, PostgreSQL, and the MIT-licensed codebase.",
     detailIntro:
       "Self-hosting moves control and responsibility to the operator. Open Inventory provides Compose files, migrations, a health endpoint, PostgreSQL and persistent upload storage as a documented base. Backups, restore tests, TLS, network exposure and updates remain operational tasks.",
     outcomes: [
@@ -585,7 +609,7 @@ const englishFeatureCopy = {
     items: [
       {
         title: "Roles and conditional rules",
-        copy: "Manage local accounts, custom roles, granular permissions and content-dependent access rules. Auth0 can be added as an optional identity provider.",
+        copy: "Manage local accounts, custom roles, granular permissions and content-dependent access rules. Auth0 or a standards-based OpenID Connect provider can be added for sign-in.",
       },
       {
         title: "Docker Compose and PostgreSQL",
@@ -594,6 +618,18 @@ const englishFeatureCopy = {
       {
         title: "Selectable file storage",
         copy: "Store uploads in a persistent local volume by default or configure Openinary. Database and file storage must be backed up as one recoverable dataset.",
+      },
+      {
+        title: "Multiple organizations",
+        copy: "Separate workspaces, data, and memberships within one deployment. Roles and permissions are evaluated in the currently selected organization.",
+      },
+      {
+        title: "AI usage and monthly limit",
+        copy: "Review estimated cost by action, provider, and status. An organization limit is checked before every paid AI call and can stop paid AI completely.",
+      },
+      {
+        title: "Controlled offline copies",
+        copy: "Keep selected views available offline on a trusted device. Disabling offline access or signing out removes the locally stored copies.",
       },
       {
         title: "MIT-licensed source",
@@ -659,10 +695,10 @@ export function EnglishFeaturesPage() {
                 <span className="block text-brand">implementation details.</span>
               </h1>
               <p className="mt-7 max-w-xl text-[17px] leading-8 text-muted">
-                Open Inventory combines photo capture, typed records, stock
-                movements, labels, spatial data and an API. The sections below
-                describe the data flow, provider boundaries and known operating
-                responsibilities.
+                Open Inventory combines photo capture, typed records, variants,
+                stock operations, internal requests, WooCommerce, spatial data,
+                and an API. The sections below describe the data flow, provider
+                boundaries, and known operating responsibilities.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
@@ -705,7 +741,7 @@ export function EnglishFeaturesPage() {
           <div className="mx-auto grid max-w-[1240px] gap-8 px-5 sm:grid-cols-3 sm:px-8">
             {[
               ["One capture queue", "with separate resource, media and optional processing stages"],
-              ["Two stock models", "for bulk quantities and individually serialized units"],
+              ["Three operation types", "for purchases, sales, and multi-line loans"],
               ["One open contract", "shared by the web app, native iOS client and integrations"],
             ].map(([value, label]) => (
               <div key={value} className="border-l-2 border-brand-border pl-5">
@@ -757,6 +793,11 @@ export function EnglishFeaturesPage() {
                   src: "/marketing/screenshots/web-stock.png",
                   title: "Record stock movements",
                   copy: "See incoming and outgoing movements, locations, and history on the record.",
+                },
+                {
+                  src: "/marketing/screenshots/web-orders.png",
+                  title: "Manage purchasing as an operation",
+                  copy: "Bring open lines, partial receipts, expected quantities, and stock intake together.",
                 },
                 {
                   src: "/marketing/screenshots/web-label-designer.png",

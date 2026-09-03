@@ -24,6 +24,7 @@ import {
   MarketingFooter,
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
+import { LatestFeatures } from "@/components/marketing/latest-features";
 import {
   marketingHref,
   marketingOgLocale,
@@ -107,13 +108,13 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
     metadata: {
       title: "Open Inventory – Inventarisierung in Sekunden",
       description:
-        "Ein Foto genügt: Open Inventory schlägt mit KI Bezeichnung, Beschreibung, Typ und Tags vor und verbindet den Eintrag mit Bildern, Bestand und Standort.",
+        "Open Inventory verbindet Fotoerfassung mit Bestand, Einkauf, Verkauf, Ausleihe, Varianten, internen Anfragen und WooCommerce – selbst hostbar und Open Source.",
     },
     hero: {
       eyebrow: "Inventarisierung",
       title: "Wo ist der Akkuschrauber?",
       description:
-        "Inventarisierung in Sekunden statt Stunden: Einfache Inventarisierung mit KI – vom automatisch erzeugten Text bis zum perfekten Bild.",
+        "Vom schnellen Foto bis zum vollständigen Vorgang: Erfasse Inventar in Sekunden und verwalte danach Bestand, Einkauf, Verkauf, Ausleihe und Reservierungen an einem Ort.",
       primary: "Live-Demo öffnen",
       secondary: "Mit Docker starten",
       facts: ["MIT-Lizenz", "Docker & PostgreSQL", "Web + native iOS-App"],
@@ -155,7 +156,7 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
       eyebrow: "Was Open Inventory kann",
       title: "Alles im Blick. Alles sofort griffbereit.",
       description:
-        "Vom automatisch erstellten Eintrag bis zur Suche, Ausleihe und Bestandsführung begleitet Open Inventory deine Ausrüstung im gesamten Alltag.",
+        "Vom automatisch erstellten Eintrag bis zu Suche, Varianten, Einkauf, Verkauf, Ausleihe und Bestandsführung begleitet Open Inventory deine Ausrüstung im gesamten Alltag.",
       linkLabel: "Im Detail",
       items: [
         {
@@ -172,7 +173,7 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
         },
         {
           title: "Sofort wiederfinden",
-          copy: "Suche, Tags, QR- und Barcodes führen direkt zum Eintrag mit Medien, Zustand, Bestand und Fundort.",
+          copy: "Suche, Favoriten, Tags, QR- und Barcodes führen direkt zum Eintrag mit Medien, Varianten, Zustand, Bestand und Fundort.",
           href: "/features/strukturieren",
           icon: Search,
         },
@@ -183,14 +184,14 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
           icon: MapPinned,
         },
         {
-          title: "Bestand & Ausleihe",
-          copy: "Mengen, Einzelgeräte, Zu- und Abgänge, Reservierungen, Ausgaben und Rückgaben bleiben nachvollziehbar.",
+          title: "Bestand & Vorgänge",
+          copy: "Mengen, Einzelgeräte, Einkäufe, Verkäufe, Ausleihen, Anfragen und Reservierungen bleiben nachvollziehbar.",
           href: "/features/bestand-ausleihe",
           icon: PackageCheck,
         },
         {
-          title: "Abläufe verbinden",
-          copy: "Etiketten, Scan-Workflows, Rollen, API-Tokens und OpenAPI 3.1 binden dein Team und eigene Prozesse an.",
+          title: "Abläufe & Shops verbinden",
+          copy: "Etiketten, Scan-Workflows, WooCommerce, API-Tokens und OpenAPI 3.1 binden dein Team und externe Prozesse an.",
           href: "/features/labels-api",
           icon: Workflow,
         },
@@ -258,13 +259,13 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
     metadata: {
       title: "Open Inventory – Inventory in seconds",
       description:
-        "One photo is enough: Open Inventory uses AI to suggest a name, description, type, and tags, then connects the record with images, stock, and location.",
+        "Open Inventory connects camera capture with stock, purchasing, sales, lending, variants, internal requests, and WooCommerce — self-hostable and open source.",
     },
     hero: {
       eyebrow: "Inventory",
       title: "Where is the cordless drill?",
       description:
-        "Inventory in seconds, not hours: simple AI-assisted capture, from automatically written details to a polished product image.",
+        "From a quick photo to a complete operation: capture inventory in seconds, then manage stock, purchasing, sales, lending, and reservations in one place.",
       primary: "Open live demo",
       secondary: "Start with Docker",
       facts: ["MIT licensed", "Docker & PostgreSQL", "Web + native iOS app"],
@@ -306,7 +307,7 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
       eyebrow: "What Open Inventory can do",
       title: "Everything visible. Everything within reach.",
       description:
-        "From automatic capture to search, checkout, and stock management, Open Inventory supports your equipment throughout its working life.",
+        "From automatic capture to search, variants, purchasing, sales, lending, and stock management, Open Inventory supports equipment throughout its working life.",
       linkLabel: "View details",
       items: [
         {
@@ -323,7 +324,7 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
         },
         {
           title: "Find anything immediately",
-          copy: "Search, tags, QR, and barcodes lead to the record with media, condition, stock, and location.",
+          copy: "Search, favorites, tags, QR, and barcodes lead to the record with media, variants, condition, stock, and location.",
           href: "/features/strukturieren",
           icon: Search,
         },
@@ -334,14 +335,14 @@ const homepageCopy: Record<MarketingLocale, HomepageCopy> = {
           icon: MapPinned,
         },
         {
-          title: "Manage stock and lending",
-          copy: "Quantities, serialized devices, movements, reservations, checkout, and returns remain traceable.",
+          title: "Manage stock and operations",
+          copy: "Quantities, serialized devices, purchases, sales, loans, requests, and reservations remain traceable.",
           href: "/features/bestand-ausleihe",
           icon: PackageCheck,
         },
         {
-          title: "Connect your workflows",
-          copy: "Labels, scan workflows, roles, API tokens, and OpenAPI 3.1 connect teams and custom processes.",
+          title: "Connect workflows and stores",
+          copy: "Labels, scan workflows, WooCommerce, API tokens, and OpenAPI 3.1 connect teams and external processes.",
           href: "/features/labels-api",
           icon: Workflow,
         },
@@ -728,6 +729,8 @@ function HomePageContent({
             <InventoryMagicFlow locale={locale} copy={copy.workflow} />
           </div>
         </section>
+
+        <LatestFeatures locale={locale} />
 
         <section className="border-b border-border py-20 sm:py-28">
           <div className="mx-auto max-w-[1240px] px-5 sm:px-8">

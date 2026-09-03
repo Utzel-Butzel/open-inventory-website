@@ -14,8 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadataBase = new URL(host ? `${protocol}://${host}` : fallback);
   const locale = requestHeaders.get(UI_LANGUAGE_HEADER) === "de" ? "de" : "en";
   const description = locale === "de"
-    ? "Open Inventory verbindet Gegenstände mit Standorten, Beständen und Buchungen. Selbst hostbar, MIT-lizenziert, mit optionaler Bildanalyse und nativer iOS-App."
-    : "Open Inventory connects objects with locations, stock, and movement history. Self-hostable and MIT licensed, with optional image analysis and a native iOS app.";
+    ? "Open Inventory verbindet Gegenstände mit Standorten, Bestand, Einkauf, Verkauf, Ausleihe und Integrationen. Selbst hostbar, MIT-lizenziert und mit nativer iOS-App."
+    : "Open Inventory connects objects with locations, stock, purchasing, sales, lending, and integrations. Self-hostable, MIT licensed, and available with a native iOS app.";
   const title = locale === "de"
     ? "Open Inventory – Inventar für Werkstatt und Technik"
     : "Open Inventory – Inventory for workshops and technical teams";

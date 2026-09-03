@@ -4,6 +4,8 @@ import {
   Boxes,
   Braces,
   Camera,
+  CalendarRange,
+  CircleDollarSign,
   ClipboardCheck,
   Container,
   Database,
@@ -12,6 +14,7 @@ import {
   Github,
   Globe2,
   History,
+  Heart,
   ImageIcon,
   Languages,
   Layers3,
@@ -27,9 +30,11 @@ import {
   ShoppingCart,
   Smartphone,
   Sparkles,
+  Store,
   Tags,
   Users,
   WandSparkles,
+  WifiOff,
 } from "lucide-react";
 
 export type FeatureSlug =
@@ -206,7 +211,7 @@ export const featureGroups: FeatureGroup[] = [
     intro:
       "Nicht jedes Inventar denkt in denselben Kategorien. Typen, Felder, Beziehungen und Sprachen passen sich deinem Modell an.",
     description:
-      "Inventar flexibel strukturieren: eigene Typen und Felder, Beziehungen, Medien, Mehrsprachigkeit sowie schnelle Suche und Sammelbearbeitung.",
+      "Inventar flexibel strukturieren: eigene Typen und Felder, Variantenfamilien, Optionen, Beziehungen, Medien, Favoriten und Sammelbearbeitung.",
     detailIntro:
       "Ein Familienkeller braucht andere Angaben als ein Gerätepark. Open Inventory gibt deshalb kein starres Branchenschema vor: Du kombinierst stabile Typen, eigene Felder, Beziehungen, Standorte und Medien zu einem Modell, das verständlich bleibt und per API nutzbar ist.",
     outcomes: [
@@ -294,27 +299,37 @@ export const featureGroups: FeatureGroup[] = [
         copy: "Eine kanonische Sprache, feldgenaue Aktualität, Terminologiehinweise und Hintergrund-Regeneration halten KI-gestützte Übersetzungen kontrollierbar und konsistent.",
       },
       {
-        icon: Search,
+        icon: Heart,
         title: "Suchen, filtern, bearbeiten",
-        copy: "Durchsuche die responsive Raster- oder Tabellenansicht, filtere Bestände und ändere gemeinsame Felder oder zusätzliche Tags für mehrere Einträge in einem Schritt.",
+        copy: "Durchsuche die responsive Raster- oder Tabellenansicht, markiere häufig benötigte Einträge als Favoriten und ändere gemeinsame Felder oder Tags gesammelt.",
+      },
+      {
+        icon: Layers3,
+        title: "Variantenfamilien & Optionen",
+        copy: "Verbinde vorhandene Einträge als Varianten oder erzeuge Konfigurationen aus Optionsgruppen. Jede Variante bleibt ein vollständiger Eintrag mit eigener SKU, eigenem Barcode und Bestand.",
+      },
+      {
+        icon: Link2,
+        title: "Beziehungs- & Kostenstruktur",
+        copy: "Visualisiere Familien, Stücklisten, Enthaltensein und weitere Verbindungen über mehrere Ebenen. Die optionale Kostenansicht macht Materialanteile entlang der Struktur sichtbar.",
       },
     ],
   },
   {
     slug: "bestand-ausleihe",
-    menuTitle: "Bestand & Ausleihe",
+    menuTitle: "Bestand & Vorgänge",
     eyebrow: "03 · Lagern & bewegen",
     title: "Bestand mit belastbarer Historie",
     intro:
-      "Open Inventory verbindet schnelle Alltagsaktionen mit einem unveränderlichen Ledger – vom einzelnen Kabel bis zum serialisierten Gerät.",
+      "Open Inventory verbindet schnelle Alltagsaktionen mit einer nachvollziehbaren Historie – vom einzelnen Kabel bis zu Einkauf, Verkauf und Ausleihe.",
     description:
-      "Bestände, Ausleihen und Lagerorte verwalten: Mengen- und Einzelbestand, append-only Bewegungen, Inventur, Reservierungen, Einkauf und Stücklisten.",
+      "Bestände und Vorgänge verwalten: Mengen- und Einzelbestand, Bewegungen, Inventur, interne Anfragen, Einkauf, Verkauf, Ausleihe, Kosten und Stücklisten.",
     detailIntro:
       "Schrauben brauchen eine Menge, ein Laptop eine eigene Identität. Open Inventory führt beides im selben System und schreibt jede Veränderung als datierte Bewegung fort. So bleiben aktueller Bestand und sein Zustandekommen gemeinsam nachvollziehbar.",
     outcomes: [
       "Bulk-Artikel und einzelne Geräte passend zu ihrem tatsächlichen Ablauf führen",
       "Ausgabe, Rückgabe, Transfer und Korrektur ohne überschriebene Historie buchen",
-      "Mindestbestand, Bestellungen, Wareneingänge und Baugruppen zusammen denken",
+      "Anfragen, Bestellungen, Verkäufe, Ausleihen, Kosten und Baugruppen zusammen denken",
     ],
     workflowTitle: "Jede Bewegung hat einen klaren Anlass",
     workflowIntro:
@@ -378,7 +393,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: History,
         title: "Lückenlose Bewegungen",
-        copy: "Zugänge, Abgänge, Korrekturen und Transfers werden datiert und append-only protokolliert. Bestände können nicht unter null fallen; Korrekturen überschreiben die Historie nicht.",
+        copy: "Zugänge, Abgänge, Korrekturen und Transfers werden datiert protokolliert. Die Organisationsrichtlinie entscheidet, ob Negativbestand erlaubt ist; Korrekturen bleiben in der Historie sichtbar.",
       },
       {
         icon: MapPinned,
@@ -392,8 +407,8 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         icon: Users,
-        title: "Ausgabe, Zuweisung & Reservierung",
-        copy: "Buche Mengen oder Einzelgeräte auf Benutzer, andere Inventareinträge oder freie Empfänger. Rückgabe und Storno stellen die Verfügbarkeit nachvollziehbar wieder her.",
+        title: "Ausleihen & mehrteilige Vorgänge",
+        copy: "Bündele mehrere Mengen oder Seriennummern pro Kontakt. Ausgabe, Fälligkeit, Teilrückgaben und Storno bleiben für jede Position nachvollziehbar.",
       },
       {
         icon: PackageCheck,
@@ -402,8 +417,18 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         icon: ShoppingCart,
-        title: "Bestellungen & Wareneingang",
-        copy: "Erfasse Bestellungen, erwartete Mengen und Teillieferungen. Wareneingänge fließen kontrolliert in den Bestand und dessen Bewegungshistorie ein.",
+        title: "Einkauf & Verkauf",
+        copy: "Erfasse mehrteilige Einkaufs- und Verkaufsaufträge mit Kontakten, Preisen und Teilmengen. Wareneingang und Ausgabe fließen kontrolliert in die Bewegungshistorie ein.",
+      },
+      {
+        icon: CalendarRange,
+        title: "Interne Anfragen & Kalender",
+        copy: "Plane zukünftigen Bedarf, genehmige oder lehne Anfragen ab und reserviere Bestand bis zur Erfüllung. Der Kalender macht kommende Belegungen sichtbar.",
+      },
+      {
+        icon: CircleDollarSign,
+        title: "Kosten & Verpackungseinheiten",
+        copy: "Speichere Preise an Bewegungen, verfolge Bestands- und Materialkosten und rechne gekaufte Rollen, Kartons oder Kanister in die jeweilige Basiseinheit um.",
       },
       {
         icon: Layers3,
@@ -485,7 +510,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: QrCode,
         title: "QR- und Barcode-Workflows",
-        copy: "Scanne mit Kamera oder Foto, löse Inventarlinks, UUIDs, SKUs und Seriennummern auf und prüfe konfigurierbare Lageraktionen vor der idempotenten Ausführung.",
+        copy: "Scanne mit Kamera oder Foto, löse Inventarlinks, UUIDs, SKUs und Seriennummern auf und gestalte konfigurierbare Aktionsabläufe mit Vorschau, Eingaben und bestätigter Ausführung.",
       },
       {
         icon: Barcode,
@@ -511,6 +536,11 @@ export const featureGroups: FeatureGroup[] = [
         icon: Braces,
         title: "Dokumentierte REST-API",
         copy: "Die eingecheckte OpenAPI-3.1-Spezifikation, interaktive Referenz und gehashte, widerrufbare Tokens mit Ablaufdatum und Scopes machen Integrationen planbar.",
+      },
+      {
+        icon: Store,
+        title: "WooCommerce-Bestandssync",
+        copy: "Ordne Shop-Positionen per exakter SKU dem Mengenbestand zu. Webhooks buchen Bestellungen aus und gleichen Rückerstattungen oder Stornos mit nachvollziehbaren Gegenbuchungen ab.",
       },
     ],
   },
@@ -604,6 +634,11 @@ export const featureGroups: FeatureGroup[] = [
         title: "Navigierbare Räume 3D",
         copy: "Der Web-Viewer zeigt die gemessene RoomPlan-Struktur, durchsuchbare Inventarmarker und optional bereitgestellte fotorealistische Derivate – mit klarer Trennung der Koordinatensysteme.",
       },
+      {
+        icon: WandSparkles,
+        title: "Raumfotos & geschätzte Platzierung",
+        copy: "Wähle gezielt Raumfotos für die optionale Analyse. Erkannte Objekte und geschätzte Positionen bleiben überprüfbare Vorschläge, bevor sie in die Raumstruktur übernommen werden.",
+      },
     ],
   },
   {
@@ -614,7 +649,7 @@ export const featureGroups: FeatureGroup[] = [
     intro:
       "Der offene Code gibt Kontrolle. Rollen, Tokens, persistente Daten und explizite Provider-Grenzen machen daraus einen betreibbaren Dienst.",
     description:
-      "Open Inventory selbst hosten und kontrolliert betreiben: Rollen und Regeln, Docker Compose, PostgreSQL, persistente Uploads und MIT-lizenzierter Quellcode.",
+      "Open Inventory kontrolliert betreiben: Organisationen, Rollen, OIDC, Offline-Kopien, KI-Kostenlimits, Docker Compose, PostgreSQL und MIT-lizenzierter Quellcode.",
     detailIntro:
       "Self-hosting verlagert Kontrolle und Verantwortung zur betreibenden Organisation. Open Inventory liefert dafür einen nachvollziehbaren Stack mit Compose-Dateien, Migrationen, Healthcheck, PostgreSQL und persistenten Uploads. Backups, Updates, TLS und Zugriffswege bleiben bewusste Betriebsaufgaben.",
     outcomes: [
@@ -679,7 +714,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: ShieldCheck,
         title: "Rollen & bedingte Regeln",
-        copy: "Verwalte lokale Konten, eigene Rollen, granulare Berechtigungen und inhaltsabhängige Zugriffsregeln. Auth0 kann optional als Identitätsanbieter ergänzt werden.",
+        copy: "Verwalte lokale Konten, eigene Rollen, granulare Berechtigungen und inhaltsabhängige Zugriffsregeln. Für die Anmeldung lassen sich Auth0 oder ein standardkonformer OpenID-Connect-Provider ergänzen.",
       },
       {
         icon: Container,
@@ -690,6 +725,21 @@ export const featureGroups: FeatureGroup[] = [
         icon: Database,
         title: "Wählbarer Dateispeicher",
         copy: "Speichere Uploads standardmäßig im persistenten lokalen Volume oder binde optional Openinary an. Datenbank und Dateien werden gemeinsam gesichert.",
+      },
+      {
+        icon: Users,
+        title: "Mehrere Organisationen",
+        copy: "Trenne Arbeitsbereiche, Daten und Mitgliedschaften innerhalb einer Bereitstellung. Rollen und Rechte gelten jeweils in der ausgewählten Organisation.",
+      },
+      {
+        icon: CircleDollarSign,
+        title: "KI-Nutzung & Monatslimit",
+        copy: "Sieh geschätzte Kosten nach Aktion, Provider und Status. Ein Organisationslimit wird vor jedem kostenpflichtigen KI-Aufruf geprüft und kann KI-Ausgaben vollständig stoppen.",
+      },
+      {
+        icon: WifiOff,
+        title: "Kontrollierte Offline-Kopien",
+        copy: "Halte ausgewählte Ansichten auf einem vertrauenswürdigen Gerät offline verfügbar. Beim Deaktivieren oder Abmelden werden die lokal gespeicherten Kopien entfernt.",
       },
       {
         icon: Github,

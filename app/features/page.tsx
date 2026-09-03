@@ -32,14 +32,14 @@ export async function generateMetadata(): Promise<Metadata> {
     ? {
         title: "Features and implementation details — Open Inventory",
         description:
-          "Technical reference for capture queues, typed inventory records, stock movements, labels, spatial data, self-hosting and the native iOS client.",
+          "Technical reference for capture queues, variants, stock operations, internal requests, WooCommerce, spatial data, self-hosting and the native iOS client.",
         openGraphDescription:
           "How Open Inventory implements capture, stock, labels, spatial data, operations and its native iOS client.",
       }
     : {
         title: "Alle Funktionen — Open Inventory",
         description:
-          "Von der Fotoerfassung über Lagerbewegungen und QR-Etiketten bis zur offenen API: alle Funktionen von Open Inventory verständlich erklärt.",
+          "Von Fotoerfassung, Varianten und Lagerbewegungen über Einkauf, Verkauf, Ausleihe und WooCommerce bis zur offenen API: alle Funktionen verständlich erklärt.",
         openGraphDescription:
           "Inventarisieren in Sekunden statt Stunden – mit Fotoerfassung, Lagerverwaltung, iOS-App und offener API.",
       };
@@ -109,7 +109,7 @@ export default async function FeaturesPage() {
               <p className="mt-7 max-w-xl text-[17px] leading-8 text-muted">
                 Fotografieren, prüfen, fertig. Open Inventory macht die erste
                 Erfassung schnell und bleibt stark, wenn dein Bestand wächst –
-                vom Familienkeller bis zum Makerspace.
+                vom Familienkeller bis zu Einkauf, Verkauf und Ausleihe im Team.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
@@ -152,7 +152,7 @@ export default async function FeaturesPage() {
           <div className="mx-auto grid max-w-[1240px] gap-8 px-5 sm:grid-cols-3 sm:px-8">
             {[
               ["1 Foto", "startet einen prüfbaren Datensatz"],
-              ["1 Scan", "findet Objekt oder Lageraktion"],
+              ["3 Vorgangsarten", "für Einkauf, Verkauf und Ausleihe"],
               ["1 offener Stack", "Web, iOS und API im Repository"],
             ].map(([value, label]) => (
               <div key={value} className="border-l-2 border-brand-border pl-5">
@@ -204,6 +204,11 @@ export default async function FeaturesPage() {
                   src: "/marketing/screenshots/web-stock.png",
                   title: "Bestand und Bewegungen buchen",
                   copy: "Zu- und Abgänge, Lagerorte und Historie direkt am Datensatz.",
+                },
+                {
+                  src: "/marketing/screenshots/web-orders.png",
+                  title: "Einkäufe als Vorgang verwalten",
+                  copy: "Offene Positionen, Teillieferungen, erwartete Mengen und Wareneingänge zusammenführen.",
                 },
                 {
                   src: "/marketing/screenshots/web-label-designer.png",

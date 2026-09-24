@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { VariantStockGuide } from "@/components/marketing/variant-stock-guide";
 import { CopyInstallCommand } from "@/components/marketing/copy-install-command";
 import {
   MarketingFooter,
@@ -70,6 +71,7 @@ const navigation = [
   { label: "Configuration", href: "#configuration" },
   { label: "Authentication", href: "#authentication" },
   { label: "API", href: "#api" },
+  { label: "Variants & assembly", href: "#variant-stock" },
   { label: "Operations", href: "#operations" },
 ];
 
@@ -527,6 +529,8 @@ export default async function DocsPage() {
                 </a>
               </div>
             </section>
+
+            <VariantStockGuide locale="en" />
 
             <section id="operations" className="scroll-mt-24 pt-16">
               <SectionHeading eyebrow="05 · Operations" title="Make durability part of the deployment.">

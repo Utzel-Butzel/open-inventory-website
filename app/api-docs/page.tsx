@@ -38,6 +38,7 @@ export default async function ApiDocsPage() {
         json: "JSON öffnen",
         yaml: "YAML öffnen",
         reference: "Interaktive API-Referenz",
+        variants: "Anleitung: Varianten fertigen und ausbuchen",
       }
     : {
         eyebrow: "Developer reference",
@@ -46,6 +47,7 @@ export default async function ApiDocsPage() {
         json: "Open JSON",
         yaml: "Open YAML",
         reference: "Interactive API reference",
+        variants: "Guide: build and issue variants",
       };
 
   return (
@@ -69,6 +71,9 @@ export default async function ApiDocsPage() {
                 <p className="mt-6 max-w-2xl text-[16px] leading-7 text-white/55 sm:text-[17px]">
                   {copy.intro}
                 </p>
+                <Link href={marketingHref(locale, "/docs#variant-stock")} className="mt-4 inline-block text-sm font-semibold text-[#a69fff] hover:underline">
+                  {copy.variants}
+                </Link>
                 <div className="mt-5 flex items-start gap-2.5 text-sm leading-6 text-white/55">
                   <KeyRound className="mt-1 size-4 shrink-0 text-[#9188ff]" />
                   <p>

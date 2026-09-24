@@ -19,6 +19,7 @@ import {
   MarketingFooter,
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
+import { VariantStockGuide } from "@/components/marketing/variant-stock-guide";
 import { HeroVideo } from "@/components/marketing/hero-video";
 import {
   marketingHref,
@@ -197,6 +198,7 @@ const germanTechnicalPageCopy: Record<"docs" | "api-docs" | "imprint", Marketing
       { title: "5. Daten persistent halten", copy: "PostgreSQL-Daten und Uploads gehören auf dauerhafte Volumes oder in einen ausdrücklich konfigurierten Objektspeicher." },
       { title: "6. Zugriff absichern", copy: "Beende TLS an einem Reverse Proxy und beschränke Datenbank und Speicher auf vertrauenswürdige Netze." },
       { title: "7. Wiederherstellung testen", copy: "Ein Backup ist erst belastbar, wenn die Wiederherstellung mit der betriebenen Anwendungsversion getestet wurde." },
+      { title: "Varianten fertigen und ausbuchen", copy: "Zielvarianten bauen, Einzelbestände und Familiensummen lesen und Fertigartikel über die API ausbuchen.", href: "/docs#variant-stock" },
     ],
   },
   "api-docs": {
@@ -353,6 +355,12 @@ function MarketingPageContent({
             </div>
           </div>
         </section>
+
+        {kind === "docs" ? (
+          <div className="mx-auto max-w-[900px] px-5 sm:px-8">
+            <VariantStockGuide locale={locale} />
+          </div>
+        ) : null}
 
         <section className="border-y border-border bg-background py-16 sm:py-20">
           <div className="mx-auto flex max-w-[960px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between">

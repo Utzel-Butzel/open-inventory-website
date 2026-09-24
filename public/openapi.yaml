@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Inventory API
-  version: 1.20.0
+  version: 1.21.0
   description: >-
     Organization-scoped API for configurable inventory structures, localized
     content, indoor 3D room scans, location-aware stock, cycle counts,
@@ -50,7 +50,7 @@ tags:
   - name: Purchasing
     description: Purchase orders, incoming quantities, and stock receipts.
   - name: Orders
-    description: Shared purchase, sales, and multi-item loan workflows with line-linked stock movements.
+    description: Shared purchase, sales, and multi-item loan workflows with line-linked stock movements, outbound parcels, and shipment history.
   - name: Scan workflows
     description: Configurable scan actions and execution.
   - name: Media
@@ -238,7 +238,7 @@ paths:
         "503": { description: Integration credential encryption is not configured }
     patch:
       tags: [Integrations]
-      summary: Enable or disable WooCommerce order stock sync
+      summary: Enable or disable WooCommerce order synchronization
       description: Creates or removes signed order.created and order.updated webhooks in WooCommerce. Enabling requires a public HTTPS AUTH_URL and a Consumer Key with write access.
       security: [{ adminSession: [] }]
       requestBody:
@@ -248,7 +248,7 @@ paths:
             schema: { $ref: "#/components/schemas/WooCommerceSyncPatch" }
       responses:
         "200":
-          description: Stock sync state updated
+          description: Order synchronization state updated
           content:
             application/json:
               schema: { $ref: "#/components/schemas/WooCommerceConnectionStatusResponse" }
@@ -291,8 +291,8 @@ paths:
       - { $ref: "#/components/parameters/OrganizationId" }
     post:
       tags: [Integrations]
-      summary: Reconcile one WooCommerce order or retry orders with issues
-      description: Fetches canonical order and refund data from WooCommerce, maps exact item or variant SKUs, and writes idempotent issue or return stock movements. Omitting orderId retries up to 20 recorded orders with issues.
+      summary: Import recent WooCommerce orders, reconcile one order, or retry issues
+      description: Fetches canonical order and refund data from WooCommerce, projects the customer and sales order into Inventory, maps exact item or variant SKUs, and writes idempotent issue or return stock movements. Set window to last-7-days for a read-only WooCommerce import based on order creation time. Omitting both fields retries up to 20 recorded orders with issues.
       security: [{ adminSession: [] }]
       requestBody:
         required: false
@@ -348,7 +348,7 @@ paths:
         "200": { description: Delivery authenticated and reconciled, or safely recognized as a duplicate }
         "400": { description: Invalid JSON or unsupported topic }
         "401": { description: Invalid signature or unknown WooCommerce webhook ID }
-        "410": { description: Stock sync is disabled }
+        "410": { description: WooCommerce order synchronization is disabled }
         "413": { description: Payload exceeds one megabyte }
         "422": { description: Payload has no valid order ID }
         "502": { description: Canonical WooCommerce order retrieval failed and the delivery may be retried }
@@ -2545,93 +2545,7 @@ paths:
         "403": { description: Missing inventory create or primary-item update access }
         "409": { description: Variants already exist, generation already ran, or the primary is archived }
         "422": { description: Invalid option matrix or circular effective BOM }
-  /resources/{id}/variants:
-    parameters:
-      - { $ref: "#/components/parameters/OrganizationId" }
-      - { $ref: "#/components/parameters/ResourceId" }
-    get:
-      tags: [Resources, Stock]
-      summary: List legacy bulk-stock variants for an inventory item
-      deprecated: true
-      responses:
-        "200":
-          description: Variants and the allocated/unallocated parent stock summary
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [variants, summary, trackingMode]
-                properties:
-                  variants: { type: array, items: { $ref: "#/components/schemas/ResourceVariant" } }
-                  summary: { $ref: "#/components/schemas/ResourceVariantStockSummary" }
-                  trackingMode: { type: string, enum: [bulk, serialized] }
-        "404": { $ref: "#/components/responses/NotFound" }
-    post:
-      tags: [Resources, Stock]
-      summary: Add a legacy bulk-stock variant and optionally allocate existing parent stock
-      deprecated: true
-      description: Variants are bulk-only. `initialAllocation` moves existing unallocated parent stock into the variant without changing the parent total.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/ResourceVariantInput" }
-      responses:
-        "201": { description: Variant created }
-        "409": { description: Identifier conflict, serialized tracking, or insufficient unallocated stock }
-        "422": { description: Invalid variant }
-  /resources/{id}/variants/{variantId}:
-    parameters:
-      - { $ref: "#/components/parameters/OrganizationId" }
-      - { $ref: "#/components/parameters/ResourceId" }
-      - name: variantId
-        in: path
-        required: true
-        schema: { type: string, format: uuid }
-    patch:
-      tags: [Resources]
-      summary: Update variant identity or price fields
-      deprecated: true
-      description: Quantity cannot be patched; use a dated variant stock movement.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/ResourceVariantPatch" }
-      responses:
-        "200": { description: Variant updated }
-        "404": { $ref: "#/components/responses/NotFound" }
-        "409": { description: SKU or barcode is already used }
-    delete:
-      tags: [Resources]
-      summary: Delete an unused zero-stock variant
-      deprecated: true
-      responses:
-        "204": { description: Variant deleted }
-        "409": { description: Variant has stock or movement history }
-  /resources/{id}/variants/{variantId}/stock/movements:
-    parameters:
-      - { $ref: "#/components/parameters/OrganizationId" }
-      - { $ref: "#/components/parameters/ResourceId" }
-      - name: variantId
-        in: path
-        required: true
-        schema: { type: string, format: uuid }
-    post:
-      tags: [Stock]
-      summary: Book an atomic parent and variant stock movement
-      deprecated: true
-      description: The signed delta updates parent and variant quantities together and appends one dated stock-ledger row.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/ResourceVariantStockMovementInput" }
-      responses:
-        "201": { description: Parent and variant stock updated atomically }
-        "404": { $ref: "#/components/responses/NotFound" }
-        "409": { description: Insufficient stock, serialized tracking, or maximum quantity exceeded }
-        "422": { description: Invalid stock movement }
+
   /resources/{id}/translations:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -2765,7 +2679,7 @@ paths:
     get:
       tags: [Resources]
       summary: Resolve a scanned QR or barcode to an inventory item
-      description: Accepts an item UUID, Inventory resource URL, item or variant SKU/barcode, or serial number. Variant matches include a `variant` object.
+      description: Accepts an item UUID, Inventory resource URL, item or variant SKU/barcode, or serial number. Variants are ordinary resources and return their own resource ID.
       parameters:
         - name: code
           in: query
@@ -2781,8 +2695,7 @@ paths:
                 required: [resource, matchedBy]
                 properties:
                   resource: { $ref: "#/components/schemas/Resource" }
-                  variant: { $ref: "#/components/schemas/ResourceVariant" }
-                  matchedBy: { type: string, enum: [id, sku, barcode, serialNumber, variantSku, variantBarcode] }
+                  matchedBy: { type: string, enum: [id, sku, barcode, serialNumber] }
         "404": { $ref: "#/components/responses/NotFound" }
         "409": { description: Serial number is ambiguous }
   /stock:
@@ -2814,6 +2727,183 @@ paths:
                   items:
                     type: array
                     items: { $ref: "#/components/schemas/StockOverviewItem" }
+  /stock/scan-workflows/{workflowId}/runner:
+    parameters:
+      - &a1
+        $ref: "#/components/parameters/OrganizationId"
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: &a3
+        - Scan workflows
+      summary: Load targets, variants and conditional inputs for an action chain
+      responses: &a4
+        "200":
+          description: "Runner configuration in workflow: id, name, description,
+            extraction, codeTypes, inputFields, targetSelectionMode, fixedCode,
+            action summaries and targetGroups"
+        "404":
+          description: Flow unavailable or has no action chain
+    post:
+      tags: [Scan workflows]
+      summary: Prepare a native scan and return the server-extracted identifier
+      description: Requires workflows.read. Returns the runner configuration plus identifier. Validates the code type and extraction rules without changing stock or requiring form inputs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [code]
+              properties:
+                code: { type: string, minLength: 1, maxLength: 2048 }
+                codeType:
+                  type: [string, "null"]
+                  enum: [qr_code, data_matrix, aztec, pdf417, code_128, code_93, code_39, codabar, ean_13, ean_8, upc_a, upc_e, itf, null]
+      responses:
+        "200": { description: Runner configuration including the extracted identifier }
+        "404": { description: Flow unavailable }
+        "422": { description: Invalid code type or code does not match extraction rules }
+  /stock/action-chains/preview:
+    parameters: &a2
+      - *a1
+    post:
+      tags:
+        - Scan workflows
+      summary: Preview all actions without committing changes
+      description: Requires workflows.read. Runs the complete chain and rolls it back,
+        returning planHash. Conditions and component selections are evaluated in
+        order.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActionChainRunInput"
+      responses:
+        "200":
+          description: Reviewed plan or previously completed execution
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionChainRunReport"
+        "404":
+          description: Flow or target unavailable
+        "409":
+          description: Stale preview, stock conflict or idempotency mismatch
+        "422":
+          description: Invalid input or failed action, with actionId in details
+  /stock/action-chains/execute:
+    parameters: *a2
+    post:
+      tags:
+        - Scan workflows
+      summary: Confirm all actions in one transaction
+      description: Requires workflows.manage, an Idempotency-Key UUID and the exact
+        reviewed inputs with expectedPlanHash. Stale plans return 409. Stock,
+        units, manufacturing records, audit and webhook outbox commit together.
+        oncePerCode also deduplicates workflow + identifier + selected target set.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActionChainRunInput"
+      responses:
+        "200":
+          description: Idempotent replay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionChainRunReport"
+        "201":
+          description: All actions committed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionChainRunReport"
+        "404":
+          description: Flow or target unavailable
+        "409":
+          description: Stale preview, stock conflict or idempotency mismatch
+        "422":
+          description: Invalid input or failed action, with actionId in details
+  /public/action-flows/{triggerId}/chain:
+    servers:
+      - url: /api
+    parameters:
+      - name: triggerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: *a3
+      summary: Load targets, variants and conditional inputs for an action chain
+      responses: *a4
+      security: []
+  /public/action-flows/{triggerId}/chain/{mode}:
+    servers:
+      - url: /api
+    parameters:
+      - name: triggerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: mode
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+            - preview
+            - execute
+    post:
+      tags:
+        - Scan workflows
+      summary: Preview or confirm an enabled public action chain
+      description: Same-origin, rate-limited public endpoint. The trigger must remain
+        enabled. The configured fixed code overrides submitted code. Preview does
+        not need an Idempotency-Key; execute requires a UUID key and
+        expectedPlanHash. All actions roll back on failure.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActionChainRunInput"
+      responses:
+        "200":
+          description: Idempotent replay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionChainRunReport"
+        "201":
+          description: All actions committed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionChainRunReport"
+        "404":
+          description: Flow or target unavailable
+        "409":
+          description: Stale preview, stock conflict or idempotency mismatch
+        "422":
+          description: Invalid input or failed action, with actionId in details
+      security: []
   /stock/scan-workflows:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -3888,6 +3978,78 @@ paths:
         "200": { description: Order updated }
         "409": { description: Completed or cancelled orders cannot be reopened }
         "422": { description: Invalid type-specific status or contact role }
+  /orders/{orderId}/shipments:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: orderId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Orders]
+      summary: List outbound parcels for a sales order
+      responses:
+        "200":
+          description: Shipments with lines, serialized units, and immutable status history
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [shipments]
+                properties:
+                  shipments:
+                    type: array
+                    items: { $ref: "#/components/schemas/Shipment" }
+    post:
+      tags: [Orders]
+      summary: Create an outbound parcel from fulfilled sales-order lines
+      description: Assigns fulfilled bulk quantities and concrete serialized units to a parcel. This endpoint records Inventory shipping data and does not write to WooCommerce.
+      parameters:
+        - { $ref: "#/components/parameters/RequiredIdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ShipmentInput" }
+      responses:
+        "200": { description: Replayed the original shipment response }
+        "201": { description: Shipment created }
+        "400": { description: Missing or invalid Idempotency-Key }
+        "409": { description: Quantity, serialized-unit, tracking-number, or idempotency conflict }
+        "422": { description: Invalid shipment, line, or order type }
+  /orders/{orderId}/shipments/{shipmentId}:
+    parameters:
+      - { $ref: "#/components/parameters/OrganizationId" }
+      - name: orderId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+      - name: shipmentId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Orders]
+      summary: Update shipment details or advance its delivery status
+      description: Records every change in the shipment event history. Entering shipped or delivered records the effective timestamp automatically unless occurredAt is supplied.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ShipmentPatch" }
+      responses:
+        "200":
+          description: Shipment updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [shipment]
+                properties:
+                  shipment: { $ref: "#/components/schemas/Shipment" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: Invalid lifecycle transition or duplicate tracking number }
+        "422": { description: Invalid shipment details or timestamp }
   /orders/{orderId}/lines/{lineId}/movements:
     parameters:
       - { $ref: "#/components/parameters/OrganizationId" }
@@ -4504,10 +4666,20 @@ components:
       properties:
         syncEnabled: { type: boolean }
     WooCommerceManualSyncRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        orderId: { type: integer, minimum: 1 }
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [orderId]
+          properties:
+            orderId: { type: integer, minimum: 1 }
+        - type: object
+          additionalProperties: false
+          required: [window]
+          properties:
+            window: { type: string, const: last-7-days }
+        - type: object
+          additionalProperties: false
+          maxProperties: 0
     WooCommerceOrderLineIssue:
       type: object
       additionalProperties: false
@@ -4520,9 +4692,10 @@ components:
     WooCommerceOrderSync:
       type: object
       additionalProperties: false
-      required: [orderId, orderNumber, orderStatus, status, totalLines, syncedLines, lastError, updatedAt, issues]
+      required: [orderId, localOrderId, orderNumber, orderStatus, status, totalLines, syncedLines, lastError, updatedAt, issues]
       properties:
         orderId: { type: integer, minimum: 1 }
+        localOrderId: { type: [string, "null"], format: uuid }
         orderNumber: { type: string }
         orderStatus: { type: string }
         status: { type: string, enum: [succeeded, partial, failed] }
@@ -6094,6 +6267,10 @@ components:
       required: [quantity]
       additionalProperties: false
       properties:
+        outputResourceId:
+          type: string
+          format: uuid
+          description: Finished item to credit. Must be the requested item or a direct variant. For primary items with variants, omit only when componentResourceSelections identifies exactly one variant by its complete effective BOM. Explicitly use the primary ID for unassigned output. Ambiguous or unmatched selections return 422.
         quantity: { type: integer, minimum: 1, maximum: 1000 }
         occurredAt: { type: string, format: date-time }
         location: { type: [string, "null"], maxLength: 240 }
@@ -6305,7 +6482,7 @@ components:
               items: { $ref: "#/components/schemas/OrderLineUnit" }
     Order:
       type: object
-      required: [id, type, contactName, status, orderedAt, lines, totalQuantity, totalFulfilled, totalReturned, totalReserved]
+      required: [id, type, contactName, status, orderedAt, lines, shipments, totalQuantity, totalFulfilled, totalReturned, totalReserved]
       properties:
         id: { type: string, format: uuid }
         type: { $ref: "#/components/schemas/OrderType" }
@@ -6317,10 +6494,110 @@ components:
         expectedAt: { type: [string, "null"], format: date-time }
         note: { type: string }
         lines: { type: array, items: { $ref: "#/components/schemas/OrderLine" } }
+        shipments: { type: array, items: { $ref: "#/components/schemas/Shipment" } }
         totalQuantity: { type: integer, minimum: 0 }
         totalFulfilled: { type: integer, minimum: 0 }
         totalReturned: { type: integer, minimum: 0 }
         totalReserved: { type: integer, minimum: 0 }
+    ShipmentStatus:
+      type: string
+      enum: [draft, ready, shipped, in_transit, delivered, exception, returned, cancelled]
+    ShipmentLineInput:
+      type: object
+      additionalProperties: false
+      required: [orderLineId, quantity]
+      properties:
+        orderLineId: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1, maximum: 2000000000 }
+        unitIds:
+          type: array
+          maxItems: 100
+          uniqueItems: true
+          description: Concrete stock-unit ids; required one-for-one for serialized lines and forbidden for bulk lines.
+          items: { type: string, format: uuid }
+    ShipmentInput:
+      type: object
+      additionalProperties: false
+      required: [carrierCode, lines]
+      properties:
+        carrierCode: { type: string, pattern: "^[a-z0-9][a-z0-9_-]{0,39}$" }
+        service: { type: [string, "null"], minLength: 1, maxLength: 120 }
+        trackingNumber: { type: [string, "null"], minLength: 1, maxLength: 180 }
+        trackingUrl: { type: [string, "null"], format: uri, maxLength: 2048, description: HTTPS only. Known carriers receive a default URL when omitted. }
+        status: { type: string, enum: [draft, ready], default: draft }
+        note: { type: string, maxLength: 20000 }
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items: { $ref: "#/components/schemas/ShipmentLineInput" }
+    ShipmentPatch:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        carrierCode: { type: string, pattern: "^[a-z0-9][a-z0-9_-]{0,39}$" }
+        service: { type: [string, "null"], minLength: 1, maxLength: 120 }
+        trackingNumber: { type: [string, "null"], minLength: 1, maxLength: 180 }
+        trackingUrl: { type: [string, "null"], format: uri, maxLength: 2048, description: HTTPS only. }
+        status: { $ref: "#/components/schemas/ShipmentStatus" }
+        occurredAt: { type: string, format: date-time, description: Effective status timestamp; requires status. }
+        note: { type: string, maxLength: 20000 }
+        eventNote: { type: string, maxLength: 2000 }
+    ShipmentUnit:
+      type: object
+      required: [orderLineUnitId, stockUnitId, code]
+      properties:
+        orderLineUnitId: { type: string, format: uuid }
+        stockUnitId: { type: string, format: uuid }
+        code: { type: string, maxLength: 180 }
+    ShipmentLine:
+      type: object
+      required: [id, orderLineId, resourceId, resourceName, quantity, units]
+      properties:
+        id: { type: string, format: uuid }
+        orderLineId: { type: string, format: uuid }
+        resourceId: { type: string, format: uuid }
+        resourceName: { type: string }
+        quantity: { type: integer, minimum: 1 }
+        units:
+          type: array
+          items: { $ref: "#/components/schemas/ShipmentUnit" }
+    ShipmentEvent:
+      type: object
+      required: [id, fromStatus, toStatus, note, actor, occurredAt]
+      properties:
+        id: { type: string, format: uuid }
+        fromStatus: { anyOf: [{ $ref: "#/components/schemas/ShipmentStatus" }, { type: "null" }] }
+        toStatus: { $ref: "#/components/schemas/ShipmentStatus" }
+        note: { type: string }
+        actor: { type: [string, "null"] }
+        occurredAt: { type: string, format: date-time }
+    Shipment:
+      type: object
+      required: [id, orderId, carrierCode, service, trackingNumber, trackingUrl, status, shippedAt, deliveredAt, note, createdBy, updatedBy, createdAt, updatedAt, lines, events, totalQuantity]
+      properties:
+        id: { type: string, format: uuid }
+        orderId: { type: string, format: uuid }
+        carrierCode: { type: string }
+        service: { type: [string, "null"] }
+        trackingNumber: { type: [string, "null"] }
+        trackingUrl: { type: [string, "null"], format: uri }
+        status: { $ref: "#/components/schemas/ShipmentStatus" }
+        shippedAt: { type: [string, "null"], format: date-time }
+        deliveredAt: { type: [string, "null"], format: date-time }
+        note: { type: string }
+        createdBy: { type: [string, "null"] }
+        updatedBy: { type: [string, "null"] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        lines:
+          type: array
+          items: { $ref: "#/components/schemas/ShipmentLine" }
+        events:
+          type: array
+          items: { $ref: "#/components/schemas/ShipmentEvent" }
+        totalQuantity: { type: integer, minimum: 1 }
     OrderLineMovementInput:
       type: object
       additionalProperties: false
@@ -6572,11 +6849,671 @@ components:
         value: { type: string, minLength: 1, maxLength: 120 }
         label: { type: string, minLength: 1, maxLength: 120 }
         color: { type: string, minLength: 1, maxLength: 32 }
+    ActionChainValue:
+      oneOf:
+        - type: object
+          properties:
+            source:
+              type: string
+              const: literal
+            value:
+              anyOf:
+                - type: string
+                  maxLength: 20000
+                - type: number
+                - type: boolean
+                - type: "null"
+          required:
+            - source
+            - value
+          additionalProperties: false
+        - type: object
+          properties:
+            source:
+              type: string
+              const: scan
+            field:
+              type: string
+              enum:
+                - identifier
+                - raw
+          required:
+            - source
+            - field
+          additionalProperties: false
+        - type: object
+          properties:
+            source:
+              type: string
+              const: input
+            key:
+              type: string
+              pattern: ^[A-Za-z0-9_.-]{1,80}$
+          required:
+            - source
+            - key
+          additionalProperties: false
+        - type: object
+          properties:
+            source:
+              type: string
+              const: result
+            actionId:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            path:
+              type: string
+              pattern: ^(resourceId|unitId|code|found|status|quantity|metadata\.[A-Za-z0-9_.-]{1,80}|customFields\.[A-Za-z0-9_.-]{1,80})$
+          required:
+            - source
+            - actionId
+            - path
+          additionalProperties: false
+    ActionChainConditions:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+            - all
+            - any
+        rules:
+          minItems: 1
+          maxItems: 8
+          type: array
+          items:
+            type: object
+            properties:
+              left:
+                $ref: "#/components/schemas/ActionChainValue"
+              operator:
+                type: string
+                enum:
+                  - equals
+                  - not-equals
+                  - exists
+                  - missing
+                  - gt
+                  - gte
+                  - lt
+                  - lte
+              right:
+                $ref: "#/components/schemas/ActionChainValue"
+            required:
+              - left
+              - operator
+            additionalProperties: false
+      required:
+        - mode
+        - rules
+      additionalProperties: false
+    ActionChainTarget:
+      oneOf:
+        - type: object
+          properties:
+            source:
+              type: string
+              const: selected
+          required:
+            - source
+          additionalProperties: false
+        - type: object
+          properties:
+            source:
+              type: string
+              const: resource
+            resourceId:
+              type: string
+              format: uuid
+              pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          required:
+            - source
+            - resourceId
+          additionalProperties: false
+        - type: object
+          properties:
+            source:
+              type: string
+              const: result
+            actionId:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+          required:
+            - source
+            - actionId
+          additionalProperties: false
+    ActionChainAction:
+      oneOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            target:
+              $ref: "#/components/schemas/ActionChainTarget"
+            code:
+              $ref: "#/components/schemas/ActionChainValue"
+              default:
+                source: scan
+                field: identifier
+            type:
+              type: string
+              const: find-unit
+            allowMissing:
+              default: false
+              type: boolean
+          required:
+            - id
+            - label
+            - target
+            - type
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            target:
+              $ref: "#/components/schemas/ActionChainTarget"
+            code:
+              $ref: "#/components/schemas/ActionChainValue"
+              default:
+                source: scan
+                field: identifier
+            properties:
+              default: []
+              maxItems: 24
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    pattern: ^[A-Za-z0-9_.-]{1,80}$
+                  storage:
+                    type: string
+                    enum:
+                      - metadata
+                      - custom-field
+                  value:
+                    $ref: "#/components/schemas/ActionChainValue"
+                required:
+                  - key
+                  - storage
+                  - value
+                additionalProperties: false
+            applyFlowValues:
+              default: false
+              type: boolean
+            type:
+              type: string
+              const: unit
+            mode:
+              type: string
+              enum:
+                - create
+                - update
+                - upsert
+            status:
+              default: null
+              anyOf:
+                - type: string
+                  enum:
+                    - available
+                    - reserved
+                    - in-use
+                    - maintenance
+                    - consumed
+                    - lost
+                    - retired
+                - type: "null"
+          required:
+            - id
+            - label
+            - target
+            - type
+            - mode
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            target:
+              $ref: "#/components/schemas/ActionChainTarget"
+            code:
+              $ref: "#/components/schemas/ActionChainValue"
+              default:
+                source: scan
+                field: identifier
+            properties:
+              default: []
+              maxItems: 24
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    pattern: ^[A-Za-z0-9_.-]{1,80}$
+                  storage:
+                    type: string
+                    enum:
+                      - metadata
+                      - custom-field
+                  value:
+                    $ref: "#/components/schemas/ActionChainValue"
+                required:
+                  - key
+                  - storage
+                  - value
+                additionalProperties: false
+            applyFlowValues:
+              default: false
+              type: boolean
+            type:
+              type: string
+              const: assembly-build
+            quantity:
+              $ref: "#/components/schemas/ActionChainValue"
+            components:
+              default: []
+              maxItems: 40
+              type: array
+              items:
+                type: object
+                properties:
+                  slotKey:
+                    type: string
+                    pattern: ^[A-Za-z0-9_-]{1,80}$
+                  resource:
+                    $ref: "#/components/schemas/ActionChainValue"
+                  unitFromAction:
+                    type: string
+                    pattern: ^[A-Za-z0-9_-]{1,80}$
+                  choice:
+                    type: object
+                    properties:
+                      inputKey:
+                        type: string
+                        pattern: ^[A-Za-z0-9_.-]{1,80}$
+                      resources:
+                        type: object
+                        propertyNames:
+                          type: string
+                          minLength: 1
+                          maxLength: 120
+                        additionalProperties:
+                          type: string
+                          format: uuid
+                          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    required:
+                      - inputKey
+                      - resources
+                    additionalProperties: false
+                required:
+                  - slotKey
+                additionalProperties: false
+          required:
+            - id
+            - label
+            - target
+            - type
+            - quantity
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            type:
+              type: string
+              const: stock-adjustment
+            target:
+              $ref: "#/components/schemas/ActionChainTarget"
+            delta:
+              $ref: "#/components/schemas/ActionChainValue"
+            factor:
+              default: 1
+              anyOf:
+                - type: number
+                  const: 1
+                - type: number
+                  const: -1
+          required:
+            - id
+            - label
+            - type
+            - target
+            - delta
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            target:
+              $ref: "#/components/schemas/ActionChainTarget"
+            code:
+              $ref: "#/components/schemas/ActionChainValue"
+              default:
+                source: scan
+                field: identifier
+            type:
+              type: string
+              const: set-location
+            location:
+              $ref: "#/components/schemas/ActionChainValue"
+            structured:
+              default: true
+              type: boolean
+          required:
+            - id
+            - label
+            - target
+            - type
+            - location
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            type:
+              type: string
+              const: assert
+            check:
+              $ref: "#/components/schemas/ActionChainConditions"
+            message:
+              type: string
+              minLength: 1
+              maxLength: 500
+          required:
+            - id
+            - label
+            - type
+            - check
+            - message
+          additionalProperties: false
+        - type: object
+          properties:
+            id:
+              type: string
+              pattern: ^[A-Za-z0-9_-]{1,80}$
+            label:
+              type: string
+              minLength: 1
+              maxLength: 160
+            enabled:
+              default: true
+              type: boolean
+            when:
+              default: null
+              anyOf:
+                - $ref: "#/components/schemas/ActionChainConditions"
+                - type: "null"
+            type:
+              type: string
+              const: webhook
+            eventName:
+              type: string
+              minLength: 1
+              maxLength: 120
+            properties:
+              default: []
+              maxItems: 24
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    pattern: ^[A-Za-z0-9_-]{1,80}$
+                  value:
+                    $ref: "#/components/schemas/ActionChainValue"
+                required:
+                  - key
+                  - value
+                additionalProperties: false
+          required:
+            - id
+            - label
+            - type
+            - eventName
+          additionalProperties: false
+    ActionChainRunInput:
+      type: object
+      properties:
+        workflowId:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        code:
+          type: string
+          minLength: 1
+          maxLength: 2048
+        codeType:
+          type: [string, "null"]
+          enum: [qr_code, data_matrix, aztec, pdf417, code_128, code_93, code_39, codabar, ean_13, ean_8, upc_a, upc_e, itf, null]
+        selectedResourceIds:
+          default: []
+          maxItems: 24
+          type: array
+          items:
+            type: string
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        inputs:
+          default: {}
+          type: object
+          propertyNames:
+            type: string
+            maxLength: 80
+          additionalProperties:
+            anyOf:
+              - type: string
+                maxLength: 20000
+              - type: number
+              - type: boolean
+              - maxItems: 12
+                type: array
+                items:
+                  type: string
+                  maxLength: 2048
+        expectedPlanHash:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+      required:
+        - workflowId
+        - code
+      additionalProperties: false
+    ActionChainRunReport:
+      type: object
+      properties:
+        workflowId:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+        revision:
+          type: integer
+          minimum: -9007199254740991
+          maximum: 9007199254740991
+        identifier:
+          type: string
+        planHash:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        replayed:
+          type: boolean
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              label:
+                type: string
+              type:
+                type: string
+              skipped:
+                type: boolean
+              target:
+                anyOf:
+                  - type: string
+                  - type: "null"
+              eventName:
+                type: string
+              code:
+                type: string
+              quantityBefore:
+                type: integer
+                minimum: -9007199254740991
+                maximum: 9007199254740991
+              quantityAfter:
+                type: integer
+                minimum: -9007199254740991
+                maximum: 9007199254740991
+              statusBefore:
+                anyOf:
+                  - type: string
+                  - type: "null"
+              statusAfter:
+                anyOf:
+                  - type: string
+                  - type: "null"
+              locationBefore:
+                anyOf:
+                  - type: string
+                  - type: "null"
+              locationAfter:
+                anyOf:
+                  - type: string
+                  - type: "null"
+              metadata:
+                type: object
+                propertyNames:
+                  type: string
+                additionalProperties: {}
+              customFields:
+                type: object
+                propertyNames:
+                  type: string
+                additionalProperties: {}
+              components:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    quantity:
+                      type: integer
+                      minimum: -9007199254740991
+                      maximum: 9007199254740991
+                    codes:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                    - name
+                    - quantity
+                    - codes
+            required:
+              - id
+              - label
+              - type
+              - skipped
+              - target
+      required:
+        - workflowId
+        - revision
+        - identifier
+        - planHash
+        - steps
     ScanWorkflowInputField:
       type: object
       required: [key, label, required]
       additionalProperties: false
       properties:
+        visibleWhen:
+          anyOf:
+            - $ref: "#/components/schemas/ActionChainConditions"
+            - type: "null"
+          description: May depend only on scan values and earlier visible inputs. Hidden
+            values are ignored, including required fields.
         key: { type: string, minLength: 1, maxLength: 80, pattern: "^[A-Za-z0-9_.-]+$" }
         label: { type: string, minLength: 1, maxLength: 120 }
         required: { type: boolean }
@@ -6595,6 +7532,19 @@ components:
       type: object
       required: [name, resourceId, extraction, identifierPropertyKey]
       properties:
+        actions:
+          type: array
+          maxItems: 24
+          default: []
+          description: Ordered action list. Empty preserves the legacy operation. Results
+            may reference only earlier actions. At least one action must be enabled.
+          items:
+            $ref: "#/components/schemas/ActionChainAction"
+        oncePerCode:
+          type: boolean
+          default: false
+          description: Deduplicate workflow + extracted identifier + selected target set,
+            even with a new execution key.
         name: { type: string, minLength: 1, maxLength: 160 }
         description: { type: string, maxLength: 5000, default: "" }
         enabled: { type: boolean, default: true }
@@ -6651,6 +7601,19 @@ components:
       additionalProperties: false
       description: Current revision plus at least one writable ScanWorkflowInput property.
       properties:
+        actions:
+          type: array
+          maxItems: 24
+          default: []
+          description: Ordered action list. Empty preserves the legacy operation. Results
+            may reference only earlier actions. At least one action must be enabled.
+          items:
+            $ref: "#/components/schemas/ActionChainAction"
+        oncePerCode:
+          type: boolean
+          default: false
+          description: Deduplicate workflow + extracted identifier + selected target set,
+            even with a new execution key.
         revision: { type: integer, minimum: 1 }
         name: { type: string, minLength: 1, maxLength: 160 }
         description: { type: string, maxLength: 5000 }
@@ -6871,6 +7834,10 @@ components:
       required: [workflowId, revision, code, expectedResourceUpdatedAt, expectedUnitId, expectedUnitUpdatedAt]
       additionalProperties: false
       properties:
+        expectedPlanHash:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          description: Required for action chains. Prefer the dedicated action-chains endpoints.
         workflowId: { type: string, format: uuid }
         revision: { type: integer, minimum: 1 }
         code: { type: string, minLength: 1, maxLength: 2048 }
@@ -7586,8 +8553,11 @@ components:
         unitName: { type: string }
     StockDetail:
       type: object
-      required: [resource, config, forecast, procurement, movements, units]
+      required: [resource, family, config, forecast, procurement, movements, units]
       properties:
+        family:
+          description: Individual variant balances and their total including unassigned primary stock, read from the same database snapshot.
+          $ref: "#/components/schemas/ResourceFamily"
         resource:
           type: object
           required: [id, name, type, categories, quantity]
@@ -7603,7 +8573,7 @@ components:
                 properties:
                   name: { type: string }
                   color: { type: string }
-            quantity: { type: integer }
+            quantity: { type: integer, description: "This item’s own stock. For the family total use family.summary.totalQuantity." }
         config: { $ref: "#/components/schemas/StockConfig" }
         forecast: { $ref: "#/components/schemas/StockForecast" }
         procurement:
@@ -7769,7 +8739,7 @@ components:
             enum: [description, type, valueCents, currency, priority, tags, categories, customFields, notes]
     ResourceFamily:
       type: object
-      required: [role, currentResourceId, primary, variants, legacyVariantCount, optionGroupCount, summary]
+      required: [role, currentResourceId, primary, variants, optionGroupCount, summary]
       properties:
         role: { type: string, enum: [primary, variant] }
         currentResourceId: { type: string, format: uuid }
@@ -7777,15 +8747,14 @@ components:
         variants:
           type: array
           items: { $ref: "#/components/schemas/ResourceFamilyMember" }
-        legacyVariantCount: { type: integer, minimum: 0 }
         optionGroupCount: { type: integer, minimum: 0 }
         summary:
           type: object
           required: [totalQuantity, primaryQuantity, variantQuantity, variantCount, serializedVariantCount]
           properties:
-            totalQuantity: { type: integer, minimum: 0 }
-            primaryQuantity: { type: integer, minimum: 0 }
-            variantQuantity: { type: integer, minimum: 0 }
+            totalQuantity: { type: integer }
+            primaryQuantity: { type: integer }
+            variantQuantity: { type: integer }
             variantCount: { type: integer, minimum: 0 }
             serializedVariantCount: { type: integer, minimum: 0 }
     ResourceOptionValueInput:
@@ -7909,67 +8878,6 @@ components:
               id: { type: string, format: uuid }
               name: { type: string }
               sku: { type: [string, "null"] }
-    ResourceVariantInput:
-      type: object
-      additionalProperties: false
-      required: [name]
-      properties:
-        name: { type: string, minLength: 1, maxLength: 240 }
-        sku: { type: [string, "null"], maxLength: 80 }
-        barcode: { type: [string, "null"], maxLength: 180 }
-        priceCents: { type: [integer, "null"], minimum: 0, maximum: 2000000000 }
-        currency: { type: string, minLength: 3, maxLength: 3 }
-        position: { type: integer, minimum: 0, maximum: 100000 }
-        initialAllocation:
-          type: integer
-          minimum: 0
-          maximum: 2000000000
-          default: 0
-    ResourceVariantPatch:
-      type: object
-      additionalProperties: false
-      properties:
-        name: { type: string, minLength: 1, maxLength: 240 }
-        sku: { type: [string, "null"], maxLength: 80 }
-        barcode: { type: [string, "null"], maxLength: 180 }
-        priceCents: { type: [integer, "null"], minimum: 0, maximum: 2000000000 }
-        currency: { type: string, minLength: 3, maxLength: 3 }
-        position: { type: integer, minimum: 0, maximum: 100000 }
-    ResourceVariant:
-      type: object
-      required: [id, resourceId, name, currency, quantity, position, createdAt, updatedAt]
-      properties:
-        id: { type: string, format: uuid }
-        resourceId: { type: string, format: uuid }
-        name: { type: string }
-        sku: { type: [string, "null"] }
-        barcode: { type: [string, "null"] }
-        priceCents: { type: [integer, "null"], minimum: 0 }
-        currency: { type: string }
-        quantity: { type: integer }
-        position: { type: integer, minimum: 0 }
-        createdBy: { type: [string, "null"] }
-        updatedBy: { type: [string, "null"] }
-        createdAt: { type: string, format: date-time }
-        updatedAt: { type: string, format: date-time }
-    ResourceVariantStockSummary:
-      type: object
-      required: [totalQuantity, allocatedQuantity, unallocatedQuantity, variantCount]
-      properties:
-        totalQuantity: { type: integer }
-        allocatedQuantity: { type: integer }
-        unallocatedQuantity: { type: integer }
-        variantCount: { type: integer, minimum: 0 }
-    ResourceVariantStockMovementInput:
-      type: object
-      additionalProperties: false
-      required: [delta]
-      properties:
-        delta: { type: integer, minimum: -2000000000, maximum: 2000000000, not: { const: 0 } }
-        type: { type: string, enum: [receipt, issue, adjustment, return, waste], default: adjustment }
-        reason: { type: [string, "null"], maxLength: 240 }
-        note: { type: string, maxLength: 20000 }
-        occurredAt: { type: string, format: date-time }
     ResourceMapFeature:
       type: object
       required: [id, type, layer, description, coordinates]

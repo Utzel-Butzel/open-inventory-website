@@ -75,7 +75,7 @@ function ArticleNote({
     <aside className={`mt-8 rounded-2xl border p-5 sm:p-6 ${style.wrapper}`}>
       <div className="flex items-start gap-4">
         <span
-          className={`grid size-9 shrink-0 place-items-center rounded-xl ${style.icon}`}
+          className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${style.icon}`}
         >
           <Icon className="size-4" aria-hidden="true" />
         </span>
@@ -97,28 +97,25 @@ export function EnglishBlogOverviewPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
-        <section className="relative overflow-hidden border-b border-border bg-[#121318] text-white">
-          <div className="pointer-events-none absolute left-[8%] top-16 size-[360px] rounded-full bg-[#8ff0cc]/10 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[7%] top-4 size-[480px] rounded-full bg-[#665cff]/25 blur-[140px]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
+      <main id="main-content">
+        <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
 
-          <div className="relative mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+          <div className="site-shell relative py-20 sm:py-28">
             <div className="max-w-4xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8ff0cc]">
+              <p className="site-eyebrow">
                 Technical notes
               </p>
-              <h1 className="mt-5 text-[clamp(3.2rem,7vw,6.6rem)] font-semibold leading-[0.91] tracking-[-0.07em]">
+              <h1 className="site-title mt-5">
                 How Open Inventory
-                <span className="block text-[#9188ff]">works internally.</span>
+                <span className="block text-brand">works internally.</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-[17px] leading-8 text-white/55 sm:text-[19px]">
+              <p className="mt-7 max-w-2xl text-[17px] leading-8 text-muted sm:text-[19px]">
                 Notes on queues, data models, APIs, labels, iOS, and
                 self-hosting. With explicit limits and links to the open source.
               </p>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/60">
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-muted">
               {[
                 "MIT license",
                 "PostgreSQL + Next.js",
@@ -127,7 +124,7 @@ export function EnglishBlogOverviewPage() {
               ].map((item) => (
                 <span key={item} className="flex items-center gap-2">
                   <Check
-                    className="size-3.5 text-[#8ff0cc]"
+                    className="size-3.5 text-brand"
                     aria-hidden="true"
                   />
                   {item}
@@ -137,14 +134,14 @@ export function EnglishBlogOverviewPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-24">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+        <section className="site-shell py-16 sm:py-24">
+          <p className="site-eyebrow">
             Latest article
           </p>
 
           <Link
             href={href(`/blog/${featured.slug}`)}
-            className="group mt-5 grid overflow-hidden rounded-[30px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-xl lg:grid-cols-[0.9fr_1.1fr]"
+            className="group mt-5 grid overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong lg:grid-cols-[0.9fr_1.1fr]"
           >
             <div className="relative min-h-[300px] overflow-hidden bg-strong text-white lg:min-h-[440px]">
               <Image
@@ -174,7 +171,7 @@ export function EnglishBlogOverviewPage() {
                 <span aria-hidden="true">·</span>
                 <span>{featured.readingTime}</span>
               </div>
-              <h2 className="mt-5 text-[clamp(2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground">
+              <h2 className="mt-5 text-[clamp(2rem,4vw,3.7rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground">
                 {featured.title}
               </h2>
               <p className="mt-6 max-w-xl text-[15px] leading-7 text-muted sm:text-base">
@@ -192,13 +189,13 @@ export function EnglishBlogOverviewPage() {
         </section>
 
         <section className="border-y border-border bg-surface-subtle">
-          <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-24">
+          <div className="site-shell py-16 sm:py-24">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                <p className="site-eyebrow">
                   All articles
                 </p>
-                <h2 className="mt-3 text-[34px] font-semibold tracking-[-0.05em] text-foreground sm:text-[44px]">
+                <h2 className="mt-3 text-[34px] font-semibold tracking-[-0.03em] text-foreground sm:text-[44px]">
                   Capture, data model, and operations
                 </h2>
               </div>
@@ -213,7 +210,7 @@ export function EnglishBlogOverviewPage() {
                 <Link
                   key={article.slug}
                   href={href(`/blog/${article.slug}`)}
-                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-[26px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-lg"
+                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-surface-muted">
                     <Image
@@ -221,21 +218,18 @@ export function EnglishBlogOverviewPage() {
                       alt={article.cover.alt}
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                      className="object-cover"
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-7 sm:p-8">
                     <div className="flex items-center justify-between gap-4">
                       <span
-                        className={`rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${article.accentSoft}`}
+                        className="site-eyebrow rounded-full px-3 py-1.5 bg-brand-soft"
                       >
                         {article.category}
                       </span>
-                      <span
-                        className={`size-3 rounded-full bg-gradient-to-br ${article.accent}`}
-                      />
                     </div>
-                    <h3 className="mt-7 text-[28px] font-semibold leading-[1.05] tracking-[-0.045em] text-foreground sm:text-[32px]">
+                    <h3 className="mt-7 text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[32px]">
                       {article.title}
                     </h3>
                     <p className="mt-4 text-sm leading-6 text-muted">
@@ -256,7 +250,7 @@ export function EnglishBlogOverviewPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+        <section className="site-shell py-20 sm:py-28">
           <div className="grid gap-5 md:grid-cols-3">
             {[
               {
@@ -279,7 +273,7 @@ export function EnglishBlogOverviewPage() {
                 key={item.title}
                 className="rounded-2xl border border-border bg-surface p-6"
               >
-                <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
+                <span className="grid size-10 place-items-center rounded-[10px] bg-brand-soft text-brand">
                   <item.icon className="size-[18px]" aria-hidden="true" />
                 </span>
                 <h2 className="mt-5 text-lg font-semibold tracking-[-0.025em] text-foreground">
@@ -290,9 +284,9 @@ export function EnglishBlogOverviewPage() {
             ))}
           </div>
 
-          <div className="mt-10 flex flex-col items-start justify-between gap-6 rounded-[26px] bg-[#121318] p-7 text-white sm:flex-row sm:items-center sm:p-9">
+          <div className="mt-10 flex flex-col items-start justify-between gap-6 rounded-2xl border border-border bg-surface p-7 text-foreground sm:flex-row sm:items-center sm:p-9">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+              <p className="site-eyebrow">
                 Open source · MIT
               </p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
@@ -303,7 +297,7 @@ export function EnglishBlogOverviewPage() {
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-[#121318] transition hover:-translate-y-0.5"
+              className="site-button site-button-primary shrink-0"
             >
               <Github className="size-4" aria-hidden="true" />
               Open repository
@@ -332,25 +326,21 @@ export function EnglishBlogArticlePage({
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <article>
-          <header className="relative overflow-hidden border-b border-white/10 bg-[#121318] text-white">
-            <div
-              className={`pointer-events-none absolute -right-24 -top-36 size-[620px] rounded-full bg-gradient-to-br ${article.accent} opacity-25 blur-[110px]`}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
+          <header className="relative overflow-hidden border-b border-border bg-background text-foreground">
 
-            <div className="relative mx-auto max-w-[1020px] px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-16">
+            <div className="site-shell relative pb-16 pt-12 sm:pb-24 sm:pt-16">
               <Link
                 href={href("/blog")}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-white/55 transition hover:text-white"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-muted transition hover:text-foreground"
               >
                 <ArrowLeft className="size-3.5" aria-hidden="true" />
                 All articles
               </Link>
 
-              <div className="mt-12 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-white/50">
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 uppercase tracking-[0.15em] text-[#8ff0cc]">
+              <div className="mt-12 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-muted">
+                <span className="site-eyebrow rounded-md border border-border bg-surface px-3 py-1.5">
                   {article.category}
                 </span>
                 <time dateTime={article.publishedAt}>
@@ -360,24 +350,24 @@ export function EnglishBlogArticlePage({
                 <span>{article.readingTime}</span>
               </div>
 
-              <h1 className="mt-7 max-w-5xl text-[clamp(3rem,7vw,6rem)] font-semibold leading-[0.93] tracking-[-0.065em]">
+              <h1 className="site-title mt-7 max-w-5xl">
                 {article.title}
               </h1>
-              <p className="mt-7 max-w-3xl text-[17px] leading-8 text-white/55 sm:text-[19px]">
+              <p className="mt-7 max-w-3xl text-[17px] leading-8 text-muted sm:text-[19px]">
                 {article.excerpt}
               </p>
 
-              <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-6">
+              <div className="mt-10 flex items-center gap-3 border-t border-border pt-6">
                 <span
-                  className={`grid size-9 place-items-center rounded-xl bg-gradient-to-br ${article.accent} text-xs font-bold text-white`}
+                  className="grid size-9 place-items-center rounded-[10px] bg-brand-soft text-xs font-bold text-foreground"
                 >
                   OI
                 </span>
                 <div>
-                  <p className="text-xs font-semibold text-white">
+                  <p className="text-xs font-semibold text-foreground">
                     Open Inventory
                   </p>
-                  <p className="mt-0.5 text-[11px] text-white/45">
+                  <p className="mt-0.5 text-[11px] text-muted">
                     Technical notes · MIT licensed
                   </p>
                 </div>
@@ -385,8 +375,8 @@ export function EnglishBlogArticlePage({
             </div>
           </header>
 
-          <figure className="mx-auto max-w-[1120px] px-5 pt-10 sm:px-8 sm:pt-12">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-[24px] border border-border bg-surface-muted shadow-sm">
+          <figure className="site-shell pt-10 sm:pt-12">
+            <div className="relative aspect-[3/2] overflow-hidden rounded-2xl border border-border bg-surface-muted shadow-sm">
               <Image
                 src={article.cover.src}
                 alt={article.cover.alt}
@@ -401,7 +391,7 @@ export function EnglishBlogArticlePage({
             </figcaption>
           </figure>
 
-          <div className="mx-auto grid max-w-[1120px] gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[220px_minmax(0,760px)] lg:justify-between">
+          <div className="site-shell grid gap-12 py-12 sm:py-16 lg:grid-cols-[220px_minmax(0,760px)] lg:justify-between">
             <aside className="hidden lg:block">
               <div className="sticky top-24">
                 <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
@@ -415,7 +405,7 @@ export function EnglishBlogArticlePage({
                     <Link
                       key={section.id}
                       href={href(`#${section.id}`)}
-                      className="rounded-xl px-3 py-2.5 text-[12px] font-medium leading-5 text-muted transition hover:bg-surface hover:text-foreground"
+                      className="rounded-[10px] px-3 py-2.5 text-[12px] font-medium leading-5 text-muted transition hover:bg-surface hover:text-foreground"
                     >
                       {section.title}
                     </Link>
@@ -436,8 +426,8 @@ export function EnglishBlogArticlePage({
             </aside>
 
             <div className="min-w-0">
-              <section className="rounded-[24px] border border-border bg-surface p-6 shadow-sm sm:p-8">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+              <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+                <p className="site-eyebrow">
                   Summary
                 </p>
                 <ul className="mt-5 grid gap-4">
@@ -470,18 +460,18 @@ export function EnglishBlogArticlePage({
                   >
                     <div className="flex items-center gap-3">
                       <span
-                        className={`grid size-8 place-items-center rounded-xl bg-gradient-to-br text-[11px] font-semibold text-white ${article.accent}`}
+                        className="grid size-8 place-items-center rounded-[10px] bg-brand-soft text-[11px] font-semibold text-brand"
                       >
                         {String(sectionIndex + 1).padStart(2, "0")}
                       </span>
                       {section.eyebrow ? (
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+                        <p className="site-eyebrow">
                           {section.eyebrow}
                         </p>
                       ) : null}
                     </div>
 
-                    <h2 className="mt-5 text-[32px] font-semibold leading-[1.05] tracking-[-0.05em] text-foreground sm:text-[42px]">
+                    <h2 className="mt-5 text-[32px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[42px]">
                       {section.title}
                     </h2>
 
@@ -502,7 +492,7 @@ export function EnglishBlogArticlePage({
                             key={step.title}
                             className="grid gap-4 rounded-2xl border border-border bg-surface p-5 sm:grid-cols-[40px_1fr] sm:p-6"
                           >
-                            <span className="grid size-10 place-items-center rounded-xl bg-strong font-mono text-xs font-semibold text-on-strong">
+                            <span className="grid size-10 place-items-center rounded-[10px] bg-strong font-mono text-xs font-semibold text-on-strong">
                               {String(index + 1).padStart(2, "0")}
                             </span>
                             <div>
@@ -523,7 +513,7 @@ export function EnglishBlogArticlePage({
                         {section.bullets.map((bullet) => (
                           <li
                             key={bullet}
-                            className="flex items-start gap-3 rounded-xl bg-surface-subtle px-4 py-3.5 text-sm leading-6 text-muted-strong"
+                            className="flex items-start gap-3 rounded-[10px] bg-surface-subtle px-4 py-3.5 text-sm leading-6 text-muted-strong"
                           >
                             <Check
                               className="mt-1 size-3.5 shrink-0 text-brand"
@@ -542,10 +532,10 @@ export function EnglishBlogArticlePage({
               </div>
 
               <section className="border-t border-border pt-14 sm:pt-16">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+                <p className="site-eyebrow">
                   Further reading
                 </p>
-                <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.045em] text-foreground">
+                <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.03em] text-foreground">
                   From the article to the implementation
                 </h2>
                 <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -603,21 +593,21 @@ export function EnglishBlogArticlePage({
         </article>
 
         <section className="border-t border-border bg-surface-subtle">
-          <div className="mx-auto max-w-[1020px] px-5 py-16 sm:px-8 sm:py-20">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+          <div className="site-shell py-16 sm:py-20">
+            <p className="site-eyebrow">
               Next article
             </p>
             <Link
               href={href(`/blog/${nextArticle.slug}`)}
-              className="group mt-4 flex flex-col justify-between gap-6 rounded-[24px] border border-border bg-surface p-7 shadow-sm transition hover:border-border-strong hover:shadow-lg sm:flex-row sm:items-end sm:p-9"
+              className="group mt-4 flex flex-col justify-between gap-6 rounded-2xl border border-border bg-surface p-7 shadow-sm transition hover:border-border-strong sm:flex-row sm:items-end sm:p-9"
             >
               <div>
                 <span
-                  className={`rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${nextArticle.accentSoft}`}
+                  className="site-eyebrow rounded-full px-3 py-1.5 bg-brand-soft"
                 >
                   {nextArticle.category}
                 </span>
-                <h2 className="mt-5 max-w-2xl text-[28px] font-semibold leading-[1.05] tracking-[-0.045em] text-foreground sm:text-[34px]">
+                <h2 className="mt-5 max-w-2xl text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[34px]">
                   {nextArticle.title}
                 </h2>
               </div>

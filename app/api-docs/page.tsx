@@ -18,8 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
   const title = locale === "de" ? "API-Dokumentation — Open Inventory" : "API documentation — Open Inventory";
   const description = locale === "de"
-    ? "Die Open-Inventory-API mit Bearer-Token und der interaktiven OpenAPI-Referenz untersuchen."
-    : "Explore and test the Open Inventory bearer-token API with the interactive OpenAPI reference.";
+    ? "API-Referenz für Inventar, Bestand, Etiketten und Druckaufträge. Mit Authentifizierung, Beispielen und OpenAPI-Download."
+    : "API reference for inventory, stock, labels and print jobs, with authentication, examples and OpenAPI downloads.";
   return {
     title: { absolute: title },
     description,
@@ -33,53 +33,60 @@ export default async function ApiDocsPage() {
   const copy = locale === "de"
     ? {
         eyebrow: "Entwicklerreferenz",
-        intro: "Untersuche den OpenAPI-3.1-Vertrag, erzeuge Request-Beispiele und führe authentifizierte Aufrufe gegen diese Instanz aus.",
-        auth: "Wähle in der Referenz die Authentifizierung und trage ein eingeschränktes API-Token aus den Workspace-Einstellungen ein.",
+        intro: "Endpunkte, Eingaben und Antworten für deine Integration. Requests gehen an die Anwendungsinstanz, deren Adresse unter Server steht. Ersetze sie bei Bedarf durch deine eigene Instanz.",
+        auth: "Inventar-Endpunkte verwenden Bearer-Token aus Einstellungen → API. Druckverwaltung und QZ benötigen eine Browsersitzung auf der Anwendungsinstanz; Agent-Endpunkte ein eigenes Drucker-Token. Die Authentifizierung steht am jeweiligen Endpunkt.",
         json: "JSON öffnen",
         yaml: "YAML öffnen",
         reference: "Interaktive API-Referenz",
-        variants: "Anleitung: Varianten fertigen und ausbuchen",
+        variants: "Varianten fertigen und ausbuchen",
+        start: "API-Einstieg",
+        printing: "Drucken einrichten",
+        note: "Browsersitzungen lassen sich von dieser separaten Webseite aus nicht wie ein API-Token verwenden. Teste sitzungsgebundene Aufrufe auf der Anwendungsinstanz.",
       }
     : {
         eyebrow: "Developer reference",
-        intro: "Explore the OpenAPI 3.1 contract, generate request examples, and run authenticated calls against this deployment.",
-        auth: "Select Authentication in the reference and enter a scoped API token created in your workspace settings.",
+        intro: "Endpoints, inputs and responses for your integration. Requests target the application address shown under Server. Replace it with your own instance when needed.",
+        auth: "Inventory endpoints use bearer tokens from Settings → API. Print management and QZ require a browser session on the application instance; agent endpoints need a dedicated printer token. Check authentication on each operation.",
         json: "Open JSON",
         yaml: "Open YAML",
         reference: "Interactive API reference",
-        variants: "Guide: build and issue variants",
+        variants: "Build and issue variants",
+        start: "API quick start",
+        printing: "Set up printing",
+        note: "Browser sessions cannot be used like an API token from this separate website. Test session-authenticated requests on the application instance.",
       };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
-        <section className="overflow-hidden border-b border-white/10 bg-[#121318] text-white">
-          <div className="relative mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
-            <div className="pointer-events-none absolute -right-16 -top-24 size-[420px] rounded-full bg-[#665cff]/25 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-40 left-1/4 size-[320px] rounded-full bg-[#8ff0cc]/10 blur-[100px]" />
+      <main id="main-content">
+        <section className="overflow-hidden border-b border-border bg-background text-foreground">
+          <div className="site-shell relative py-16 sm:py-20">
 
             <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                <p className="site-eyebrow">
                   {copy.eyebrow}
                 </p>
-                <h1 className="mt-5 text-[clamp(2.8rem,6vw,5rem)] font-semibold leading-[0.94] tracking-[-0.065em]">
+                <h1 className="site-title mt-5">
                   Open Inventory API
                 </h1>
-                <p className="mt-6 max-w-2xl text-[16px] leading-7 text-white/55 sm:text-[17px]">
+                <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted sm:text-[17px]">
                   {copy.intro}
                 </p>
-                <Link href={marketingHref(locale, "/docs#variant-stock")} className="mt-4 inline-block text-sm font-semibold text-[#a69fff] hover:underline">
-                  {copy.variants}
-                </Link>
-                <div className="mt-5 flex items-start gap-2.5 text-sm leading-6 text-white/55">
-                  <KeyRound className="mt-1 size-4 shrink-0 text-[#9188ff]" />
+                <nav aria-label={copy.reference} className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-brand">
+                  <Link href={marketingHref(locale, "/docs#api")} className="hover:underline">{copy.start} →</Link>
+                  <Link href={marketingHref(locale, "/docs#printing")} className="hover:underline">{copy.printing} →</Link>
+                  <Link href={marketingHref(locale, "/docs#variant-stock")} className="hover:underline">{copy.variants} →</Link>
+                </nav>
+                <div className="mt-5 flex items-start gap-2.5 text-sm leading-6 text-muted">
+                  <KeyRound className="mt-1 size-4 shrink-0 text-brand" />
                   <p>
                     {copy.auth}
                   </p>
                 </div>
+                <p className="mt-3 max-w-2xl text-xs leading-6 text-muted">{copy.note}</p>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -87,21 +94,21 @@ export default async function ApiDocsPage() {
                   href="/openapi.json"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/15"
+                  className="site-button site-button-secondary"
                 >
                   <Braces className="size-4" />
                   {copy.json}
-                  <ExternalLink className="size-3.5 text-white/45" />
+                  <ExternalLink className="size-3.5 text-muted" />
                 </Link>
                 <Link
                   href="/openapi.yaml"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-[#24252a] transition hover:bg-[#f0efff]"
+                  className="site-button site-button-secondary"
                 >
-                  <FileCode2 className="size-4 text-[#665cff]" />
+                  <FileCode2 className="size-4 text-brand" />
                   {copy.yaml}
-                  <ExternalLink className="size-3.5 text-[#9a9ca3]" />
+                  <ExternalLink className="size-3.5 text-muted" />
                 </Link>
               </div>
             </div>

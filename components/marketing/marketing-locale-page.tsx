@@ -303,25 +303,24 @@ function MarketingPageContent({
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
-      <main>
-        <section className="relative overflow-hidden border-b border-border bg-[#111216] text-white">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.055)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_94%)]" />
-          <div className="relative mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8ff0cc]">
+      <main id="main-content">
+        <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
+          <div className="site-shell relative py-20 sm:py-28">
+            <span className="site-eyebrow inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-1.5">
               <Icon className="size-3.5" aria-hidden="true" />
               {copy.eyebrow}
             </span>
-            <h1 className="mt-6 max-w-5xl text-[clamp(3.2rem,7vw,6.8rem)] font-semibold leading-[0.9] tracking-[-0.07em]">
+            <h1 className="site-title mt-6 max-w-5xl">
               {copy.title}
             </h1>
-            <p className="mt-7 max-w-2xl text-[17px] leading-8 text-white/60">
+            <p className="mt-7 max-w-2xl text-[17px] leading-8 text-muted">
               {copy.intro}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={primaryHref} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#8ff0cc] px-5 text-sm font-semibold text-[#17382d]">
+              <Link href={primaryHref} className="site-button site-button-primary">
                 {copy.primary}<ArrowRight className="size-4" aria-hidden="true" />
               </Link>
-              <Link href={secondaryHref} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold text-white">
+              <Link href={secondaryHref} className="site-button site-button-secondary">
                 {copy.secondary}<Github className="size-4" aria-hidden="true" />
               </Link>
             </div>
@@ -334,18 +333,18 @@ function MarketingPageContent({
           id={kind === "docs" ? "docker" : undefined}
           className="scroll-mt-24 bg-surface py-20 sm:py-28"
         >
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {copy.sections.map((section, index) => {
                 const card = (
-                  <article className="h-full rounded-[24px] border border-border bg-background p-6 transition hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-7">
+                  <article className="h-full rounded-2xl border border-border bg-background p-6 transition hover:border-border-strong sm:p-7">
                     <div className="flex items-center justify-between">
-                      <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
+                      <span className="grid size-10 place-items-center rounded-[10px] bg-brand-soft text-brand">
                         {index % 3 === 0 ? <Camera className="size-4" /> : index % 3 === 1 ? <PackageCheck className="size-4" /> : <QrCode className="size-4" />}
                       </span>
                       <span className="font-mono text-[10px] text-muted">{String(index + 1).padStart(2, "0")}</span>
                     </div>
-                    <h2 className="mt-9 text-[24px] font-semibold leading-[1.05] tracking-[-0.04em]">{section.title}</h2>
+                    <h2 className="mt-9 text-[24px] font-semibold leading-[1.15] tracking-[-0.04em]">{section.title}</h2>
                     <p className="mt-3 text-sm leading-6 text-muted">{section.copy}</p>
                     {section.href ? <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand">{labels.openPage} <ArrowRight className="size-4" /></span> : null}
                   </article>
@@ -357,19 +356,19 @@ function MarketingPageContent({
         </section>
 
         {kind === "docs" ? (
-          <div className="mx-auto max-w-[900px] px-5 sm:px-8">
+          <div className="site-shell !max-w-[900px]">
             <VariantStockGuide locale={locale} />
           </div>
         ) : null}
 
         <section className="border-y border-border bg-background py-16 sm:py-20">
-          <div className="mx-auto flex max-w-[960px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="site-shell flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">{labels.trustEyebrow}</p>
-              <h2 className="mt-3 text-[36px] font-semibold tracking-[-0.05em]">{labels.trustTitle}</h2>
+              <p className="site-eyebrow">{labels.trustEyebrow}</p>
+              <h2 className="mt-3 text-[36px] font-semibold tracking-[-0.03em]">{labels.trustTitle}</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{labels.trustCopy}</p>
             </div>
-            <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-[14px] bg-strong px-5 text-sm font-semibold text-on-strong">
+            <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary shrink-0">
               GitHub <Github className="size-4" />
             </a>
           </div>

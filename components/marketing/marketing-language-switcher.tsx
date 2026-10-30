@@ -1,6 +1,5 @@
 "use client";
 
-import { Languages } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -39,26 +38,28 @@ export function MarketingLanguageSwitcher({
 
   return (
     <div
-      className={`inline-flex h-10 items-center gap-0.5 rounded-xl border p-1 text-[10px] font-semibold uppercase tracking-[0.08em] ${
+      className={`inline-flex h-9 items-center gap-0.5 rounded-md p-0.5 text-[11px] font-medium uppercase tracking-[0.04em] ${
         inverse
-          ? "border-white/15 bg-white/[0.06] text-white/60"
-          : "border-border bg-surface text-muted"
+          ? "text-white/70"
+          : "text-muted"
       }`}
+      role="group"
       aria-label={label}
     >
-      <Languages className="ml-1.5 mr-1 size-3.5" aria-hidden="true" />
       {(["de", "en"] as const).map((item) => (
         <a
           key={item}
           href={localizedPath(pathname, item)}
           hrefLang={item}
+          aria-label={item === "de" ? "Deutsch" : "English"}
+          title={item === "de" ? "Deutsch" : "English"}
           lang={item}
           aria-current={locale === item ? "page" : undefined}
-          className={`grid h-7 min-w-8 place-items-center rounded-lg px-1.5 transition ${
+          className={`grid h-8 min-w-8 place-items-center rounded px-1.5 transition-colors ${
             locale === item
               ? inverse
                 ? "bg-white text-[#111216]"
-                : "bg-strong text-on-strong"
+                : "bg-surface-muted text-foreground"
               : inverse
                 ? "hover:bg-white/10 hover:text-white"
                 : "hover:bg-surface-muted hover:text-foreground"

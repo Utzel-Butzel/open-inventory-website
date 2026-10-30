@@ -108,7 +108,7 @@ function Note({
   return (
     <aside className={`mt-8 rounded-2xl border p-5 sm:p-6 ${style.wrapper}`}>
       <div className="flex items-start gap-4">
-        <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${style.icon}`}>
+        <span className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${style.icon}`}>
           <Icon className="size-4" aria-hidden="true" />
         </span>
         <div>
@@ -155,23 +155,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <article>
-          <header className="relative overflow-hidden border-b border-white/10 bg-[#121318] text-white">
-            <div className={`pointer-events-none absolute -right-24 -top-36 size-[620px] rounded-full bg-gradient-to-br ${article.accent} opacity-25 blur-[110px]`} />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
+          <header className="relative overflow-hidden border-b border-border bg-background text-foreground">
 
-            <div className="relative mx-auto max-w-[1020px] px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-16">
+            <div className="site-shell relative pb-16 pt-12 sm:pb-24 sm:pt-16">
               <Link
                 href={marketingHref(locale, "/blog")}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-white/55 transition hover:text-white"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-muted transition hover:text-foreground"
               >
                 <ArrowLeft className="size-3.5" aria-hidden="true" />
                 Alle Artikel
               </Link>
 
-              <div className="mt-12 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-white/50">
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 uppercase tracking-[0.15em] text-[#8ff0cc]">
+              <div className="mt-12 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-muted">
+                <span className="site-eyebrow rounded-md border border-border bg-surface px-3 py-1.5">
                   {article.category}
                 </span>
                 <time dateTime={article.publishedAt}>{article.publishedLabel}</time>
@@ -179,27 +177,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <span>{article.readingTime}</span>
               </div>
 
-              <h1 className="mt-7 max-w-5xl text-[clamp(3rem,7vw,6rem)] font-semibold leading-[0.93] tracking-[-0.065em]">
+              <h1 className="site-title mt-7 max-w-5xl">
                 {article.title}
               </h1>
-              <p className="mt-7 max-w-3xl text-[17px] leading-8 text-white/55 sm:text-[19px]">
+              <p className="mt-7 max-w-3xl text-[17px] leading-8 text-muted sm:text-[19px]">
                 {article.excerpt}
               </p>
 
-              <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-6">
-                <span className={`grid size-9 place-items-center rounded-xl bg-gradient-to-br ${article.accent} text-xs font-bold text-white`}>
+              <div className="mt-10 flex items-center gap-3 border-t border-border pt-6">
+                <span className="grid size-9 place-items-center rounded-[10px] bg-brand-soft text-xs font-bold text-foreground">
                   OI
                 </span>
                 <div>
-                  <p className="text-xs font-semibold text-white">Open Inventory</p>
-                  <p className="mt-0.5 text-[11px] text-white/45">Technische Notizen · MIT-lizenziert</p>
+                  <p className="text-xs font-semibold text-foreground">Open Inventory</p>
+                  <p className="mt-0.5 text-[11px] text-muted">Technische Notizen · MIT-lizenziert</p>
                 </div>
               </div>
             </div>
           </header>
 
-          <figure className="mx-auto max-w-[1120px] px-5 pt-10 sm:px-8 sm:pt-12">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-[24px] border border-border bg-surface-muted shadow-sm">
+          <figure className="site-shell pt-10 sm:pt-12">
+            <div className="relative aspect-[3/2] overflow-hidden rounded-2xl border border-border bg-surface-muted shadow-sm">
               <Image
                 src={article.cover.src}
                 alt={article.cover.alt}
@@ -213,7 +211,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </figcaption>
           </figure>
 
-          <div className="mx-auto grid max-w-[1120px] gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[220px_minmax(0,760px)] lg:justify-between">
+          <div className="site-shell grid gap-12 py-12 sm:py-16 lg:grid-cols-[220px_minmax(0,760px)] lg:justify-between">
             <aside className="hidden lg:block">
               <div className="sticky top-24">
                 <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
@@ -224,7 +222,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <Link
                       key={section.id}
                       href={marketingHref(locale, `#${section.id}`)}
-                      className="rounded-xl px-3 py-2.5 text-[12px] font-medium leading-5 text-muted transition hover:bg-surface hover:text-foreground"
+                      className="rounded-[10px] px-3 py-2.5 text-[12px] font-medium leading-5 text-muted transition hover:bg-surface hover:text-foreground"
                     >
                       {section.title}
                     </Link>
@@ -245,8 +243,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </aside>
 
             <div className="min-w-0">
-              <section className="rounded-[24px] border border-border bg-surface p-6 shadow-sm sm:p-8">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+              <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+                <p className="site-eyebrow">
                   Kurz zusammengefasst
                 </p>
                 <ul className="mt-5 grid gap-4">
@@ -271,17 +269,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     className="scroll-mt-28 border-b border-border py-14 last:border-0 sm:py-16"
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`grid size-8 place-items-center rounded-xl bg-gradient-to-br text-[11px] font-semibold text-white ${article.accent}`}>
+                      <span className="grid size-8 place-items-center rounded-[10px] bg-brand-soft text-[11px] font-semibold text-brand">
                         {String(sectionIndex + 1).padStart(2, "0")}
                       </span>
                       {section.eyebrow ? (
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+                        <p className="site-eyebrow">
                           {section.eyebrow}
                         </p>
                       ) : null}
                     </div>
 
-                    <h2 className="mt-5 text-[32px] font-semibold leading-[1.05] tracking-[-0.05em] text-foreground sm:text-[42px]">
+                    <h2 className="mt-5 text-[32px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[42px]">
                       {section.title}
                     </h2>
 
@@ -299,7 +297,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                       <ol className="mt-8 grid gap-4">
                         {section.steps.map((step, index) => (
                           <li key={step.title} className="grid gap-4 rounded-2xl border border-border bg-surface p-5 sm:grid-cols-[40px_1fr] sm:p-6">
-                            <span className="grid size-10 place-items-center rounded-xl bg-strong font-mono text-xs font-semibold text-on-strong">
+                            <span className="grid size-10 place-items-center rounded-[10px] bg-strong font-mono text-xs font-semibold text-on-strong">
                               {String(index + 1).padStart(2, "0")}
                             </span>
                             <div>
@@ -318,7 +316,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     {section.bullets ? (
                       <ul className="mt-8 grid gap-3">
                         {section.bullets.map((bullet) => (
-                          <li key={bullet} className="flex items-start gap-3 rounded-xl bg-surface-subtle px-4 py-3.5 text-sm leading-6 text-muted-strong">
+                          <li key={bullet} className="flex items-start gap-3 rounded-[10px] bg-surface-subtle px-4 py-3.5 text-sm leading-6 text-muted-strong">
                             <Check className="mt-1 size-3.5 shrink-0 text-brand" strokeWidth={2.5} aria-hidden="true" />
                             <InlineCode text={bullet} />
                           </li>
@@ -332,10 +330,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </div>
 
               <section className="border-t border-border pt-14 sm:pt-16">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+                <p className="site-eyebrow">
                   Weiterführend
                 </p>
-                <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.045em] text-foreground">
+                <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.03em] text-foreground">
                   Vom Artikel in die Praxis
                 </h2>
                 <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -373,16 +371,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </article>
 
         <section className="border-t border-border bg-surface-subtle">
-          <div className="mx-auto max-w-[1020px] px-5 py-16 sm:px-8 sm:py-20">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
+          <div className="site-shell py-16 sm:py-20">
+            <p className="site-eyebrow">
               Als Nächstes
             </p>
-            <Link href={marketingHref(locale, `/blog/${nextArticle.slug}`)} className="group mt-4 flex flex-col justify-between gap-6 rounded-[24px] border border-border bg-surface p-7 shadow-sm transition hover:border-border-strong hover:shadow-lg sm:flex-row sm:items-end sm:p-9">
+            <Link href={marketingHref(locale, `/blog/${nextArticle.slug}`)} className="group mt-4 flex flex-col justify-between gap-6 rounded-2xl border border-border bg-surface p-7 shadow-sm transition hover:border-border-strong sm:flex-row sm:items-end sm:p-9">
               <div>
-                <span className={`rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${nextArticle.accentSoft}`}>
+                <span className="site-eyebrow rounded-full px-3 py-1.5 bg-brand-soft">
                   {nextArticle.category}
                 </span>
-                <h2 className="mt-5 max-w-2xl text-[28px] font-semibold leading-[1.05] tracking-[-0.045em] text-foreground sm:text-[34px]">
+                <h2 className="mt-5 max-w-2xl text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[34px]">
                   {nextArticle.title}
                 </h2>
               </div>

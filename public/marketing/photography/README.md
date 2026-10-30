@@ -36,7 +36,7 @@ into them.
 
 | File | Size | Photographer | Source | Licence and changes |
 | --- | --- | --- | --- | --- |
-| `knipex-pliers-wrench.webp` | 1800 × 1013 | Raimond Spekking | [Knipex Zangenschlüssel 86 03 125](https://commons.wikimedia.org/wiki/File:Knipex_Zangenschl%C3%BCssel-8892.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) · resized, metadata stripped and converted from JPEG to WebP; the homepage additionally presents the same photograph with CSS cropping and colour treatment in the first workflow step |
+| `knipex-pliers-wrench.webp` | 1800 × 1013 | Raimond Spekking | [Knipex Zangenschlüssel 86 03 125](https://commons.wikimedia.org/wiki/File:Knipex_Zangenschl%C3%BCssel-8892.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) · resized, metadata stripped and converted from JPEG to WebP |
 
 Attribution for the Wikimedia Commons image: © Raimond Spekking / CC BY-SA
 4.0 (via Wikimedia Commons). The adapted WebP is distributed under the same

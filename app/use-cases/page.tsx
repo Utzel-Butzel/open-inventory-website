@@ -190,19 +190,16 @@ export default async function UseCasesPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:64px_64px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_88%)]" />
-          <div className="pointer-events-none absolute left-[8%] top-12 size-80 rounded-full bg-[#8ff0cc]/25 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[8%] top-24 size-96 rounded-full bg-[#8175ff]/20 blur-[125px]" />
 
-          <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
+          <div className="site-shell relative pb-20 pt-16 sm:pb-28 sm:pt-24">
             <div className="grid gap-12 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div className="max-w-4xl">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   Für Dinge, die wirklich benutzt werden
                 </p>
-                <h1 className="mt-5 text-[clamp(3.25rem,7vw,6.6rem)] font-semibold leading-[0.9] tracking-[-0.07em]">
+                <h1 className="site-title mt-5">
                   Inventarisieren in
                   <span className="block text-brand">Sekunden statt Stunden.</span>
                 </h1>
@@ -213,7 +210,7 @@ export default async function UseCasesPage() {
                 </p>
               </div>
 
-              <div className="rounded-[28px] border border-border bg-surface/90 p-5 shadow-[var(--shadow-md)] backdrop-blur sm:p-6">
+              <div className="rounded-2xl border border-border bg-surface/90 p-5 shadow-[var(--shadow-md)] backdrop-blur sm:p-6">
                 <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-4">
                   {[
                     [Camera, "Foto aufnehmen", "statt jedes Feld einzeln zu tippen"],
@@ -240,13 +237,13 @@ export default async function UseCasesPage() {
         </section>
 
         <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">
                   Echte Einblicke
                 </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                   Reale Dinge. Eine echte Oberfläche.
                 </h2>
               </div>
@@ -272,7 +269,7 @@ export default async function UseCasesPage() {
               {overviewGallery.map((item) => (
                 <figure
                   key={item.src}
-                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] shadow-2xl ${item.layout}`}
+                  className={`group relative isolate overflow-hidden rounded-2xl border border-white/10 bg-[#1b1c22] shadow-[var(--shadow-md)] ${item.layout}`}
                 >
                   <Image
                     src={item.src}
@@ -306,12 +303,12 @@ export default async function UseCasesPage() {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                 Acht konkrete Einstiege
               </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+              <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                 Ein offenes System. Dein eigener Alltag.
               </h2>
               <p className="mt-5 text-[16px] leading-7 text-muted sm:text-[18px]">
@@ -329,7 +326,7 @@ export default async function UseCasesPage() {
                   <Link
                     key={useCase.slug}
                     href={`/de/use-cases/${useCase.slug}`}
-                    className={`group overflow-hidden rounded-[28px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
+                    className={`group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
@@ -354,7 +351,7 @@ export default async function UseCasesPage() {
                     </div>
                     <div className="p-6 sm:p-7">
                       <div className="flex items-center justify-between gap-4">
-                        <h3 className="text-[28px] font-semibold tracking-[-0.045em]">
+                        <h3 className="text-[28px] font-semibold tracking-[-0.035em]">
                           {useCase.name}
                         </h3>
                         <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted transition group-hover:border-brand-border group-hover:bg-brand-soft group-hover:text-brand">
@@ -373,13 +370,13 @@ export default async function UseCasesPage() {
         </section>
 
         <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   Gemeinsame Basis
                 </p>
-                <h2 className="mt-4 text-[40px] font-semibold leading-none tracking-[-0.055em] sm:text-[54px]">
+                <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[54px]">
                   Schnell anfangen. Später tiefer gehen.
                 </h2>
                 <p className="mt-5 text-[16px] leading-7 text-muted">
@@ -416,7 +413,7 @@ export default async function UseCasesPage() {
                   return (
                     <article
                       key={feature.title}
-                      className="rounded-[24px] border border-border bg-surface p-6"
+                      className="rounded-2xl border border-border bg-surface p-6"
                     >
                       <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand">
                         <Icon className="size-5" />
@@ -436,10 +433,8 @@ export default async function UseCasesPage() {
         </section>
 
         <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(135deg,#1a1b21,#22202f)] px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
-              <div className="pointer-events-none absolute -right-16 -top-24 size-80 rounded-full bg-[#8175ff]/25 blur-[100px]" />
-              <div className="pointer-events-none absolute -bottom-24 left-1/4 size-72 rounded-full bg-[#8ff0cc]/15 blur-[100px]" />
+          <div className="site-shell">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
               <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
                 <div className="max-w-3xl">
                   <div className="flex flex-wrap gap-2">
@@ -449,16 +444,16 @@ export default async function UseCasesPage() {
                           key={item}
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-white/65"
                         >
-                          <Check className="size-3 text-[#8ff0cc]" />
+                          <Check className="size-3 text-brand-inverse" />
                           {item}
                         </span>
                       ),
                     )}
                   </div>
-                  <h2 className="mt-6 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">
+                  <h2 className="mt-6 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[62px]">
                     Deine Dinge. Deine Daten. Dein Server.
                   </h2>
-                  <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/55">
+                  <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/65">
                     Installiere Open Inventory mit Docker, prüfe den Quellcode
                     oder passe den Workflow an. Open Source ist hier kein
                     Exportknopf, sondern die Grundlage des Produkts.
@@ -467,7 +462,7 @@ export default async function UseCasesPage() {
                 <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                   <Link
                     href="/de/docs#docker"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#675ee5] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#756de8]"
+                    className="site-button site-button-primary"
                   >
                     <Container className="size-4" />
                     Mit Docker starten
@@ -476,7 +471,7 @@ export default async function UseCasesPage() {
                     href={githubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+                    className="site-button site-button-secondary"
                   >
                     <Github className="size-4" />
                     Code auf GitHub

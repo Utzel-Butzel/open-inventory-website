@@ -17,7 +17,7 @@ function resolvedTheme(): Theme {
 
 function updateThemeColor(theme: Theme) {
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach(
-    (meta) => meta.setAttribute("content", theme === "dark" ? "#0a0c10" : "#f6f7f9"),
+    (meta) => meta.setAttribute("content", theme === "dark" ? "#191b1f" : "#f6f5f1"),
   );
 }
 
@@ -46,11 +46,18 @@ export function ThemeToggle({
       }
     };
 
-    const initialTheme = resolvedTheme();
-    setTheme(initialTheme);
-    updateThemeColor(initialTheme);
+    const syncTheme = () => {
+      const nextTheme = resolvedTheme();
+      setTheme(nextTheme);
+      updateThemeColor(nextTheme);
+    };
+    syncTheme();
     media.addEventListener("change", syncSystemTheme);
-    return () => media.removeEventListener("change", syncSystemTheme);
+    window.addEventListener("inventory-theme-change", syncTheme);
+    return () => {
+      media.removeEventListener("change", syncSystemTheme);
+      window.removeEventListener("inventory-theme-change", syncTheme);
+    };
   }, []);
 
   function toggleTheme() {
@@ -59,8 +66,7 @@ export function ThemeToggle({
     try {
       localStorage.setItem("inventory-theme", nextTheme);
     } catch {}
-    updateThemeColor(nextTheme);
-    setTheme(nextTheme);
+    window.dispatchEvent(new Event("inventory-theme-change"));
   }
 
   const dark = theme === "dark";
@@ -70,7 +76,7 @@ export function ThemeToggle({
     <button
       type="button"
       onClick={toggleTheme}
-      className={`grid size-9 place-items-center rounded-xl border border-border bg-surface text-muted shadow-sm transition hover:bg-surface-hover hover:text-foreground ${className ?? ""}`}
+      className={`grid size-9 place-items-center rounded-md text-muted transition-colors hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border ${className ?? ""}`}
       aria-label={label}
       title={label}
     >

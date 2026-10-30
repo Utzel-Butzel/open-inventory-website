@@ -1,17 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  Boxes,
-  Check,
-  Container,
-  Github,
-  KeyRound,
-  ShieldCheck,
-  Smartphone,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronDown } from "lucide-react";
 
 import {
   featureIOSCaptures,
@@ -24,7 +13,9 @@ import {
   MarketingFooter,
   MarketingHeader,
 } from "@/components/marketing/site-chrome";
-import { marketingHref } from "@/lib/marketing-i18n";
+import { marketingHref, type MarketingLocale } from "@/lib/marketing-i18n";
+import { publicDemoUrl } from "@/lib/site-config";
+import { BusinessFlow } from "@/components/marketing/business-flow";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 const licenseUrl = `${githubUrl}/blob/main/LICENSE`;
@@ -131,6 +122,10 @@ const englishFeatureCopy = {
       {
         title: "Native iPhone capture",
         copy: "The open SwiftUI app captures photos, scans codes and persists upload stages. Stable operation IDs prevent defined retries from creating duplicate records.",
+      },
+      {
+        title: "Bin estimates · experimental",
+        copy: "Estimate quantities from several photos. The optional 3D mode adds a rotatable model with manual annotations and needs a dedicated GPU runtime. Accuracy is not validated; stock booking remains a separate confirmation.",
       },
     ],
   },
@@ -307,6 +302,18 @@ const englishFeatureCopy = {
     ],
     items: [
       {
+        title: "Plan consumption and deliveries",
+        copy: "Compare stock history and forecasts. Consumption, lead times and outstanding receipts inform suggested reorder dates and quantities. You still decide when to place an order.",
+      },
+      {
+        title: "Bill-of-materials analysis",
+        copy: "Review production quantities, variants, component needs, costs and dependencies before building. Missing prices remain visibly unknown.",
+      },
+      {
+        title: "Edit individual device codes",
+        copy: "Change a serialized unit’s code and print its own label. The unit ID and QR link stay the same.",
+      },
+      {
         title: "Bulk or serialized tracking",
         copy: "Track identical parts as a quantity or represent every physical unit with a UUID, readable code, state, location, metadata and acquisition date.",
       },
@@ -349,40 +356,28 @@ const englishFeatureCopy = {
     ],
   },
   "labels-api": {
-    menuTitle: "Codes, labels and API",
+    menuTitle: "Labels, printing and API",
     eyebrow: "04 · Resolve and integrate",
     title: "From a printed code to an API operation",
     intro:
-      "Labels and software integrations resolve the same records. Scan workflows add preview and confirmation before a stock operation is executed.",
+      "Design labels for items and individual devices. Print through the browser, a local P-touch or a shared Office printer, and connect other systems through the API.",
     description:
-      "Technical overview of QR and barcode resolution, label layouts, CSV exchange, public shares and the OpenAPI 3.1 REST API.",
+      "Design labels, save print lists and use browser printing, QZ Tray or a shared Office printer. QR scans, CSV and the REST API connect your workflows.",
     detailIntro:
-      "A label should resolve an unambiguous record; an integration should use the same documented identifiers and operations. Open Inventory connects both paths with explicit lookup, preview, validation and idempotent execution.",
+      "Choose items or individual units, adjust a template and prepare a print series. Scan the label later to open the matching record. CSV and the API connect your inventory to other systems.",
     outcomes: [
-      "Resolve records by short link, QR code, barcode, UUID, SKU or serial number",
-      "Create reusable print layouts in the browser",
-      "Exchange data through validated CSV and scoped REST operations",
+      "Label items and individual devices with their own QR codes",
+      "Print locally or on the shared Office printer and save personal print lists",
+      "Exchange data through CSV and a scoped REST API",
     ],
-    workflowTitle: "Resolve first, mutate only after review",
+    workflowTitle: "From an item to a printed label",
     workflowIntro:
-      "A scan starts as a lookup. A stock change is written only after the record and proposed operation have been resolved and reviewed.",
+      "Print a single label or collect multiple items and templates into a series.",
     workflow: [
-      {
-        title: "Choose an identifier",
-        copy: "Use a short inventory link, UUID, SKU or serial number as the stable entry point to the record.",
-      },
-      {
-        title: "Build a label layout",
-        copy: "Combine a QR link, Code 128, text and an optional record image in a reusable print definition.",
-      },
-      {
-        title: "Scan and resolve",
-        copy: "Camera, image upload or hardware scanner reads the code. The matching record is displayed before any mutation.",
-      },
-      {
-        title: "Execute the workflow",
-        copy: "Run a reviewed stock action or call the same contract from an integration using a scoped token and idempotency key.",
-      },
+      { title: "Choose an item or device", copy: "Select an item or serialized unit. Its QR link stays valid when the device code changes." },
+      { title: "Design the label", copy: "Combine QR codes, barcodes, images and text. Adjust print-only titles, subtitles and copies, then check the preview." },
+      { title: "Choose a destination", copy: "Use the browser dialog, QZ Tray on a local PT-P710BT or a shared Windows printer. Send prepared labels as a series." },
+      { title: "Scan and continue", copy: "Open the record by scanning, review the operation and confirm the stock action." },
     ],
     example: {
       eyebrow: "Example · Tool issue",
@@ -395,9 +390,9 @@ const englishFeatureCopy = {
       ],
     },
     screenshot: {
-      alt: "Mock Open Inventory records that can be resolved by codes and API",
+      alt: "Open Inventory label designer with QR and barcode preview",
       caption:
-        "The same records are used by search, scan and API paths · mock data from a German-configured demo instance",
+        "Label designer in the web app · German demo data",
     },
     ios: {
       title: "Use the iPhone as an open scanner client.",
@@ -408,7 +403,7 @@ const englishFeatureCopy = {
         "Inspect scanner and server implementations in the same repository",
       ],
     },
-    trustTitle: "The API contract is a checked-in project artifact.",
+    trustTitle: "API access with scoped permissions",
     trustCopy:
       "The OpenAPI 3.1 specification is stored as YAML in the repository. Tokens are stored as hashes and can carry expiry dates and scopes. They can be revoked without changing the underlying user account.",
     trustPoints: [
@@ -418,12 +413,20 @@ const englishFeatureCopy = {
     ],
     items: [
       {
+        title: "Three printing options",
+        copy: "Use the browser print dialog, direct USB printing on a Brother PT-P710BT through QZ Tray, or a shared Office printer with a Windows agent. Shared setup currently uses 24 mm tape.",
+      },
+      {
+        title: "Saved print lists",
+        copy: "Collect items, individual units, templates and copies. Your personal list is saved per organization. A P-touch series supports up to 100 labels using the same tape width.",
+      },
+      {
         title: "QR and barcode workflows",
         copy: "Scan from a camera or image, resolve inventory links, UUIDs, SKUs and serial numbers, and design configurable action flows with previews, inputs, and confirmed execution.",
       },
       {
         title: "Reusable label layouts",
-        copy: "Design layouts in the browser with a short QR link, Code 128, optional record image and presets including Brother 62 mm and 102 × 152 mm.",
+        copy: "Design QR codes, barcodes, multiple text fields, subtitles and custom images. Adjust typography and cropping, use inverted printing or automatic label length, test-print drafts and save copies.",
       },
       {
         title: "CSV import and export",
@@ -431,7 +434,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Transactional duplicate merging",
-        copy: "A score helps identify similar records. A merge applies related-data changes transactionally instead of leaving partially moved associations.",
+        copy: "Find similar records and merge them together with their related data.",
       },
       {
         title: "Revocable public shares",
@@ -439,7 +442,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Documented REST API",
-        copy: "The checked-in OpenAPI 3.1 specification, interactive reference and hashed tokens with expiry and scopes make integrations inspectable.",
+        copy: "Read and update inventory through the interactive OpenAPI reference. API tokens are revocable and scoped; print management requires a browser session.",
       },
       {
         title: "WooCommerce stock sync",
@@ -647,820 +650,328 @@ export function getEnglishFeatureCopy(
     : undefined;
 }
 
-function EnglishInventoryPreview() {
-  return (
-    <figure className="overflow-hidden rounded-[28px] border border-border bg-surface p-2 shadow-[0_28px_80px_rgba(24,20,38,0.14)] sm:p-3">
-      <div className="relative overflow-hidden rounded-[20px] border border-border bg-surface-muted">
-        <Image
-          src="/marketing/screenshots/web-dashboard.png"
-          alt="Actual Open Inventory dashboard capture with real object photographs and purpose-built demo data"
-          width={1440}
-          height={960}
-          priority
-          sizes="(max-width: 1024px) 100vw, 55vw"
-          className="h-auto w-full"
-        />
-        <span className="absolute left-3 top-3 rounded-full border border-white/25 bg-[#17181d]/90 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-          Actual app capture · demo data
-        </span>
-      </div>
-      <figcaption className="px-3 pb-1 pt-3 text-[10px] leading-5 text-muted">
-        Unaltered screenshot of the running web app with real object photographs and purpose-built demo records.
-      </figcaption>
-    </figure>
-  );
+const presentationCopy = {
+  de: {
+    erfassen: { title: "Gegenstände mit Fotos erfassen", intro: "Fotografiere Geräte und Material direkt vor Ort. Ergänze die Angaben selbst oder prüfe optionale KI-Vorschläge, bevor du sie übernimmst." },
+    strukturieren: { title: "Ein Platz für alle Angaben", intro: "Fotos, Seriennummern, Dokumente und eigene Felder gehören zum selben Eintrag. Suche und Filter helfen dir, ihn wiederzufinden." },
+    "bestand-ausleihe": { title: "Bestände und Ausleihen verfolgen", intro: "Verfolge Ausleihen, Verbrauch und Lieferungen. Bestandsprognosen helfen beim Nachbestellen; die Stücklistenanalyse zeigt Materialbedarf und Kosten vor der Fertigung." },
+    "labels-api": { title: "Etiketten gestalten. Gemeinsam drucken.", intro: "Kennzeichne Artikel und einzelne Geräte mit QR-Etiketten. Drucke lokal oder am gemeinsamen Bürodrucker und speichere vorbereitete Drucklisten für später." },
+    "orte-raeume": { title: "Vom Standort zum richtigen Regal", intro: "Ordne Gegenstände Räumen, Schränken und Lagerorten zu. Karten und Raumansichten ergänzen den Standort, wenn du sie brauchst." },
+    "betrieb-sicherheit": { title: "Auf deinem Server. Mit klaren Zugriffsrechten.", intro: "Betreibe Open Inventory auf deiner Infrastruktur, verwalte Rollen und sichere deine Daten. Quellcode und Dokumentation sind öffentlich." },
+  },
+  en: {
+    erfassen: { title: "Capture objects with photos", intro: "Photograph equipment and supplies where you find them. Enter the details yourself or review optional AI suggestions before accepting them." },
+    strukturieren: { title: "One place for every detail", intro: "Keep photos, serial numbers, documents and custom fields on the same record. Search and filters help you find it again." },
+    "bestand-ausleihe": { title: "Keep track of stock and loans", intro: "Track loans, consumption and deliveries. Stock forecasts inform replenishment; bill-of-materials analysis shows component needs and costs before production." },
+    "labels-api": { title: "Design labels. Share a printer.", intro: "Label items and individual devices with QR codes. Print locally or on the shared Office printer and save prepared lists for later." },
+    "orte-raeume": { title: "Find the location. Find the shelf.", intro: "Assign objects to rooms, cabinets and storage locations. Add maps and room views when you need more spatial context." },
+    "betrieb-sicherheit": { title: "Your server. Clear access controls.", intro: "Run Open Inventory on your infrastructure, manage roles and back up your data. The source and documentation are public." },
+  },
+} satisfies Record<MarketingLocale, Record<FeatureSlug, { title: string; intro: string }>>;
+
+function featureCopy(locale: MarketingLocale, group: FeatureGroup): EnglishFeatureCopy {
+  return locale === "en" ? englishFeatureCopy[group.slug] : group;
 }
 
-export function EnglishFeaturesPage() {
-  const href = (path: string) => marketingHref("en", path);
-
-  return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <MarketingHeader />
-
-      <main>
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:56px_56px] opacity-55 [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
-          <div className="pointer-events-none absolute -left-20 top-28 size-[340px] rounded-full bg-[#8ff0cc]/25 blur-[110px]" />
-          <div className="pointer-events-none absolute right-0 top-16 size-[430px] rounded-full bg-[#8175ff]/18 blur-[130px]" />
-
-          <div className="relative mx-auto grid max-w-[1240px] items-center gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[0.88fr_1.12fr]">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.13em] text-brand">
-                <Github className="size-3.5" aria-hidden="true" />
-                MIT-licensed source
-              </div>
-              <h1 className="mt-6 text-[clamp(3.3rem,6.5vw,6rem)] font-semibold leading-[0.91] tracking-[-0.07em]">
-                Features and
-                <span className="block text-brand">implementation details.</span>
-              </h1>
-              <p className="mt-7 max-w-xl text-[17px] leading-8 text-muted">
-                Open Inventory combines photo capture, typed records, variants,
-                stock operations, internal requests, WooCommerce, spatial data,
-                and an API. The sections below describe the data flow, provider
-                boundaries, and known operating responsibilities.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href={href("/docs#docker")}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.22)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
-                >
-                  <Container className="size-[17px]" aria-hidden="true" />
-                  Read the Docker setup
-                </Link>
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:border-border-strong"
-                >
-                  Inspect the source
-                  <ArrowUpRight className="size-4" aria-hidden="true" />
-                </a>
-              </div>
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-muted">
-                {["MIT license", "Self-hostable", "Web + native iOS client"].map(
-                  (item) => (
-                    <span key={item} className="inline-flex items-center gap-1.5">
-                      <Check
-                        className="size-3 text-success"
-                        strokeWidth={2.6}
-                        aria-hidden="true"
-                      />
-                      {item}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-            <EnglishInventoryPreview />
-          </div>
-        </section>
-
-        <section className="border-b border-border bg-surface py-16 sm:py-20">
-          <div className="mx-auto grid max-w-[1240px] gap-8 px-5 sm:grid-cols-3 sm:px-8">
-            {[
-              ["One capture queue", "with separate resource, media and optional processing stages"],
-              ["Three operation types", "for purchases, sales, and multi-line loans"],
-              ["One open contract", "shared by the web app, native iOS client and integrations"],
-            ].map(([value, label]) => (
-              <div key={value} className="border-l-2 border-brand-border pl-5">
-                <p className="text-2xl font-semibold tracking-[-0.04em]">
-                  {value}
-                </p>
-                <p className="mt-1 text-sm leading-6 text-muted">{label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-b border-border py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid items-end gap-8 lg:grid-cols-[1fr_0.72fr]">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Interface examples
-                </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[58px]">
-                  Real captures from the running web app.
-                </h2>
-              </div>
-              <p className="text-[15px] leading-7 text-muted">
-                These unaltered screenshots use deliberately created demo
-                records and real object photographs. The captured instance is
-                configured in German, so its embedded labels remain German.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-5 lg:grid-cols-2">
-              {[
-                {
-                  src: "/marketing/screenshots/web-dashboard.png",
-                  title: "Review the dashboard",
-                  copy: "Inspect metrics and recent records with real object photographs.",
-                },
-                {
-                  src: "/marketing/screenshots/web-inventory.png",
-                  title: "Search inventory records",
-                  copy: "Inspect records, states, tags and locations in one list.",
-                },
-                {
-                  src: "/marketing/screenshots/web-item-detail.png",
-                  title: "Inspect an item in detail",
-                  copy: "Bring real object photographs, master data, media, and stock status together.",
-                },
-                {
-                  src: "/marketing/screenshots/web-stock.png",
-                  title: "Record stock movements",
-                  copy: "See incoming and outgoing movements, locations, and history on the record.",
-                },
-                {
-                  src: "/marketing/screenshots/web-orders.png",
-                  title: "Manage purchasing as an operation",
-                  copy: "Bring open lines, partial receipts, expected quantities, and stock intake together.",
-                },
-                {
-                  src: "/marketing/screenshots/web-label-designer.png",
-                  title: "Design printable labels",
-                  copy: "Generate QR and Code 128 previews from a selected demo record.",
-                },
-                {
-                  src: "/marketing/screenshots/web-batch.png",
-                  title: "Process a capture batch",
-                  copy: "Use the photo tray and shared capture settings in the running web app.",
-                },
-                {
-                  src: "/marketing/screenshots/web-locations.png",
-                  title: "Distribute stock by location",
-                  copy: "Review quantities, incoming stock, minimum levels, and coverage for each storage location.",
-                },
-                {
-                  src: "/marketing/screenshots/web-notifications.png",
-                  title: "Catch maintenance and shortages",
-                  copy: "Review concrete maintenance dates and low-stock warnings in one event list.",
-                },
-                {
-                  src: "/marketing/screenshots/web-settings-access.png",
-                  title: "Control shared access",
-                  copy: "Manage members, roles, and permissions in the self-hosted instance.",
-                },
-                {
-                  src: "/marketing/screenshots/web-inventory-types.png",
-                  title: "Define inventory types",
-                  copy: "Configure rooms, vehicles, tools, and custom types with explicit behavior.",
-                },
-                {
-                  src: "/marketing/screenshots/web-custom-fields.png",
-                  title: "Structure custom fields",
-                  copy: "Add typed information such as calibration dates to the records it applies to.",
-                },
-                {
-                  src: "/marketing/screenshots/web-data-transfer.png",
-                  title: "Exchange data deliberately",
-                  copy: "Use validated CSV import or export to CSV, a formatted Excel workbook, or a PDF report.",
-                },
-              ].map((screenshot) => (
-                <figure
-                  key={screenshot.src}
-                  className="overflow-hidden rounded-[24px] border border-border bg-surface shadow-[var(--shadow-md)]"
-                >
-                  <div className="relative overflow-hidden border-b border-border bg-surface-muted">
-                    <Image
-                      src={screenshot.src}
-                      alt={`${screenshot.title} in a real Open Inventory capture with demo records`}
-                      width={1440}
-                      height={960}
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="h-auto w-full"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-[#17181d]/85 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-                      Real capture · demo data
-                    </span>
-                  </div>
-                  <figcaption className="p-5">
-                    <p className="text-[17px] font-semibold tracking-[-0.025em]">
-                      {screenshot.title}
-                    </p>
-                    <p className="mt-1 text-[13px] leading-6 text-muted">
-                      {screenshot.copy}
-                    </p>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                Feature reference
-              </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
-                Six areas, with their constraints explained.
-              </h2>
-              <p className="mt-6 text-[17px] leading-8 text-muted">
-                Every item below belongs to the open project. External AI,
-                identity, map and storage providers remain optional deployment
-                choices.
-              </p>
-            </div>
-
-            <div className="mt-20 space-y-24 sm:mt-24">
-              {featureGroups.map((source) => {
-                const group = englishFeatureCopy[source.slug];
-                return (
-                  <section
-                    id={source.slug}
-                    key={source.slug}
-                    className="scroll-mt-28"
-                  >
-                    <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand">
-                          {group.eyebrow}
-                        </p>
-                        <h3 className="mt-4 text-[32px] font-semibold leading-[1.05] tracking-[-0.05em] sm:text-[42px]">
-                          {group.title}
-                        </h3>
-                        <p className="mt-4 max-w-md text-[15px] leading-7 text-muted">
-                          {group.intro}
-                        </p>
-                        <Link
-                          href={href(`/features/${source.slug}`)}
-                          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:gap-3"
-                        >
-                          Open the technical detail
-                          <ArrowRight className="size-4" aria-hidden="true" />
-                        </Link>
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {group.items.map((item, index) => {
-                          const Icon = source.items[index]?.icon ?? Boxes;
-                          return (
-                            <article
-                              key={item.title}
-                              className="rounded-[22px] border border-border bg-surface p-5 transition duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-md)]"
-                            >
-                              <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
-                                <Icon
-                                  className="size-[18px]"
-                                  strokeWidth={1.9}
-                                  aria-hidden="true"
-                                />
-                              </span>
-                              <h4 className="mt-5 text-[17px] font-semibold tracking-[-0.025em]">
-                                {item.title}
-                              </h4>
-                              <p className="mt-2 text-[13px] leading-6 text-muted">
-                                {item.copy}
-                              </p>
-                            </article>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </section>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-surface py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_auto]">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                Open implementation
-              </p>
-              <h2 className="mt-4 text-[38px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[52px]">
-                Inspect the code and the operating boundaries.
-              </h2>
-              <p className="mt-5 text-[16px] leading-7 text-muted">
-                The web app, native iOS client, database migrations and OpenAPI
-                document are published together under the MIT license.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Link
-                href={href("/open-source")}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-strong px-5 text-sm font-semibold text-on-strong transition hover:-translate-y-0.5 hover:opacity-90"
-              >
-                Open-source details
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-              <Link
-                href={href("/ios")}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border px-5 text-sm font-semibold transition hover:bg-surface-muted"
-              >
-                Native iOS architecture
-                <Smartphone className="size-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <MarketingFooter />
-    </div>
-  );
-}
-
-function EnglishProductScreenshot({
-  source,
+function ProductScreenshot({
+  group,
   copy,
+  eager = false,
 }: {
-  source: FeatureGroup;
+  group: FeatureGroup;
   copy: EnglishFeatureCopy;
+  eager?: boolean;
 }) {
   return (
-    <figure className="relative overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_34px_100px_rgba(23,23,35,0.18)]">
-      <div className="flex h-11 items-center gap-1.5 border-b border-border bg-surface px-4">
-        <span className="size-2 rounded-full bg-[#ff6a64]" />
-        <span className="size-2 rounded-full bg-[#f7c84d]" />
-        <span className="size-2 rounded-full bg-[#67d68c]" />
-        <span className="ml-3 font-mono text-[8px] text-muted">
-          app.open-inventory.local
-        </span>
-        <span className="ml-auto rounded-full bg-brand-soft px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.11em] text-brand">
-          Mock data
-        </span>
+    <figure className="min-w-0">
+      <div className="site-product-frame">
+        <Image
+          src={group.screenshot.src}
+          alt={copy.screenshot.alt}
+          width={1440}
+          height={960}
+          loading={eager ? "eager" : "lazy"}
+          sizes="(max-width: 1024px) 100vw, 58vw"
+          className="h-auto w-full"
+        />
       </div>
-      <Image
-        src={source.screenshot.src}
-        alt={copy.screenshot.alt}
-        width={1440}
-        height={960}
-        priority
-        sizes="(max-width: 1024px) 100vw, 55vw"
-        className="h-auto w-full"
-      />
-      <figcaption className="border-t border-border px-5 py-3 text-[9px] text-muted">
+      <figcaption className="mt-3 text-xs leading-5 text-muted">
         {copy.screenshot.caption}
       </figcaption>
     </figure>
   );
 }
 
-function EnglishExamplePanel({ copy }: { copy: EnglishFeatureCopy }) {
+function FeatureActions({ locale }: { locale: MarketingLocale }) {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#1a1b21] shadow-2xl">
-      <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4">
-        <span className="size-2 rounded-full bg-[#ff6a64]" />
-        <span className="size-2 rounded-full bg-[#f7c84d]" />
-        <span className="size-2 rounded-full bg-[#67d68c]" />
-        <span className="ml-3 font-mono text-[9px] text-white/35">
-          concrete example
-        </span>
-      </div>
-      <div className="p-5 sm:p-7">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8ff0cc]">
-          {copy.example.eyebrow}
-        </p>
-        <h3 className="mt-4 text-[30px] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[38px]">
-          {copy.example.title}
-        </h3>
-        <p className="mt-4 max-w-xl text-[14px] leading-7 text-white/55">
-          {copy.example.copy}
-        </p>
-        <div className="mt-8 grid gap-2 sm:grid-cols-3">
-          {copy.example.facts.map((fact) => (
-            <div
-              key={fact.label}
-              className="rounded-2xl border border-white/10 bg-white/[0.045] p-4"
-            >
-              <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/35">
-                {fact.label}
-              </p>
-              <p className="mt-3 text-[12px] font-semibold leading-5 text-white/90">
-                {fact.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="mt-8 flex flex-wrap gap-3">
+      <a href={publicDemoUrl} className="site-button site-button-primary">
+        {locale === "de" ? "Live-Demo öffnen" : "Open live demo"}
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </a>
+      <Link href={marketingHref(locale, "/docs#docker")} className="site-button site-button-secondary">
+        {locale === "de" ? "Selbst hosten" : "Self-host"}
+      </Link>
     </div>
   );
 }
 
-export function EnglishFeatureDetailPage({ slug }: { slug: string }) {
-  const source = getFeatureGroup(slug);
-  const copy = getEnglishFeatureCopy(slug);
-  if (!source || !copy) return null;
-
-  const href = (path: string) => marketingHref("en", path);
-  const currentIndex = featureGroups.findIndex(
-    (item) => item.slug === source.slug,
-  );
-  const nextSource =
-    featureGroups[(currentIndex + 1) % featureGroups.length] ?? featureGroups[0];
-  const nextCopy = nextSource ? englishFeatureCopy[nextSource.slug] : undefined;
+export function FeatureOverviewPage({ locale }: { locale: MarketingLocale }) {
+  const de = locale === "de";
+  const href = (path: string) => marketingHref(locale, path);
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
-
-      <main>
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:60px_60px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
-          <div className="pointer-events-none absolute -left-24 top-24 size-[380px] rounded-full bg-[#8ff0cc]/24 blur-[120px]" />
-          <div className="pointer-events-none absolute right-0 top-12 size-[460px] rounded-full bg-[#8175ff]/18 blur-[135px]" />
-
-          <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 sm:px-8 sm:pb-28 sm:pt-12">
-            <Link
-              href={href("/features")}
-              className="inline-flex items-center gap-2 rounded-lg text-xs font-semibold text-muted transition hover:text-foreground"
-            >
-              <ArrowLeft className="size-3.5" aria-hidden="true" />
-              All features
-            </Link>
-
-            <div className="mt-10 grid items-center gap-14 lg:grid-cols-[0.88fr_1.12fr] lg:gap-12">
-              <div className="relative z-10 max-w-[650px]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  {copy.eyebrow}
-                </p>
-                <h1 className="mt-5 text-[clamp(3.15rem,6.2vw,5.9rem)] font-semibold leading-[0.91] tracking-[-0.068em]">
-                  {copy.title}
-                </h1>
-                <p className="mt-7 text-[17px] leading-7 text-muted sm:text-[19px] sm:leading-8">
-                  {copy.intro}
-                </p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href={href("/docs#docker")}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.24)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
-                  >
-                    <Container className="size-4" aria-hidden="true" />
-                    Read the self-hosting setup
-                  </Link>
-                  <a
-                    href={githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-border-strong"
-                  >
-                    <Github className="size-4" aria-hidden="true" />
-                    Inspect on GitHub
-                  </a>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-muted">
-                  {["MIT license", "Self-hostable", "Native iOS client"].map(
-                    (item) => (
-                      <span key={item} className="flex items-center gap-1.5">
-                        <Check
-                          className="size-3 text-success"
-                          strokeWidth={2.5}
-                          aria-hidden="true"
-                        />
-                        {item}
-                      </span>
-                    ),
-                  )}
-                </div>
-              </div>
-
-              <EnglishProductScreenshot source={source} copy={copy} />
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
+      <main id="main-content">
+        <section className="site-section border-b border-border">
+          <div className="site-shell grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                Scope
+              <p className="site-eyebrow">{de ? "Die Funktionen" : "The features"}</p>
+              <h1 className="site-title mt-5">{de ? "Wissen, was da ist. Und wo es bleibt." : "Know what you have. And where it goes."}</h1>
+              <p className="mt-6 max-w-xl text-lg leading-8 text-muted">
+                {de ? "Erfasse Geräte und Material, finde ihren Standort und behalte Ausleihen und Bestände im Blick. Vom ersten Gegenstand bis zum gemeinsamen Lager." : "Capture equipment and supplies, find their location and keep track of loans and stock. From your first item to a shared storeroom."}
               </p>
-              <h2 className="mt-4 text-[40px] font-semibold leading-[1.02] tracking-[-0.055em] sm:text-[56px]">
-                What this area changes in the data flow.
-              </h2>
-              <p className="mt-6 text-[16px] leading-8 text-muted">
-                {copy.detailIntro}
-              </p>
+              <FeatureActions locale={locale} />
+              <p className="mt-6 text-sm text-muted">{de ? "MIT-Lizenz · Selbst gehostet · Web und iOS" : "MIT license · Self-hosted · Web and iOS"}</p>
             </div>
-            <div className="grid content-start gap-3">
-              {copy.outcomes.map((outcome, index) => (
-                <div
-                  key={outcome}
-                  className="flex gap-4 rounded-[20px] border border-border bg-surface p-5"
-                >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-success-soft text-success">
-                    <Check className="size-4" strokeWidth={2.5} aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted">
-                      Result {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <p className="mt-2 text-[15px] font-medium leading-6">
-                      {outcome}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            <figure className="min-w-0">
+              <div className="site-product-frame">
+                <Image src="/marketing/screenshots/web-inventory.png" alt={de ? "Inventarübersicht mit Objektfotos, Namen und Standorten in Open Inventory" : "Open Inventory records with object photos, names and locations"} width={1440} height={960} loading="eager" sizes="(max-width: 1024px) 100vw, 58vw" className="h-auto w-full" />
+              </div>
+              <figcaption className="mt-3 text-xs leading-5 text-muted">{de ? "Die Web-App mit Beispieldaten. Alle Produktansichten zeigen die tatsächliche Oberfläche." : "The web app with demo data. All product captures show the actual interface; this demo instance is in German."}</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <nav aria-label={de ? "Funktionsbereiche" : "Feature areas"} className="border-b border-border bg-surface">
+          <div className="site-shell grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+            {featureGroups.map((group, index) => (
+              <a key={group.slug} href={`#${group.slug}`} className="flex min-h-16 items-center gap-3 py-4 text-sm font-medium transition-colors hover:text-brand">
+                <span className="font-mono text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
+                {featureCopy(locale, group).menuTitle}
+                <ArrowRight className="ml-auto size-4 text-muted" aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <section className="border-b border-border py-10">
+          <div className="site-shell">
+            <h2 className="site-eyebrow">{de ? "Aktuell ergänzt" : "Recently added"}</h2>
+            <div className="mt-5 grid gap-6 md:grid-cols-3">
+              {(de ? [
+                ["Gemeinsam drucken", "Etiketten für Einzelgeräte, gespeicherte Listen und ein Bürodrucker für das Team.", "/features/labels-api"],
+                ["Bestände vorausplanen", "Verbrauch, Lieferungen und Bestandsverläufe für Nachbestellungen nutzen.", "/docs#planning"],
+                ["Fertigung durchrechnen", "Varianten, Materialbedarf, Kosten und Abhängigkeiten in der Stücklistenanalyse vergleichen.", "/features/bestand-ausleihe"],
+              ] : [
+                ["Share a printer", "Individual unit labels, saved print lists and an Office printer for the team.", "/features/labels-api"],
+                ["Plan ahead", "Use consumption, deliveries and stock history to plan replenishment.", "/docs#planning"],
+                ["Plan production", "Compare variants, material needs, costs and dependencies in the BOM analysis.", "/features/bestand-ausleihe"],
+              ]).map(([title, text, path]) => <Link key={path} href={href(path)} className="group border-l-2 border-brand pl-5"><h3 className="font-semibold group-hover:text-brand">{title} →</h3><p className="mt-2 text-sm leading-6 text-muted">{text}</p></Link>)}
             </div>
           </div>
         </section>
 
-        <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                Included implementation
-              </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
-                Individual capabilities and constraints.
-              </h2>
-              <p className="mt-5 text-[16px] leading-7 text-muted">
-                These components are part of the MIT-licensed project. Optional
-                providers are identified where they take part in a workflow.
-              </p>
-            </div>
+        <div className="site-shell">
+          {featureGroups.map((group, index) => {
+            const copy = featureCopy(locale, group);
+            const presentation = presentationCopy[locale][group.slug];
+            return (
+              <section id={group.slug} key={group.slug} className="site-section scroll-mt-28 border-b border-border last:border-b-0">
+                <div className="grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+                  <div>
+                    <p className="site-eyebrow">{String(index + 1).padStart(2, "0")} / {copy.menuTitle}</p>
+                    <h2 className="site-heading mt-4">{presentation.title}</h2>
+                    <p className="mt-5 text-base leading-7 text-muted">{presentation.intro}</p>
+                    <ul className="mt-6 space-y-3">
+                      {copy.outcomes.slice(0, 2).map((outcome) => (
+                        <li key={outcome} className="flex gap-3 text-sm leading-6">
+                          <Check className="mt-1 size-4 shrink-0 text-brand" aria-hidden="true" />
+                          {outcome}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href={href(`/features/${group.slug}`)} className="site-link mt-7 inline-flex items-center gap-2">
+                      {de ? "Funktionen und Ablauf ansehen" : "Explore features and workflow"}
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                  <ProductScreenshot group={group} copy={copy} />
+                </div>
+              </section>
+            );
+          })}
+        </div>
 
-            <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section className="site-section border-y border-border bg-surface">
+          <div className="site-shell">
+            <details className="group">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 [&::-webkit-details-marker]:hidden">
+                <span>
+                  <span className="site-eyebrow">{de ? "Für größere Abläufe" : "For more involved workflows"}</span>
+                  <span className="site-heading mt-4 block">{de ? "Wie die Bereiche zusammenarbeiten" : "How the pieces work together"}</span>
+                  <span className="mt-4 block max-w-2xl text-base leading-7 text-muted">{de ? "Einkauf, Lager, Ausleihe und Verkauf nutzen dieselben Daten. Öffne die interaktive Übersicht, um einen Ablauf zu verfolgen." : "Purchasing, stock, lending and sales use the same records. Open the interactive overview to follow a workflow."}</span>
+                </span>
+                <ChevronDown className="mt-3 size-6 shrink-0 text-brand transition-transform group-open:rotate-180" aria-hidden="true" />
+              </summary>
+              <div className="mt-8 border-t border-border">
+                <BusinessFlow locale={locale} />
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section className="site-section">
+          <div className="site-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="max-w-2xl">
+              <p className="site-eyebrow">{de ? "Offen für deinen Betrieb" : "Open for your setup"}</p>
+              <h2 className="site-heading mt-4">{de ? "Erst ausprobieren. Dann selbst betreiben." : "Try it first. Then make it yours."}</h2>
+              <p className="mt-5 text-base leading-7 text-muted">{de ? "Web-App, iOS-App und API sind MIT-lizenziert. Für den eigenen Betrieb findest du die Installation, Konfiguration und Hinweise zu Backups in der Dokumentation." : "The web app, iOS app and API are MIT-licensed. The documentation covers installation, configuration and backups for your own instance."}</p>
+              <Link href={href("/open-source")} className="site-link mt-6 inline-flex items-center gap-2">{de ? "Mehr zum offenen Projekt" : "About the open-source project"}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+            </div>
+            <FeatureActions locale={locale} />
+          </div>
+        </section>
+      </main>
+      <MarketingFooter />
+    </div>
+  );
+}
+
+export function EnglishFeaturesPage() {
+  return <FeatureOverviewPage locale="en" />;
+}
+
+export function FeatureDetailContent({ locale, group }: { locale: MarketingLocale; group: FeatureGroup }) {
+  const de = locale === "de";
+  const copy = featureCopy(locale, group);
+  const presentation = presentationCopy[locale][group.slug];
+  const href = (path: string) => marketingHref(locale, path);
+  const nextGroup = featureGroups[(featureGroups.findIndex((item) => item.slug === group.slug) + 1) % featureGroups.length];
+  const nextCopy = featureCopy(locale, nextGroup);
+
+  return (
+    <div className="min-h-dvh bg-background text-foreground">
+      <MarketingHeader />
+      <main id="main-content">
+        <section className="border-b border-border pb-16 pt-8 sm:pb-24 sm:pt-10">
+          <div className="site-shell">
+            <Link href={href("/features")} className="site-link inline-flex items-center gap-2 text-sm"><ArrowLeft className="size-4" aria-hidden="true" />{de ? "Alle Funktionen" : "All features"}</Link>
+            <div className="mt-10 grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+              <div>
+                <p className="site-eyebrow">{copy.eyebrow}</p>
+                <h1 className="site-title mt-5">{presentation.title}</h1>
+                <p className="mt-6 text-lg leading-8 text-muted">{presentation.intro}</p>
+                <FeatureActions locale={locale} />
+              </div>
+              <ProductScreenshot group={group} copy={copy} eager />
+            </div>
+          </div>
+        </section>
+
+        <section className="site-section">
+          <div className="site-shell grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20">
+            <div>
+              <p className="site-eyebrow">{de ? "Im Arbeitsalltag" : "In everyday use"}</p>
+              <h2 className="site-heading mt-4">{de ? "Was du damit erledigen kannst" : "What you can do with it"}</h2>
+              <p className="mt-5 text-base leading-8 text-muted">{copy.detailIntro}</p>
+            </div>
+            <ul className="divide-y divide-border border-y border-border">
+              {copy.outcomes.map((outcome) => <li key={outcome} className="flex gap-4 py-6 text-base leading-7"><Check className="mt-1 size-5 shrink-0 text-brand" aria-hidden="true" />{outcome}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section className="site-section border-y border-border bg-surface">
+          <div className="site-shell">
+            <p className="site-eyebrow">{de ? "Funktionen im Detail" : "Features in detail"}</p>
+            <h2 className="site-heading mt-4">{copy.menuTitle}</h2>
+            <div className="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
               {copy.items.map((item, index) => {
-                const Icon = source.items[index]?.icon ?? Boxes;
-                return (
-                  <article
-                    key={item.title}
-                    className="rounded-[24px] border border-border bg-surface p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)]"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand">
-                        <Icon
-                          className="size-5"
-                          strokeWidth={1.9}
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span className="font-mono text-[9px] text-muted">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <h3 className="mt-9 text-[21px] font-semibold tracking-[-0.04em]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-3 text-[14px] leading-6 text-muted">
-                      {item.copy}
-                    </p>
-                  </article>
-                );
+                const Icon = group.items[index]?.icon;
+                return <article key={item.title} className="border-t border-border pt-6">
+                  {Icon && <Icon className="size-6 text-brand" strokeWidth={1.6} aria-hidden="true" />}
+                  <h3 className="mt-4 text-xl font-semibold leading-7">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-muted">{item.copy}</p>
+                </article>;
               })}
             </div>
           </div>
         </section>
 
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Sequence
-                </p>
-                <h2 className="mt-4 text-[40px] font-semibold leading-[1.02] tracking-[-0.055em] sm:text-[54px]">
-                  {copy.workflowTitle}
-                </h2>
-                <p className="mt-5 text-[15px] leading-7 text-muted">
-                  {copy.workflowIntro}
-                </p>
-              </div>
-              <ol className="grid gap-3 sm:grid-cols-2">
-                {copy.workflow.map((step, index) => (
-                  <li
-                    key={step.title}
-                    className="relative rounded-[22px] border border-border bg-surface p-5"
-                  >
-                    <span className="grid size-9 place-items-center rounded-xl bg-strong font-mono text-[10px] font-semibold text-on-strong">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="mt-8 text-[18px] font-semibold tracking-[-0.03em]">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 text-[13px] leading-6 text-muted">
-                      {step.copy}
-                    </p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
+        <section className="site-section">
+          <div className="site-shell grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
-                Worked example
-              </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
-                Concrete records, states and decisions.
-              </h2>
-              <p className="mt-6 max-w-xl text-[16px] leading-7 text-white/55">
-                The values are mock data, but the workflow and state changes
-                correspond to operations implemented by Open Inventory.
-              </p>
+              <p className="site-eyebrow">{de ? "Schritt für Schritt" : "Step by step"}</p>
+              <h2 className="site-heading mt-4">{copy.workflowTitle}</h2>
+              <p className="mt-5 text-base leading-7 text-muted">{copy.workflowIntro}</p>
+              {group.slug === "labels-api" && <Link href={href("/docs#printing")} className="site-link mt-5 inline-block">{de ? "Drucker einrichten und erste Etiketten drucken →" : "Set up a printer and print your first labels →"}</Link>}
             </div>
-            <EnglishExamplePanel copy={copy} />
+            <ol className="divide-y divide-border border-y border-border">
+              {copy.workflow.map((step, index) => <li key={step.title} className="flex gap-5 py-6"><span className="pt-1 font-mono text-sm text-brand">{String(index + 1).padStart(2, "0")}</span><div><h3 className="text-lg font-semibold">{step.title}</h3><p className="mt-2 text-sm leading-7 text-muted">{step.copy}</p></div></li>)}
+            </ol>
+          </div>
+          <div className="site-shell mt-14">
+            <aside className="rounded-xl border border-border bg-surface-muted p-6 sm:p-10">
+              <p className="site-eyebrow">{copy.example.eyebrow}</p>
+              <div className="mt-4 grid gap-8 lg:grid-cols-2 lg:gap-14">
+                <div><h3 className="text-2xl font-semibold leading-8">{copy.example.title}</h3><p className="mt-3 text-base leading-7 text-muted">{copy.example.copy}</p></div>
+                <dl className="grid content-start gap-5 sm:grid-cols-3">{copy.example.facts.map((fact) => <div key={fact.label} className="border-t border-border-strong pt-4"><dt className="text-xs leading-5 text-muted">{fact.label}</dt><dd className="mt-2 text-sm font-semibold leading-6">{fact.value}</dd></div>)}</dl>
+              </div>
+            </aside>
           </div>
         </section>
 
-        <section className="border-b border-border bg-surface py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
-            <figure className="mx-auto w-full max-w-[292px]">
-              <div className="overflow-hidden rounded-[51px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_28px_80px_rgba(18,20,28,0.28)]">
-                <Image
-                  src={featureIOSCaptures[source.slug]}
-                  width={1206}
-                  height={2622}
-                  sizes="292px"
-                  alt="Real native Open Inventory app capture with purpose-built demo data"
-                  className="h-auto w-full rounded-[39px]"
-                />
+        <section className="site-section border-y border-border bg-surface">
+          <div className="site-shell grid items-center gap-12 lg:grid-cols-[0.65fr_1fr] lg:gap-20">
+            <figure className="mx-auto w-full max-w-[248px]">
+              <div className="overflow-hidden rounded-[36px] border-[6px] border-[#242722] bg-[#242722]">
+                <Image src={featureIOSCaptures[group.slug]} width={1206} height={2622} sizes="248px" alt={de ? `Open Inventory auf dem iPhone: ${copy.menuTitle}` : `Open Inventory on iPhone: ${copy.menuTitle}`} className="h-auto w-full" />
               </div>
-              <figcaption className="mt-4 text-center text-[10px] font-semibold uppercase tracking-[0.13em] text-muted">
-                Real SwiftUI app capture · demo data
-              </figcaption>
+              <figcaption className="mt-4 text-center text-xs leading-5 text-muted">{de ? "Native iOS-App · Beispieldaten" : "Native iOS app · German demo data"}</figcaption>
             </figure>
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand">
-                <Smartphone className="size-3.5" aria-hidden="true" />
-                Open-source iOS implementation
-              </div>
-              <h2 className="mt-6 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
-                {copy.ios.title}
-              </h2>
-              <p className="mt-5 max-w-2xl text-[16px] leading-7 text-muted">
-                {copy.ios.copy}
-              </p>
-              <div className="mt-7 grid gap-3">
-                {copy.ios.points.map((point) => (
-                  <p key={point} className="flex gap-3 text-sm leading-6">
-                    <Check
-                      className="mt-1 size-4 shrink-0 text-success"
-                      strokeWidth={2.4}
-                      aria-hidden="true"
-                    />
-                    {point}
-                  </p>
-                ))}
-              </div>
-              <Link
-                href={href("/ios")}
-                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:gap-3"
-              >
-                Read the native iOS architecture
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
+              <p className="site-eyebrow">{de ? "Auch vor Ort" : "On site, too"}</p>
+              <h2 className="site-heading mt-4">{copy.ios.title}</h2>
+              <p className="mt-5 text-base leading-7 text-muted">{copy.ios.copy}</p>
+              <ul className="mt-6 space-y-3">{copy.ios.points.map((point) => <li key={point} className="flex gap-3 text-sm leading-6"><Check className="mt-1 size-4 shrink-0 text-brand" aria-hidden="true" />{point}</li>)}</ul>
+              <Link href={href("/ios")} className="site-link mt-7 inline-flex items-center gap-2">{de ? "Die iOS-App kennenlernen" : "Explore the iOS app"}<ArrowRight className="size-4" aria-hidden="true" /></Link>
             </div>
           </div>
         </section>
 
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="overflow-hidden rounded-[30px] border border-border bg-surface shadow-[var(--shadow-md)]">
-              <div className="grid gap-10 p-6 sm:p-10 lg:grid-cols-[0.86fr_1.14fr] lg:p-14">
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-success-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-success">
-                    <Github className="size-3.5" aria-hidden="true" />
-                    MIT-licensed source
-                  </div>
-                  <h2 className="mt-6 text-[38px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[52px]">
-                    {copy.trustTitle}
-                  </h2>
-                  <p className="mt-5 text-[15px] leading-7 text-muted">
-                    {copy.trustCopy}
-                  </p>
-                </div>
-                <div>
-                  <div className="grid gap-3">
-                    {copy.trustPoints.map((point) => (
-                      <div
-                        key={point}
-                        className="flex gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
-                      >
-                        <ShieldCheck
-                          className="mt-0.5 size-4 shrink-0 text-success"
-                          aria-hidden="true"
-                        />
-                        <p className="text-[13px] leading-6">{point}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <a
-                      href={licenseUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex h-10 items-center gap-2 rounded-xl border border-border px-3.5 text-xs font-semibold transition hover:bg-surface-muted"
-                    >
-                      MIT license
-                      <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                    </a>
-                    <a
-                      href={openApiUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex h-10 items-center gap-2 rounded-xl border border-border px-3.5 text-xs font-semibold transition hover:bg-surface-muted"
-                    >
-                      <KeyRound className="size-3.5" aria-hidden="true" />
-                      OpenAPI 3.1
-                    </a>
-                    <Link
-                      href={href("/open-source")}
-                      className="inline-flex h-10 items-center gap-2 rounded-xl bg-strong px-3.5 text-xs font-semibold text-on-strong transition hover:opacity-90"
-                    >
-                      Open-source architecture
-                      <ArrowRight className="size-3.5" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </div>
+        <section className="site-section">
+          <div className="site-shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+            <div><p className="site-eyebrow">{de ? "Einrichtung und Details" : "Setup and details"}</p><h2 className="mt-4 text-2xl font-semibold">{de ? "So richtest du es ein" : "Set it up"}</h2><Link href={href(group.slug === "labels-api" ? "/docs#printing" : group.slug === "bestand-ausleihe" ? "/docs#planning" : "/docs")} className="site-link mt-5 inline-block">{de ? "Zur Anleitung →" : "Read the guide →"}</Link></div>
+            <div><ul className="space-y-5">{copy.trustPoints.map((point) => <li key={point} className="flex gap-3 text-sm leading-7"><Check className="mt-1.5 size-4 shrink-0 text-brand" aria-hidden="true" />{point}</li>)}</ul>
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4 text-sm">
+                <a href={licenseUrl} className="site-link inline-flex items-center gap-2">{de ? "MIT-Lizenz" : "MIT license"}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+                <a href={openApiUrl} className="site-link inline-flex items-center gap-2">OpenAPI 3.1<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+                <Link href={href("/open-source")} className="site-link">Open Source</Link>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-              {nextSource && nextCopy ? (
-                <Link
-                  href={href(`/features/${nextSource.slug}`)}
-                  className="group rounded-[28px] border border-border bg-surface p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] sm:p-9"
-                >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-brand">
-                    Next feature area
-                  </p>
-                  <div className="mt-6 flex items-end justify-between gap-6">
-                    <div>
-                      <h2 className="text-[32px] font-semibold leading-none tracking-[-0.05em] sm:text-[42px]">
-                        {nextCopy.menuTitle}
-                      </h2>
-                      <p className="mt-3 max-w-lg text-sm leading-6 text-muted">
-                        {nextCopy.intro}
-                      </p>
-                    </div>
-                    <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand-soft text-brand transition group-hover:translate-x-1">
-                      <ArrowRight className="size-5" aria-hidden="true" />
-                    </span>
-                  </div>
-                </Link>
-              ) : null}
-
-              <div className="rounded-[28px] bg-[#121318] p-7 text-white shadow-sm sm:p-9">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-[#8ff0cc]">
-                  Operate your own instance
-                </p>
-                <h2 className="mt-5 text-[32px] font-semibold leading-none tracking-[-0.05em] sm:text-[42px]">
-                  Start from the documented stack.
-                </h2>
-                <p className="mt-4 max-w-lg text-sm leading-6 text-white/50">
-                  Review the Compose services, persistence requirements and
-                  provider configuration before exposing an instance to a
-                  network.
-                </p>
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href={href("/docs#docker")}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 text-xs font-semibold text-[#17181d] transition hover:-translate-y-0.5"
-                  >
-                    <Container className="size-4" aria-hidden="true" />
-                    Docker setup
-                  </Link>
-                  <Link
-                    href={href("/use-cases")}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 px-4 text-xs font-semibold transition hover:bg-white/10"
-                  >
-                    Use-case notes
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <section className="site-section border-t border-border bg-surface">
+          <div className="site-shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+            <Link href={href(`/features/${nextGroup.slug}`)} className="group block">
+              <p className="site-eyebrow">{de ? "Nächster Funktionsbereich" : "Next feature area"}</p>
+              <h2 className="mt-4 flex items-center gap-4 text-3xl font-semibold leading-tight">{nextCopy.menuTitle}<ArrowRight className="size-6 shrink-0 text-brand transition-transform group-hover:translate-x-1" aria-hidden="true" /></h2>
+              <p className="mt-4 max-w-lg text-sm leading-7 text-muted">{presentationCopy[locale][nextGroup.slug].intro}</p>
+            </Link>
+            <div className="border-t border-border pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0"><p className="site-eyebrow">{de ? "Selbst ausprobieren" : "Try it yourself"}</p><h2 className="mt-4 text-3xl font-semibold leading-tight">{de ? "Ein erster Blick in dein neues Inventar." : "Take a look at your next inventory."}</h2><FeatureActions locale={locale} /></div>
           </div>
         </section>
       </main>
-
       <MarketingFooter />
     </div>
   );
+}
+
+export function EnglishFeatureDetailPage({ slug }: { slug: string }) {
+  const group = getFeatureGroup(slug);
+  if (!group || !getEnglishFeatureCopy(slug)) return null;
+  return <FeatureDetailContent locale="en" group={group} />;
 }

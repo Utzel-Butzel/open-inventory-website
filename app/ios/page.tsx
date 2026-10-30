@@ -160,19 +160,20 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
                 <Image
                   src={capture.src}
                   alt={capture.alt}
+                  loading="eager"
                   fill
                   sizes="(max-width: 639px) 45vw, (max-width: 1023px) 260px, 220px"
                   className="object-cover"
                 />
               </div>
             </div>
-            <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-white/40 sm:text-[10px]">
+            <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65 sm:text-[10px]">
               {capture.label}
             </p>
           </div>
         ))}
       </div>
-      <figcaption className="mt-10 text-center text-[10px] font-medium text-white/45 sm:mt-14">
+      <figcaption className="mt-10 text-center text-[10px] font-medium text-white/65 sm:mt-14">
         {isEnglish
           ? "Real app captures with demo data"
           : "Echte App-Aufnahmen mit Demo-Daten"}
@@ -230,13 +231,13 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
 
   return (
     <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-      <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+      <div className="site-shell">
         <div className="grid gap-7 lg:grid-cols-[1fr_0.68fr] lg:items-end">
           <div className="max-w-4xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
               {isEnglish ? "More actual app states" : "Mehr echte App-Zustände"}
             </p>
-            <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
+            <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
               {isEnglish
                 ? "Six workflows. Directly from the native app."
                 : "Sechs Abläufe. Direkt aus der nativen App."}
@@ -348,13 +349,10 @@ export default async function IOSPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <section className="relative overflow-hidden bg-[#111216] text-white">
-          <div className="pointer-events-none absolute -left-24 top-20 size-[420px] rounded-full bg-[#665cff]/28 blur-[130px]" />
-          <div className="pointer-events-none absolute right-[8%] top-24 size-[380px] rounded-full bg-[#8ff0cc]/14 blur-[130px]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
 
-          <div className="relative mx-auto grid max-w-[1240px] items-center gap-16 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1fr_0.78fr] lg:gap-10">
+          <div className="site-shell relative grid items-center gap-16 py-20 sm:py-28 lg:grid-cols-[1fr_0.78fr] lg:gap-10">
             <div className="max-w-[650px]">
               <div className="flex items-center gap-5 sm:gap-6">
                 <Image
@@ -370,30 +368,30 @@ export default async function IOSPage() {
                   className="size-[96px] rounded-[23px] shadow-[0_20px_55px_rgba(0,0,0,0.42)] ring-1 ring-white/15 sm:size-[120px] sm:rounded-[28px]"
                 />
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">
                     {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
                   </p>
-                  <p className="mt-2 text-sm text-white/50">
+                  <p className="mt-2 text-sm text-white/65">
                     {isEnglish ? "Native app · iOS 17+" : "Native App · iOS 17+"}
                   </p>
                 </div>
               </div>
 
-              <h1 className="mt-8 text-[clamp(3.5rem,7vw,6.5rem)] font-semibold leading-[0.9] tracking-[-0.075em]">
+              <h1 className="site-title mt-8">
                 {isEnglish ? "Inventory in" : "Inventar in"}
-                <span className="block text-[#9188ff]">
+                <span className="block text-brand-inverse">
                   {isEnglish ? "your hands." : "deiner Hand."}
                 </span>
               </h1>
-              <p className="mt-7 max-w-[600px] text-[17px] leading-8 text-white/55 sm:text-[19px]">
+              <p className="mt-7 max-w-[600px] text-[17px] leading-8 text-white/65 sm:text-[19px]">
                 {isEnglish
                   ? "Take a photo, scan a code, or record stock right at the shelf. Open Inventory connects to your own instance, while uploads and optional AI processing continue reliably in the background."
                   : "Foto aufnehmen, Code scannen oder Bestand direkt am Regal buchen: Open Inventory verbindet sich mit deiner eigenen Instanz, während Uploads und optionale KI-Verarbeitung zuverlässig im Hintergrund weiterlaufen."}
               </p>
 
-              <div className="mt-8 max-w-[590px] rounded-[22px] border border-white/12 bg-white/[0.065] p-4 backdrop-blur-sm sm:p-5">
+              <div className="mt-8 max-w-[590px] rounded-2xl border border-white/12 bg-white/[0.065] p-4 backdrop-blur-sm sm:p-5">
                 <div className="flex items-start gap-4">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#8ff0cc]/12 text-[#8ff0cc]">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-inverse/12 text-brand-inverse">
                     <Clock3 className="size-6" strokeWidth={1.8} aria-hidden="true" />
                   </span>
                   <div>
@@ -402,7 +400,7 @@ export default async function IOSPage() {
                         ? "App Store release in preparation"
                         : "App-Store-Veröffentlichung in Vorbereitung"}
                     </p>
-                    <p className="mt-1 text-[12px] leading-5 text-white/45">
+                    <p className="mt-1 text-[12px] leading-5 text-white/65">
                       {isEnglish
                         ? "The public App Store product page is not live yet. We will link it here as soon as it is available."
                         : "Die öffentliche Produktseite im App Store ist noch nicht freigeschaltet. Sobald sie verfügbar ist, wird sie hier verlinkt."}
@@ -414,27 +412,27 @@ export default async function IOSPage() {
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="#app-workflows"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-white px-5 text-sm font-semibold text-[#17181d] transition hover:-translate-y-0.5 hover:bg-white/90"
+                  className="site-button site-button-primary"
                 >
                   {isEnglish ? "Explore the workflows" : "Abläufe ansehen"}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
                 <Link
                   href="#getting-started"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/[0.06] px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/10"
+                  className="site-button site-button-secondary"
                 >
                   {isEnglish ? "See how to get started" : "So startest du"}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-white/50">
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-white/65">
                 {(isEnglish
                   ? ["Native for iPhone", "iOS 17+", "Your server URL"]
                   : ["Nativ für iPhone", "iOS 17+", "Deine Server-URL"]
                 ).map((item) => (
                   <span key={item} className="inline-flex items-center gap-1.5">
-                    <Check className="size-3 text-[#8ff0cc]" strokeWidth={2.6} aria-hidden="true" />
+                    <Check className="size-3 text-brand-inverse" strokeWidth={2.6} aria-hidden="true" />
                     {item}
                   </span>
                 ))}
@@ -446,7 +444,7 @@ export default async function IOSPage() {
         </section>
 
         <section className="border-b border-border bg-surface py-16 sm:py-20">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr_1fr]">
               {[
                 {
@@ -473,14 +471,14 @@ export default async function IOSPage() {
               ].map(({ icon: Icon, title, copy }, index) => (
                 <article
                   key={title}
-                  className={`rounded-[26px] border p-7 sm:p-8 ${
+                  className={`rounded-2xl border p-7 sm:p-8 ${
                     index === 0
-                      ? "border-brand/15 bg-[linear-gradient(135deg,var(--color-background),var(--color-brand-soft))]"
+                      ? "border-brand/15 bg-brand-soft"
                       : "border-border bg-background"
                   }`}
                 >
                   <span
-                    className={`grid place-items-center rounded-[22px] bg-brand-soft text-brand ${
+                    className={`grid place-items-center rounded-2xl bg-brand-soft text-brand ${
                       index === 0 ? "size-20" : "size-16"
                     }`}
                   >
@@ -499,12 +497,12 @@ export default async function IOSPage() {
         </section>
 
         <section id="app-workflows" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                 {isEnglish ? "Day to day" : "Im Alltag"}
               </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[60px]">
+              <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                 {isEnglish
                   ? "Less data entry. A clearer inventory."
                   : "Weniger Verwaltung. Mehr Überblick."}
@@ -520,7 +518,7 @@ export default async function IOSPage() {
               {(isEnglish ? everydayFeaturesEn : everydayFeatures).map(({ icon: Icon, title, copy }, index) => (
                 <article
                   key={title}
-                  className={`relative overflow-hidden rounded-[28px] border border-border bg-surface p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-8 ${
+                  className={`relative overflow-hidden rounded-2xl border border-border bg-surface p-7 transition duration-300 hover:shadow-[var(--shadow-md)] sm:p-8 ${
                     index === 0 ? "min-h-[340px] md:col-span-2 lg:col-span-2" : "min-h-[280px]"
                   }`}
                 >
@@ -532,7 +530,7 @@ export default async function IOSPage() {
                     />
                   ) : null}
                   <span
-                    className={`relative grid place-items-center rounded-[22px] bg-brand-soft text-brand ${
+                    className={`relative grid place-items-center rounded-2xl bg-brand-soft text-brand ${
                       index === 0 ? "size-20" : "size-16"
                     }`}
                   >
@@ -543,7 +541,7 @@ export default async function IOSPage() {
                     />
                   </span>
                   <h3
-                    className={`relative mt-10 font-semibold tracking-[-0.04em] ${
+                    className={`relative mt-10 font-semibold tracking-[-0.035em] ${
                       index === 0 ? "text-3xl sm:text-[38px]" : "text-xl"
                     }`}
                   >
@@ -561,17 +559,17 @@ export default async function IOSPage() {
         <NativeWorkflowCaptures locale={locale} />
 
         <section className="border-y border-border bg-[#17181d] py-20 text-white sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="site-shell grid items-center gap-14 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">
                 {isEnglish ? "Optional on LiDAR devices" : "Optional auf LiDAR-Geräten"}
               </p>
-              <h2 className="mt-4 text-[40px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[54px]">
+              <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[54px]">
                 {isEnglish
                   ? "Measure rooms. Place inventory in 3D space."
                   : "Räume vermessen. Dinge räumlich verorten."}
               </h2>
-              <p className="mt-6 text-[16px] leading-7 text-white/52">
+              <p className="mt-6 text-[16px] leading-7 text-white/65">
                 {isEnglish
                   ? "RoomPlan, depth sensing, and precise indoor placement are optional features for compatible LiDAR iPhones, usually recent Pro models. Taking photos, scanning, searching, and recording stock work on supported iPhones without LiDAR."
                   : "RoomPlan, Tiefenmessung und präzise Innenraum-Platzierung sind Zusatzfunktionen für kompatible LiDAR-iPhones, typischerweise aktuelle Pro-Modelle. Fotografieren, Scannen, Suchen und Buchen funktionieren unabhängig davon auf unterstützten iPhones."}
@@ -596,14 +594,14 @@ export default async function IOSPage() {
                 return (
                   <article
                     key={title as string}
-                    className="flex gap-5 rounded-[22px] border border-white/10 bg-white/[0.045] p-5 sm:p-6"
+                    className="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.045] p-5 sm:p-6"
                   >
-                    <span className="grid size-14 shrink-0 place-items-center rounded-[20px] bg-[#9188ff]/12 text-[#a39cff]">
+                    <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-brand-inverse/12 text-brand-inverse">
                       <FeatureIcon className="size-7" strokeWidth={1.65} aria-hidden="true" />
                     </span>
                     <div>
                       <h3 className="text-[16px] font-semibold">{title as string}</h3>
-                      <p className="mt-2 text-[13px] leading-6 text-white/48">{copy as string}</p>
+                      <p className="mt-2 text-[13px] leading-6 text-white/65">{copy as string}</p>
                     </div>
                   </article>
                 );
@@ -613,13 +611,13 @@ export default async function IOSPage() {
         </section>
 
         <section id="getting-started" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div className="max-w-3xl">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   {isEnglish ? "Ready in moments" : "In wenigen Momenten startklar"}
                 </p>
-                <h2 className="mt-4 text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[56px]">
+                <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">
                   {isEnglish
                     ? "Open the app. Connect your server. Start capturing."
                     : "App öffnen. Instanz verbinden. Losfotografieren."}
@@ -631,7 +629,7 @@ export default async function IOSPage() {
                 </p>
               </div>
 
-              <div className="rounded-[26px] border border-brand-border bg-brand-soft p-6 sm:p-7">
+              <div className="rounded-2xl border border-brand-border bg-brand-soft p-6 sm:p-7">
                 <Link2 className="size-9 text-brand" strokeWidth={1.6} aria-hidden="true" />
                 <p className="mt-5 text-[16px] font-semibold tracking-[-0.025em]">
                   {isEnglish
@@ -646,25 +644,25 @@ export default async function IOSPage() {
               </div>
             </div>
 
-            <ol className="mt-14 grid overflow-hidden rounded-[34px] bg-[#17181d] text-white md:grid-cols-2 lg:grid-cols-4">
+            <ol className="mt-14 grid overflow-hidden rounded-2xl bg-[#17181d] text-white md:grid-cols-2 lg:grid-cols-4">
               {startSteps.map(({ icon: StepIcon, number, title, copy }, index) => (
                 <li
                   key={number}
                   className="relative min-h-[310px] border-b border-white/10 p-7 last:border-b-0 md:[&:nth-child(odd)]:border-r lg:border-b-0 lg:border-r lg:last:border-r-0 lg:p-8"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <span className="grid size-[76px] place-items-center rounded-[26px] bg-white/[0.07] text-[#8ff0cc] ring-1 ring-white/10">
+                    <span className="grid size-[76px] place-items-center rounded-2xl bg-white/[0.07] text-brand-inverse ring-1 ring-white/10">
                       <StepIcon className="size-9" strokeWidth={1.55} aria-hidden="true" />
                     </span>
-                    <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-white/35">
+                    <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-white/65">
                       {number}
                     </span>
                   </div>
-                  <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.04em]">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-white/48">{copy}</p>
+                  <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.035em]">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-white/65">{copy}</p>
                   {index < startSteps.length - 1 ? (
                     <ArrowRight
-                      className="absolute -right-3 top-14 z-10 hidden size-6 rounded-full bg-[#17181d] p-1 text-[#9188ff] lg:block"
+                      className="absolute -right-3 top-14 z-10 hidden size-6 rounded-full bg-[#17181d] p-1 text-brand-inverse lg:block"
                       aria-hidden="true"
                     />
                   ) : null}
@@ -675,7 +673,7 @@ export default async function IOSPage() {
         </section>
 
         <section className="border-y border-border bg-surface py-20 sm:py-24">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-4 md:grid-cols-3">
               {[
                 {
@@ -700,8 +698,8 @@ export default async function IOSPage() {
                     : "Create, Medien, Analyse und Cover besitzen stabile Schlüssel – Wiederholen heißt nicht duplizieren.",
                 },
               ].map(({ icon: Icon, title, copy }) => (
-                <article key={title} className="flex gap-5 rounded-[24px] bg-background p-6 sm:p-7">
-                  <span className="grid size-14 shrink-0 place-items-center rounded-[20px] bg-success-soft text-success">
+                <article key={title} className="flex gap-5 rounded-2xl bg-background p-6 sm:p-7">
+                  <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-success-soft text-success">
                     <Icon className="size-7" strokeWidth={1.65} aria-hidden="true" />
                   </span>
                   <div>
@@ -716,8 +714,7 @@ export default async function IOSPage() {
 
         <section className="py-20 sm:py-28">
           <div className="mx-auto max-w-[1120px] px-5 sm:px-8">
-            <div className="relative overflow-hidden rounded-[38px] border border-brand-border bg-[radial-gradient(circle_at_50%_0%,var(--color-brand-soft),var(--color-background)_64%)] px-6 py-14 text-center sm:px-12 sm:py-20">
-              <div className="pointer-events-none absolute -left-20 top-10 size-64 rounded-full bg-brand/10 blur-[90px]" />
+            <div className="relative overflow-hidden rounded-2xl border border-brand-border bg-surface px-6 py-14 text-center sm:px-12 sm:py-20">
               <div className="relative flex flex-col items-center">
                 <Image
                   src="/marketing/ios-app-icon-current.png"
@@ -729,7 +726,7 @@ export default async function IOSPage() {
                 <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
                 </p>
-                <h2 className="mt-4 max-w-[820px] text-[40px] font-semibold leading-[1] tracking-[-0.055em] sm:text-[60px]">
+                <h2 className="mt-4 max-w-[820px] text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                   {isEnglish ? "Take a photo. Finish the record." : "Foto aufnehmen. Eintrag fertig."}
                 </h2>
                 <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted sm:text-[17px]">
@@ -748,14 +745,14 @@ export default async function IOSPage() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="#app-workflows"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5 hover:bg-brand-hover"
+                    className="site-button site-button-primary"
                   >
                     <Smartphone className="size-5" aria-hidden="true" />
                     {isEnglish ? "Explore the app" : "App kennenlernen"}
                   </Link>
                   <Link
                     href="#getting-started"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:bg-surface-muted"
+                    className="site-button site-button-secondary"
                   >
                     {isEnglish ? "See how to get started" : "So startest du"}
                     <ArrowRight className="size-4" aria-hidden="true" />

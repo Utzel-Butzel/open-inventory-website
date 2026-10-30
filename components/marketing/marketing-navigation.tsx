@@ -1,30 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Archive,
-  ArrowRight,
-  ArrowUpRight,
-  Camera,
-  ChevronDown,
-  Container,
-  FlaskConical,
-  Github,
-  Hammer,
-  House,
-  MapPinned,
-  Menu,
-  PackageCheck,
-  QrCode,
-  Rocket,
-  School,
-  ShieldCheck,
-  Tags,
-  Users,
-  Wrench,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { MarketingLanguageSwitcher } from "@/components/marketing/marketing-language-switcher";
@@ -39,55 +16,48 @@ type DropdownItem = {
   label: string;
   href: string;
   description: string;
-  icon: LucideIcon;
 };
 
 const featureItemsDe: DropdownItem[] = [
   {
-    label: "Schnellerfassung & KI",
+    label: "Inventar erfassen",
     href: "/features/erfassen",
     description: "Per Foto erfassen und Vorschläge prüfen.",
-    icon: Camera,
   },
   {
     label: "Inventar strukturieren",
     href: "/features/strukturieren",
     description: "Typen, Varianten, Optionen und Beziehungen abbilden.",
-    icon: Tags,
   },
   {
     label: "Bestand & Vorgänge",
     href: "/features/bestand-ausleihe",
-    description: "Bestand, Einkauf, Verkauf und Ausleihe verfolgen.",
-    icon: PackageCheck,
+    description: "Bestand und Ausleihe verfolgen, Nachbestellung und Fertigung planen.",
   },
   {
-    label: "Labels, Scans & API",
+    label: "Etiketten, Drucken & API",
     href: "/features/labels-api",
-    description: "Codes, Aktionsabläufe, WooCommerce und API nutzen.",
-    icon: QrCode,
+    description: "Etiketten gestalten, lokal oder gemeinsam drucken und per API verbinden.",
   },
   {
     label: "Orte & 3D-Räume",
     href: "/features/orte-raeume",
     description: "Karten, Räume und Fundorte verbinden.",
-    icon: MapPinned,
   },
   {
     label: "Betrieb & Sicherheit",
     href: "/features/betrieb-sicherheit",
     description: "Self-hosting, Rollen und Datenkontrolle.",
-    icon: ShieldCheck,
   },
 ];
 
 const featureItemsEn: DropdownItem[] = [
-  { label: "Fast capture & AI", href: "/features/erfassen", description: "Capture by photo and review suggestions.", icon: Camera },
-  { label: "Structure inventory", href: "/features/strukturieren", description: "Model types, variants, options and relations.", icon: Tags },
-  { label: "Stock & operations", href: "/features/bestand-ausleihe", description: "Track stock, purchases, sales and loans.", icon: PackageCheck },
-  { label: "Labels, scans & API", href: "/features/labels-api", description: "Use codes, action flows, WooCommerce and the API.", icon: QrCode },
-  { label: "Locations & 3D spaces", href: "/features/orte-raeume", description: "Connect maps, rooms and storage locations.", icon: MapPinned },
-  { label: "Operations & security", href: "/features/betrieb-sicherheit", description: "Self-hosting, roles and data control.", icon: ShieldCheck },
+  { label: "Capture inventory", href: "/features/erfassen", description: "Capture by photo and review suggestions." },
+  { label: "Structure inventory", href: "/features/strukturieren", description: "Model types, variants, options and relations." },
+  { label: "Stock & operations", href: "/features/bestand-ausleihe", description: "Track stock and loans, plan replenishment and production." },
+  { label: "Labels, printing & API", href: "/features/labels-api", description: "Design labels, print locally or share a printer, and connect the API." },
+  { label: "Locations & 3D spaces", href: "/features/orte-raeume", description: "Connect maps, rooms and storage locations." },
+  { label: "Operations & security", href: "/features/betrieb-sicherheit", description: "Self-hosting, roles and data control." },
 ];
 
 const useCaseItemsDe: DropdownItem[] = [
@@ -95,75 +65,63 @@ const useCaseItemsDe: DropdownItem[] = [
     label: "Makerspace",
     href: "/use-cases/makerspace",
     description: "Werkzeuge, Maschinen und Material.",
-    icon: Wrench,
   },
   {
     label: "Familie",
     href: "/use-cases/familie",
     description: "Keller, Kisten und geteilte Dinge.",
-    icon: House,
   },
   {
     label: "Startup",
     href: "/use-cases/startup",
     description: "Assets für wachsende Teams.",
-    icon: Rocket,
   },
   {
     label: "Verein & Verleih",
     href: "/use-cases/verein",
     description: "Material, Ausgabe und Rückgabe.",
-    icon: Users,
   },
   {
     label: "Sammlung",
     href: "/use-cases/sammlung",
     description: "Objekte und Herkunft dokumentieren.",
-    icon: Archive,
   },
   {
     label: "Schule & Bildung",
     href: "/use-cases/schule",
     description: "Geräte, Lernmittel und Fachräume.",
-    icon: School,
   },
   {
     label: "Handwerk",
     href: "/use-cases/handwerk",
     description: "Werkzeug zwischen Lager und Baustelle.",
-    icon: Hammer,
   },
   {
     label: "Labor",
     href: "/use-cases/labor",
     description: "Geräte, Probenbedarf und Standorte.",
-    icon: FlaskConical,
   },
 ];
 
 const useCaseItemsEn: DropdownItem[] = [
-  { label: "Makerspace", href: "/use-cases/makerspace", description: "Tools, machines and materials.", icon: Wrench },
-  { label: "Family", href: "/use-cases/familie", description: "Basements, boxes and shared belongings.", icon: House },
-  { label: "Startup", href: "/use-cases/startup", description: "Assets for growing teams.", icon: Rocket },
-  { label: "Club & lending", href: "/use-cases/verein", description: "Equipment, checkout and returns.", icon: Users },
-  { label: "Collection", href: "/use-cases/sammlung", description: "Document objects and provenance.", icon: Archive },
-  { label: "School & education", href: "/use-cases/schule", description: "Devices, learning materials and rooms.", icon: School },
-  { label: "Trades", href: "/use-cases/handwerk", description: "Tools between storage and job sites.", icon: Hammer },
-  { label: "Lab", href: "/use-cases/labor", description: "Equipment, supplies and locations.", icon: FlaskConical },
+  { label: "Makerspace", href: "/use-cases/makerspace", description: "Tools, machines and materials." },
+  { label: "Family", href: "/use-cases/familie", description: "Basements, boxes and shared belongings." },
+  { label: "Startup", href: "/use-cases/startup", description: "Assets for growing teams." },
+  { label: "Club & lending", href: "/use-cases/verein", description: "Equipment, checkout and returns." },
+  { label: "Collection", href: "/use-cases/sammlung", description: "Document objects and provenance." },
+  { label: "School & education", href: "/use-cases/schule", description: "Devices, learning materials and rooms." },
+  { label: "Trades", href: "/use-cases/handwerk", description: "Tools between storage and job sites." },
+  { label: "Lab", href: "/use-cases/labor", description: "Equipment, supplies and locations." },
 ];
 
 const directLinksDe = [
-  { label: "iOS App", href: "/ios" },
-  { label: "Blog", href: "/blog" },
   { label: "Open Source", href: "/open-source" },
-  { label: "Docs", href: "/docs" },
+  { label: "Dokumentation", href: "/docs" },
 ];
 
 const directLinksEn = [
-  { label: "iOS app", href: "/ios" },
-  { label: "Blog", href: "/blog" },
   { label: "Open Source", href: "/open-source" },
-  { label: "Docs", href: "/docs" },
+  { label: "Documentation", href: "/docs" },
 ];
 
 function DesktopDropdown({
@@ -177,7 +135,7 @@ function DesktopDropdown({
   onToggle,
   onClose,
   buttonRef,
-  openSourceLabel,
+  relatedLink,
 }: {
   dropdownKey: DropdownKey;
   label: string;
@@ -189,7 +147,7 @@ function DesktopDropdown({
   onToggle: () => void;
   onClose: () => void;
   buttonRef: React.RefObject<HTMLButtonElement | null>;
-  openSourceLabel: string;
+  relatedLink?: { label: string; href: string };
 }) {
   const panelId = `marketing-${dropdownKey}-dropdown`;
 
@@ -208,7 +166,7 @@ function DesktopDropdown({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={onToggle}
-        className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-lg px-1.5 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+        className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-md px-1 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
           isOpen ? "text-foreground" : "text-muted hover:text-foreground"
         }`}
       >
@@ -222,18 +180,18 @@ function DesktopDropdown({
       <div
         id={panelId}
         hidden={!isOpen}
-        className="absolute left-0 top-[calc(100%+8px)] z-50 w-[620px] overflow-hidden rounded-[22px] border border-border bg-surface p-3 shadow-2xl"
+        className="absolute left-1/2 top-[calc(100%+16px)] z-50 w-[560px] -translate-x-1/2 overflow-hidden rounded-lg border border-border bg-surface p-3 shadow-[0_12px_32px_rgb(0_0_0/0.10)]"
       >
         <Link
           href={overviewHref}
           onClick={onClose}
-          className="group flex items-center justify-between rounded-2xl bg-surface-muted px-4 py-3.5 transition hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+          className="group flex items-center justify-between rounded-md border-b border-border px-3 pb-4 pt-2 transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
         >
           <span>
             <span className="block text-sm font-semibold text-foreground">
               {overviewLabel}
             </span>
-            <span className="mt-1 block text-[11px] leading-4 text-muted">
+            <span className="mt-1 block text-xs leading-5 text-muted">
               {overviewDescription}
             </span>
           </span>
@@ -245,22 +203,18 @@ function DesktopDropdown({
 
         <div className="mt-2 grid grid-cols-2 gap-1">
           {items.map((item) => {
-            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
-                className="group flex min-h-[72px] items-start gap-3 rounded-2xl p-3 transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+                className="group flex min-h-[86px] items-start rounded-md p-3 transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
               >
-                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand transition group-hover:bg-brand-solid group-hover:text-on-brand">
-                  <Icon className="size-4" strokeWidth={1.9} aria-hidden="true" />
-                </span>
                 <span className="min-w-0 pt-0.5">
                   <span className="block text-[13px] font-semibold text-foreground">
                     {item.label}
                   </span>
-                  <span className="mt-1 block text-[10px] leading-4 text-muted">
+                  <span className="mt-1 block text-xs leading-5 text-muted">
                     {item.description}
                   </span>
                 </span>
@@ -269,10 +223,16 @@ function DesktopDropdown({
           })}
         </div>
 
-        <div className="mt-2 flex items-center gap-2 border-t border-border px-3 pb-1 pt-3 text-[10px] font-semibold text-muted">
-          <Github className="size-3.5 text-brand" aria-hidden="true" />
-          {openSourceLabel}
-        </div>
+        {relatedLink && (
+          <Link
+            href={relatedLink.href}
+            onClick={onClose}
+            className="mt-2 flex items-center justify-between rounded-md border-t border-border px-3 pb-1 pt-3 text-xs font-medium text-muted transition hover:text-foreground"
+          >
+            {relatedLink.label}
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -328,29 +288,29 @@ export function DesktopMarketingNavigation({
   const copy = locale === "de"
     ? {
         navigation: "Hauptnavigation",
-        features: "Funktionen",
+        features: "Produkt",
         allFeatures: "Alle Funktionen",
-        featuresDescription: "Den vollständigen Funktionskatalog entdecken.",
-        useCases: "Use Cases",
-        allUseCases: "Alle Use Cases",
-        useCasesDescription: "Open Inventory in konkreten Arbeitswelten.",
-        openSource: "Teil des MIT-lizenzierten Open-Source-Projekts",
+        featuresDescription: "Erfassen, wiederfinden und gemeinsam nutzen.",
+        useCases: "Einsatzbereiche",
+        allUseCases: "Alle Einsatzbereiche",
+        useCasesDescription: "Für Werkstätten, Teams und gemeinsame Ausrüstung.",
+        ios: "Inventar unterwegs verwalten: die iOS-App",
       }
     : {
         navigation: "Main navigation",
-        features: "Features",
+        features: "Product",
         allFeatures: "All features",
-        featuresDescription: "Browse the complete feature reference.",
+        featuresDescription: "Capture, find and share your inventory.",
         useCases: "Use cases",
         allUseCases: "All use cases",
-        useCasesDescription: "Open Inventory in concrete working environments.",
-        openSource: "Part of the MIT-licensed open-source project",
+        useCasesDescription: "For workshops, teams and shared equipment.",
+        ios: "Manage inventory on the go with the iOS app",
       };
 
   return (
     <nav
       ref={navigationRef}
-      className="hidden items-center gap-3 xl:flex"
+      className="hidden items-center gap-4 lg:flex xl:gap-5"
       aria-label={copy.navigation}
     >
       <DesktopDropdown
@@ -368,7 +328,7 @@ export function DesktopMarketingNavigation({
         }
         onClose={closeDropdown}
         buttonRef={featureButtonRef}
-        openSourceLabel={copy.openSource}
+        relatedLink={{ label: copy.ios, href: marketingHref(locale, "/ios") }}
       />
       <DesktopDropdown
         dropdownKey="use-cases"
@@ -385,14 +345,13 @@ export function DesktopMarketingNavigation({
         }
         onClose={closeDropdown}
         buttonRef={useCaseButtonRef}
-        openSourceLabel={copy.openSource}
       />
       {directLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}
           onClick={closeDropdown}
-          className="whitespace-nowrap rounded-lg text-[13px] font-medium text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex h-10 items-center whitespace-nowrap rounded-md text-[13px] font-medium text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {link.label}
         </Link>
@@ -429,7 +388,7 @@ function MobileAccordion({
         aria-expanded={expanded}
         aria-controls={panelId}
         onClick={onToggle}
-        className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-semibold text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm font-semibold text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
       >
         {label}
         <ChevronDown
@@ -441,21 +400,19 @@ function MobileAccordion({
         <Link
           href={overviewHref}
           onClick={onNavigate}
-          className="flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-semibold text-brand hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+          className="flex items-center justify-between rounded-md px-3 py-2.5 text-[13px] font-semibold text-brand hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
         >
           {overviewLabel}
           <ArrowRight className="size-3.5" aria-hidden="true" />
         </Link>
         {items.map((item) => {
-          const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={onNavigate}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+              className="flex items-center gap-3 rounded-md px-3 py-2.5 text-[13px] font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
             >
-              <Icon className="size-3.5 shrink-0 text-brand" strokeWidth={1.9} aria-hidden="true" />
               {item.label}
             </Link>
           );
@@ -493,23 +450,25 @@ export function MobileMarketingNavigation({
         close: "Navigation schließen",
         open: "Navigation öffnen",
         mobile: "Mobile Navigation",
-        features: "Funktionen",
+        features: "Produkt",
         allFeatures: "Alle Funktionen",
-        useCases: "Use Cases",
-        allUseCases: "Alle Use Cases",
+        useCases: "Einsatzbereiche",
+        allUseCases: "Alle Einsatzbereiche",
         openApp: "Live-Demo öffnen",
-        docker: "Mit Docker starten",
+        docker: "Selbst hosten",
+        ios: "iOS-App",
       }
     : {
         close: "Close navigation",
         open: "Open navigation",
         mobile: "Mobile navigation",
-        features: "Features",
+        features: "Product",
         allFeatures: "All features",
         useCases: "Use cases",
         allUseCases: "All use cases",
         openApp: "Open live demo",
-        docker: "Start with Docker",
+        docker: "Self-hosting",
+        ios: "iOS app",
       };
 
   const closeNavigation = () => {
@@ -541,7 +500,13 @@ export function MobileMarketingNavigation({
   }, [isOpen]);
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div
+      ref={wrapperRef}
+      className="relative"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) closeNavigation();
+      }}
+    >
       <button
         ref={menuButtonRef}
         type="button"
@@ -551,7 +516,7 @@ export function MobileMarketingNavigation({
           setIsOpen((current) => !current);
           if (isOpen) setExpandedAccordion(null);
         }}
-        className="grid size-10 place-items-center rounded-xl border border-border bg-surface text-foreground shadow-sm transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="grid size-10 place-items-center rounded-md border border-border text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {isOpen ? (
           <X className="size-5" aria-hidden="true" />
@@ -566,7 +531,7 @@ export function MobileMarketingNavigation({
       <nav
         id="mobile-marketing-navigation"
         hidden={!isOpen}
-        className="absolute right-0 top-12 max-h-[calc(100dvh-88px)] w-[min(360px,calc(100vw-40px))] overflow-y-auto rounded-2xl border border-border bg-surface p-2 shadow-2xl"
+        className="absolute right-0 top-14 max-h-[calc(100dvh-96px)] w-[min(390px,calc(100vw-40px))] overflow-y-auto rounded-lg border border-border bg-surface p-3 shadow-[0_12px_32px_rgb(0_0_0/0.10)]"
         aria-label={copy.mobile}
       >
         <div className="mb-1 flex items-center justify-end px-2 py-1">
@@ -575,7 +540,7 @@ export function MobileMarketingNavigation({
         <a
           href={appUrl}
           onClick={closeNavigation}
-          className="mb-2 flex items-center justify-between rounded-xl bg-brand-solid px-3 py-3 text-sm font-semibold text-on-brand shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+          className="site-button site-button-primary mb-3 w-full !justify-between"
         >
           {copy.openApp}
           <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -615,28 +580,32 @@ export function MobileMarketingNavigation({
               key={link.href}
               href={link.href}
               onClick={closeNavigation}
-              className="block rounded-xl px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+              className="block rounded-md px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
             >
               {link.label}
             </Link>
           ))}
+          <div className="mt-1 flex gap-4 border-t border-border px-3 pb-2 pt-4 text-[13px] text-muted">
+            <Link href={marketingHref(locale, "/ios")} onClick={closeNavigation} className="hover:text-foreground">{copy.ios}</Link>
+            <Link href={marketingHref(locale, "/blog")} onClick={closeNavigation} className="hover:text-foreground">Blog</Link>
+          </div>
           <a
             href={githubUrl}
             target="_blank"
             rel="noreferrer"
             onClick={closeNavigation}
-            className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+            className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
           >
             GitHub
-            <Github className="size-4" aria-hidden="true" />
+            <ArrowUpRight className="size-3.5" aria-hidden="true" />
           </a>
           <Link
             href={marketingHref(locale, "/docs#docker")}
             onClick={closeNavigation}
-            className="mt-1 flex items-center justify-between rounded-xl bg-strong px-3 py-3 text-sm font-semibold text-on-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+            className="site-button site-button-secondary mt-2 w-full !justify-between"
           >
             {copy.docker}
-            <Container className="size-4" aria-hidden="true" />
+            <ArrowRight className="size-3.5" aria-hidden="true" />
           </Link>
         </div>
       </nav>

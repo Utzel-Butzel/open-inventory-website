@@ -78,29 +78,26 @@ export default async function BlogPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
-        <section className="relative overflow-hidden border-b border-border bg-[#121318] text-white">
-          <div className="pointer-events-none absolute left-[8%] top-16 size-[360px] rounded-full bg-[#8ff0cc]/10 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[7%] top-4 size-[480px] rounded-full bg-[#665cff]/25 blur-[140px]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
+      <main id="main-content">
+        <section className="relative overflow-hidden border-b border-border bg-background text-foreground">
 
-          <div className="relative mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+          <div className="site-shell relative py-20 sm:py-28">
             <div className="max-w-4xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8ff0cc]">
+              <p className="site-eyebrow">
                 Technische Notizen
               </p>
-              <h1 className="mt-5 text-[clamp(3.2rem,7vw,6.6rem)] font-semibold leading-[0.91] tracking-[-0.07em]">
+              <h1 className="site-title mt-5">
                 Wie Open Inventory
-                <span className="block text-[#9188ff]">intern funktioniert.</span>
+                <span className="block text-brand">intern funktioniert.</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-[17px] leading-8 text-white/55 sm:text-[19px]">
+              <p className="mt-7 max-w-2xl text-[17px] leading-8 text-muted sm:text-[19px]">
                 Notizen zu Queues, Datenmodell, API, Etiketten, iOS und
                 Self-Hosting. Mit konkreten Grenzen und Links zum offenen
                 Quellcode.
               </p>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/60">
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-muted">
               {[
                 "MIT-Lizenz",
                 "PostgreSQL + Next.js",
@@ -108,7 +105,7 @@ export default async function BlogPage() {
                 "OpenAPI",
               ].map((item) => (
                 <span key={item} className="flex items-center gap-2">
-                  <Check className="size-3.5 text-[#8ff0cc]" aria-hidden="true" />
+                  <Check className="size-3.5 text-brand" aria-hidden="true" />
                   {item}
                 </span>
               ))}
@@ -116,14 +113,14 @@ export default async function BlogPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-24">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+        <section className="site-shell py-16 sm:py-24">
+          <p className="site-eyebrow">
             Aktueller Artikel
           </p>
 
           <Link
             href={marketingHref(locale, `/blog/${featured.slug}`)}
-            className="group mt-5 grid overflow-hidden rounded-[30px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-xl lg:grid-cols-[0.9fr_1.1fr]"
+            className="group mt-5 grid overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong lg:grid-cols-[0.9fr_1.1fr]"
           >
             <div className="relative min-h-[300px] overflow-hidden bg-strong text-white lg:min-h-[440px]">
               <Image
@@ -151,7 +148,7 @@ export default async function BlogPage() {
                 <span aria-hidden="true">·</span>
                 <span>{featured.readingTime}</span>
               </div>
-              <h2 className="mt-5 text-[clamp(2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground">
+              <h2 className="mt-5 text-[clamp(2rem,4vw,3.7rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground">
                 {featured.title}
               </h2>
               <p className="mt-6 max-w-xl text-[15px] leading-7 text-muted sm:text-base">
@@ -166,13 +163,13 @@ export default async function BlogPage() {
         </section>
 
         <section className="border-y border-border bg-surface-subtle">
-          <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-24">
+          <div className="site-shell py-16 sm:py-24">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                <p className="site-eyebrow">
                   Alle Artikel
                 </p>
-                <h2 className="mt-3 text-[34px] font-semibold tracking-[-0.05em] text-foreground sm:text-[44px]">
+                <h2 className="mt-3 text-[34px] font-semibold tracking-[-0.03em] text-foreground sm:text-[44px]">
                   Erfassung, Datenmodell und Betrieb
                 </h2>
               </div>
@@ -187,7 +184,7 @@ export default async function BlogPage() {
                 <Link
                   key={article.slug}
                   href={marketingHref(locale, `/blog/${article.slug}`)}
-                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-[26px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-lg"
+                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-surface-muted">
                     <Image
@@ -195,17 +192,16 @@ export default async function BlogPage() {
                       alt={article.cover.alt}
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                      className="object-cover"
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-7 sm:p-8">
                     <div className="flex items-center justify-between gap-4">
-                      <span className={`rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${article.accentSoft}`}>
+                      <span className="site-eyebrow rounded-full px-3 py-1.5 bg-brand-soft">
                         {article.category}
                       </span>
-                      <span className={`size-3 rounded-full bg-gradient-to-br ${article.accent}`} />
                     </div>
-                    <h3 className="mt-7 text-[28px] font-semibold leading-[1.05] tracking-[-0.045em] text-foreground sm:text-[32px]">
+                    <h3 className="mt-7 text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-foreground sm:text-[32px]">
                       {article.title}
                     </h3>
                     <p className="mt-4 text-sm leading-6 text-muted">
@@ -226,7 +222,7 @@ export default async function BlogPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+        <section className="site-shell py-20 sm:py-28">
           <div className="grid gap-5 md:grid-cols-3">
             {[
               {
@@ -246,7 +242,7 @@ export default async function BlogPage() {
               },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-border bg-surface p-6">
-                <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
+                <span className="grid size-10 place-items-center rounded-[10px] bg-brand-soft text-brand">
                   <item.icon className="size-[18px]" aria-hidden="true" />
                 </span>
                 <h2 className="mt-5 text-lg font-semibold tracking-[-0.025em] text-foreground">
@@ -257,9 +253,9 @@ export default async function BlogPage() {
             ))}
           </div>
 
-          <div className="mt-10 flex flex-col items-start justify-between gap-6 rounded-[26px] bg-[#121318] p-7 text-white sm:flex-row sm:items-center sm:p-9">
+          <div className="mt-10 flex flex-col items-start justify-between gap-6 rounded-2xl border border-border bg-surface p-7 text-foreground sm:flex-row sm:items-center sm:p-9">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+              <p className="site-eyebrow">
                 Open Source · MIT
               </p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
@@ -270,7 +266,7 @@ export default async function BlogPage() {
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-[#121318] transition hover:-translate-y-0.5"
+              className="site-button site-button-primary shrink-0"
             >
               <Github className="size-4" aria-hidden="true" />
               Repository öffnen

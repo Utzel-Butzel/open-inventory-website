@@ -1091,19 +1091,16 @@ export function EnglishUseCasesPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:64px_64px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_88%)]" />
-          <div className="pointer-events-none absolute left-[8%] top-12 size-80 rounded-full bg-[#8ff0cc]/25 blur-[110px]" />
-          <div className="pointer-events-none absolute right-[8%] top-24 size-96 rounded-full bg-[#8175ff]/20 blur-[125px]" />
 
-          <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
+          <div className="site-shell relative pb-20 pt-16 sm:pb-28 sm:pt-24">
             <div className="grid gap-12 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div className="max-w-4xl">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   For physical inventory that is actually used
                 </p>
-                <h1 className="mt-5 text-[clamp(3.25rem,7vw,6.6rem)] font-semibold leading-[0.9] tracking-[-0.07em]">
+                <h1 className="site-title mt-5">
                   Capture quickly.
                   <span className="block text-brand">Keep the model explicit.</span>
                 </h1>
@@ -1114,7 +1111,7 @@ export function EnglishUseCasesPage() {
                 </p>
               </div>
 
-              <div className="rounded-[28px] border border-border bg-surface/90 p-5 shadow-[var(--shadow-md)] backdrop-blur sm:p-6">
+              <div className="rounded-2xl border border-border bg-surface/90 p-5 shadow-[var(--shadow-md)] backdrop-blur sm:p-6">
                 <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-4">
                   {[
                     [Camera, "Capture at the object", "photos and codes reduce later transcription"],
@@ -1141,13 +1138,13 @@ export function EnglishUseCasesPage() {
         </section>
 
         <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">
                   Real-world views
                 </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                   Physical context. Actual interface.
                 </h2>
               </div>
@@ -1173,7 +1170,7 @@ export function EnglishUseCasesPage() {
               {englishOverviewGallery.map((item) => (
                 <figure
                   key={item.src}
-                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1c22] shadow-2xl ${item.layout}`}
+                  className={`group relative isolate overflow-hidden rounded-2xl border border-white/10 bg-[#1b1c22] shadow-[var(--shadow-md)] ${item.layout}`}
                 >
                   <Image
                     src={item.src}
@@ -1207,12 +1204,12 @@ export function EnglishUseCasesPage() {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                 Eight concrete operating contexts
               </p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">
+              <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                 One codebase, different inventory rules.
               </h2>
               <p className="mt-5 text-[16px] leading-7 text-muted sm:text-[18px]">
@@ -1227,7 +1224,7 @@ export function EnglishUseCasesPage() {
                 <Link
                   key={useCase.slug}
                   href={enHref(`/use-cases/${useCase.slug}`)}
-                  className={`group overflow-hidden rounded-[28px] border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
+                  className={`group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${cardSpans[index]}`}
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <EnglishOverviewVisual useCase={useCase} />
@@ -1240,7 +1237,7 @@ export function EnglishUseCasesPage() {
                   </div>
                   <div className="p-6 sm:p-7">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-[28px] font-semibold tracking-[-0.045em]">
+                      <h3 className="text-[28px] font-semibold tracking-[-0.035em]">
                         {useCase.name}
                       </h3>
                       <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted transition group-hover:border-brand-border group-hover:bg-brand-soft group-hover:text-brand">
@@ -1258,13 +1255,13 @@ export function EnglishUseCasesPage() {
         </section>
 
         <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
                   Shared technical basis
                 </p>
-                <h2 className="mt-4 text-[40px] font-semibold leading-none tracking-[-0.055em] sm:text-[54px]">
+                <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[54px]">
                   Start with capture. Add structure when it earns its place.
                 </h2>
                 <p className="mt-5 text-[16px] leading-7 text-muted">
@@ -1299,7 +1296,7 @@ export function EnglishUseCasesPage() {
                 ].map((feature) => {
                   const Icon = feature.icon;
                   return (
-                    <article key={feature.title} className="rounded-[24px] border border-border bg-surface p-6">
+                    <article key={feature.title} className="rounded-2xl border border-border bg-surface p-6">
                       <span className="grid size-11 place-items-center rounded-2xl bg-brand-soft text-brand">
                         <Icon className="size-5" aria-hidden="true" />
                       </span>
@@ -1316,34 +1313,33 @@ export function EnglishUseCasesPage() {
         </section>
 
         <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(135deg,#1a1b21,#22202f)] px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
-              <div className="pointer-events-none absolute -right-16 -top-24 size-80 rounded-full bg-[#8175ff]/25 blur-[100px]" />
+          <div className="site-shell">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
               <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
                 <div className="max-w-3xl">
                   <div className="flex flex-wrap gap-2">
                     {["MIT licensed", "Self-hosted", "No industry-specific black box"].map((item) => (
                       <span key={item} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-white/65">
-                        <Check className="size-3 text-[#8ff0cc]" aria-hidden="true" />
+                        <Check className="size-3 text-brand-inverse" aria-hidden="true" />
                         {item}
                       </span>
                     ))}
                   </div>
-                  <h2 className="mt-6 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">
+                  <h2 className="mt-6 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[62px]">
                     Your records, your server, and inspectable code.
                   </h2>
-                  <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/55">
+                  <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/65">
                     Clone the repository, run the Docker stack, inspect the API
                     contract, and decide which optional external services are
                     appropriate for your installation.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                  <Link href={enHref("/docs#docker")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-[#675ee5] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#756de8]">
+                  <Link href={enHref("/docs#docker")} className="site-button site-button-primary">
                     <Container className="size-4" aria-hidden="true" />
                     Start with Docker
                   </Link>
-                  <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-white/15 bg-white/5 px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+                  <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary">
                     <Github className="size-4" aria-hidden="true" />
                     Browse the code
                   </a>
@@ -1374,12 +1370,12 @@ function EnglishHeroVisual({ useCase }: { useCase: UseCase }) {
 
 function EnglishMockInventory({ useCase }: { useCase: UseCase }) {
   return (
-    <figure className="overflow-hidden rounded-[28px] border border-border bg-[#17181d] p-2.5 shadow-[0_30px_80px_rgba(18,20,28,0.2)]">
+    <figure className="overflow-hidden rounded-2xl border border-border bg-[#17181d] p-2.5 shadow-[var(--shadow-md)]">
       <div className="flex h-9 items-center gap-1.5 px-3">
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
         <span className="size-2 rounded-full bg-white/20" />
-        <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.14em] text-white/45">
+        <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.14em] text-white/65">
           Real web app capture · demo data
         </span>
       </div>
@@ -1389,9 +1385,9 @@ function EnglishMockInventory({ useCase }: { useCase: UseCase }) {
         height={960}
         sizes="(max-width: 1024px) 100vw, 58vw"
         alt={`Real Open Inventory web capture with photo-rich demo records for ${useCase.name}`}
-        className="h-auto w-full rounded-[20px]"
+        className="h-auto w-full rounded-2xl"
       />
-      <figcaption className="px-3 pb-2 pt-3 text-[10px] leading-5 text-white/55">
+      <figcaption className="px-3 pb-2 pt-3 text-[10px] leading-5 text-white/65">
         Unaltered capture from the running web app. Every visible record was
         created specifically for this demo.
       </figcaption>
@@ -1412,7 +1408,7 @@ function EnglishIosPhone({ useCase }: { useCase: UseCase }) {
           className="h-auto w-full rounded-[37px]"
         />
       </div>
-      <figcaption className="mt-4 text-center text-[10px] leading-5 text-white/50">
+      <figcaption className="mt-4 text-center text-[10px] leading-5 text-white/65">
         Real app capture from the iOS Simulator · demo data
       </figcaption>
     </figure>
@@ -1427,10 +1423,9 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
     <div className="min-h-dvh bg-background text-foreground">
       <MarketingHeader />
 
-      <main>
+      <main id="main-content">
         <section className="relative overflow-hidden border-b border-border">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:64px_64px] opacity-45 [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
-          <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8 sm:px-8 sm:pb-28 sm:pt-12">
+          <div className="site-shell relative pb-20 pt-8 sm:pb-28 sm:pt-12">
             <Link href={enHref("/use-cases")} className="inline-flex items-center gap-2 rounded-lg text-xs font-semibold text-muted transition hover:text-foreground">
               <ArrowLeft className="size-3.5" aria-hidden="true" />
               All use cases
@@ -1441,16 +1436,16 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
                 <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>
                   Open Inventory for {useCase.name}
                 </p>
-                <h1 className="mt-5 text-[clamp(3.15rem,6.2vw,6rem)] font-semibold leading-[0.91] tracking-[-0.068em]">
+                <h1 className="site-title mt-5">
                   {useCase.title}
                 </h1>
                 <p className="mt-7 text-[17px] leading-7 text-muted sm:text-[19px] sm:leading-8">{useCase.description}</p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href={enHref("/docs#docker")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand shadow-[0_12px_30px_rgba(102,92,255,0.24)] transition hover:-translate-y-0.5 hover:bg-brand-hover">
+                  <Link href={enHref("/docs#docker")} className="site-button site-button-primary">
                     <Container className="size-4" aria-hidden="true" />
                     Self-host the open-source stack
                   </Link>
-                  <a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-border-strong">
+                  <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary">
                     <Github className="size-4" aria-hidden="true" />
                     Browse GitHub
                   </a>
@@ -1466,16 +1461,14 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
               </div>
 
               <div className="relative">
-                <div className="pointer-events-none absolute -left-12 top-16 size-52 rounded-full bg-[#8ff0cc]/30 blur-[80px]" />
-                <div className="pointer-events-none absolute -right-10 bottom-8 size-64 rounded-full bg-[#8175ff]/25 blur-[90px]" />
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[30px] border border-border bg-surface shadow-[0_36px_100px_rgba(23,23,35,0.2)]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-md)]">
                   <EnglishHeroVisual useCase={useCase} />
                   <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-2xl border border-white/15 bg-black/45 p-3.5 text-white backdrop-blur-md">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#8ff0cc]/20 text-[#8ff0cc]">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-inverse/20 text-brand-inverse">
                       <Sparkles className="size-4" aria-hidden="true" />
                     </span>
                     <div>
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/50">Capture path</p>
+                      <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65">Capture path</p>
                       <p className="mt-0.5 text-xs font-semibold">Take a photo · review the draft · save the record</p>
                     </div>
                   </div>
@@ -1486,10 +1479,10 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1240px] gap-14 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20">
+          <div className="site-shell grid gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20">
             <div>
               <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>Operational problem</p>
-              <h2 className="mt-4 text-[40px] font-semibold leading-[1.02] tracking-[-0.055em] sm:text-[56px]">Less reconstruction, more traceable state.</h2>
+              <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">Less reconstruction, more traceable state.</h2>
               <p className="mt-6 text-[16px] leading-7 text-muted">{useCase.challenge}</p>
               <ul className="mt-8 grid gap-3">
                 {useCase.promises.map((promise) => (
@@ -1508,17 +1501,17 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         </section>
 
         <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="max-w-3xl">
               <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>A workflow at the point of use</p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">From a physical object to a usable record.</h2>
+              <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">From a physical object to a usable record.</h2>
               <p className="mt-5 text-[16px] leading-7 text-muted sm:text-[18px]">
                 Capture starts with a camera or an existing code. Structured fields and deeper workflows are added without hiding the transaction being made.
               </p>
             </div>
             <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {useCase.steps.map((step, index) => (
-                <article key={step.title} className="relative overflow-hidden rounded-[24px] border border-border bg-surface p-6">
+                <article key={step.title} className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6">
                   <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-brand">0{index + 1}</span>
                   <h3 className="mt-10 text-xl font-semibold tracking-[-0.035em]">{step.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-muted">{step.description}</p>
@@ -1530,11 +1523,11 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
               <div>
                 <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>Relevant capabilities</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.055em] sm:text-[60px]">The data model behind this use case.</h2>
+                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">The data model behind this use case.</h2>
               </div>
               <p className="max-w-2xl text-[16px] leading-7 text-muted lg:justify-self-end">
                 These capabilities are part of the same MIT-licensed application. Open Inventory does not split them into closed industry editions.
@@ -1544,11 +1537,11 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
               {useCase.features.map((feature) => {
                 const Icon = featureIcons[feature.icon];
                 return (
-                  <article key={feature.title} className="group rounded-[26px] border border-border bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)] sm:p-7">
+                  <article key={feature.title} className="group rounded-2xl border border-border bg-surface p-6 transition duration-300 hover:shadow-[var(--shadow-md)] sm:p-7">
                     <span className={`grid size-11 place-items-center rounded-2xl ${useCase.softAccent}`}>
                       <Icon className="size-5" strokeWidth={1.9} aria-hidden="true" />
                     </span>
-                    <h3 className="mt-10 text-[22px] font-semibold tracking-[-0.04em]">{feature.title}</h3>
+                    <h3 className="mt-10 text-[22px] font-semibold tracking-[-0.035em]">{feature.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-muted">{feature.description}</p>
                   </article>
                 );
@@ -1560,34 +1553,33 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
           <div className="mx-auto grid max-w-[1120px] gap-16 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
             <div className="relative order-2 lg:order-1">
-              <div className="pointer-events-none absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#8175ff]/25 blur-[100px]" />
               <EnglishIosPhone useCase={useCase} />
             </div>
             <div className="order-1 lg:order-2">
               <div className="flex items-center gap-3">
                 <Image src="/marketing/ios-app-icon-current.png" width={48} height={48} alt="Open Inventory app icon" className="rounded-[13px] shadow-lg" />
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8ff0cc]">Native iOS app</p>
-                  <p className="mt-1 text-xs text-white/45">SwiftUI · included in the repository</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">Native iOS app</p>
+                  <p className="mt-1 text-xs text-white/65">SwiftUI · included in the repository</p>
                 </div>
               </div>
-              <h2 className="mt-7 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[62px]">{useCase.iosTitle}</h2>
-              <p className="mt-6 text-[16px] leading-7 text-white/55 sm:text-[18px] sm:leading-8">{useCase.iosCopy}</p>
+              <h2 className="mt-7 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[62px]">{useCase.iosTitle}</h2>
+              <p className="mt-6 text-[16px] leading-7 text-white/65 sm:text-[18px] sm:leading-8">{useCase.iosCopy}</p>
               <ul className="mt-8 grid gap-3">
                 {useCase.iosPoints.map((point) => (
                   <li key={point} className="flex items-start gap-3 text-sm leading-6 text-white/70">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-[#8ff0cc]/15 text-[#8ff0cc]">
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-inverse/15 text-brand-inverse">
                       <Check className="size-3" aria-hidden="true" />
                     </span>
                     {point}
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-semibold text-white/50">
-                <CircleDot className="size-3 text-[#8ff0cc]" aria-hidden="true" />
+              <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-semibold text-white/65">
+                <CircleDot className="size-3 text-brand-inverse" aria-hidden="true" />
                 Camera and scanner operations run on a physical iPhone
               </div>
-              <Link href={enHref("/ios")} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#8ff0cc]">
+              <Link href={enHref("/ios")} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-inverse">
                 Read the iOS implementation notes
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
@@ -1596,15 +1588,15 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         </section>
 
         <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-            <div className="relative overflow-hidden rounded-[32px] border border-brand-border bg-brand-soft px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
+          <div className="site-shell">
+            <div className="relative overflow-hidden rounded-2xl border border-brand-border bg-brand-soft px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
               <div className="relative grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-center">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Open source is part of the operating model</p>
-                  <h2 className="mt-4 text-[40px] font-semibold leading-[1.02] tracking-[-0.055em] sm:text-[58px]">{useCase.openSourceTitle}</h2>
+                  <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[58px]">{useCase.openSourceTitle}</h2>
                   <p className="mt-6 max-w-3xl text-[16px] leading-7 text-muted-strong">{useCase.openSourceCopy}</p>
                 </div>
-                <div className="grid gap-3 rounded-[24px] border border-brand-border bg-surface/65 p-5 backdrop-blur sm:p-6">
+                <div className="grid gap-3 rounded-2xl border border-brand-border bg-surface/65 p-5 backdrop-blur sm:p-6">
                   {[
                     [Github, "MIT-licensed source"],
                     [Container, "Docker setup with PostgreSQL"],
@@ -1628,20 +1620,20 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
         </section>
 
         <section className="border-t border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+          <div className="site-shell">
             <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Run it on your infrastructure</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[64px]">Start with one reviewed record.</h2>
+                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[64px]">Start with one reviewed record.</h2>
                 <p className="mt-5 text-[16px] leading-7 text-muted">
                   Start the Docker stack, photograph one real object, and inspect the resulting fields and media before choosing a wider rollout.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href={enHref("/docs#docker")} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-solid px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5 hover:bg-brand-hover">
+                <Link href={enHref("/docs#docker")} className="site-button site-button-primary">
                   <Container className="size-4" aria-hidden="true" /> Docker guide
                 </Link>
-                <Link href={enHref(`/use-cases/${nextUseCase.slug}`)} className="inline-flex h-12 items-center justify-center gap-2 rounded-[14px] border border-border bg-surface px-5 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-border-strong">
+                <Link href={enHref(`/use-cases/${nextUseCase.slug}`)} className="site-button site-button-secondary">
                   Next use case: {nextUseCase.name}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>

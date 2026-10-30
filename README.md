@@ -3,6 +3,11 @@
 Public website, technical documentation and blog for
 [Open Inventory](https://github.com/Utzel-Butzel/inventory).
 
+Production: [openinventory.polyxo.de](https://openinventory.polyxo.de).
+Set `SITE_URL=https://openinventory.polyxo.de` in Dokploy. The previous host,
+`inventory.rollingtime.de`, stays attached for permanent redirects; paths and
+query parameters are preserved.
+
 The website is deliberately separate from the inventory application. It does
 not connect to PostgreSQL, start background workers or handle authentication.
 The self-hostable web application and REST API remain in the
@@ -49,6 +54,30 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+To synchronize an unpublished local application checkout, use the same source for
+both commands:
+
+```bash
+OPENAPI_SOURCE_FILE=../inventory/public/openapi.yaml npm run sync:openapi
+OPENAPI_SOURCE_FILE=../inventory/public/openapi.yaml npm run check:openapi
+```
+
+Edit the application's specification first; the website YAML is a copy. The JSON
+reference uses `APP_URL` as its API server so requests target the application.
+
+## Website design
+
+Shared colours and layout primitives live in `app/globals.css`: `site-shell`,
+`site-section`, `site-title`, `site-heading`, `site-eyebrow`, `site-button`,
+`site-link` and `site-product-frame`. Use semantic colour tokens for surfaces
+that change with the theme; use `brand-inverse` for accents on fixed dark panels.
+Homepage-specific composition lives in `app/page.module.css`.
+
+Product screenshots show the actual applications with demo data. Contextual
+photography is documented in `public/marketing/photography/README.md`; it does
+not represent customers or endorsements. Keep the English and German copy in
+sync and identify German interface captures on English pages.
 
 ## Hero video source
 

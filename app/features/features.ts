@@ -23,6 +23,7 @@ import {
   MapPinned,
   PackageCheck,
   PackageOpen,
+  Printer,
   QrCode,
   ScanLine,
   Search,
@@ -201,6 +202,11 @@ export const featureGroups: FeatureGroup[] = [
         title: "Native iPhone-Erfassung",
         copy: "Die offene SwiftUI-App fotografiert, scannt Codes und überträgt Aufträge mit einer absturzsicheren Warteschlange. Netzwerk-Wiederholungen erzeugen dank Idempotenz keine Dubletten.",
       },
+      {
+        icon: Boxes,
+        title: "Kisteninhalt schätzen · experimentell",
+        copy: "Schätze Mengen aus mehreren Fotos. Der optionale 3D-Modus ergänzt ein drehbares Modell mit manuellen Markierungen und benötigt eine eigene GPU-Umgebung. Die Genauigkeit ist nicht validiert; die Buchung bestätigst du separat.",
+      },
     ],
   },
   {
@@ -319,7 +325,7 @@ export const featureGroups: FeatureGroup[] = [
     slug: "bestand-ausleihe",
     menuTitle: "Bestand & Vorgänge",
     eyebrow: "03 · Lagern & bewegen",
-    title: "Bestand mit belastbarer Historie",
+    title: "Bestände buchen und vorausplanen",
     intro:
       "Open Inventory verbindet schnelle Alltagsaktionen mit einer nachvollziehbaren Historie – vom einzelnen Kabel bis zu Einkauf, Verkauf und Ausleihe.",
     description:
@@ -386,6 +392,21 @@ export const featureGroups: FeatureGroup[] = [
     ],
     items: [
       {
+        icon: History,
+        title: "Verbrauch und Lieferungen vorausplanen",
+        copy: "Vergleiche Bestandshistorie und Prognose. Verbrauch, Lieferzeiten und offene Wareneingänge ergeben Vorschläge für Nachbestellzeitpunkt und Menge. Bestellungen werden weiterhin von dir ausgelöst.",
+      },
+      {
+        icon: Layers3,
+        title: "Stücklistenanalyse",
+        copy: "Prüfe Produktionsmengen, Varianten, Komponentenbedarf, Kosten und Abhängigkeiten vor dem Bauen. Fehlende Preise bleiben als unbekannt sichtbar.",
+      },
+      {
+        icon: Barcode,
+        title: "Kennungen einzelner Geräte ändern",
+        copy: "Passe die Kennung einer serialisierten Einheit an und drucke ihr eigenes Etikett. Die Geräte-ID und ihr QR-Link bleiben erhalten.",
+      },
+      {
         icon: PackageOpen,
         title: "Sammel- oder Einzelbestand",
         copy: "Führe identische Teile als Bulk-Bestand oder jede physische Einheit separat mit UUID, lesbarem Code, eigenem Status, Standort, Metadaten und Anschaffungsdatum.",
@@ -412,7 +433,7 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         icon: PackageCheck,
-        title: "Mindestbestand & Prognose",
+        title: "Bestandsprognose & Nachbestellung",
         copy: "Mindestmenge, Bestellmenge, Lieferzeit und Verbrauchsrate ergeben Warnungen, ein geschätztes Ausverkaufsdatum und einen begründeten Nachbestellvorschlag.",
       },
       {
@@ -439,39 +460,39 @@ export const featureGroups: FeatureGroup[] = [
   },
   {
     slug: "labels-api",
-    menuTitle: "QR, Labels & API",
+    menuTitle: "Etiketten, Drucken & API",
     eyebrow: "04 · Finden & automatisieren",
     title: "Vom Etikett bis zur API",
     intro:
-      "Menschen scannen ein Label, Systeme sprechen OpenAPI. Beide Wege greifen auf denselben verlässlichen Bestand zu.",
+      "Gestalte Etiketten für Artikel und Einzelgeräte. Drucke im Browser, direkt am P-touch oder über den gemeinsamen Bürodrucker und verbinde weitere Systeme per API.",
     description:
-      "Inventar mit QR- und Barcodes finden, eigene Etiketten gestalten, CSV austauschen, Inhalte teilen und Abläufe über die OpenAPI-3.1-REST-API verbinden.",
+      "Etiketten gestalten, Drucklisten speichern und per Browser, QZ Tray oder gemeinsamem Bürodrucker ausgeben. QR-Scans, CSV und REST-API verbinden die Abläufe.",
     detailIntro:
-      "Ein gutes Etikett bringt Menschen ohne Umweg zum richtigen Eintrag. Eine gute API macht dasselbe für Software. Open Inventory verbindet beide Wege mit eindeutiger Auflösung, bestätigten Aktionen und einem dokumentierten Datenvertrag.",
+      "Wähle Artikel oder einzelne Geräte, passe die Vorlage an und bereite eine Druckserie vor. Ein Scan führt später zum passenden Eintrag. CSV und API verbinden dein Inventar mit anderen Systemen.",
     outcomes: [
-      "Objekte über QR, Barcode, SKU, Seriennummer oder Inventarlink eindeutig finden",
-      "Wiederverwendbare Etikettenlayouts direkt im Browser gestalten",
+      "Artikel und einzelne Geräte mit eigenen QR-Etiketten kennzeichnen",
+      "Lokal oder am gemeinsamen Bürodrucker drucken; persönliche Drucklisten speichern",
       "Daten per CSV oder scoped REST-API kontrolliert austauschen",
     ],
-    workflowTitle: "Vom physischen Objekt zum sicheren digitalen Vorgang",
+    workflowTitle: "Vom Artikel zum gedruckten Etikett",
     workflowIntro:
-      "Scannen ist zunächst eine Suche. Erst nach der eindeutigen Auflösung und einer sichtbaren Prüfung wird daraus eine Lageraktion.",
+      "Einzelne Etiketten sofort drucken oder mehrere Artikel und Vorlagen zu einer Serie sammeln.",
     workflow: [
       {
-        title: "Kennung festlegen",
-        copy: "Nutze einen kurzen Inventarlink, eine UUID, SKU oder Seriennummer als eindeutigen Einstieg zum Datensatz.",
+        title: "Artikel oder Gerät wählen",
+        copy: "Wähle einen Artikel oder eine serialisierte Einheit. Ihr QR-Link bleibt auch nach einer Änderung der Gerätekennung gültig.",
       },
       {
         title: "Label gestalten",
-        copy: "Kombiniere QR-Link, Code 128, Text und optional ein Objektbild in einem wiederverwendbaren Drucklayout.",
+        copy: "Kombiniere QR-Code, Barcode, Bilder und Text. Passe Titel, Untertitel und Kopien für den Druck an und prüfe die Vorschau.",
       },
       {
-        title: "Scannen und auflösen",
-        copy: "Kamera, Foto oder Handscanner lesen den Code. Open Inventory zeigt den gefundenen Eintrag, bevor etwas verändert wird.",
+        title: "Druckziel wählen",
+        copy: "Nutze den Browser-Druckdialog, QZ Tray am lokalen PT-P710BT oder den gemeinsamen Windows-Drucker. Gesammelte Etiketten lassen sich als Serie senden.",
       },
       {
-        title: "Ablauf verbinden",
-        copy: "Konfiguriere geprüfte Lageraktionen oder binde eigene Systeme mit scoped Token und OpenAPI-Vertrag an.",
+        title: "Scannen und weiterarbeiten",
+        copy: "Öffne den Eintrag per Scan, prüfe den Vorgang und bestätige die gewünschte Bestandsaktion.",
       },
     ],
     example: {
@@ -498,7 +519,7 @@ export const featureGroups: FeatureGroup[] = [
         "Scanner-Code und Server-API gemeinsam im Repository prüfen",
       ],
     },
-    trustTitle: "Die Schnittstelle ist Teil des Produkts, nicht ein Hintereingang.",
+    trustTitle: "API mit begrenzbaren Zugriffsrechten",
     trustCopy:
       "Die OpenAPI-3.1-Spezifikation liegt als YAML im Repository. Tokens werden gehasht gespeichert, können Ablaufdatum und Scopes tragen und lassen sich widerrufen. So bleiben Integrationen dokumentiert und begrenzbar.",
     trustPoints: [
@@ -508,6 +529,16 @@ export const featureGroups: FeatureGroup[] = [
     ],
     items: [
       {
+        icon: Printer,
+        title: "Drei Druckwege",
+        copy: "Browser-Druckdialog für vorhandene Drucker, direkter USB-Druck am Brother PT-P710BT mit QZ Tray oder ein gemeinsamer Bürodrucker mit Windows-Agent. Die gemeinsame Einrichtung nutzt derzeit 24-mm-Band.",
+      },
+      {
+        icon: ListChecks,
+        title: "Gespeicherte Drucklisten",
+        copy: "Sammle Artikel, Einzelgeräte, Vorlagen und Kopien. Deine persönliche Druckliste bleibt je Organisation gespeichert. Pro P-touch-Serie sind bis zu 100 Etiketten mit derselben Bandbreite möglich.",
+      },
+      {
         icon: QrCode,
         title: "QR- und Barcode-Workflows",
         copy: "Scanne mit Kamera oder Foto, löse Inventarlinks, UUIDs, SKUs und Seriennummern auf und gestalte konfigurierbare Aktionsabläufe mit Vorschau, Eingaben und bestätigter Ausführung.",
@@ -515,7 +546,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Barcode,
         title: "Eigene Etiketten",
-        copy: "Entwirf wiederverwendbare Layouts im Browser – mit kurzem QR-Link, Code 128, optionalem Objektbild und Presets unter anderem für Brother 62 mm und 102 × 152 mm.",
+        copy: "Gestalte QR-Codes, Barcodes, mehrere Textfelder, Untertitel und eigene Bilder. Nutze Schrift- und Zuschnittoptionen, invertierten Druck und automatische Etikettenlänge. Entwürfe lassen sich testdrucken und als Kopie speichern.",
       },
       {
         icon: FileSpreadsheet,
@@ -525,7 +556,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Fingerprint,
         title: "Dubletten sicher zusammenführen",
-        copy: "Ein Scoring hilft beim Finden ähnlicher Einträge. Beim transaktionalen Zusammenführen bleiben zugehörige Daten konsistent, statt halbfertig verteilt zu werden.",
+        copy: "Finde ähnliche Einträge und führe sie mit ihren zugehörigen Daten zusammen.",
       },
       {
         icon: Globe2,
@@ -535,7 +566,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Braces,
         title: "Dokumentierte REST-API",
-        copy: "Die eingecheckte OpenAPI-3.1-Spezifikation, interaktive Referenz und gehashte, widerrufbare Tokens mit Ablaufdatum und Scopes machen Integrationen planbar.",
+        copy: "Lies und ändere Inventar über die interaktive OpenAPI-Referenz. API-Token sind widerrufbar und auf Scopes begrenzbar; Druckverwaltung benötigt eine Browsersitzung.",
       },
       {
         icon: Store,

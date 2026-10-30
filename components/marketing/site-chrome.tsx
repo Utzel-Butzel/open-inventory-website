@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Boxes, Container, Github } from "lucide-react";
+import { ArrowUpRight, Boxes } from "lucide-react";
 
 import {
   DesktopMarketingNavigation,
@@ -30,15 +30,15 @@ export function OpenInventoryBrand({
   return (
     <Link
       href={href}
-      className={`group inline-flex shrink-0 items-center gap-2.5 rounded-xl ${
+      className={`inline-flex shrink-0 items-center gap-2.5 rounded-md ${
         inverse ? "text-white" : "text-foreground"
       }`}
       aria-label={homeLabel}
     >
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-solid text-on-brand shadow-[0_7px_20px_rgba(102,92,255,0.24)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-[1.04]">
-        <Boxes className="size-[19px]" strokeWidth={2.2} aria-hidden="true" />
+      <span className="grid size-8 shrink-0 place-items-center rounded-md bg-brand-solid text-on-brand">
+        <Boxes className="size-[19px]" strokeWidth={1.8} aria-hidden="true" />
       </span>
-      <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.025em] sm:text-base">
+      <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.035em] sm:text-base">
         Open Inventory
       </span>
     </Link>
@@ -50,7 +50,7 @@ export async function MarketingHeader() {
   const copy = locale === "de"
     ? {
         home: "Open Inventory Startseite",
-        docker: "Mit Docker starten",
+        skip: "Zum Inhalt springen",
         openApp: "Live-Demo öffnen",
         lightTheme: "Helles Farbschema verwenden",
         darkTheme: "Dunkles Farbschema verwenden",
@@ -58,7 +58,7 @@ export async function MarketingHeader() {
       }
     : {
         home: "Open Inventory home",
-        docker: "Start with Docker",
+        skip: "Skip to content",
         openApp: "Open live demo",
         lightTheme: "Use light theme",
         darkTheme: "Use dark theme",
@@ -66,9 +66,12 @@ export async function MarketingHeader() {
       };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
       <MarketingDocumentLanguage locale={locale} />
-      <div className="mx-auto flex h-[70px] max-w-[1240px] items-center justify-between px-5 sm:px-8">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-3 focus:text-sm focus:text-background">
+        {copy.skip}
+      </a>
+      <div className="site-shell flex h-[72px] items-center justify-between gap-6">
         <OpenInventoryBrand
           href={marketingHref(locale, "/")}
           homeLabel={copy.home}
@@ -76,7 +79,7 @@ export async function MarketingHeader() {
 
         <DesktopMarketingNavigation locale={locale} />
 
-        <div className="hidden shrink-0 items-center gap-2 xl:flex">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <MarketingLanguageSwitcher locale={locale} />
           <ThemeToggle
             lightLabel={copy.lightTheme}
@@ -84,32 +87,15 @@ export async function MarketingHeader() {
             pendingLabel={copy.toggleTheme}
           />
           <a
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-            className="inline-flex size-10 items-center justify-center rounded-xl text-foreground transition hover:bg-surface-muted"
-          >
-            <Github className="size-4" aria-hidden="true" />
-          </a>
-          <Link
-            href={marketingHref(locale, "/docs#docker")}
-            className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-xl border border-border bg-surface px-3 text-[13px] font-semibold text-foreground transition hover:-translate-y-0.5 hover:bg-surface-muted"
-          >
-            <Container className="size-3.5" aria-hidden="true" />
-            {copy.docker}
-          </Link>
-          <a
             href={publicDemoUrl}
-            className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-xl bg-brand-solid px-4 text-[13px] font-semibold text-on-brand shadow-sm transition hover:-translate-y-0.5 hover:opacity-90"
+            className="site-button site-button-primary ml-2 !min-h-10 !px-4 !text-[13px]"
           >
             {copy.openApp}
             <ArrowUpRight className="size-3.5" aria-hidden="true" />
           </a>
         </div>
 
-        <div className="flex items-center gap-2 xl:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle
             className="size-10"
             lightLabel={copy.lightTheme}
@@ -133,12 +119,12 @@ export async function MarketingFooter() {
   const copy = locale === "de"
     ? {
         home: "Open Inventory Startseite",
-        intro: "Per Foto erfassen und mit Standort, Bestand, Einkauf, Verkauf, Ausleihe und Integrationen verbinden. MIT-lizenziert und selbst hostbar.",
+        intro: "Geräte, Material und gemeinsame Ausrüstung an einem Ort. Open Source, auf deinem eigenen Server.",
         product: "Produkt",
         features: "Funktionen",
         docs: "Dokumentation",
         api: "API-Referenz",
-        useCases: "Use Cases",
+        useCases: "Einsatzbereiche",
         family: "Familie",
         club: "Verein & Verleih",
         collection: "Sammlung",
@@ -148,11 +134,11 @@ export async function MarketingFooter() {
         license: "MIT-Lizenz",
         openApp: "Web-App öffnen",
         imprint: "Impressum",
-        tagline: "Vom Foto zum vollständigen Vorgang.",
+        tagline: "Wissen, was da ist. Finden, was du brauchst.",
       }
     : {
         home: "Open Inventory home",
-        intro: "Capture by photo and connect each record with location, stock, purchasing, sales, lending, and integrations. MIT licensed and self-hostable.",
+        intro: "Equipment, materials and shared tools in one place. Open source, on your own server.",
         product: "Product",
         features: "Features",
         docs: "Documentation",
@@ -167,19 +153,19 @@ export async function MarketingFooter() {
         license: "MIT license",
         openApp: "Open web app",
         imprint: "Legal notice",
-        tagline: "From a photo to the complete operation.",
+        tagline: "Know what you have. Find what you need.",
       };
 
   return (
-    <footer className="border-t border-white/10 bg-[#111216] text-white">
-      <div className="mx-auto max-w-[1240px] px-5 py-12 sm:px-8 sm:py-16">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+    <footer className="border-t border-border bg-surface-subtle text-foreground">
+      <div className="site-shell py-14 sm:py-20">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <div>
-            <OpenInventoryBrand inverse href={href("/")} homeLabel={copy.home} />
-            <p className="mt-4 max-w-sm text-sm leading-6 text-white/50">
+            <OpenInventoryBrand href={href("/")} homeLabel={copy.home} />
+            <p className="mt-4 max-w-sm text-sm leading-6 text-muted">
               {copy.intro}
             </p>
-            <div className="mt-5 flex flex-wrap gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">
+            <div className="mt-5 flex flex-wrap gap-2 text-xs text-muted">
               <span>MIT Open Source</span>
               <span aria-hidden="true">·</span>
               <span>Web + iOS</span>
@@ -189,47 +175,47 @@ export async function MarketingFooter() {
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">{copy.product}</p>
-            <div className="mt-4 grid gap-3 text-sm text-white/65">
-              <Link href={href("/features")} className="w-fit hover:text-white">{copy.features}</Link>
-              <Link href={href("/ios")} className="w-fit hover:text-white">iOS App</Link>
-              <Link href={href("/open-source")} className="w-fit hover:text-white">Open Source</Link>
-              <Link href={href("/docs")} className="w-fit hover:text-white">{copy.docs}</Link>
-              <Link href={href("/api-docs")} className="w-fit hover:text-white">{copy.api}</Link>
+            <p className="text-sm font-semibold text-foreground">{copy.product}</p>
+            <div className="mt-4 grid gap-3 text-sm text-muted">
+              <Link href={href("/features")} className="w-fit transition-colors hover:text-foreground">{copy.features}</Link>
+              <Link href={href("/ios")} className="w-fit transition-colors hover:text-foreground">iOS App</Link>
+              <Link href={href("/open-source")} className="w-fit transition-colors hover:text-foreground">Open Source</Link>
+              <Link href={href("/docs")} className="w-fit transition-colors hover:text-foreground">{copy.docs}</Link>
+              <Link href={href("/api-docs")} className="w-fit transition-colors hover:text-foreground">{copy.api}</Link>
             </div>
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">{copy.useCases}</p>
-            <div className="mt-4 grid gap-3 text-sm text-white/65">
-              <Link href={href("/use-cases/makerspace")} className="w-fit hover:text-white">Makerspace</Link>
-              <Link href={href("/use-cases/familie")} className="w-fit hover:text-white">{copy.family}</Link>
-              <Link href={href("/use-cases/startup")} className="w-fit hover:text-white">Startup</Link>
-              <Link href={href("/use-cases/verein")} className="w-fit hover:text-white">{copy.club}</Link>
-              <Link href={href("/use-cases/sammlung")} className="w-fit hover:text-white">{copy.collection}</Link>
-              <Link href={href("/use-cases/schule")} className="w-fit hover:text-white">{copy.school}</Link>
-              <Link href={href("/use-cases/handwerk")} className="w-fit hover:text-white">{copy.trades}</Link>
-              <Link href={href("/use-cases/labor")} className="w-fit hover:text-white">Lab</Link>
+            <p className="text-sm font-semibold text-foreground">{copy.useCases}</p>
+            <div className="mt-4 grid gap-3 text-sm text-muted">
+              <Link href={href("/use-cases/makerspace")} className="w-fit transition-colors hover:text-foreground">Makerspace</Link>
+              <Link href={href("/use-cases/familie")} className="w-fit transition-colors hover:text-foreground">{copy.family}</Link>
+              <Link href={href("/use-cases/startup")} className="w-fit transition-colors hover:text-foreground">Startup</Link>
+              <Link href={href("/use-cases/verein")} className="w-fit transition-colors hover:text-foreground">{copy.club}</Link>
+              <Link href={href("/use-cases/sammlung")} className="w-fit transition-colors hover:text-foreground">{copy.collection}</Link>
+              <Link href={href("/use-cases/schule")} className="w-fit transition-colors hover:text-foreground">{copy.school}</Link>
+              <Link href={href("/use-cases/handwerk")} className="w-fit transition-colors hover:text-foreground">{copy.trades}</Link>
+              <Link href={href("/use-cases/labor")} className="w-fit transition-colors hover:text-foreground">Lab</Link>
             </div>
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">{copy.project}</p>
-            <div className="mt-4 grid gap-3 text-sm text-white/65">
-              <a href={githubUrl} target="_blank" rel="noreferrer" className="w-fit hover:text-white">GitHub</a>
-              <a href={`${githubUrl}/issues`} target="_blank" rel="noreferrer" className="w-fit hover:text-white">Issues</a>
-              <a href={`${githubUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="w-fit hover:text-white">{copy.license}</a>
-              <Link href={href("/blog")} className="w-fit hover:text-white">Blog</Link>
-              <a href={appHref("/login")} className="w-fit hover:text-white">{copy.openApp}</a>
-              <Link href={href("/impressum")} className="w-fit hover:text-white">{copy.imprint}</Link>
+            <p className="text-sm font-semibold text-foreground">{copy.project}</p>
+            <div className="mt-4 grid gap-3 text-sm text-muted">
+              <a href={githubUrl} target="_blank" rel="noreferrer" className="w-fit transition-colors hover:text-foreground">GitHub</a>
+              <a href={`${githubUrl}/issues`} target="_blank" rel="noreferrer" className="w-fit transition-colors hover:text-foreground">Issues</a>
+              <a href={`${githubUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="w-fit transition-colors hover:text-foreground">{copy.license}</a>
+              <Link href={href("/blog")} className="w-fit transition-colors hover:text-foreground">Blog</Link>
+              <a href={appHref("/login")} className="w-fit transition-colors hover:text-foreground">{copy.openApp}</a>
+              <Link href={href("/impressum")} className="w-fit transition-colors hover:text-foreground">{copy.imprint}</Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>Open Inventory · {copy.license}</p>
-          <div className="flex flex-col gap-3 sm:items-end">
-            <MarketingLanguageSwitcher locale={locale} inverse />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <MarketingLanguageSwitcher locale={locale} />
             <p>{copy.tagline}</p>
           </div>
         </div>

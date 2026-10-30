@@ -53,8 +53,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f7f9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0c10" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f5f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#191b1f" },
   ],
 };
 
@@ -70,7 +70,7 @@ const resolvedTheme = theme === "light" || theme === "dark"
   ? theme
   : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
-  meta.setAttribute("content", resolvedTheme === "dark" ? "#0a0c10" : "#f6f7f9");
+  meta.setAttribute("content", resolvedTheme === "dark" ? "#191b1f" : "#f6f5f1");
 });
 `;
 

@@ -64,11 +64,11 @@ test("the website proxy handles only public marketing routes", async () => {
   assert.deepEqual(UI_LANGUAGES, ["en", "de"]);
 });
 
-test("technical documentation links move to Fumadocs in the selected language", () => {
-  assert.equal(marketingHref("de", "/api-docs"), "https://docs.openinventory.polyxo.de/de/api-reference");
-  assert.equal(marketingHref("en", "/de/api-docs"), "https://docs.openinventory.polyxo.de/en/api-reference");
-  assert.equal(marketingHref("de", "/docs#printing"), "https://docs.openinventory.polyxo.de/de/printing");
-  assert.equal(marketingHref("en", "/docs#variant-stock"), "https://docs.openinventory.polyxo.de/en/variant-stock");
+test("technical documentation links always lead to the English Fumadocs site", () => {
+  assert.equal(marketingHref("de", "/api-docs"), "https://docs.openinventory.polyxo.de/api-reference");
+  assert.equal(marketingHref("en", "/de/api-docs"), "https://docs.openinventory.polyxo.de/api-reference");
+  assert.equal(marketingHref("de", "/docs#printing"), "https://docs.openinventory.polyxo.de/printing");
+  assert.equal(marketingHref("en", "/docs#variant-stock"), "https://docs.openinventory.polyxo.de/variant-stock");
   assert.equal(marketingHref("de", "/docs"), "/de/docs");
   assert.equal(marketingHref("en", "/docs#docker"), "/docs#docker");
 });

@@ -12,15 +12,15 @@ curl 'https://inventory.example.com/api/v1/resources?limit=10' \
   -H "Authorization: Bearer $INVENTORY_API_TOKEN"
 ```
 
-### API token
+## API token
 
 Inventory, stock and integrations. Create one under Settings → API and select the required scopes.
 
-### Browser session
+## Browser session
 
 Saved print lists, shared printers, print jobs and QZ signing. An ordinary API token cannot replace this sign-in.
 
-### Printer token (iprt_)
+## Printer token (iprt_)
 
 For the Windows agent only: claim and acknowledge jobs for its assigned printer.
 
@@ -28,4 +28,4 @@ User-bound credentials can select an active membership with X-Organization-ID. S
 
 For endpoints using Idempotency-Key, assign a new UUID to each operation and reuse it only for the same request. For 409, inspect the conflict or running operation; for 422, check the input; for 429, check the rate limit. Print submissions use the UUID in the id field instead.
 
-[Interactive reference →](/en/api-reference) · [OpenAPI JSON →](/openapi.json) · [OpenAPI YAML →](/openapi.yaml)
+[Interactive reference →](/api-reference) · [OpenAPI JSON →](/openapi.json) · [OpenAPI YAML →](/openapi.yaml)

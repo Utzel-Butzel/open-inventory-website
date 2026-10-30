@@ -4,45 +4,45 @@ title: "Design and print labels"
 
 Choose a print destination for your workspace. Design templates and prepare labels in the web app.
 
-### Browser print dialog
+## Browser print dialog
 
 For installed printers and other label formats. Choose the printer in the system dialog, select the matching paper size and 100% scale, then check a test label.
 
 Requires a printer configured on this computer.
 
-### Brother PT-P710BT · QZ Tray
+## Brother PT-P710BT · QZ Tray
 
 Direct USB printing from a desktop browser. QZ Tray runs on the same computer as the browser and printer. Select the loaded tape width, connect QZ and choose the correct print queue.
 
 The dedicated macOS queue setup is linked below. Without signing, QZ asks for approval when accessed.
 
-### Shared Office printer
+## Shared Office printer
 
 A Windows PC receives jobs through the print agent and sends them to its connected PT-P710BT. Other users submit through the web app without installing QZ Tray on their devices.
 
 The printer PC must stay awake and online. Setup currently supports 24 mm tape.
 
-### Choose an item or individual unit
+## Choose an item or individual unit
 
 Open Labels or the print shortcut on an item. For serialized stock, select individual units. Their QR codes open that exact unit; renaming its code does not change the link.
 
-### Design a template
+## Design a template
 
 Set the dimensions and position QR codes, barcodes, images and text. Use multiple text fields, subtitles, fonts, alignment, image cropping and inverted printing. One text field can automatically adjust the label length to its content.
 
-### Check text and copies
+## Check text and copies
 
 Override a title or subtitle for printing without changing the item. Set the copy count. Test-print a draft, then save it as a template or a separate copy.
 
-### Prepare a print list
+## Prepare a print list
 
 For P-touch and shared printing, collect items using different templates. Preview, text and print data are saved together. Your personal list is stored per organization and survives reloads; later template edits do not change prepared labels.
 
-### Print the series
+## Print the series
 
 Every label in a series needs the same tape width; lengths and layouts may differ. Each job supports up to 100 labels and 4 MB of print data. Review the list and send it to the selected destination.
 
-### Set up a shared printer
+## Set up a shared printer
 
 - On the Windows PC, create a dedicated Generic / Text Only queue on the PT-P710BT USB port with RAW/winprint. Load 24 mm tape.
 
@@ -54,7 +54,7 @@ Every label in a series needs the same tape width; lengths and layouts may diffe
 
 [Installation and maintenance →](https://github.com/Utzel-Butzel/inventory/tree/main/scripts/print-agent)
 
-### Set up QZ Tray and optional signing
+## Set up QZ Tray and optional signing
 
 Install QZ Tray, connect the PT-P710BT by USB and create the dedicated queue using the linked guide. The selected tape width must match the loaded tape. On 24 mm tape the printable height is about 18 mm; start with the matching P-touch preset.
 
@@ -62,13 +62,13 @@ Optionally, the server can sign QZ requests using a certificate trusted on the p
 
 [USB setup and tape formats →](https://github.com/Utzel-Butzel/inventory/blob/main/docs/ptouch-printing.md)
 
-### Job accepted, but no label?
+## Job accepted, but no label?
 
 Acceptance by QZ or Windows does not confirm physical printing. Check power, tape and the queue on the printer computer. For Outcome uncertain, inspect the actual output before resubmitting. You can cancel your own waiting shared-printer jobs; they expire after ten minutes.
 
 Printing requires labels.read and a browser session. Saving and editing templates requires labels.manage; managing shared printers requires tokens.manage. Saved lists, printers and jobs are documented under Label printing in the API reference.
 
-### How a job moves through the printing API
+## How a job moves through the printing API
 
 - Read templates from /label-setups. The browser renders the labels and checks QR readability and tape fit. /label-workspace stores the prepared personal list.
 
@@ -80,4 +80,4 @@ Printing requires labels.read and a browser session. Saving and editing template
 
 All paths are under /api/v1. With local QZ printing, the browser sends the job directly to QZ Tray; the server endpoints /labels/qz-certificate and /labels/qz-sign only provide optional signing.
 
-[Open the printing API →](/en/api-reference) · [Product: labels and API →](https://openinventory.polyxo.de/features/labels-api)
+[Open the printing API →](/api-reference) · [Product: labels and API →](https://openinventory.polyxo.de/features/labels-api)

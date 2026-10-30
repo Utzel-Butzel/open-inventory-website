@@ -11,8 +11,8 @@ export const legacyTechnicalDocs: Record<string, string> = {
   "variant-stock": "variant-stock", operations: "operations",
 };
 
-export function technicalDocsHref(locale: MarketingLocale, slug = "") {
-  return `https://docs.openinventory.polyxo.de/${locale}${slug ? `/${slug}` : ""}`;
+export function technicalDocsHref(slug = "") {
+  return `https://docs.openinventory.polyxo.de${slug ? `/${slug}` : ""}`;
 }
 
 export function marketingHref(locale: MarketingLocale, href: string) {
@@ -53,10 +53,10 @@ export function marketingHref(locale: MarketingLocale, href: string) {
         ? pathname.slice(3)
         : pathname;
 
-  if (unprefixedPath === "/api-docs") return technicalDocsHref(locale, "api-reference");
+  if (unprefixedPath === "/api-docs") return technicalDocsHref("api-reference");
   if (unprefixedPath === "/docs" && suffix.startsWith("#")) {
     const slug = legacyTechnicalDocs[suffix.slice(1)];
-    if (slug) return technicalDocsHref(locale, slug);
+    if (slug) return technicalDocsHref(slug);
   }
   if (locale === "en") return `${unprefixedPath}${suffix}`;
   return `${unprefixedPath === "/" ? "/de" : `/de${unprefixedPath}`}${suffix}`;

@@ -4,5 +4,10 @@
 @import 'fumadocs-openapi/css/preset.css';
 
 body { font-family: Arial, Helvetica, sans-serif; }
-:root { --color-fd-primary: #355e4c; }
-.dark { --color-fd-primary: #9dceb3; }
+:root { --color-fd-primary: #6047b0; }
+.dark { --color-fd-primary: #c3b4ed; }
+
+.docs-sidebar-footer { order: -1; margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
+.docs-setup-card { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 7px; background: #6248b4; color: white; }
+.docs-setup-card:hover { background: #563d9f; }
+.docs-hero { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; margin: 8px 0 28px; }

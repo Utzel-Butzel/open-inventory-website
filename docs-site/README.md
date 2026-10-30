@@ -1,7 +1,7 @@
 # Open Inventory technical documentation
 
 Fumadocs website at https://docs.openinventory.polyxo.de, separate from the public
-website's short setup guide. German and English MDX content lives in
+website's short setup guide. English MDX content lives in
 `content/docs`. The API reference is generated directly from the root
 `public/openapi.yaml`; edit the application specification first.
 
@@ -10,7 +10,7 @@ npm ci
 npm run dev
 ```
 
-Preview: http://localhost:3002/de (German) or /en (English).
+Preview: http://localhost:3002. Previous /de and /en URLs redirect permanently to the matching English page.
 `npm run build` prepares the OpenAPI downloads and builds the standalone server.
 The API examples default to `inventory.example.com`; readers use their own
 application origin. No API credentials or proxy are stored on this site.

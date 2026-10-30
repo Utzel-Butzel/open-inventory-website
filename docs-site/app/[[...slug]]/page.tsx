@@ -5,31 +5,29 @@ import { source } from '@/lib/source';
 import { getMDXComponents } from '@/mdx-components';
 import { OpenAPIPage } from '@/components/api-page';
 
-type Props = { params: Promise<{ lang: string; slug?: string[] }> };
+type Props = { params: Promise<{ slug?: string[] }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { lang, slug } = await params;
-  const page = source.getPage(slug, lang);
+  const { slug } = await params;
+  const page = source.getPage(slug);
   if (!page) notFound();
   const path = slug?.length ? `/${slug.join('/')}` : '';
   return {
     title: page.data.title,
     description: page.data.description,
-    alternates: { canonical: `/${lang}${path}`, languages: { en: `/en${path}`, de: `/de${path}`, 'x-default': `/en${path}` } },
+    alternates: { canonical: path || '/' },
   };
 }
 
 export default async function Page({ params }: Props) {
-  const { lang, slug } = await params;
-  const page = source.getPage(slug, lang);
+  const { slug } = await params;
+  const page = source.getPage(slug);
   if (!page) notFound();
   if (page.type === 'openapi') {
     return <DocsPage full toc={page.data.toc}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsBody>
-        <p className="text-sm text-fd-muted-foreground">{lang === 'de'
-          ? 'Die API läuft auf deiner Anwendungsinstanz. Schemas und Feldnamen stammen unverändert aus der OpenAPI-Spezifikation. Browsergebundene Aufrufe benötigen eine Sitzung auf der Instanz.'
-          : 'The API runs on your application instance. Schemas and field names come directly from the OpenAPI specification. Session-authenticated requests require a session on that instance.'}</p>
+        <p className="text-sm text-fd-muted-foreground">The API runs on your own Open Inventory instance. Session-authenticated requests require a session on that instance.</p>
         <OpenAPIPage {...page.data.getOpenAPIPageProps()} />
       </DocsBody>
     </DocsPage>;
@@ -37,7 +35,7 @@ export default async function Page({ params }: Props) {
   const MDX = page.data.body;
   const apiGroups = new Map<string, ReturnType<typeof source.getPages>>();
   if (slug?.[0] === 'api-reference') {
-    for (const endpoint of source.getPages(lang)) {
+    for (const endpoint of source.getPages()) {
       if (endpoint.type !== 'openapi') continue;
       const group = endpoint.slugs[1] ?? 'API';
       const pages = apiGroups.get(group) ?? [];

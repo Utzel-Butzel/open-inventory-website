@@ -1,0 +1,45 @@
+---
+title: Open Inventory Guide
+description: Set up your instance, print labels and connect your tools with the Open Inventory API.
+---
+
+import { Card, Cards } from 'fumadocs-ui/components/card';
+import { BookOpen, KeyRound, Printer, Rocket, Server, Workflow } from 'lucide-react';
+
+<img src="/parts-storage.webp" alt="Sorted screws and small parts in workshop storage trays" width="1800" height="1202" className="docs-hero" />
+
+<Cards>
+  <Card title="Getting started" href="https://openinventory.polyxo.de/docs" icon={<Rocket className="text-amber-500" />}>
+    Install Open Inventory with a ready-made Dokploy or Coolify template.
+  </Card>
+  <Card title="Authentication" href="/authentication" icon={<KeyRound className="text-emerald-500" />}>
+    Configure local accounts, Auth0 or OpenID Connect for your team.
+  </Card>
+  <Card title="API guide" href="/api" icon={<Workflow className="text-emerald-500" />}>
+    Choose the right credentials and send your first request.
+  </Card>
+  <Card title="API reference" href="/api-reference" icon={<BookOpen className="text-sky-500" />}>
+    Explore endpoints, request parameters and response schemas.
+  </Card>
+  <Card title="Labels & printing" href="/printing" icon={<Printer className="text-violet-500" />}>
+    Design labels and set up browser printing, QZ Tray or a shared printer.
+  </Card>
+  <Card title="Stock & assembly" href="/variant-stock" icon={<Workflow className="text-orange-500" />}>
+    Track variants, build finished items and record stock movements.
+  </Card>
+  <Card title="Operations" href="/operations" icon={<Server className="text-rose-500" />}>
+    Maintain your installation, back up files and check updates.
+  </Card>
+</Cards>
+
+## Start with your instance
+
+New to self-hosting? Use the [simple setup guide](https://openinventory.polyxo.de/docs). For a terminal-based installation, follow the [Docker guide](/installation).
+
+Once your instance is running, configure [sign-in and access](/authentication), try a [test label](/printing) or connect an external tool through the [API](/api).
+
+## Open source, on your server
+
+Open Inventory runs on your infrastructure. This documentation site stores no inventory data; API requests go to your own instance.
+
+Find the source code, report an issue or contribute on [GitHub](https://github.com/Utzel-Butzel/inventory).

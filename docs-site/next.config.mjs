@@ -6,6 +6,9 @@ export default withMDX({
   output: 'standalone',
   poweredByHeader: false,
   outputFileTracingRoot: import.meta.dirname,
-  redirects: async () => [{ source: '/', destination: '/en', permanent: false }],
+  redirects: async () => ['de', 'en'].flatMap(locale => [
+    { source: `/${locale}`, destination: '/', permanent: true },
+    { source: `/${locale}/:path+`, destination: '/:path+', permanent: true },
+  ]),
   turbopack: { root: import.meta.dirname },
 });

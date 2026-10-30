@@ -7,7 +7,7 @@ export function LegacyDocsLinks({ locale }: { locale: MarketingLocale }) {
   useEffect(() => {
     function followLegacyLink() {
       const slug = legacyTechnicalDocs[window.location.hash.slice(1)];
-      if (slug) window.location.replace(technicalDocsHref(locale, slug));
+      if (slug) window.location.replace(technicalDocsHref(slug));
     }
     followLegacyLink();
     window.addEventListener("hashchange", followLegacyLink);

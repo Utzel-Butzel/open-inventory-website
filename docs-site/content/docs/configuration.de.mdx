@@ -1,0 +1,20 @@
+---
+title: "Instanz konfigurieren"
+---
+
+AUTH_URL ist die öffentliche HTTPS-Adresse deiner Anwendung. Verwende pro Installation ein eigenes AUTH_SECRET. Datenbank und Uploads benötigen dauerhaften Speicher.
+
+
+```text
+AUTH_URL=https://inventory.example.com
+AUTH_SECRET=replace-with-a-long-random-secret
+AUTH_TRUST_HOST=true
+```
+
+- Dateien: lokales Upload-Volume oder eine konfigurierte Openinary-Instanz.
+
+- KI: optional für Bildanalyse, Zählhilfen, Übersetzungen und Cover. Organisationsweite Modelle und Vorgaben stehen unter Einstellungen → KI.
+
+- Karten: die Standardkarten laden externe Kacheln; eigene kompatible Tile-URLs sind konfigurierbar.
+
+[Alle Umgebungsvariablen →](https://github.com/Utzel-Butzel/inventory/blob/main/.env.example)

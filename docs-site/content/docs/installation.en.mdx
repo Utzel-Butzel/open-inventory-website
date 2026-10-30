@@ -1,0 +1,18 @@
+---
+title: "Start with Docker"
+---
+
+You need Git, Docker Compose v2, OpenSSL and curl. The installer starts the application and PostgreSQL with persistent volumes and runs database migrations.
+
+
+```bash
+git clone https://github.com/Utzel-Butzel/inventory.git
+cd inventory
+./scripts/install.sh
+```
+
+The installer creates .env and generates the required secrets. When finished, it prints the application address and first admin credentials, using admin@inventory.local by default. Sign in with the generated password and change it under Settings → Users.
+
+Dokploy and Coolify deployment templates configure the database, upload storage and health check. Find the initial password in the platform’s environment settings.
+
+[Dokploy →](https://github.com/Utzel-Butzel/inventory/tree/main/deploy/dokploy) · [Coolify →](https://github.com/Utzel-Butzel/inventory/tree/main/deploy/coolify)

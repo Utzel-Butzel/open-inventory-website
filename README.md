@@ -38,6 +38,14 @@ sitemap are generated for both languages.
 
 ## API documentation
 
+The main `/docs` page is the short Dokploy/Coolify setup guide. Technical guides
+and the Fumadocs API reference live in [`docs-site`](docs-site/README.md), deployed
+separately at [docs.openinventory.polyxo.de](https://docs.openinventory.polyxo.de).
+Old `/api-docs` routes and technical `/docs#…` links forward to the matching
+language there. The downloadable installation templates in `public/install`
+are copied from `inventory/deploy/dokploy/base64.txt` and
+`inventory/deploy/coolify/compose.yaml`.
+
 `public/openapi.yaml` is a synchronized copy of the source specification in
 the application repository. Check or update it with:
 

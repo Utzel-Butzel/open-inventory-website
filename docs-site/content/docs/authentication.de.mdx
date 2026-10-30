@@ -1,0 +1,25 @@
+---
+title: "Anmeldung und Zugriff"
+---
+
+Nutze lokale Passwörter, Auth0 oder einen OpenID-Connect-Provider. Organisationen, Rollen und Berechtigungen werden in Open Inventory verwaltet.
+
+Für Auth0 oder OIDC muss bereits ein aktiver Benutzer mit derselben E-Mail-Adresse existieren. Der Provider muss email_verified: true liefern. Teste die externe Anmeldung, bevor du lokale Passwörter deaktivierst. Der aktuelle iOS-Passwortlogin funktioniert nicht bei einer ausschließlich externen Anmeldung.
+
+### Auth0 und OIDC konfigurieren
+
+Auth0 benötigt AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET und AUTH0_DOMAIN. Hinterlege als Callback https://inventory.example.com/api/auth/callback/auth0.
+
+
+```text
+AUTH_OIDC_PROVIDER_ID=supabase
+AUTH_OIDC_PROVIDER_NAME=Supabase
+AUTH_OIDC_ISSUER=https://your-project.supabase.co/auth/v1
+AUTH_OIDC_CLIENT_ID=your-client-id
+AUTH_OIDC_CLIENT_SECRET=your-client-secret
+AUTH_OIDC_SCOPES=openid email profile
+```
+
+Bei OIDC entspricht das letzte Callback-Segment der Provider-ID: im Beispiel https://inventory.example.com/api/auth/callback/supabase. Ersetze die Beispieldomain durch deine Anwendungsadresse.
+
+[Anmeldeprovider einrichten →](https://github.com/Utzel-Butzel/inventory/blob/main/AUTHPROVIDERS.md)

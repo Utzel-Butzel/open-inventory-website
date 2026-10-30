@@ -1,0 +1,19 @@
+{
+  "title": "Open Inventory",
+  "pages": [
+    "index",
+    "---Einrichtung---",
+    "installation",
+    "configuration",
+    "authentication",
+    "---Anleitungen---",
+    "printing",
+    "planning",
+    "variant-stock",
+    "operations",
+    "---API---",
+    "api",
+    "api-reference",
+    "reference"
+  ]
+}

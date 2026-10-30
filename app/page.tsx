@@ -13,9 +13,8 @@ const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
 const content = {
   de: {
-    title: "Open Inventory – Inventarverwaltung für Werkstätten und Teams",
+    title: "Open Inventory – Wissen, was da ist.",
     description: "Geräte und Material erfassen, Standorte finden und Bestände und Ausleihen nachvollziehen. Open Source, selbst hostbar und mit nativer iPhone-App.",
-    eyebrow: "Inventarverwaltung für Werkstätten und Teams",
     headline: ["Wissen, was da ist.", "Und wo."],
     intro: "Geräte, Werkzeug und Material an einem Ort verwalten. Finde, was du brauchst, sieh den verfügbaren Bestand und behalte Ausleihen im Blick.",
     demo: "Live-Demo öffnen", host: "Selbst hosten", facts: ["Open Source · MIT-Lizenz", "Auf deinem Server", "Web & iPhone"],
@@ -73,9 +72,8 @@ const content = {
     closingTitle: "Mach dir selbst ein Bild.", closingCopy: "Öffne die Demo mit Beispieldaten oder richte Open Inventory auf deinem Server ein.", github: "Quellcode auf GitHub",
   },
   en: {
-    title: "Open Inventory – Inventory management for workshops and teams",
+    title: "Open Inventory – Know what you have.",
     description: "Catalogue equipment and supplies, find locations and keep track of stock and loans. Open source, self-hosted and with a native iPhone app.",
-    eyebrow: "Inventory management for workshops and teams",
     headline: ["Know what you have.", "And where it is."],
     intro: "Keep equipment, tools and supplies in one place. Find what you need, check available stock and keep track of what is on loan.",
     demo: "Open live demo", host: "Host it yourself", facts: ["Open source · MIT license", "On your server", "Web & iPhone"],
@@ -149,7 +147,6 @@ export default async function HomePage() {
         <section className={styles.hero}>
           <div className={`site-shell ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              <p className="site-eyebrow">{c.eyebrow}</p>
               <h1 className={`site-title ${styles.heroTitle}`}>{c.headline[0]}<span>{c.headline[1]}</span></h1>
               <p className={styles.lead}>{c.intro}</p>
               <div className={styles.actions}>

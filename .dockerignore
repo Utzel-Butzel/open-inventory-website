@@ -6,3 +6,6 @@ npm-debug.log
 output
 video/node_modules
 video/out
+
+docs-site/node_modules
+docs-site/.next

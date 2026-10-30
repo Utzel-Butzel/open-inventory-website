@@ -5,6 +5,16 @@ export type MarketingLocale = (typeof MARKETING_LOCALES)[number];
 
 export const DEFAULT_MARKETING_LOCALE: MarketingLocale = "en";
 
+export const legacyTechnicalDocs: Record<string, string> = {
+  configuration: "configuration", authentication: "authentication", api: "api",
+  printing: "printing", "shared-printer": "printing", planning: "planning",
+  "variant-stock": "variant-stock", operations: "operations",
+};
+
+export function technicalDocsHref(locale: MarketingLocale, slug = "") {
+  return `https://docs.openinventory.polyxo.de/${locale}${slug ? `/${slug}` : ""}`;
+}
+
 export function marketingHref(locale: MarketingLocale, href: string) {
   const pathname = href.split(/[?#]/, 1)[0] || href;
   const suffix = href.slice(pathname.length);
@@ -43,6 +53,11 @@ export function marketingHref(locale: MarketingLocale, href: string) {
         ? pathname.slice(3)
         : pathname;
 
+  if (unprefixedPath === "/api-docs") return technicalDocsHref(locale, "api-reference");
+  if (unprefixedPath === "/docs" && suffix.startsWith("#")) {
+    const slug = legacyTechnicalDocs[suffix.slice(1)];
+    if (slug) return technicalDocsHref(locale, slug);
+  }
   if (locale === "en") return `${unprefixedPath}${suffix}`;
   return `${unprefixedPath === "/" ? "/de" : `/de${unprefixedPath}`}${suffix}`;
 }

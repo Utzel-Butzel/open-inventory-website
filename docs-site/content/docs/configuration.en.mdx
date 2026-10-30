@@ -1,0 +1,20 @@
+---
+title: "Configure your instance"
+---
+
+AUTH_URL is the public HTTPS address of your application. Use a unique AUTH_SECRET for each installation. Database data and uploads need persistent storage.
+
+
+```text
+AUTH_URL=https://inventory.example.com
+AUTH_SECRET=replace-with-a-long-random-secret
+AUTH_TRUST_HOST=true
+```
+
+- Files: the local upload volume or a configured Openinary instance.
+
+- AI: optional for image analysis, counting, translations and covers. Organization models and defaults live under Settings → AI.
+
+- Maps: default maps load external tiles; you can configure your own compatible tile URLs.
+
+[All environment variables →](https://github.com/Utzel-Butzel/inventory/blob/main/.env.example)

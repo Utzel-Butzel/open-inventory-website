@@ -1,0 +1,27 @@
+---
+title: "Plan stock and review quantities"
+---
+
+### Stock forecasting
+
+Set minimum stock, lead time and purchasing units. Planning uses consumption, current stock and outstanding receipts to show historical and projected balances and suggest replenishment quantities. Loans and transfers are not consumption. Suggestions do not place orders.
+
+### Bill-of-materials analysis
+
+Compare production quantities and variants by components, stock, costs and dependencies. Missing prices appear as unknown. Analysis does not book stock; components are consumed only when a build is confirmed.
+
+### Individual units
+
+Edit unit identifiers and print their own labels while keeping their UUIDs and QR links. Only units unlinked to orders, assignments or assemblies can be deleted; deletion is recorded in the movement history.
+
+### Quantities from photos
+
+In a stock movement or inventory count, open Quantity from photo. Alongside visible-part counting, an experimental mode estimates bin contents from three to five photos. Review the result and assumptions, copy the quantity into the form, then confirm the stock booking separately.
+
+### 3D estimation · experimental
+
+Three to four photos and manual annotations produce a rotatable 3D model and, where possible, a quantity estimate. The server needs a separately configured Python/GPU runtime, absent from the standard Docker image. Accuracy is not validated; a result may provide no applicable count.
+
+GET /api/v1/stock/forecast returns planning inputs and historical balances; the interface calculates the forecast. The experimental /ai/count/bulk and /ai/count/3d endpoints require ai.count and item access. None of these requests changes stock.
+
+[Set up the 3D runtime →](https://github.com/Utzel-Butzel/inventory/tree/main/services/bulk-3d) · [Quantity estimation limits →](https://github.com/Utzel-Butzel/inventory/blob/main/docs/bulk-quantity-estimation.md)

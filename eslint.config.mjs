@@ -13,6 +13,7 @@ export default defineConfig([
   },
   globalIgnores([
     ".next/**",
+    "docs-site/**",
     "data/**",
     "dist/**",
     "out/**",

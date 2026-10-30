@@ -1,0 +1,57 @@
+import { defineI18n } from 'fumadocs-core/i18n';
+import { uiTranslations } from 'fumadocs-ui/i18n';
+import { openapiTranslations } from 'fumadocs-openapi/i18n';
+import deApi from './de-api.json';
+
+export const i18n = defineI18n({
+  defaultLanguage: 'en',
+  languages: ['en', 'de'],
+});
+export const translations = i18n.translations().extend(uiTranslations()).extend(openapiTranslations()).add({
+  en: { displayName: 'English' },
+  de: {
+    ...deApi,
+    displayName: 'Deutsch',
+    'Search(search trigger)': 'Suchen',
+    'Search(search dialog)': 'Dokumentation durchsuchen',
+    'Open Search(search trigger)(aria-label)': 'Suche öffnen',
+    'Close Search(search dialog)(aria-label)': 'Suche schließen',
+    'No results found(search dialog)': 'Keine Ergebnisse gefunden',
+    'Search failed(search dialog)': 'Suche fehlgeschlagen',
+    'Search failed, showing results for {query}(search dialog)': 'Suche fehlgeschlagen. Ergebnisse für {query}',
+    'Choose a language(language switcher)': 'Sprache wählen',
+    'Choose a language(language switcher)(aria-label)': 'Sprache wählen',
+    'On this page(table of contents)': 'Auf dieser Seite',
+    'Table of Contents(inline table of contents)': 'Inhaltsverzeichnis',
+    'No Headings(table of contents)': 'Keine Überschriften',
+    'Previous Page(pagination)': 'Vorherige Seite',
+    'Next Page(pagination)': 'Nächste Seite',
+    'Collapse Sidebar(sidebar)(aria-label)': 'Seitenleiste einklappen',
+    'Open Sidebar(sidebar)(aria-label)': 'Seitenleiste öffnen',
+    'Close Sidebar(sidebar)(aria-label)': 'Seitenleiste schließen',
+    'Close Sidebar(aria-label)': 'Seitenleiste schließen',
+    'Hide Sidebar(sidebar)': 'Seitenleiste ausblenden',
+    'Show Sidebar(sidebar)': 'Seitenleiste einblenden',
+    'Copy Anchor Link(heading anchor)(aria-label)': 'Link zur Überschrift kopieren',
+    'Copied Anchor Link(heading anchor)(aria-label)': 'Link kopiert',
+    'Copy Text(code block)(aria-label)': 'Text kopieren',
+    'Copied Text(code block)(aria-label)': 'Text kopiert',
+    'Copy Link(accordion)(aria-label)': 'Link kopieren',
+    'Copied Link(accordion)(aria-label)': 'Link kopiert',
+    'Toggle Theme(theme switcher)(aria-label)': 'Farbschema wechseln',
+    'Dark(theme switcher)(aria-label)': 'Dunkel',
+    'Light(theme switcher)(aria-label)': 'Hell',
+    'System(theme switcher)(aria-label)': 'Systemeinstellung',
+    'Toggle Menu(mobile menu)(aria-label)': 'Menü öffnen oder schließen',
+    'Page Not Found(404 page)': 'Seite nicht gefunden',
+    'Back to Home(404 page)': 'Zur Startseite',
+    'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.(404 page)': 'Die gesuchte Seite wurde verschoben oder ist nicht verfügbar.',
+    'Edit on GitHub(edit page)': 'Auf GitHub bearbeiten',
+    'Last updated on(page footer)': 'Zuletzt aktualisiert am',
+    'Default(type table)': 'Standard',
+    'Parameters(type table)': 'Parameter',
+    'Returns(type table)': 'Rückgabe',
+    'Prop(type table)': 'Eigenschaft',
+    'Type(type table)': 'Typ',
+  },
+});

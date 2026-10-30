@@ -1,0 +1,77 @@
+---
+title: "Track finished stock per variant"
+---
+
+Using the app · Variants & assembly
+
+Each variant is a full inventory record with its own resource ID, SKU, barcode, and stock. Variants belong to a product family with a primary item. OpenPaper L White and Black therefore remain independently bookable after assembly.
+
+### 1. Prepare variants and recipes
+
+Create variants on the primary item, connect existing records, or generate configurations from option groups. Variants inherit the primary bill of materials. Define differing components on each variant, such as a white frame replacing the black frame.
+
+### 2. Build the output variant
+
+On the primary item’s build form, choose the finished item / output variant. The form loads its bill of materials and stock. Building one white device consumes its PCB and white frame and credits only the white variant’s finished stock. Component consumption and finished output either commit together or roll back completely.
+
+### 3. Issue the finished item
+
+Open the sold variant’s stock and book an issue there. Only that variant loses stock, and the family total decreases accordingly. The PCB and frame are not consumed a second time.
+
+### Variant balances, unassigned stock, and the family total
+
+The primary item lists variants with their individual balances. Its stock view also shows unassigned primary stock and the family total. Example after building one white variant:
+
+| Stock | Quantity |
+| --- | --- |
+| OpenPaper L White | 1 |
+| OpenPaper L Black | 0 |
+| Unassigned on the primary item | 2 |
+| Total stock | 3 |
+
+Total stock = sum of all variant balances + unassigned primary stock
+
+GET /api/v1/resources/&#123;primaryId&#125;/stock returns family.variants with each variant’s quantity, plus family.summary containing totalQuantity, variantQuantity, and primaryQuantity. resource.quantity remains the primary item’s own unassigned balance. Do not add it to the family total again. All values in this response use the same database snapshot. Reading the family requires stock.read access to every member.
+
+### Build through the API
+
+Replace placeholders with your resource UUIDs and API token. Use a new Idempotency-Key for each new operation; reuse the same key when retrying the identical request. Builds require this header.
+
+```text
+POST /api/v1/resources/{primaryId}/stock/builds
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+Idempotency-Key: <unique-build-key>
+
+{
+  "quantity": 1,
+  "outputResourceId": "<whiteVariantId>"
+}
+```
+
+outputResourceId must identify the requested resource or one of its direct variants. Alternatively, call POST /api/v1/resources/&#123;whiteVariantId&#125;/stock/builds directly with quantity. To deliberately produce unassigned stock, explicitly set outputResourceId to the primary item’s ID.
+
+When calling through the primary item, you may omit outputResourceId if componentResourceSelections maps stable BOM slot IDs to selected component IDs and the complete resulting recipe matches exactly one output variant. Each selected component must be the slot’s component or one of its direct variants. No match or multiple matches return HTTP 422; choose the output explicitly in that case.
+
+### Issue through the API
+
+```text
+POST /api/v1/resources/{whiteVariantId}/stock/movements
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+Idempotency-Key: <unique-issue-key>
+
+{
+  "delta": -1,
+  "type": "issue",
+  "note": "Order #1234"
+}
+```
+
+The resource path contains the variant’s ID. The body uses delta and type; it does not use an additional variant_id field or a separate legacy variant endpoint. A negative delta reduces stock.
+
+### Negative stock follows organization policy
+
+With “Allow negative stock” off (allowNegativeStock = false), an issue below zero returns HTTP 409. With it on, bulk stock may fall below zero, and the family view includes those negative balances. Serialized stock still requires actual available units. Receipts can recover an existing negative balance even when protection is enabled.
+
+[Open the full API reference](/en/api-reference)

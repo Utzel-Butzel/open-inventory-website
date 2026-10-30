@@ -41,7 +41,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
     ...posts.map((slug) => `/blog/${slug}`),
     "/docs",
-    "/api-docs",
   ];
 
   return routes.flatMap((route, index) => {

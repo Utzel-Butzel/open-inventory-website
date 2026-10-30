@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Camera, Shapes, PackageCheck, Printer, MapPin, ShieldCheck, Wrench, House, Rocket, Users, Archive, GraduationCap, Hammer, FlaskConical, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { MarketingLanguageSwitcher } from "@/components/marketing/marketing-language-switcher";
@@ -13,6 +13,7 @@ import {
 type DropdownKey = "features" | "use-cases";
 
 type DropdownItem = {
+  icon: LucideIcon;
   label: string;
   href: string;
   description: string;
@@ -21,97 +22,97 @@ type DropdownItem = {
 const featureItemsDe: DropdownItem[] = [
   {
     label: "Inventar erfassen",
-    href: "/features/erfassen",
+    href: "/features/erfassen", icon: Camera,
     description: "Per Foto erfassen und Vorschläge prüfen.",
   },
   {
     label: "Inventar strukturieren",
-    href: "/features/strukturieren",
+    href: "/features/strukturieren", icon: Shapes,
     description: "Typen, Varianten, Optionen und Beziehungen abbilden.",
   },
   {
     label: "Bestand & Vorgänge",
-    href: "/features/bestand-ausleihe",
+    href: "/features/bestand-ausleihe", icon: PackageCheck,
     description: "Bestand und Ausleihe verfolgen, Nachbestellung und Fertigung planen.",
   },
   {
     label: "Etiketten, Drucken & API",
-    href: "/features/labels-api",
+    href: "/features/labels-api", icon: Printer,
     description: "Etiketten gestalten, lokal oder gemeinsam drucken und per API verbinden.",
   },
   {
     label: "Orte & 3D-Räume",
-    href: "/features/orte-raeume",
+    href: "/features/orte-raeume", icon: MapPin,
     description: "Karten, Räume und Fundorte verbinden.",
   },
   {
     label: "Betrieb & Sicherheit",
-    href: "/features/betrieb-sicherheit",
+    href: "/features/betrieb-sicherheit", icon: ShieldCheck,
     description: "Self-hosting, Rollen und Datenkontrolle.",
   },
 ];
 
 const featureItemsEn: DropdownItem[] = [
-  { label: "Capture inventory", href: "/features/erfassen", description: "Capture by photo and review suggestions." },
-  { label: "Structure inventory", href: "/features/strukturieren", description: "Model types, variants, options and relations." },
-  { label: "Stock & operations", href: "/features/bestand-ausleihe", description: "Track stock and loans, plan replenishment and production." },
-  { label: "Labels, printing & API", href: "/features/labels-api", description: "Design labels, print locally or share a printer, and connect the API." },
-  { label: "Locations & 3D spaces", href: "/features/orte-raeume", description: "Connect maps, rooms and storage locations." },
-  { label: "Operations & security", href: "/features/betrieb-sicherheit", description: "Self-hosting, roles and data control." },
+  { label: "Capture inventory", href: "/features/erfassen", icon: Camera, description: "Capture by photo and review suggestions." },
+  { label: "Structure inventory", href: "/features/strukturieren", icon: Shapes, description: "Model types, variants, options and relations." },
+  { label: "Stock & operations", href: "/features/bestand-ausleihe", icon: PackageCheck, description: "Track stock and loans, plan replenishment and production." },
+  { label: "Labels, printing & API", href: "/features/labels-api", icon: Printer, description: "Design labels, print locally or share a printer, and connect the API." },
+  { label: "Locations & 3D spaces", href: "/features/orte-raeume", icon: MapPin, description: "Connect maps, rooms and storage locations." },
+  { label: "Operations & security", href: "/features/betrieb-sicherheit", icon: ShieldCheck, description: "Self-hosting, roles and data control." },
 ];
 
 const useCaseItemsDe: DropdownItem[] = [
   {
     label: "Makerspace",
-    href: "/use-cases/makerspace",
+    href: "/use-cases/makerspace", icon: Wrench,
     description: "Werkzeuge, Maschinen und Material.",
   },
   {
     label: "Familie",
-    href: "/use-cases/familie",
+    href: "/use-cases/familie", icon: House,
     description: "Keller, Kisten und geteilte Dinge.",
   },
   {
     label: "Startup",
-    href: "/use-cases/startup",
+    href: "/use-cases/startup", icon: Rocket,
     description: "Assets für wachsende Teams.",
   },
   {
     label: "Verein & Verleih",
-    href: "/use-cases/verein",
+    href: "/use-cases/verein", icon: Users,
     description: "Material, Ausgabe und Rückgabe.",
   },
   {
     label: "Sammlung",
-    href: "/use-cases/sammlung",
+    href: "/use-cases/sammlung", icon: Archive,
     description: "Objekte und Herkunft dokumentieren.",
   },
   {
     label: "Schule & Bildung",
-    href: "/use-cases/schule",
+    href: "/use-cases/schule", icon: GraduationCap,
     description: "Geräte, Lernmittel und Fachräume.",
   },
   {
     label: "Handwerk",
-    href: "/use-cases/handwerk",
+    href: "/use-cases/handwerk", icon: Hammer,
     description: "Werkzeug zwischen Lager und Baustelle.",
   },
   {
     label: "Labor",
-    href: "/use-cases/labor",
+    href: "/use-cases/labor", icon: FlaskConical,
     description: "Geräte, Probenbedarf und Standorte.",
   },
 ];
 
 const useCaseItemsEn: DropdownItem[] = [
-  { label: "Makerspace", href: "/use-cases/makerspace", description: "Tools, machines and materials." },
-  { label: "Family", href: "/use-cases/familie", description: "Basements, boxes and shared belongings." },
-  { label: "Startup", href: "/use-cases/startup", description: "Assets for growing teams." },
-  { label: "Club & lending", href: "/use-cases/verein", description: "Equipment, checkout and returns." },
-  { label: "Collection", href: "/use-cases/sammlung", description: "Document objects and provenance." },
-  { label: "School & education", href: "/use-cases/schule", description: "Devices, learning materials and rooms." },
-  { label: "Trades", href: "/use-cases/handwerk", description: "Tools between storage and job sites." },
-  { label: "Lab", href: "/use-cases/labor", description: "Equipment, supplies and locations." },
+  { label: "Makerspace", href: "/use-cases/makerspace", icon: Wrench, description: "Tools, machines and materials." },
+  { label: "Family", href: "/use-cases/familie", icon: House, description: "Basements, boxes and shared belongings." },
+  { label: "Startup", href: "/use-cases/startup", icon: Rocket, description: "Assets for growing teams." },
+  { label: "Club & lending", href: "/use-cases/verein", icon: Users, description: "Equipment, checkout and returns." },
+  { label: "Collection", href: "/use-cases/sammlung", icon: Archive, description: "Document objects and provenance." },
+  { label: "School & education", href: "/use-cases/schule", icon: GraduationCap, description: "Devices, learning materials and rooms." },
+  { label: "Trades", href: "/use-cases/handwerk", icon: Hammer, description: "Tools between storage and job sites." },
+  { label: "Lab", href: "/use-cases/labor", icon: FlaskConical, description: "Equipment, supplies and locations." },
 ];
 
 const directLinksDe = [
@@ -208,8 +209,9 @@ function DesktopDropdown({
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
-                className="group flex min-h-[86px] items-start rounded-md p-3 transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+                className="group flex min-h-[86px] items-start gap-3 rounded-md p-3 transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
               >
+                <item.icon className="mt-1 size-5 shrink-0 text-brand" strokeWidth={1.7} aria-hidden="true" />
                 <span className="min-w-0 pt-0.5">
                   <span className="block text-[13px] font-semibold text-foreground">
                     {item.label}
@@ -413,6 +415,7 @@ function MobileAccordion({
               onClick={onNavigate}
               className="flex items-center gap-3 rounded-md px-3 py-2.5 text-[13px] font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
             >
+              <item.icon className="size-4 shrink-0 text-brand" strokeWidth={1.7} aria-hidden="true" />
               {item.label}
             </Link>
           );

@@ -1,0 +1,31 @@
+---
+title: "API: den ersten Request senden"
+---
+
+Die API läuft unter /api/v1 auf deiner Anwendungsinstanz. Diese öffentliche Webseite stellt die Referenz bereit.
+
+Ersetze inventory.example.com durch die Adresse deiner Instanz und setze INVENTORY_API_TOKEN in deiner lokalen Shell. Der folgende Aufruf liest bis zu zehn Einträge; er verändert keine Daten.
+
+
+```bash
+curl 'https://inventory.example.com/api/v1/resources?limit=10' \
+  -H "Authorization: Bearer $INVENTORY_API_TOKEN"
+```
+
+### API-Token
+
+Inventar, Bestände und Integrationen. Unter Einstellungen → API anlegen und die benötigten Scopes auswählen.
+
+### Browsersitzung
+
+Drucklisten, gemeinsame Drucker, Druckaufträge und QZ-Signierung. Ein gewöhnliches API-Token ersetzt diese Anmeldung nicht.
+
+### Drucker-Token (iprt_)
+
+Nur für den Windows-Agenten: Aufträge des zugehörigen Druckers abholen und quittieren.
+
+Benutzergebundene Zugänge können über X-Organization-ID eine eigene aktive Mitgliedschaft wählen. Eigenständige API-Token bleiben an ihre Organisation gebunden. Zusätzlich zu Scopes gelten die Berechtigungen des jeweiligen Endpunkts und gegebenenfalls Artikelrechte.
+
+Bei Endpunkten mit Idempotency-Key bekommt jeder neue Vorgang eine eigene UUID. Wiederhole denselben Request mit demselben Schlüssel. Prüfe bei 409 den Konflikt oder laufenden Auftrag, bei 422 die Eingaben und bei 429 das Ratenlimit. Druckaufträge verwenden stattdessen die UUID im Feld id.
+
+[Interaktive Referenz →](/de/api-reference) · [OpenAPI JSON →](/openapi.json) · [OpenAPI YAML →](/openapi.yaml)

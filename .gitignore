@@ -144,3 +144,8 @@ vite.config.ts.timestamp-*
 
 # Local browser QA artifacts
 .playwright-cli/
+
+# Generated Fumadocs output
+docs-site/.source/
+docs-site/public/openapi.json
+docs-site/public/openapi.yaml

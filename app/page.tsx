@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Github, ScanLine, Server, ShieldCheck } from "lucide-react";
 
+import { AppDownloads } from "@/components/marketing/app-downloads";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
 import { marketingHref, marketingOgLocale, marketingPathAlternates } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
@@ -14,10 +15,10 @@ const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 const content = {
   de: {
     title: "Open Inventory – Wissen, was da ist.",
-    description: "Geräte und Material erfassen, Standorte finden und Bestände und Ausleihen nachvollziehen. Open Source, selbst hostbar und mit nativer iPhone-App.",
+    description: "Geräte und Material erfassen, Standorte finden und Bestände und Ausleihen nachvollziehen. Open Source, selbst hostbar und mit nativen Apps für iPhone und Android.",
     headline: ["Wissen, was da ist.", "Und wo."],
     intro: "Geräte, Werkzeug und Material an einem Ort verwalten. Finde, was du brauchst, sieh den verfügbaren Bestand und behalte Ausleihen im Blick.",
-    demo: "Live-Demo öffnen", host: "Selbst hosten", facts: ["Open Source · MIT-Lizenz", "Auf deinem Server", "Web & iPhone"],
+    demo: "Live-Demo öffnen", host: "Selbst hosten", facts: ["Open Source · MIT-Lizenz", "Auf deinem Server", "Web, iPhone & Android"],
     photoAlt: "Eine Person lötet an einer Platine an einem benutzten Werkstatttisch",
     searchAlt: "Echte iPhone-App mit der Suche nach Löt: Lötstation Weller WE1010, verfügbar im Elektroniklabor an Bank 3",
     captureLabel: "Gefunden im Elektroniklabor.", captureNote: "iPhone-App · Beispieldaten",
@@ -40,8 +41,8 @@ const content = {
     webCaption: "Open Inventory im Browser · Beispieldaten",
     mobileEyebrow: "Direkt am Regal",
     mobileTitle: "Das Inventar kommt mit.",
-    mobileCopy: "Ein Etikett scannen, den Standort nachsehen oder einen Zugang buchen. Die native iPhone-App verbindet die Arbeit vor Ort mit deiner eigenen Instanz.",
-    mobileLink: "Die iPhone-App ansehen", mobileNote: "iOS 17+ · App-Store-Veröffentlichung in Vorbereitung",
+    mobileCopy: "Ein Etikett scannen, den Standort nachsehen oder einen Zugang buchen. Die nativen Apps für iPhone und Android verbinden die Arbeit vor Ort mit deiner eigenen Instanz.",
+    mobileLink: "Die iPhone-App ansehen", mobileNote: "iOS 17+ · Android 8.0+",
     mobileAlt: "iPhone-Detailansicht der Lötstation mit Foto, Standort Elektroniklabor Bank 3 und Bestand zwei",
     scenariosEyebrow: "Im Einsatz gedacht",
     scenariosTitle: "Jeder Ort hat sein eigenes Inventar.",
@@ -67,16 +68,16 @@ const content = {
       { q: "Was brauche ich zum Selbst-Hosting?", a: "Einen Server mit Docker Compose sowie Speicher für Datenbank und Bilder. Für den laufenden Betrieb gehören Backups, Updates und ein sicherer Zugang dazu. Die Dokumentation führt dich durch die Einrichtung.", href: "/docs#docker", link: "Zur Installationsanleitung" },
       { q: "Kann ich meine vorhandenen Listen übernehmen?", a: "Ja. Du kannst Inventar als CSV-Datei importieren. Verwende dafür die vorgesehenen Spaltennamen. Listen aus Excel kannst du zuerst als CSV speichern.", href: "/docs", link: "Dokumentation öffnen" },
       { q: "Funktioniert die Anwendung ohne KI?", a: "Ja. Inventar, Standorte und Bestände lassen sich ohne KI verwalten. Wenn du KI-Funktionen aktivierst, werden die dafür benötigten Inhalte an den konfigurierten Dienst gesendet.", href: "/open-source", link: "Datenfluss nachvollziehen" },
-      { q: "Wie bekomme ich die iPhone-App?", a: "Der Quellcode der nativen App ist öffentlich. Die App-Store-Veröffentlichung ist in Vorbereitung. Die App benötigt iOS 17 oder neuer und eine erreichbare Open-Inventory-Instanz.", href: "/ios", link: "Zur iPhone-App" },
+      { q: "Wie bekomme ich die Apps?", a: "Die Android-Vorabversion kannst du direkt als APK herunterladen (Android 8.0+). App Store und Google Play folgen. Die iPhone-App benötigt iOS 17+. Beide Apps verbinden sich mit deiner eigenen Open-Inventory-Instanz.", href: "/ios#app-downloads", link: "Zu den App-Downloads" },
     ],
     closingTitle: "Mach dir selbst ein Bild.", closingCopy: "Öffne die Demo mit Beispieldaten oder richte Open Inventory auf deinem Server ein.", github: "Quellcode auf GitHub",
   },
   en: {
     title: "Open Inventory – Know what you have.",
-    description: "Catalogue equipment and supplies, find locations and keep track of stock and loans. Open source, self-hosted and with a native iPhone app.",
+    description: "Catalogue equipment and supplies, find locations and keep track of stock and loans. Open source, self-hosted and with native iPhone and Android apps.",
     headline: ["Know what you have.", "And where it is."],
     intro: "Keep equipment, tools and supplies in one place. Find what you need, check available stock and keep track of what is on loan.",
-    demo: "Open live demo", host: "Host it yourself", facts: ["Open source · MIT license", "On your server", "Web & iPhone"],
+    demo: "Open live demo", host: "Host it yourself", facts: ["Open source · MIT license", "On your server", "Web, iPhone & Android"],
     photoAlt: "A person soldering a circuit board at a well-used workshop bench",
     searchAlt: "Actual iPhone app searching for a soldering station, showing availability and its location at electronics lab bench 3",
     captureLabel: "Found in the electronics lab.", captureNote: "iPhone app · Demo data · German interface",
@@ -95,8 +96,8 @@ const content = {
     stockLink: "Explore stock management", stockAlt: "Web stock overview with quantities, expected deliveries and low-stock items",
     webCaption: "Open Inventory in the browser · Demo data · German interface",
     mobileEyebrow: "Right at the shelf", mobileTitle: "Take your inventory with you.",
-    mobileCopy: "Scan a label, check a location or record incoming stock. The native iPhone app connects work in the field to your own instance.",
-    mobileLink: "Explore the iPhone app", mobileNote: "iOS 17+ · App Store release in preparation",
+    mobileCopy: "Scan a label, check a location or record incoming stock. The native iPhone and Android apps connect work in the field to your own instance.",
+    mobileLink: "Explore the iPhone app", mobileNote: "iOS 17+ · Android 8.0+",
     mobileAlt: "iPhone detail view of a soldering station with its photo, electronics lab location and two units in stock",
     scenariosEyebrow: "Everyday settings", scenariosTitle: "Every place has its own inventory.",
     scenarios: [
@@ -120,7 +121,7 @@ const content = {
       { q: "What do I need to self-host?", a: "A server with Docker Compose and storage for the database and images. Operating your instance includes backups, updates and secure access. The documentation walks you through setup.", href: "/docs#docker", link: "Read the installation guide" },
       { q: "Can I import my existing lists?", a: "Yes. You can import inventory from a CSV file using the supported column names. Save existing Excel lists as CSV before importing.", href: "/docs", link: "Open the documentation" },
       { q: "Does it work without AI?", a: "Yes. You can manage inventory, locations and stock without AI. If you enable AI features, the content they need is sent to the configured provider.", href: "/open-source", link: "Understand the data flow" },
-      { q: "How do I get the iPhone app?", a: "The native app’s source code is public. The App Store release is in preparation. The app requires iOS 17 or later and access to an Open Inventory instance.", href: "/ios", link: "About the iPhone app" },
+      { q: "How do I get the apps?", a: "Download the Android preview directly as an APK (Android 8.0+). App Store and Google Play releases are coming soon. The iPhone app requires iOS 17+. Both apps connect to your own Open Inventory instance.", href: "/ios#app-downloads", link: "App downloads" },
     ],
     closingTitle: "See how it fits your team.", closingCopy: "Explore the demo with example data, or set up Open Inventory on your own server.", github: "Source code on GitHub",
   },
@@ -200,7 +201,7 @@ export default async function HomePage() {
               <div className={styles.phone}><Image src="/marketing/screenshots/ios-item-detail.png" alt={c.mobileAlt} width={1206} height={2622} sizes="280px" className="h-auto w-full" /></div>
               <figcaption>{c.captureNote}</figcaption>
             </figure>
-            <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/ios")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><p className={styles.availability}>{c.mobileNote}</p></div>
+            <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/ios")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><p className={styles.availability}>{c.mobileNote}</p><AppDownloads locale={locale} /></div>
           </div>
         </section>
 

@@ -8,7 +8,6 @@ import {
   Box,
   Camera,
   Check,
-  Clock3,
   KeyRound,
   Link2,
   LogIn,
@@ -24,6 +23,7 @@ import {
   WifiOff,
 } from "lucide-react";
 
+import { AppDownloads } from "@/components/marketing/app-downloads";
 import {
   MarketingFooter,
   MarketingHeader,
@@ -389,24 +389,8 @@ export default async function IOSPage() {
                   : "Foto aufnehmen, Code scannen oder Bestand direkt am Regal buchen: Open Inventory verbindet sich mit deiner eigenen Instanz, während Uploads und optionale KI-Verarbeitung zuverlässig im Hintergrund weiterlaufen."}
               </p>
 
-              <div className="mt-8 max-w-[590px] rounded-2xl border border-white/12 bg-white/[0.065] p-4 backdrop-blur-sm sm:p-5">
-                <div className="flex items-start gap-4">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-inverse/12 text-brand-inverse">
-                    <Clock3 className="size-6" strokeWidth={1.8} aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-white">
-                      {isEnglish
-                        ? "App Store release in preparation"
-                        : "App-Store-Veröffentlichung in Vorbereitung"}
-                    </p>
-                    <p className="mt-1 text-[12px] leading-5 text-white/65">
-                      {isEnglish
-                        ? "The public App Store product page is not live yet. We will link it here as soon as it is available."
-                        : "Die öffentliche Produktseite im App Store ist noch nicht freigeschaltet. Sobald sie verfügbar ist, wird sie hier verlinkt."}
-                    </p>
-                  </div>
-                </div>
+              <div id="app-downloads" className="scroll-mt-24">
+                <AppDownloads locale={locale} dark />
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">

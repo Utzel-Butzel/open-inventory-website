@@ -58,6 +58,16 @@ npm run check:openapi
 npm run sync:openapi
 ```
 
+## App downloads
+
+`components/marketing/app-downloads.tsx` provides the shared download block on
+the homepage and `/ios`. App Store and Google Play badges are disabled until
+their product pages are available. The Android link points to the installable
+[Android preview](https://github.com/Utzel-Butzel/inventory/releases/tag/android-preview-2026-10-31)
+hosted as a GitHub release asset, keeping the APK out of the website repository.
+Replace that URL when publishing a new preview. The release includes a SHA-256
+checksum and build provenance; this initial APK is a debug-signed development build.
+
 ## Validation
 
 ```bash

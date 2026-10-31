@@ -1579,7 +1579,7 @@ export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
                 <CircleDot className="size-3 text-brand-inverse" aria-hidden="true" />
                 Camera and scanner operations run on a physical iPhone
               </div>
-              <Link href={enHref("/ios")} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-inverse">
+              <Link href={enHref("/app")} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-inverse">
                 Read the iOS implementation notes
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>

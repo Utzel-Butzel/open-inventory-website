@@ -178,8 +178,8 @@ export async function MarketingFooter() {
             <p className="text-sm font-semibold text-foreground">{copy.product}</p>
             <div className="mt-4 grid gap-3 text-sm text-muted">
               <Link href={href("/features")} className="w-fit transition-colors hover:text-foreground">{copy.features}</Link>
-              <Link href={href("/ios")} className="w-fit transition-colors hover:text-foreground">iOS App</Link>
-              <Link href={href("/ios#app-downloads")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "App-Downloads" : "App downloads"}</Link>
+              <Link href={href("/app")} className="w-fit transition-colors hover:text-foreground">iOS App</Link>
+              <Link href={href("/app#app-downloads")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "App-Downloads" : "App downloads"}</Link>
               <Link href={href("/open-source")} className="w-fit transition-colors hover:text-foreground">Open Source</Link>
               <Link href={href("/docs")} className="w-fit transition-colors hover:text-foreground">{copy.docs}</Link>
               <Link href={href("/api-docs")} className="w-fit transition-colors hover:text-foreground">{copy.api}</Link>

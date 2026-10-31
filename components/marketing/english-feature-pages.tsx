@@ -936,7 +936,7 @@ export function FeatureDetailContent({ locale, group }: { locale: MarketingLocal
               <h2 className="site-heading mt-4">{copy.ios.title}</h2>
               <p className="mt-5 text-base leading-7 text-muted">{copy.ios.copy}</p>
               <ul className="mt-6 space-y-3">{copy.ios.points.map((point) => <li key={point} className="flex gap-3 text-sm leading-6"><Check className="mt-1 size-4 shrink-0 text-brand" aria-hidden="true" />{point}</li>)}</ul>
-              <Link href={href("/ios")} className="site-link mt-7 inline-flex items-center gap-2">{de ? "Die iOS-App kennenlernen" : "Explore the iOS app"}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+              <Link href={href("/app")} className="site-link mt-7 inline-flex items-center gap-2">{de ? "Die iOS-App kennenlernen" : "Explore the iOS app"}<ArrowRight className="size-4" aria-hidden="true" /></Link>
             </div>
           </div>
         </section>

@@ -330,7 +330,7 @@ export function DesktopMarketingNavigation({
         }
         onClose={closeDropdown}
         buttonRef={featureButtonRef}
-        relatedLink={{ label: copy.ios, href: marketingHref(locale, "/ios") }}
+        relatedLink={{ label: copy.ios, href: marketingHref(locale, "/app") }}
       />
       <DesktopDropdown
         dropdownKey="use-cases"
@@ -589,7 +589,7 @@ export function MobileMarketingNavigation({
             </Link>
           ))}
           <div className="mt-1 flex gap-4 border-t border-border px-3 pb-2 pt-4 text-[13px] text-muted">
-            <Link href={marketingHref(locale, "/ios")} onClick={closeNavigation} className="hover:text-foreground">{copy.ios}</Link>
+            <Link href={marketingHref(locale, "/app")} onClick={closeNavigation} className="hover:text-foreground">{copy.ios}</Link>
             <Link href={marketingHref(locale, "/blog")} onClick={closeNavigation} className="hover:text-foreground">Blog</Link>
           </div>
           <a

@@ -111,7 +111,7 @@ export const englishArticles: BlogArticle[] = [
       },
       {
         label: "Explore the iOS app",
-        href: "/ios",
+        href: "/app",
         description: "Native camera, scanners, and the persistent mobile queue",
       },
       {
@@ -584,7 +584,7 @@ export const englishArticles: BlogArticle[] = [
     relatedLinks: [
       {
         label: "iOS features",
-        href: "/ios",
+        href: "/app",
         description: "Native camera, QR scanner, and room capture",
       },
       {

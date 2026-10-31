@@ -48,7 +48,7 @@ test("the website proxy handles only public marketing routes", async () => {
     "/de/:path*",
     "/features/:path*",
     "/use-cases/:path*",
-    "/ios",
+    "/app",
     "/open-source",
     "/blog/:path*",
     "/docs",

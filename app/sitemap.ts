@@ -34,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/features",
     ...featurePages.map((slug) => `/features/${slug}`),
-    "/ios",
+    "/app",
     "/open-source",
     "/use-cases",
     ...useCases.map((slug) => `/use-cases/${slug}`),

@@ -157,7 +157,7 @@ export const articles: BlogArticle[] = [
       },
       {
         label: "iOS-App kennenlernen",
-        href: "/ios",
+        href: "/app",
         description: "Native Kamera, Scanner und mobile Warteschlange",
       },
       {
@@ -630,7 +630,7 @@ export const articles: BlogArticle[] = [
     relatedLinks: [
       {
         label: "iOS-Features",
-        href: "/ios",
+        href: "/app",
         description: "Native Kamera, QR-Scanner und Raumaufnahme ansehen",
       },
       {

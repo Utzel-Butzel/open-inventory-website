@@ -60,7 +60,7 @@ const pageCopy: Record<MarketingPageKind, MarketingPageCopy> = {
       { title: "Inventory model", copy: "Use custom types, fields, variant families, options, relations, locations and media. Choose bulk quantities or serialized units where the distinction matters.", href: "/features/strukturieren" },
       { title: "Stock operations", copy: "Manage movements, purchasing, sales, multi-line loans, internal requests, receipts and assemblies with explicit history.", href: "/features/bestand-ausleihe" },
       { title: "Labels and scans", copy: "Generate QR and Code 128 labels, then preview and execute guarded scan workflows in the browser or iOS app.", href: "/features/labels-api" },
-      { title: "Native iOS client", copy: "The SwiftUI app captures photos and codes, keeps a persistent upload outbox and can add RoomPlan geometry on supported devices.", href: "/ios" },
+      { title: "Native iOS client", copy: "The SwiftUI app captures photos and codes, keeps a persistent upload outbox and can add RoomPlan geometry on supported devices.", href: "/app" },
       { title: "Open by default", copy: "The web app, database migrations, OpenAPI contract and iOS source are published together under the MIT license.", href: "/open-source" },
     ],
   },

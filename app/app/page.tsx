@@ -43,11 +43,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: title },
     description,
-    alternates: marketingPathAlternates(locale, "/ios"),
+    alternates: marketingPathAlternates(locale, "/app"),
     openGraph: {
       title,
       description,
-      url: locale === "de" ? "/de/ios" : "/ios",
+      url: locale === "de" ? "/de/app" : "/app",
       images: ["/marketing/ios-app-icon-current.png"],
       ...marketingOgLocale(locale),
     },
@@ -283,7 +283,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
   );
 }
 
-export default async function IOSPage() {
+export default async function AppPage() {
   const locale = await getMarketingLocale();
   const isEnglish = locale === "en";
   const startSteps: Array<{

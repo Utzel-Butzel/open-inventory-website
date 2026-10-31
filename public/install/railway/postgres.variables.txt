@@ -1,0 +1,5 @@
+POSTGRES_DB=inventory
+POSTGRES_USER=inventory
+POSTGRES_PASSWORD=${{secret(64, "abcdef0123456789")}}
+PGDATA=/var/lib/postgresql/data/pgdata
+DATABASE_URL=postgresql://${{POSTGRES_USER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{POSTGRES_DB}}

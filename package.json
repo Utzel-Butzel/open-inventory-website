@@ -14,7 +14,7 @@
     "lint": "eslint . --ignore-pattern .next",
     "typecheck": "next typegen && tsc --noEmit",
     "test:i18n": "node --experimental-strip-types --test tests/ui-i18n.test.mjs",
-    "test": "npm run test:i18n",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "check:openapi": "node scripts/sync-openapi.mjs --check",
     "sync:openapi": "node scripts/sync-openapi.mjs"
   },

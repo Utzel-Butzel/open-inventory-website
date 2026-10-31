@@ -38,7 +38,11 @@ sitemap are generated for both languages.
 
 ## API documentation
 
-The main `/docs` page is the short Dokploy/Coolify setup guide. Technical guides
+The main `/docs` page covers Dokploy, Coolify, Docker, Railway and Portainer.
+The Portainer generator creates a standalone Compose stack with per-installation
+credentials in the browser, plus Caddy for HTTPS. Railway configuration lives in
+`public/install/railway`; its downloadable ZIP is prepared but not published or
+live-tested on Railway. Technical guides
 and the Fumadocs API reference live in [`docs-site`](docs-site/README.md), deployed
 separately at [docs.openinventory.polyxo.de](https://docs.openinventory.polyxo.de).
 Old `/api-docs` routes and technical `/docs#…` links forward to the matching

@@ -15,6 +15,8 @@ import {
 } from "@/components/marketing/site-chrome";
 import { marketingHref, type MarketingLocale } from "@/lib/marketing-i18n";
 import { publicDemoUrl } from "@/lib/site-config";
+import { AiPhotoExample } from "@/components/marketing/ai-photo-example";
+import { AiWorkflow } from "@/components/marketing/ai-workflow";
 import { BusinessFlow } from "@/components/marketing/business-flow";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
@@ -35,19 +37,19 @@ const englishFeatureCopy = {
     eyebrow: "01 · Capture",
     title: "From photos to inventory records",
     intro:
-      "Capture starts at the object. Original media is retained, generated suggestions remain reviewable, and background work is split into visible stages.",
+      "Take a photo. AI can remove its background and suggest a title, description and tags. Review the draft instead of filling in every field from scratch.",
     description:
-      "Technical overview of batch capture, image analysis, photo counting, media handling and the native open-source iOS client in Open Inventory.",
+      "Capture inventory with AI: background removal, suggested titles and descriptions, product research and batch photo capture.",
     detailIntro:
-      "Open Inventory separates the short interaction at the object from slower server-side processing. Type, location and optional processing settings can be set once for a batch. Resource creation, uploads, analysis and cover generation then run as separate jobs with their own states.",
+      "A shelf full of objects should not mean an afternoon of typing. Set a location for the batch, photograph the items and let optional AI prepare the images and descriptions. Then review and complete the records.",
     outcomes: [
       "Capture several objects without waiting for every upload and processing step",
       "Review and correct generated fields before treating them as inventory data",
       "Keep original media and structured fields on the same record",
     ],
-    workflowTitle: "A staged queue instead of one long request",
+    workflowTitle: "Photograph, review, save",
     workflowIntro:
-      "Shared context is set before the series. Each object then moves through explicit stages that can fail or be retried independently.",
+      "Set the location once for your batch. Take photos in sequence, then check the suggestions together.",
     workflow: [
       {
         title: "Set batch context",
@@ -59,11 +61,11 @@ const englishFeatureCopy = {
       },
       {
         title: "Process in stages",
-        copy: "Resource creation, media uploads, analysis and cover generation expose separate job states. Defined retries use stable idempotency keys.",
+        copy: "Images upload while AI prepares the details and optional cutout. You can see progress and retry a failed step.",
       },
       {
         title: "Review the result",
-        copy: "Check name, type, tags, quantity, tracking mode and media before relying on the record.",
+        copy: "Check the suggested details and images. Add quantity and location, and correct anything the AI misidentified.",
       },
     ],
     example: {
@@ -78,15 +80,14 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Open Inventory batch capture with mock inventory records",
-      caption:
-        "Camera-first batch capture · all visible records are mock data from a German-configured demo instance",
+      caption: "Photo capture with a workshop image · Demo data, German interface",
     },
     ios: {
       title: "Capture at the shelf with the native client.",
-      copy: "The SwiftUI app takes photos at the object and persists each operation in an Application Support outbox before upload. It connects to an Open Inventory instance selected by the operator.",
+      copy: "Photograph objects at the shelf with the iPhone app. Photos and pending uploads stay available after an interruption. The app connects to your own Open Inventory instance.",
       points: [
         "Take or select up to twelve photos for one record",
-        "Resume defined upload stages after a network interruption or restart",
+        "Resume uploads after an interrupted connection",
         "Scan a code, open the matching record and verify it on site",
       ],
     },
@@ -104,24 +105,28 @@ const englishFeatureCopy = {
         copy: "Capture several objects in sequence. Persistent jobs continue processing earlier records while the camera is available for the next object.",
       },
       {
-        title: "Image-derived draft fields",
-        copy: "Optional OpenAI or compatible image analysis proposes a name, description, type, tags, alt text and confidence value. The draft is editable before it is accepted.",
+        title: "Titles and descriptions from photos",
+        copy: "AI reads visible features and labels in your photos and suggests a title, description, type and tags.",
       },
       {
-        title: "Generated square covers",
-        copy: "OpenAI or Google can generate a square cover from a source photo. The generated asset is stored separately and the original photo remains available.",
+        title: "Remove photo backgrounds",
+        copy: "Turn a workshop snapshot into a clear cover image with a white or transparent background. The original photo remains available alongside it.",
+      },
+      {
+        title: "Research product details",
+        copy: "AI searches the web for missing product details, such as a model shown on the nameplate. You can add the findings to the record.",
       },
       {
         title: "Count similar parts from a photo",
         copy: "Optional photo counting marks detected instances and returns a confidence value. The quantity can be corrected before a stock movement is written.",
       },
       {
-        title: "Media attached to the record",
-        copy: "JPG, PNG, WebP, AVIF, HEIC, MP4, MOV, WebM, PDF and USDZ can be ordered on a record. Images are optimized client-side and EXIF coordinates can be imported.",
+        title: "Photos and manuals with the item",
+        copy: "Keep additional photos, videos, manuals and 3D files with the record. Useful details stay with the object.",
       },
       {
         title: "Native iPhone capture",
-        copy: "The open SwiftUI app captures photos, scans codes and persists upload stages. Stable operation IDs prevent defined retries from creating duplicate records.",
+        copy: "Take photos, scan codes and keep recording items on site. Uploads can resume after an interrupted connection.",
       },
       {
         title: "Bin estimates · experimental",
@@ -144,13 +149,13 @@ const englishFeatureCopy = {
       "Connect containers, rooms, devices, people and projects with explicit relations",
       "Maintain larger datasets through search, filters and bulk updates",
     ],
-    workflowTitle: "Start with a small schema and extend it deliberately",
+    workflowTitle: "Set up your own fields and storage locations",
     workflowIntro:
-      "A field is useful when it is searched, filtered, validated or automated. Additional structure can be introduced as those requirements become clear.",
+      "An instrument might need a calibration date; a box might only need its contents and location. Add the fields you will actually use.",
     workflow: [
       {
         title: "Define inventory types",
-        copy: "Use a bundled type or create a custom type with a stable key shared by the UI and API.",
+        copy: "Choose an existing type such as tool or furniture. Create your own type for other kinds of items.",
       },
       {
         title: "Add typed fields",
@@ -158,7 +163,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Create explicit relations",
-        copy: "Represent containment, responsibility and spatial relationships as directed links rather than free text.",
+        copy: "Record which box holds a device and which accessories belong to it.",
       },
       {
         title: "Search and update in bulk",
@@ -177,16 +182,15 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Actual Open Inventory item detail with an object photo, structured fields, and demo data",
-      caption:
-        "Media, master data, and stock information on an actual demo record",
+      caption: "Photos and details on an inventory record · Demo data, German interface",
     },
     ios: {
-      title: "The same structure is available on iOS.",
+      title: "Look up an item and add details on site.",
       copy: "The native client searches the same records as the web application. Location and other fields can be added while capturing the physical object.",
       points: [
         "Search by name, SKU, tag or location",
-        "Open and edit records with authenticated media requests",
-        "Use map, detail and settings screens implemented in SwiftUI",
+        "Open and edit an item’s photos and details",
+        "Look up its location on the map",
       ],
     },
     trustTitle: "The schema is inspectable and transferable.",
@@ -199,24 +203,24 @@ const englishFeatureCopy = {
     ],
     items: [
       {
-        title: "Records with complete details",
-        copy: "Store quantity, status, SKU, serial number, value, categories, tags, location, notes, priority, GPS or GeoJSON data and ordered media on each record.",
+        title: "Details about each item",
+        copy: "Keep serial number, condition, value and location on the record. Photos and notes help you tell similar devices apart.",
       },
       {
         title: "Custom inventory types",
         copy: "Use bundled types for tools, objects, furniture, vehicles, locations, people, clothing and projects, or define custom types with stable API keys.",
       },
       {
-        title: "Typed custom fields",
-        copy: "Add short or long text, numbers, booleans, dates, date-times, single or multiple choices, email, URL and dynamic references, including fields on serialized units.",
+        title: "Add your own fields",
+        copy: "Add a purchase date, calibration date or a choice of conditions. Choose whether each field holds text, a number, a date or a selection.",
       },
       {
-        title: "Relations and containment",
-        copy: "Configurable directed relations connect records. Manual placement and point-in-polygon derivation can represent rooms, cabinets, machines or projects.",
+        title: "Link contents and accessories",
+        copy: "Link a box to its contents or a machine to its accessories. Follow the link from a device to its case or spare part.",
       },
       {
         title: "Localized record content",
-        copy: "A canonical language, per-field freshness, terminology guidance and queued regeneration keep generated translations reviewable and consistent.",
+        copy: "Keep titles and descriptions in several languages. Optional AI translates the source text; you can edit the translations.",
       },
       {
         title: "Search, filters and bulk editing",
@@ -237,7 +241,7 @@ const englishFeatureCopy = {
     eyebrow: "03 · Store and move",
     title: "Stock with an append-only history",
     intro:
-      "Bulk quantities and serialized devices use different invariants but share locations, movements, purchasing, sales, lending, and request workflows.",
+      "Record deliveries, consumption and loans. The history shows when stock changed and what was issued or returned.",
     description:
       "Technical overview of bulk and serialized stock, movements, inventory counts, internal requests, purchasing, sales, lending, costs, and assemblies.",
     detailIntro:
@@ -247,25 +251,25 @@ const englishFeatureCopy = {
       "Record issues, returns, transfers and corrections without replacing their history",
       "Connect requests, purchases, sales, loans, costs, and assembly consumption",
     ],
-    workflowTitle: "Every stock change records its reason",
+    workflowTitle: "Receive a delivery and take parts from stock",
     workflowIntro:
-      "A movement changes more than a displayed number. It records the operation, location and recipient context used to derive the new state.",
+      "Take a box of screws as an example: record deliveries and withdrawals to keep the displayed quantity in line with what is on the shelf.",
     workflow: [
       {
-        title: "Choose a tracking mode",
-        copy: "Use bulk quantities for interchangeable parts and serialized units for devices with their own identity.",
+        title: "Create the item",
+        copy: "Create a bulk-stock record for the screws and choose pieces as the unit.",
       },
       {
-        title: "Assign stock locations",
-        copy: "Distribute stock across rooms, cabinets or vehicles while retaining the global quantity and availability view.",
+        title: "Receive the delivery",
+        copy: "Count the screws delivered and book them into the correct storage bin.",
       },
       {
-        title: "Write a movement",
-        copy: "Receipt, issue, transfer, lending and return operations are validated and appended to the history.",
+        title: "Record a withdrawal",
+        copy: "When someone takes screws, record the quantity as an issue. The history shows the date, quantity and storage location.",
       },
       {
-        title: "Review replenishment inputs",
-        copy: "Minimum quantity, consumption and lead time expose low stock and provide inputs for reorder planning.",
+        title: "Plan the reorder",
+        copy: "Set a minimum quantity and lead time. Use past consumption to see when more stock is needed.",
       },
     ],
     example: {
@@ -280,8 +284,7 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Actual Open Inventory stock management with a booking form, locations, and movement history",
-      caption:
-        "Stock, incoming and outgoing movements, and history in the running web app · demo data",
+      caption: "Stock booking and movement history · Demo data, German interface",
     },
     ios: {
       title: "Write stock movements at the shelf.",
@@ -315,7 +318,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Bulk or serialized tracking",
-        copy: "Track identical parts as a quantity or represent every physical unit with a UUID, readable code, state, location, metadata and acquisition date.",
+        copy: "Count interchangeable parts such as screws as a quantity. Track devices with their own serial number individually, each with its condition and location.",
       },
       {
         title: "Append-only movements",
@@ -323,7 +326,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Quantity by stock location",
-        copy: "Any suitable inventory record can be a structured stock location. Global quantity and distribution across rooms, cabinets or vehicles remain visible together.",
+        copy: "See an item’s total quantity and how it is distributed across rooms, cabinets or vehicles. Record a transfer when supplies move.",
       },
       {
         title: "Inventory count cycles",
@@ -331,15 +334,15 @@ const englishFeatureCopy = {
       },
       {
         title: "Loans and multi-line operations",
-        copy: "Bundle several quantities or serialized units per contact. Issue, due date, partial returns, and cancellation remain traceable for every line.",
+        copy: "Issue several devices or quantities to one contact. See when they are due back and which items have already been returned.",
       },
       {
         title: "Minimum stock and forecast inputs",
-        copy: "Minimum quantity, reorder amount, lead time and consumption rate produce warnings, an estimated stock-out date and a documented reorder suggestion.",
+        copy: "Set a minimum quantity and lead time. Stock, consumption and outstanding deliveries help estimate when parts will run out and when to reorder.",
       },
       {
         title: "Purchasing and sales",
-        copy: "Create multi-line purchase and sales orders with contacts, prices, and partial quantities. Receipts and issues are applied through controlled stock movements.",
+        copy: "Record orders with items, quantities, prices and suppliers or customers. When part of an order arrives, book that quantity and see what is still outstanding.",
       },
       {
         title: "Internal requests and calendar",
@@ -351,7 +354,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Bills of materials and assemblies",
-        copy: "Define assembly components and consume them atomically during a build: either the complete operation succeeds or none of it is applied.",
+        copy: "List the parts needed for an assembly. Building it deducts all components together; if the transaction fails, stock remains unchanged.",
       },
     ],
   },
@@ -391,11 +394,10 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Open Inventory label designer with QR and barcode preview",
-      caption:
-        "Label designer in the web app · German demo data",
+      caption: "QR and barcode label preview · Demo data, German interface",
     },
     ios: {
-      title: "Use the iPhone as an open scanner client.",
+      title: "Scan labels with your iPhone.",
       copy: "The native app recognizes QR, EAN-8/13, UPC-E, Code 128, Data Matrix, PDF417 and Aztec and calls the operator's own Open Inventory instance.",
       points: [
         "Resolve an inventory link, UUID, SKU or serial number",
@@ -426,11 +428,11 @@ const englishFeatureCopy = {
       },
       {
         title: "Reusable label layouts",
-        copy: "Design QR codes, barcodes, multiple text fields, subtitles and custom images. Adjust typography and cropping, use inverted printing or automatic label length, test-print drafts and save copies.",
+        copy: "Design labels with a name, code and other details in the browser. Save the template for the next print run.",
       },
       {
         title: "CSV import and export",
-        copy: "Import and export UTF-8 CSV. Row-level validation identifies invalid values, and repeated imports can use idempotent processing.",
+        copy: "Import existing lists as CSV and export your stock for other programs. If a value is invalid, the import identifies the affected row.",
       },
       {
         title: "Transactional duplicate merging",
@@ -498,8 +500,7 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Actual Open Inventory stock-locations view with quantities distributed across three demo locations",
-      caption:
-        "Stock distributed across configured locations in the running web app · demo data",
+      caption: "Quantities at three storage locations · Demo data, German interface",
     },
     ios: {
       title: "Room capture is native and optional.",
@@ -516,7 +517,7 @@ const englishFeatureCopy = {
     trustPoints: [
       "Web viewer and native capture implementation in the repository",
       "Explicit separation of manual and derived placement",
-      "Optional provider boundaries instead of hidden dependencies",
+      "Configure additional map or 3D services when needed",
     ],
     items: [
       {
@@ -525,7 +526,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Derived spatial containment",
-        copy: "When a map point lies inside a container polygon, Open Inventory can derive a relation. A manual placement deliberately takes precedence.",
+        copy: "Draw an area on the map. Items with a map point inside it can be assigned to that area automatically. A manually set placement takes precedence.",
       },
       {
         title: "Optional RoomPlan scans",
@@ -533,7 +534,7 @@ const englishFeatureCopy = {
       },
       {
         title: "Navigable 3D room data",
-        copy: "The web viewer displays measured RoomPlan geometry, searchable inventory markers and optional photorealistic derivatives with explicit coordinate-system transforms.",
+        copy: "Open a scanned room in the browser and search for inventory records within it. Optionally display photorealistic views of the room.",
       },
       {
         title: "Room photos and estimated placement",
@@ -556,13 +557,13 @@ const englishFeatureCopy = {
       "Define roles, granular permissions and content-dependent access rules",
       "Manage the database, files, secrets, backups and optional providers explicitly",
     ],
-    workflowTitle: "An open stack still requires operating decisions",
+    workflowTitle: "Set up the server, access and backups",
     workflowIntro:
       "Starting Compose is the first step. Identity, persistence, recovery and controlled upgrades are required for a durable service.",
     workflow: [
       {
         title: "Start the instance",
-        copy: "Use the checked-in Docker Compose services, PostgreSQL, migrations and health endpoint as the baseline.",
+        copy: "Start the application with Docker Compose. The installation guide covers the database, storage and checking that the service is running.",
       },
       {
         title: "Restrict access",
@@ -574,12 +575,12 @@ const englishFeatureCopy = {
       },
       {
         title: "Apply updates deliberately",
-        copy: "Review repository changes, update images and migrations in a controlled sequence, and monitor the health endpoint.",
+        copy: "Read the changes and back up your data before an update. Follow the update instructions, then check that the installation is reachable.",
       },
     ],
     example: {
       eyebrow: "Example · Self-hosted instance",
-      title: "A stack with explicit boundaries",
+      title: "What is stored on your server",
       copy: "The web app and API run in a container, structured data lives in PostgreSQL and uploads live on persistent storage. External identity, AI or storage providers are present only when configured.",
       facts: [
         { label: "Application", value: "Web · API · jobs" },
@@ -589,8 +590,7 @@ const englishFeatureCopy = {
     },
     screenshot: {
       alt: "Actual Open Inventory access settings with roles and members in a demo organization",
-      caption:
-        "Roles, members, and access rules in the running self-hosted web app",
+      caption: "Roles and workspace members · Demo data, German interface",
     },
     ios: {
       title: "The iOS client connects to the operator's instance.",
@@ -605,9 +605,9 @@ const englishFeatureCopy = {
     trustCopy:
       "The MIT license permits inspection, modification, operation and redistribution. It does not replace upgrades, backups or secure network configuration. Those responsibilities remain with the operator.",
     trustPoints: [
-      "MIT license and source for web, API and iOS",
+      "MIT license and complete source code for web, API and iOS",
       "Docker Compose, migrations, health endpoint and persistent volumes",
-      "Public issues and pull requests with visible revision history",
+      "Report bugs and propose changes on GitHub",
     ],
     items: [
       {
@@ -652,20 +652,20 @@ export function getEnglishFeatureCopy(
 
 const presentationCopy = {
   de: {
-    erfassen: { title: "Gegenstände mit Fotos erfassen", intro: "Fotografiere Geräte und Material direkt vor Ort. Ergänze die Angaben selbst oder prüfe optionale KI-Vorschläge, bevor du sie übernimmst." },
+    erfassen: { title: "Vom Foto zum Inventareintrag", intro: "Bilder freistellen, Titel und Beschreibungen vorbereiten: Die KI übernimmt die Vorarbeit. Du prüfst den Vorschlag und ergänzt, was nur du weißt." },
     strukturieren: { title: "Ein Platz für alle Angaben", intro: "Fotos, Seriennummern, Dokumente und eigene Felder gehören zum selben Eintrag. Suche und Filter helfen dir, ihn wiederzufinden." },
     "bestand-ausleihe": { title: "Bestände und Ausleihen verfolgen", intro: "Verfolge Ausleihen, Verbrauch und Lieferungen. Bestandsprognosen helfen beim Nachbestellen; die Stücklistenanalyse zeigt Materialbedarf und Kosten vor der Fertigung." },
-    "labels-api": { title: "Etiketten gestalten. Gemeinsam drucken.", intro: "Kennzeichne Artikel und einzelne Geräte mit QR-Etiketten. Drucke lokal oder am gemeinsamen Bürodrucker und speichere vorbereitete Drucklisten für später." },
+    "labels-api": { title: "Etiketten und gemeinsame Drucker", intro: "Kennzeichne Artikel und einzelne Geräte mit QR-Etiketten. Drucke lokal oder am gemeinsamen Bürodrucker und speichere vorbereitete Drucklisten für später." },
     "orte-raeume": { title: "Vom Standort zum richtigen Regal", intro: "Ordne Gegenstände Räumen, Schränken und Lagerorten zu. Karten und Raumansichten ergänzen den Standort, wenn du sie brauchst." },
-    "betrieb-sicherheit": { title: "Auf deinem Server. Mit klaren Zugriffsrechten.", intro: "Betreibe Open Inventory auf deiner Infrastruktur, verwalte Rollen und sichere deine Daten. Quellcode und Dokumentation sind öffentlich." },
+    "betrieb-sicherheit": { title: "Eigener Server und Zugriffsrechte", intro: "Betreibe Open Inventory auf deiner Infrastruktur, verwalte Rollen und sichere deine Daten. Quellcode und Dokumentation sind öffentlich." },
   },
   en: {
-    erfassen: { title: "Capture objects with photos", intro: "Photograph equipment and supplies where you find them. Enter the details yourself or review optional AI suggestions before accepting them." },
+    erfassen: { title: "From a photo to an inventory record", intro: "Remove backgrounds and prepare titles and descriptions: AI does the groundwork. You review the draft and add the details only you know." },
     strukturieren: { title: "One place for every detail", intro: "Keep photos, serial numbers, documents and custom fields on the same record. Search and filters help you find it again." },
     "bestand-ausleihe": { title: "Keep track of stock and loans", intro: "Track loans, consumption and deliveries. Stock forecasts inform replenishment; bill-of-materials analysis shows component needs and costs before production." },
-    "labels-api": { title: "Design labels. Share a printer.", intro: "Label items and individual devices with QR codes. Print locally or on the shared Office printer and save prepared lists for later." },
+    "labels-api": { title: "Labels and shared printers", intro: "Label items and individual devices with QR codes. Print locally or on the shared Office printer and save prepared lists for later." },
     "orte-raeume": { title: "Find the location. Find the shelf.", intro: "Assign objects to rooms, cabinets and storage locations. Add maps and room views when you need more spatial context." },
-    "betrieb-sicherheit": { title: "Your server. Clear access controls.", intro: "Run Open Inventory on your infrastructure, manage roles and back up your data. The source and documentation are public." },
+    "betrieb-sicherheit": { title: "Your server and access controls", intro: "Run Open Inventory on your infrastructure, manage roles and back up your data. The source and documentation are public." },
   },
 } satisfies Record<MarketingLocale, Record<FeatureSlug, { title: string; intro: string }>>;
 
@@ -728,18 +728,18 @@ export function FeatureOverviewPage({ locale }: { locale: MarketingLocale }) {
           <div className="site-shell grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <p className="site-eyebrow">{de ? "Die Funktionen" : "The features"}</p>
-              <h1 className="site-title mt-5">{de ? "Wissen, was da ist. Und wo es bleibt." : "Know what you have. And where it goes."}</h1>
+              <h1 className="site-title mt-5">{de ? "Inventar erfassen, finden und verwalten" : "Record, find and manage inventory"}</h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-muted">
                 {de ? "Erfasse Geräte und Material, finde ihren Standort und behalte Ausleihen und Bestände im Blick. Vom ersten Gegenstand bis zum gemeinsamen Lager." : "Capture equipment and supplies, find their location and keep track of loans and stock. From your first item to a shared storeroom."}
               </p>
               <FeatureActions locale={locale} />
-              <p className="mt-6 text-sm text-muted">{de ? "MIT-Lizenz · Selbst gehostet · Web und iOS" : "MIT license · Self-hosted · Web and iOS"}</p>
+              <p className="mt-6 text-sm text-muted">{de ? "MIT-Lizenz · Selbst gehostet · Web, iPhone und Android" : "MIT license · Self-hosted · Web, iPhone and Android"}</p>
             </div>
             <figure className="min-w-0">
               <div className="site-product-frame">
                 <Image src="/marketing/screenshots/web-inventory.png" alt={de ? "Inventarübersicht mit Objektfotos, Namen und Standorten in Open Inventory" : "Open Inventory records with object photos, names and locations"} width={1440} height={960} loading="eager" sizes="(max-width: 1024px) 100vw, 58vw" className="h-auto w-full" />
               </div>
-              <figcaption className="mt-3 text-xs leading-5 text-muted">{de ? "Die Web-App mit Beispieldaten. Alle Produktansichten zeigen die tatsächliche Oberfläche." : "The web app with demo data. All product captures show the actual interface; this demo instance is in German."}</figcaption>
+              <figcaption className="mt-3 text-xs leading-5 text-muted">{de ? "Inventarübersicht mit Beispieldaten." : "Inventory overview with demo data in German."}</figcaption>
             </figure>
           </div>
         </section>
@@ -797,7 +797,7 @@ export function FeatureOverviewPage({ locale }: { locale: MarketingLocale }) {
                       <ArrowRight className="size-4" aria-hidden="true" />
                     </Link>
                   </div>
-                  <ProductScreenshot group={group} copy={copy} />
+                  {group.slug === "erfassen" ? <AiPhotoExample locale={locale} /> : <ProductScreenshot group={group} copy={copy} />}
                 </div>
               </section>
             );
@@ -826,8 +826,8 @@ export function FeatureOverviewPage({ locale }: { locale: MarketingLocale }) {
           <div className="site-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="max-w-2xl">
               <p className="site-eyebrow">{de ? "Offen für deinen Betrieb" : "Open for your setup"}</p>
-              <h2 className="site-heading mt-4">{de ? "Erst ausprobieren. Dann selbst betreiben." : "Try it first. Then make it yours."}</h2>
-              <p className="mt-5 text-base leading-7 text-muted">{de ? "Web-App, iOS-App und API sind MIT-lizenziert. Für den eigenen Betrieb findest du die Installation, Konfiguration und Hinweise zu Backups in der Dokumentation." : "The web app, iOS app and API are MIT-licensed. The documentation covers installation, configuration and backups for your own instance."}</p>
+              <h2 className="site-heading mt-4">{de ? "Open Inventory selbst betreiben" : "Try it first. Then make it yours."}</h2>
+              <p className="mt-5 text-base leading-7 text-muted">{de ? "Web-App, mobile Apps und API sind MIT-lizenziert. Für den eigenen Betrieb findest du die Installation, Konfiguration und Hinweise zu Backups in der Dokumentation." : "The web app, iOS app and API are MIT-licensed. The documentation covers installation, configuration and backups for your own instance."}</p>
               <Link href={href("/open-source")} className="site-link mt-6 inline-flex items-center gap-2">{de ? "Mehr zum offenen Projekt" : "About the open-source project"}<ArrowRight className="size-4" aria-hidden="true" /></Link>
             </div>
             <FeatureActions locale={locale} />
@@ -865,23 +865,20 @@ export function FeatureDetailContent({ locale, group }: { locale: MarketingLocal
                 <p className="mt-6 text-lg leading-8 text-muted">{presentation.intro}</p>
                 <FeatureActions locale={locale} />
               </div>
-              <ProductScreenshot group={group} copy={copy} eager />
+              {group.slug === "erfassen" ? <AiPhotoExample locale={locale} eager /> : <ProductScreenshot group={group} copy={copy} eager />}
             </div>
           </div>
         </section>
 
-        <section className="site-section">
-          <div className="site-shell grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20">
-            <div>
-              <p className="site-eyebrow">{de ? "Im Arbeitsalltag" : "In everyday use"}</p>
-              <h2 className="site-heading mt-4">{de ? "Was du damit erledigen kannst" : "What you can do with it"}</h2>
-              <p className="mt-5 text-base leading-8 text-muted">{copy.detailIntro}</p>
+        {group.slug === "erfassen" && <AiWorkflow locale={locale} />}
+        {group.slug === "labels-api" && (
+          <section className="site-section border-b border-border bg-surface" id="mcp">
+            <div className="site-shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+              <div><p className="site-eyebrow">{de ? "Inventar für deine KI-Werkzeuge" : "Inventory for your AI tools"}</p><h2 className="site-heading mt-4">{de ? "Frag deinen Assistenten, was da ist." : "Ask your assistant what is in stock."}</h2></div>
+              <div><p className="text-base leading-8 text-muted">{de ? "Über die optionale MCP-Schnittstelle können kompatible KI-Assistenten Gegenstände suchen, Details lesen und Bestände abfragen. Zum Beispiel: Welche Akkuschrauber sind verfügbar?" : "Through the optional MCP interface, compatible AI assistants can search for items, read details and check stock. For example: Which cordless drills are available?"}</p><p className="mt-4 text-sm leading-7 text-muted">{de ? "Mit passenden Berechtigungen und deiner Bestätigung können sie auch Einträge anlegen oder ändern und Bestandsbewegungen buchen. Du legst fest, auf welche Organisation und Funktionen ein Assistent zugreifen darf." : "With the appropriate permissions and your confirmation, they can also create or update records and record stock movements. You choose which organisation and functions an assistant can access."}</p><a href="https://github.com/Utzel-Butzel/inventory#model-context-protocol-mcp" className="site-link mt-6">{de ? "MCP einrichten →" : "Set up MCP →"}</a></div>
             </div>
-            <ul className="divide-y divide-border border-y border-border">
-              {copy.outcomes.map((outcome) => <li key={outcome} className="flex gap-4 py-6 text-base leading-7"><Check className="mt-1 size-5 shrink-0 text-brand" aria-hidden="true" />{outcome}</li>)}
-            </ul>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="site-section border-y border-border bg-surface">
           <div className="site-shell">

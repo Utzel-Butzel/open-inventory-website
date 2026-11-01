@@ -7,8 +7,6 @@ import {
   Barcode,
   Box,
   Camera,
-  Check,
-  KeyRound,
   Link2,
   LogIn,
   Map,
@@ -17,10 +15,8 @@ import {
   RefreshCw,
   ScanLine,
   Search,
-  ShieldCheck,
   Smartphone,
   Sparkles,
-  WifiOff,
 } from "lucide-react";
 
 import { AppDownloads } from "@/components/marketing/app-downloads";
@@ -36,10 +32,10 @@ import { getMarketingLocale } from "@/lib/marketing-locale";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
-  const title = locale === "de" ? "Open Inventory für iPhone" : "Open Inventory for iPhone";
+  const title = locale === "de" ? "Open Inventory Apps" : "Open Inventory apps";
   const description = locale === "de"
-    ? "Objekte fotografieren, automatisch beschreiben, QR- und Barcodes scannen, Bestände buchen und Räume mit Open Inventory für iPhone erfassen."
-    : "Photograph objects, create useful descriptions, scan QR codes and barcodes, record stock, and capture rooms with Open Inventory for iPhone.";
+    ? "Mobile Apps für Open Inventory: Android-Vorabversion herunterladen, iPhone-Funktionen ansehen und Verfügbarkeit prüfen."
+    : "Mobile apps for Open Inventory: download the Android preview, explore iPhone features and check availability.";
   return {
     title: { absolute: title },
     description,
@@ -64,22 +60,22 @@ const everydayFeatures: AppFeature[] = [
   {
     icon: Camera,
     title: "Fotografieren statt tippen",
-    copy: "Nimm bis zu zwölf Fotos auf oder wähle sie aus der Mediathek. Die App verkleinert sie auf 2.200 Pixel und legt daraus einen verlässlichen Upload-Auftrag an.",
+    copy: "Nimm bis zu zwölf Fotos auf oder wähle sie aus der Mediathek. So bleiben Gesamtansicht, Typenschild und Zubehör am selben Eintrag.",
   },
   {
     icon: Sparkles,
     title: "Prüfbarer KI-Entwurf",
-    copy: "Auf Wunsch stößt die App am Server Analyse und Cover-Erstellung an. Name, Details und Modellwahl bleiben sichtbar und unter deiner Kontrolle.",
+    copy: "Wenn du KI aktivierst, schlägt sie Angaben zum Foto vor. Prüfe und korrigiere Name und Beschreibung, bevor du sie übernimmst.",
   },
   {
     icon: Barcode,
     title: "QR & gängige Barcodes",
-    copy: "Erkennt QR, EAN-8/13, UPC-E, Code 128, Data Matrix, PDF417 und Aztec. UUID, Inventarlink, SKU oder Seriennummer führen direkt zum passenden Eintrag.",
+    copy: "Scanne ein Inventaretikett oder einen vorhandenen Barcode. Ein bekannter Code öffnet den passenden Eintrag.",
   },
   {
     icon: Search,
     title: "Inventar in der Tasche",
-    copy: "Suche, filtere, öffne und bearbeite Einträge mit geschützten Bildern. Karte, Details und Einstellungen sind direkt auf dem iPhone verfügbar.",
+    copy: "Suche nach einem Gegenstand und sieh Fotos, Standort und Bestand nach. Änderungen sind auch in der Webanwendung sichtbar.",
   },
   {
     icon: PackagePlus,
@@ -89,7 +85,7 @@ const everydayFeatures: AppFeature[] = [
   {
     icon: ScanLine,
     title: "Teile per Foto zählen",
-    copy: "Eine optionale serverseitige Zählung liefert Menge, Markierungen und Konfidenz. Du korrigierst das Ergebnis, bevor Bestand hinzugefügt oder entnommen wird.",
+    copy: "Lass bei Bedarf Teile auf einem Foto zählen. Prüfe die markierten Treffer und korrigiere die Menge vor der Bestandsbuchung.",
   },
 ];
 
@@ -97,22 +93,22 @@ const everydayFeaturesEn: AppFeature[] = [
   {
     icon: Camera,
     title: "Take photos instead of typing",
-    copy: "Take up to twelve photos or choose them from the photo library. The app resizes them to 2,200 pixels and creates a durable upload job.",
+    copy: "Take up to twelve photos or select them from your library. Keep the item, its nameplate and accessories together in one record.",
   },
   {
     icon: Sparkles,
     title: "AI drafts you can review",
-    copy: "If enabled, the app asks the server to analyze the photos and generate a cover. The suggested name, details, and selected model stay visible and editable.",
+    copy: "If you enable AI, it suggests details from the photo. Review and correct the name and description before accepting them.",
   },
   {
     icon: Barcode,
     title: "QR and common barcodes",
-    copy: "Reads QR, EAN-8/13, UPC-E, Code 128, Data Matrix, PDF417, and Aztec. A UUID, inventory link, SKU, or serial number opens the matching item directly.",
+    copy: "Scan an inventory label or an existing barcode. A recognised code opens the matching record.",
   },
   {
     icon: Search,
     title: "Inventory in your pocket",
-    copy: "Search, filter, open, and edit items with protected images. The map, details, and settings are available directly on your iPhone.",
+    copy: "Look up an item to see its photos, location and stock. Changes also appear in the web application.",
   },
   {
     icon: PackagePlus,
@@ -122,7 +118,7 @@ const everydayFeaturesEn: AppFeature[] = [
   {
     icon: ScanLine,
     title: "Count parts from a photo",
-    copy: "An optional server-side count returns a quantity, annotations, and confidence score. You can correct it before stock is added or removed.",
+    copy: "Optionally count parts in a photo. Check the marked results and correct the quantity before recording stock.",
   },
 ];
 
@@ -175,8 +171,8 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
       </div>
       <figcaption className="mt-10 text-center text-[10px] font-medium text-white/65 sm:mt-14">
         {isEnglish
-          ? "Real app captures with demo data"
-          : "Echte App-Aufnahmen mit Demo-Daten"}
+          ? "iPhone app · Demo data, German interface"
+          : "iPhone-App · Beispieldaten"}
       </figcaption>
     </figure>
   );
@@ -206,27 +202,6 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
         ? "Actual native Open Inventory map with purpose-built demo locations"
         : "Echte native Open-Inventory-Karte mit eigens angelegten Demo-Orten",
     },
-    {
-      src: "/marketing/screenshots/ios-settings.png",
-      label: isEnglish ? "Workspace" : "Arbeitsbereich",
-      alt: isEnglish
-        ? "Actual native Open Inventory workspace settings"
-        : "Echte native Open-Inventory-Einstellungen für den Arbeitsbereich",
-    },
-    {
-      src: "/marketing/screenshots/ios-permissions.png",
-      label: isEnglish ? "Permissions" : "Berechtigungen",
-      alt: isEnglish
-        ? "Actual native Open Inventory permissions screen for a demo administrator"
-        : "Echte native Open-Inventory-Berechtigungsansicht eines Demo-Administrators",
-    },
-    {
-      src: "/marketing/screenshots/ios-system-status.png",
-      label: isEnglish ? "System status" : "Systemstatus",
-      alt: isEnglish
-        ? "Actual native Open Inventory system-status screen for the local demo server"
-        : "Echte native Open-Inventory-Systemstatusansicht des lokalen Demo-Servers",
-    },
   ];
 
   return (
@@ -235,33 +210,33 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
         <div className="grid gap-7 lg:grid-cols-[1fr_0.68fr] lg:items-end">
           <div className="max-w-4xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-              {isEnglish ? "More actual app states" : "Mehr echte App-Zustände"}
+              {isEnglish ? "On the iPhone" : "Auf dem iPhone"}
             </p>
             <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
               {isEnglish
-                ? "Six workflows. Directly from the native app."
-                : "Sechs Abläufe. Direkt aus der nativen App."}
+                ? "Search, stock and locations"
+                : "Suche, Bestand und Standorte"}
             </h2>
           </div>
           <p className="text-[15px] leading-7 text-muted">
             {isEnglish
-              ? "These original captures come directly from the running app. Every record and location was purpose-built as realistic demo data; none of the interfaces were recreated or generated."
-              : "Diese Originalaufnahmen stammen direkt aus der laufenden App. Alle Einträge und Orte wurden als realistische Demo-Daten angelegt; keine Oberfläche wurde nachgebaut oder generiert."}
+              ? "Find a record, check stock and look up a location. These views show the iPhone app with demo data."
+              : "Einen Eintrag finden, den Bestand prüfen und den Standort nachsehen. Diese Ansichten zeigen die iPhone-App mit Beispieldaten."}
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-6">
-          {captures.map((capture, index) => (
+        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          {captures.map((capture) => (
             <figure
               key={capture.src}
-              className={`group ${index % 2 === 1 ? "sm:translate-y-6" : ""}`}
+              className="mx-auto w-full max-w-[260px]"
             >
               <div className="overflow-hidden rounded-[28px] border-[5px] border-[#17181d] bg-[#17181d] p-1 shadow-[0_18px_48px_rgba(28,25,45,0.17)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_64px_rgba(28,25,45,0.24)] sm:rounded-[36px] sm:border-[6px]">
                 <Image
                   src={capture.src}
                   width={1206}
                   height={2622}
-                  sizes="(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 180px"
+                  sizes="(max-width: 639px) 260px, 30vw"
                   alt={capture.alt}
                   className="h-auto w-full rounded-[20px] sm:rounded-[27px]"
                 />
@@ -273,11 +248,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
           ))}
         </div>
 
-        <p className="mt-10 text-center text-[10px] font-medium text-muted sm:mt-16">
-          {isEnglish
-            ? "Original app captures · purpose-built demo data · no recreated interfaces"
-            : "Originale App-Aufnahmen · eigens angelegte Demo-Daten · keine nachgebauten Oberflächen"}
-        </p>
+
       </div>
     </section>
   );
@@ -369,24 +340,19 @@ export default async function AppPage() {
                 />
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">
-                    {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
+                    {isEnglish ? "Open Inventory apps" : "Open Inventory Apps"}
                   </p>
                   <p className="mt-2 text-sm text-white/65">
-                    {isEnglish ? "Native app · iOS 17+" : "Native App · iOS 17+"}
+                    {isEnglish ? "iPhone and Android" : "iPhone und Android"}
                   </p>
                 </div>
               </div>
 
-              <h1 className="site-title mt-8">
-                {isEnglish ? "Inventory in" : "Inventar in"}
-                <span className="block text-brand-inverse">
-                  {isEnglish ? "your hands." : "deiner Hand."}
-                </span>
-              </h1>
+              <h1 className="site-title mt-8">{isEnglish ? "Inventory at the shelf" : "Inventar direkt am Regal"}</h1>
               <p className="mt-7 max-w-[600px] text-[17px] leading-8 text-white/65 sm:text-[19px]">
                 {isEnglish
                   ? "Take a photo, scan a code, or record stock right at the shelf. Open Inventory connects to your own instance, while uploads and optional AI processing continue reliably in the background."
-                  : "Foto aufnehmen, Code scannen oder Bestand direkt am Regal buchen: Open Inventory verbindet sich mit deiner eigenen Instanz, während Uploads und optionale KI-Verarbeitung zuverlässig im Hintergrund weiterlaufen."}
+                  : "Fotografiere einen Gegenstand, scanne sein Etikett oder buche Material direkt am Regal. Die mobilen Apps verbinden sich mit deiner eigenen Open-Inventory-Installation."}
               </p>
 
               <div id="app-downloads" className="scroll-mt-24">
@@ -410,17 +376,6 @@ export default async function AppPage() {
                 </Link>
               </div>
 
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-white/65">
-                {(isEnglish
-                  ? ["Native for iPhone", "iOS 17+", "Your server URL"]
-                  : ["Nativ für iPhone", "iOS 17+", "Deine Server-URL"]
-                ).map((item) => (
-                  <span key={item} className="inline-flex items-center gap-1.5">
-                    <Check className="size-3 text-brand-inverse" strokeWidth={2.6} aria-hidden="true" />
-                    {item}
-                  </span>
-                ))}
-              </div>
             </div>
 
             <IPhoneCaptures locale={locale} />
@@ -429,14 +384,14 @@ export default async function AppPage() {
 
         <section className="border-b border-border bg-surface py-16 sm:py-20">
           <div className="site-shell">
-            <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr_1fr]">
+            <div className="grid gap-8 lg:grid-cols-3">
               {[
                 {
                   icon: Smartphone,
                   title: isEnglish ? "Made for the iPhone" : "Für das iPhone gemacht",
                   copy: isEnglish
-                    ? "SwiftUI and AVFoundation provide a fast camera, fluid scanning, and familiar iPhone controls instead of an embedded web interface."
-                    : "SwiftUI und AVFoundation sorgen für eine schnelle Kamera, flüssiges Scannen und vertraute iPhone-Bedienung statt einer eingebetteten Web-Oberfläche.",
+                    ? "Use the iPhone camera to photograph equipment and scan labels directly in the app."
+                    : "Nutze die iPhone-Kamera, um Geräte aufzunehmen und Etiketten direkt in der App zu scannen.",
                 },
                 {
                   icon: Link2,
@@ -447,32 +402,15 @@ export default async function AppPage() {
                 },
                 {
                   icon: RefreshCw,
-                  title: isEnglish ? "Built for bad reception" : "Für echte Funklöcher",
+                  title: isEnglish ? "Resume interrupted uploads" : "Uploads fortsetzen",
                   copy: isEnglish
-                    ? "Persistent jobs and safe retries resume interrupted uploads."
-                    : "Persistente Aufträge und sichere Wiederholungen setzen Uploads fort.",
+                    ? "If a connection drops, saved uploads can resume without creating duplicate records."
+                    : "Wenn die Verbindung abbricht, können gespeicherte Uploads fortgesetzt werden, ohne doppelte Einträge anzulegen.",
                 },
-              ].map(({ icon: Icon, title, copy }, index) => (
-                <article
-                  key={title}
-                  className={`rounded-2xl border p-7 sm:p-8 ${
-                    index === 0
-                      ? "border-brand/15 bg-brand-soft"
-                      : "border-border bg-background"
-                  }`}
-                >
-                  <span
-                    className={`grid place-items-center rounded-2xl bg-brand-soft text-brand ${
-                      index === 0 ? "size-20" : "size-16"
-                    }`}
-                  >
-                    <Icon
-                      className={index === 0 ? "size-10" : "size-8"}
-                      strokeWidth={1.65}
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <h2 className="mt-8 text-xl font-semibold tracking-[-0.035em]">{title}</h2>
+              ].map(({ icon: Icon, title, copy }) => (
+                <article key={title} className="border-t border-border py-6">
+                  <Icon className="size-6 text-muted" strokeWidth={1.7} aria-hidden="true" />
+                  <h2 className="mt-4 text-xl font-semibold tracking-[-0.035em]">{title}</h2>
                   <p className="mt-3 text-sm leading-6 text-muted">{copy}</p>
                 </article>
               ))}
@@ -488,8 +426,8 @@ export default async function AppPage() {
               </p>
               <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                 {isEnglish
-                  ? "Less data entry. A clearer inventory."
-                  : "Weniger Verwaltung. Mehr Überblick."}
+                  ? "What you can do on the iPhone"
+                  : "Was du auf dem iPhone erledigen kannst"}
               </h2>
               <p className="mt-6 text-[17px] leading-8 text-muted">
                 {isEnglish
@@ -498,45 +436,14 @@ export default async function AppPage() {
               </p>
             </div>
 
-            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {(isEnglish ? everydayFeaturesEn : everydayFeatures).map(({ icon: Icon, title, copy }, index) => (
-                <article
-                  key={title}
-                  className={`relative overflow-hidden rounded-2xl border border-border bg-surface p-7 transition duration-300 hover:shadow-[var(--shadow-md)] sm:p-8 ${
-                    index === 0 ? "min-h-[340px] md:col-span-2 lg:col-span-2" : "min-h-[280px]"
-                  }`}
-                >
-                  {index === 0 ? (
-                    <Icon
-                      className="pointer-events-none absolute -bottom-12 -right-10 size-56 text-brand opacity-[0.07] sm:size-64"
-                      strokeWidth={1.1}
-                      aria-hidden="true"
-                    />
-                  ) : null}
-                  <span
-                    className={`relative grid place-items-center rounded-2xl bg-brand-soft text-brand ${
-                      index === 0 ? "size-20" : "size-16"
-                    }`}
-                  >
-                    <Icon
-                      className={index === 0 ? "size-10" : "size-8"}
-                      strokeWidth={1.7}
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <h3
-                    className={`relative mt-10 font-semibold tracking-[-0.035em] ${
-                      index === 0 ? "text-3xl sm:text-[38px]" : "text-xl"
-                    }`}
-                  >
-                    {title}
-                  </h3>
-                  <p className={`relative mt-3 leading-7 text-muted ${index === 0 ? "max-w-xl text-base" : "text-sm"}`}>
-                    {copy}
-                  </p>
-                </article>
+            <dl className="mt-10 grid gap-x-12 md:grid-cols-2">
+              {(isEnglish ? everydayFeaturesEn : everydayFeatures).map(({ title, copy }) => (
+                <div key={title} className="border-t border-border py-6">
+                  <dt className="text-lg font-semibold">{title}</dt>
+                  <dd className="mt-2 max-w-xl text-sm leading-7 text-muted">{copy}</dd>
+                </div>
               ))}
-            </div>
+            </dl>
           </div>
         </section>
 
@@ -550,8 +457,8 @@ export default async function AppPage() {
               </p>
               <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[54px]">
                 {isEnglish
-                  ? "Measure rooms. Place inventory in 3D space."
-                  : "Räume vermessen. Dinge räumlich verorten."}
+                  ? "Record rooms with a LiDAR iPhone"
+                  : "Räume mit einem LiDAR-iPhone erfassen"}
               </h2>
               <p className="mt-6 text-[16px] leading-7 text-white/65">
                 {isEnglish
@@ -562,15 +469,15 @@ export default async function AppPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               {(isEnglish
                 ? [
-                    [Map, "Multiple rooms and floors", "Connected RoomPlan captures share an explicitly labelled coordinate system."],
-                    [MapPin, "Measured item position", "ARKit relocalization, scene depth, or plane measurements place a photographed item inside the room."],
-                    [Camera, "Localization keyframes", "A limited set of calibrated room photos can provide additional evidence for a position."],
+                    [Map, "Rooms and floors", "Combine room scans to document connected rooms and floors."],
+                    [MapPin, "Measured item position", "Use a measured position to mark where an item is located in the room."],
+                    [Camera, "Room reference photos", "Saved room photos can help locate an item again."],
                     [Box, "Reuse 3D data on the web", "Measured scenes, USDZ files, and inventory markers appear in the browser under 3D Rooms."],
                   ]
                 : [
-                    [Map, "Mehrere Räume & Etagen", "Zusammenhängende RoomPlan-Aufnahmen teilen ein klar gekennzeichnetes Koordinatensystem."],
-                    [MapPin, "Gemessene Objektposition", "ARKit-Relokalisierung, Szenentiefe oder Ebenenmessung verorten ein fotografiertes Objekt im Raum."],
-                    [Camera, "Lokalisierungs-Keyframes", "Begrenzte, kalibrierte Raumfotos können eine Position als zusätzliche Evidenz stützen."],
+                    [Map, "Räume und Etagen", "Verbinde Raumaufnahmen, um zusammenhängende Räume und Etagen zu dokumentieren."],
+                    [MapPin, "Gemessene Objektposition", "Markiere anhand einer gemessenen Position, wo sich ein Gegenstand im Raum befindet."],
+                    [Camera, "Raumfotos zur Orientierung", "Gespeicherte Raumfotos können helfen, die Position eines Gegenstands wiederzufinden."],
                     [Box, "3D im Web weiterverwenden", "Gemessene Szenen, USDZ-Dateien und Inventarmarker erscheinen im Browser unter Räume 3D."],
                   ]
               ).map(([Icon, title, copy]) => {
@@ -599,12 +506,12 @@ export default async function AppPage() {
             <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
               <div className="max-w-3xl">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  {isEnglish ? "Ready in moments" : "In wenigen Momenten startklar"}
+                  {isEnglish ? "Connect your installation" : "Installation verbinden"}
                 </p>
                 <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">
                   {isEnglish
-                    ? "Open the app. Connect your server. Start capturing."
-                    : "App öffnen. Instanz verbinden. Losfotografieren."}
+                    ? "Connect the iPhone app to your server"
+                    : "Die iPhone-App mit deinem Server verbinden"}
                 </h2>
                 <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted">
                   {isEnglish
@@ -617,8 +524,8 @@ export default async function AppPage() {
                 <Link2 className="size-9 text-brand" strokeWidth={1.6} aria-hidden="true" />
                 <p className="mt-5 text-[16px] font-semibold tracking-[-0.025em]">
                   {isEnglish
-                    ? "Your app. Your instance."
-                    : "Deine App. Deine Instanz."}
+                    ? "Your existing account"
+                    : "Dein vorhandenes Konto"}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-muted">
                   {isEnglish
@@ -632,17 +539,17 @@ export default async function AppPage() {
               {startSteps.map(({ icon: StepIcon, number, title, copy }, index) => (
                 <li
                   key={number}
-                  className="relative min-h-[310px] border-b border-white/10 p-7 last:border-b-0 md:[&:nth-child(odd)]:border-r lg:border-b-0 lg:border-r lg:last:border-r-0 lg:p-8"
+                  className="relative border-b border-white/10 p-7 last:border-b-0 md:[&:nth-child(odd)]:border-r lg:border-b-0 lg:border-r lg:last:border-r-0 lg:p-8"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <span className="grid size-[76px] place-items-center rounded-2xl bg-white/[0.07] text-brand-inverse ring-1 ring-white/10">
-                      <StepIcon className="size-9" strokeWidth={1.55} aria-hidden="true" />
+                    <span className="grid size-10 place-items-center rounded-2xl bg-white/[0.07] text-brand-inverse ring-1 ring-white/10">
+                      <StepIcon className="size-5" strokeWidth={1.55} aria-hidden="true" />
                     </span>
                     <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-white/65">
                       {number}
                     </span>
                   </div>
-                  <h3 className="mt-12 text-[24px] font-semibold tracking-[-0.035em]">{title}</h3>
+                  <h3 className="mt-6 text-[20px] font-semibold tracking-[-0.035em]">{title}</h3>
                   <p className="mt-3 text-sm leading-6 text-white/65">{copy}</p>
                   {index < startSteps.length - 1 ? (
                     <ArrowRight
@@ -656,94 +563,10 @@ export default async function AppPage() {
           </div>
         </section>
 
-        <section className="border-y border-border bg-surface py-20 sm:py-24">
-          <div className="site-shell">
-            <div className="grid gap-4 md:grid-cols-3">
-              {[
-                {
-                  icon: KeyRound,
-                  title: isEnglish ? "Token in Keychain" : "Token im Keychain",
-                  copy: isEnglish
-                    ? "Signing in creates a device token that iOS stores in Keychain."
-                    : "Die Anmeldung erzeugt einen Geräte-Token, den iOS geschützt im Keychain speichert.",
-                },
-                {
-                  icon: WifiOff,
-                  title: isEnglish ? "Persistent outbox" : "Persistente Outbox",
-                  copy: isEnglish
-                    ? "Before upload, the app binds photos and their job to the canonical server origin and stores them locally."
-                    : "Vor dem Upload werden Fotos und Auftrag an den kanonischen Server-Ursprung gebunden und lokal gesichert.",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: isEnglish ? "Idempotent steps" : "Idempotente Schritte",
-                  copy: isEnglish
-                    ? "Creation, media upload, analysis, and cover generation use stable keys, so a retry does not create duplicates."
-                    : "Create, Medien, Analyse und Cover besitzen stabile Schlüssel – Wiederholen heißt nicht duplizieren.",
-                },
-              ].map(({ icon: Icon, title, copy }) => (
-                <article key={title} className="flex gap-5 rounded-2xl bg-background p-6 sm:p-7">
-                  <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-success-soft text-success">
-                    <Icon className="size-7" strokeWidth={1.65} aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h3 className="text-[17px] font-semibold">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="mx-auto max-w-[1120px] px-5 sm:px-8">
-            <div className="relative overflow-hidden rounded-2xl border border-brand-border bg-surface px-6 py-14 text-center sm:px-12 sm:py-20">
-              <div className="relative flex flex-col items-center">
-                <Image
-                  src="/marketing/ios-app-icon-current.png"
-                  alt=""
-                  width={132}
-                  height={132}
-                  className="size-[112px] rounded-[27px] shadow-[0_24px_60px_rgba(80,71,217,0.25)] sm:size-[132px] sm:rounded-[31px]"
-                />
-                <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  {isEnglish ? "Open Inventory for iPhone" : "Open Inventory für iPhone"}
-                </p>
-                <h2 className="mt-4 max-w-[820px] text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
-                  {isEnglish ? "Take a photo. Finish the record." : "Foto aufnehmen. Eintrag fertig."}
-                </h2>
-                <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted sm:text-[17px]">
-                  {isEnglish
-                    ? "Capture objects where they are used. Open Inventory turns photos, codes, stock movements, and optional spatial data into one shared inventory."
-                    : "Erfasse Dinge dort, wo sie genutzt werden. Open Inventory verbindet Fotos, Codes, Bestandsbewegungen und optionale Raumdaten zu einem gemeinsamen Inventar."}
-                </p>
-
-                <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-brand-border bg-background/80 px-5 py-3 text-sm font-semibold shadow-sm backdrop-blur">
-                  <Smartphone className="size-5 text-brand" strokeWidth={1.7} aria-hidden="true" />
-                  {isEnglish
-                    ? "Native app · iOS 17+ · your server URL"
-                    : "Native App · iOS 17+ · deine Server-URL"}
-                </div>
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="#app-workflows"
-                    className="site-button site-button-primary"
-                  >
-                    <Smartphone className="size-5" aria-hidden="true" />
-                    {isEnglish ? "Explore the app" : "App kennenlernen"}
-                  </Link>
-                  <Link
-                    href="#getting-started"
-                    className="site-button site-button-secondary"
-                  >
-                    {isEnglish ? "See how to get started" : "So startest du"}
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <section className="border-t border-border py-10">
+          <div className="site-shell flex flex-wrap gap-6">
+            <Link href="#app-downloads" className="site-link">{isEnglish ? "Back to app availability" : "Zur App-Verfügbarkeit"}<ArrowRight aria-hidden="true" /></Link>
+            <Link href={isEnglish ? "/docs#docker" : "/de/docs#docker"} className="site-link">{isEnglish ? "Set up your server" : "Eigenen Server einrichten"}<ArrowRight aria-hidden="true" /></Link>
           </div>
         </section>
       </main>

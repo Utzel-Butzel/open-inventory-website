@@ -10,6 +10,7 @@ import {
   MarketingLanguageSwitcher,
 } from "@/components/marketing/marketing-language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { OpenSourceBadge } from "@/components/marketing/open-source-badge";
 import {
   marketingHref,
 } from "@/lib/marketing-i18n";
@@ -120,7 +121,7 @@ export async function MarketingFooter() {
     ? {
         home: "Open Inventory Startseite",
         intro: "Geräte, Material und gemeinsame Ausrüstung an einem Ort. Open Source, auf deinem eigenen Server.",
-        product: "Produkt",
+        product: "Funktion",
         features: "Funktionen",
         docs: "Dokumentation",
         api: "API-Referenz",
@@ -139,7 +140,7 @@ export async function MarketingFooter() {
     : {
         home: "Open Inventory home",
         intro: "Equipment, materials and shared tools in one place. Open source, on your own server.",
-        product: "Product",
+        product: "Features",
         features: "Features",
         docs: "Documentation",
         api: "API reference",
@@ -172,13 +173,14 @@ export async function MarketingFooter() {
               <span aria-hidden="true">·</span>
               <span>Self-hosted</span>
             </div>
+            <div className="mt-6"><OpenSourceBadge locale={locale} compact /></div>
           </div>
 
           <div>
             <p className="text-sm font-semibold text-foreground">{copy.product}</p>
             <div className="mt-4 grid gap-3 text-sm text-muted">
               <Link href={href("/features")} className="w-fit transition-colors hover:text-foreground">{copy.features}</Link>
-              <Link href={href("/app")} className="w-fit transition-colors hover:text-foreground">iOS App</Link>
+              <Link href={href("/app")} className="w-fit transition-colors hover:text-foreground">Apps</Link>
               <Link href={href("/app#app-downloads")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "App-Downloads" : "App downloads"}</Link>
               <Link href={href("/open-source")} className="w-fit transition-colors hover:text-foreground">Open Source</Link>
               <Link href={href("/docs")} className="w-fit transition-colors hover:text-foreground">{copy.docs}</Link>
@@ -220,6 +222,11 @@ export async function MarketingFooter() {
             <p>{copy.tagline}</p>
           </div>
         </div>
+        <p className="mt-5 max-w-3xl text-[10px] leading-5 text-muted">
+          {locale === "de"
+            ? "Das OSI-Logo ist eine Marke der Open Source Initiative."
+            : "The OSI logo trademark is the trademark of Open Source Initiative."}
+        </p>
       </div>
     </footer>
   );

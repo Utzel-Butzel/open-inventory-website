@@ -1,24 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import {
-  ArrowLeft,
   ArrowRight,
   Boxes,
-  Braces,
   Camera,
   Check,
-  CircleDot,
   Container,
-  FileSpreadsheet,
   Github,
-  History,
-  Languages,
-  MapPinned,
-  Network,
-  PackageCheck,
   ScanLine,
-  Share2,
   ShieldCheck,
   Smartphone,
   Sparkles,
@@ -31,10 +20,7 @@ import {
 import { marketingHref } from "@/lib/marketing-i18n";
 import {
   useCases as germanUseCases,
-  useCaseIOSCaptures,
-  useCaseWebCaptures,
   type UseCase,
-  type UseCaseIcon,
 } from "@/app/use-cases/use-cases";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
@@ -76,17 +62,17 @@ const englishCopyBySlug = {
     eyebrow: "Workshop and shared equipment",
     title: "Find tools, record checkouts, and get complete kits back.",
     cardCopy:
-      "Track machines, hand tools, and consumables with codes, locations, and an append-only movement history.",
+      "See which tools you have, where they belong and whether they are on loan.",
     description:
-      "Open Inventory combines a tool catalogue, stock records, and checkout workflows in one self-hosted system. A new item can start with a photo; members can later resolve its location, status, and available quantity by search or code.",
+      "Not everyone knows every drawer. A shared catalogue lets new members see which tools are available and where to find them. Loans are recorded on each tool.",
     imageAlt:
       "Staff working in a used community workshop with labelled tools and machines",
     challenge:
-      "Machines, individual tools, and bulk material move between benches and members every day. A spreadsheet rarely identifies which serialised unit was issued, which accessories belong to it, or whether consumables have reached their reorder point.",
+      "Someone needs a cordless drill and doesn’t know whether the workshop has one. Search shows the tool, its place on the tool wall and whether it is on loan. A photo helps identify the right model.",
     promises: [
-      "Resolve a tool through search, QR code, barcode, or inventory identifier",
-      "Track bulk consumables and serialised machines with different stock models",
-      "Record checkout, return, reservation, and location changes without replacing history",
+      "Find tools by name, QR code or barcode",
+      "Count consumables and track individual machines",
+      "Keep a history of loans, returns and location changes",
     ],
     mockData: [
       {
@@ -107,25 +93,21 @@ const englishCopyBySlug = {
     ],
     steps: [
       {
-        title: "Capture the item",
-        description:
-          "Photograph the tool and its nameplate. Any generated title, tags, or description remain a draft until someone reviews them.",
+        title: "Record the tool",
+        description: "Photograph the drill and add its model, serial number and place on the tool wall.",
       },
       {
-        title: "Choose the stock model",
-        description:
-          "Use quantity tracking for interchangeable material and serialised units for machines or tools that need an individual state.",
+        title: "Attach a label",
+        description: "Print a QR label for this device. Scanning it will open the record.",
       },
       {
-        title: "Attach a code",
-        description:
-          "Print a QR or Code 128 label that resolves to the item through the documented short-link route.",
+        title: "Record the loan",
+        description: "Select the recipient when issuing the tool and record which device they take.",
       },
       {
-        title: "Record each movement",
-        description:
-          "Confirm checkout, return, transfer, or consumption at the shelf so the current state and its history stay connected.",
-      },
+        title: "Record its return",
+        description: "Book the tool back in. Update its location if it now belongs on a different shelf.",
+      }
     ],
     features: [
       {
@@ -184,11 +166,11 @@ const englishCopyBySlug = {
     cardCopy:
       "Document boxes, rooms, manuals, and warranties without turning a household inventory into permanent spreadsheet work.",
     description:
-      "Open Inventory gives a household a searchable catalogue with photos, containers, locations, and optional read-only shares. It is self-hosted and does not require storing the family archive in a proprietary inventory service.",
+      "Photograph what you pack and add the box and storage location. Later, search for the camping stove without opening every box. You can also keep track of things you lend out.",
     imageAlt:
       "Two family members sorting labelled storage boxes in a real basement storage room",
     challenge:
-      "Seasonal equipment, spare parts, documents, and inherited objects often disappear into nested boxes. The useful question is usually not whether something exists, but where it is, what belongs with it, and whether a manual or receipt was kept.",
+      "After a trip, the stove goes back into the outdoor box in the basement. A photo and a storage location on its record help you find it before the next trip.",
     promises: [
       "Start with photos and add only the structure that is useful",
       "Represent rooms, shelves, boxes, and relationships between objects",
@@ -213,38 +195,34 @@ const englishCopyBySlug = {
     ],
     steps: [
       {
-        title: "Take a photo",
-        description:
-          "Capture an object or a box while it is already in your hand. Suggested fields remain editable before saving.",
+        title: "Photograph the contents",
+        description: "Photograph the stove and accessories before packing them. The photos stay with the record.",
       },
       {
-        title: "Add the location",
-        description:
-          "Assign a room, shelf, or container. Containers can themselves be inventory records, so nested storage remains searchable.",
+        title: "Add the box and location",
+        description: "Link the stove to the outdoor box and record its location: basement, shelf 2.",
       },
       {
-        title: "Attach context",
-        description:
-          "Keep manuals, receipts, related accessories, and notes with the record instead of spreading them across different apps.",
+        title: "Label the box",
+        description: "A QR label opens the box record. Design and print labels in the browser.",
       },
       {
-        title: "Find it later",
-        description:
-          "Search by name, description, tag, code, or location and open the relevant record on the web or iPhone.",
-      },
+        title: "Search before the trip",
+        description: "Search for camping stove to find its photos and the storage location you recorded.",
+      }
     ],
     features: [
       {
         icon: "camera",
-        title: "Photo-first capture",
+        title: "Photos of your belongings",
         description:
-          "Use several views and keep original media with the structured record. AI assistance is optional and reviewable.",
+          "Keep photos of the item, its nameplate and its receipt together. If you enable AI suggestions, review them before accepting them.",
       },
       {
         icon: "relations",
         title: "Boxes and relationships",
         description:
-          "Link an item to its container, accessories, replacement parts, or other records without flattening everything into tags.",
+          "Record which box an item belongs in and link it to its accessories or spare parts.",
       },
       {
         icon: "locations",
@@ -262,7 +240,7 @@ const englishCopyBySlug = {
         icon: "csv",
         title: "Portable core data",
         description:
-          "Validated CSV import and export support common inventory fields. A complete restore still requires the database and uploaded media.",
+          "Import an existing list as a CSV file. Export your records to continue working with them in a spreadsheet.",
       },
       {
         icon: "roles",
@@ -288,13 +266,13 @@ const englishCopyBySlug = {
     eyebrow: "Assets and growing teams",
     title: "Track devices and prototype parts without another spreadsheet workflow.",
     cardCopy:
-      "Assign equipment, count prototype parts, receive purchase orders, and integrate the inventory through a scoped REST API.",
+      "Before someone starts, check which laptop is free and whether a charger and dock are available.",
     description:
-      "Open Inventory provides an open asset and stock layer for a growing team. It covers physical records, assignments, stock movements, purchasing, and integration, but does not claim to replace device management or accounting software.",
+      "Who is using each laptop? Which test device is still in the cupboard? Keep serial number, accessories and recipient together so you can prepare the next handover.",
     imageAlt:
       "A small engineering team checking laptops and prototype equipment in a working office",
     challenge:
-      "A young company can outgrow its first asset sheet quickly: laptops need assignments, prototypes consume parts, and purchasing changes expected stock. Those workflows need one identifier model without forcing the company into a closed platform.",
+      "A new team member needs a laptop, charger and dock. Find an available device, gather the accessories and record who receives them.",
     promises: [
       "Assign serialised assets to people while keeping a dated return history",
       "Track bulk parts, purchase orders, receipts, and minimum stock",
@@ -317,28 +295,7 @@ const englishCopyBySlug = {
         status: "Reserved",
       },
     ],
-    steps: [
-      {
-        title: "Import or capture",
-        description:
-          "Validate an existing CSV before importing it, or create new assets from photos and reviewed suggestions.",
-      },
-      {
-        title: "Define the model",
-        description:
-          "Use types, custom fields, locations, and quantity or serial tracking to represent devices and parts explicitly.",
-      },
-      {
-        title: "Assign and receive",
-        description:
-          "Record equipment assignments and receive ordered quantities into the correct stock location.",
-      },
-      {
-        title: "Integrate deliberately",
-        description:
-          "Issue expiring API tokens with only the required scopes and build against the checked-in OpenAPI 3.1 contract.",
-      },
-    ],
+    steps: [{"title":"Record the laptop","description":"Photograph the device and add its serial number. Attach the purchase receipt to its record."},{"title":"Link the accessories","description":"Link the charger and dock to the laptop so you know what belongs in the handover."},{"title":"Issue it to a team member","description":"Select the recipient and record the issue. The history shows when the device was handed over."},{"title":"Record the return","description":"Book returned devices back in and note their condition. See what is ready for the next handover."}],
     features: [
       {
         icon: "stock",
@@ -396,11 +353,11 @@ const englishCopyBySlug = {
     cardCopy:
       "Catalogue shared equipment, document issues and returns, and split permissions between members and maintainers.",
     description:
-      "Open Inventory supports equipment catalogues, reservations, checkouts, locations, and public read-only views. It is not membership-management software; it focuses on the physical items a club or lending group operates.",
+      "For the next event you need a gazebo, cables and microphones. Check what is in club storage, reserve the equipment and record who takes it.",
     imageAlt:
       "Volunteers checking shared equipment in a busy club storage room",
     challenge:
-      "Volunteers change, equipment moves between events, and knowledge about incomplete kits can live with one person. A useful system must make the next checkout quick while preserving enough history for maintainers to resolve problems.",
+      "The summer event is over, but one microphone case is still missing. The loan shows the recipient and which items have come back. Record the last return when it arrives.",
     promises: [
       "Publish selected equipment records without exposing administrative data",
       "Record reservation, issue, return, and current responsibility",
@@ -423,28 +380,7 @@ const englishCopyBySlug = {
         status: "Checked out",
       },
     ],
-    steps: [
-      {
-        title: "Catalogue existing material",
-        description:
-          "Photograph equipment and review its structured fields. Existing identifiers can be retained as SKU or serial data.",
-      },
-      {
-        title: "Describe storage",
-        description:
-          "Assign each record to a room, cabinet, shelf, or kit so the return destination is visible.",
-      },
-      {
-        title: "Scan at handover",
-        description:
-          "Open the record from its label and confirm the reservation, checkout, or return with the actual person present.",
-      },
-      {
-        title: "Review exceptions",
-        description:
-          "Use history, status, and stock counts to find missing items or incomplete kits without rewriting earlier events.",
-      },
-    ],
+    steps: [{"title":"Gather the equipment","description":"Find the gazebo, cables and microphones in the catalogue. Photos identify the cases and sets."},{"title":"Reserve for the date","description":"Reserve the equipment for the event. Check other bookings in the calendar."},{"title":"Issue to the event team","description":"Record the recipient. Several items can be grouped in one loan."},{"title":"Record what comes back","description":"Book returned items back in. If the team still has one case, that line remains open."}],
     features: [
       {
         icon: "sharing",
@@ -502,11 +438,11 @@ const englishCopyBySlug = {
     cardCopy:
       "Document objects with ordered media, custom fields, relationships, locations, translations, and portable data access.",
     description:
-      "Open Inventory provides an open inventory layer for private, research, or working collections. It can document objects and their locations, but it is not presented as a complete museum collection-management or digital-preservation system.",
+      "A collection piece needs more than a name and a photo. Keep its provenance, purchase date, condition and location together, even when it moves to another display case.",
     imageAlt:
       "A collection manager photographing an object at a practical documentation table",
     challenge:
-      "A useful catalogue needs more than a title and one image. Views, identifiers, provenance notes, related objects, containers, and the current physical location have to remain connected without locking the material into an opaque platform.",
+      "An analogue camera joins the collection. Later, you want to know where it came from, which lens belongs to it and which signs of wear were already there when you bought it.",
     promises: [
       "Keep ordered images, documents, and accessible alt text with each object",
       "Model containers, related works, components, and precise locations",
@@ -608,11 +544,11 @@ const englishCopyBySlug = {
     cardCopy:
       "Capture tablets, experiment kits, and room equipment, then record lending and recurring inventory checks.",
     description:
-      "Open Inventory connects device records, carts, labels, assignments, and count cycles in a self-hosted application. It tracks physical inventory; it does not replace mobile-device management, identity management, or safeguarding systems.",
+      "Teachers can see which room holds the projector and whether it is available. Keep its cables and remote linked to the record and record who is using it.",
     imageAlt:
       "Two school staff members checking a well-used cart of shared tablets",
     challenge:
-      "Devices move between classrooms, carts, and borrowers. When serial numbers, condition notes, and returns live in separate lists, staff lose a reliable view during handover and scheduled inventory checks.",
+      "A projector is needed for the next lesson. Its record shows where it belongs and whether it has been issued. Linked accessories help you check for the cable before reaching the classroom.",
     promises: [
       "Capture carts and individual devices by photo or existing code",
       "Record issue, return, location, and the next due inventory count",
@@ -635,28 +571,7 @@ const englishCopyBySlug = {
         status: "Checked out",
       },
     ],
-    steps: [
-      {
-        title: "Capture at the cart",
-        description:
-          "Photograph new equipment in the room and review any suggested title, type, or tags before saving.",
-      },
-      {
-        title: "Serialise devices",
-        description:
-          "Give each tablet or measuring device its own identifier and state while cables and sensors can remain quantity stock.",
-      },
-      {
-        title: "Scan the handover",
-        description:
-          "Resolve the correct device from its code and confirm the recipient, room, issue, or return.",
-      },
-      {
-        title: "Run count cycles",
-        description:
-          "Schedule recurring checks and reconcile counted quantities by location without deleting the previous result.",
-      },
-    ],
+    steps: [{"title":"Record the projector","description":"Photograph it and add its serial number and place in the media cupboard."},{"title":"Link the accessories","description":"Link the remote, cable and carry bag. A photo shows what belongs in the set."},{"title":"Record the loan","description":"Scan the label and issue the device to the borrower."},{"title":"Record return and condition","description":"Book the projector back in. Add a note if a cable is missing or the device is damaged."}],
     features: [
       {
         icon: "stock",
@@ -712,13 +627,13 @@ const englishCopyBySlug = {
     eyebrow: "Vehicles and job sites",
     title: "Record tools where they are actually being used.",
     cardCopy:
-      "Track vehicle stock, power tools, and consumables from a phone, with explicit transfers and replenishment data.",
+      "Find tools in the van, record parts used and plan replenishment for storage.",
     description:
-      "Open Inventory treats service vehicles, stores, and job sites as inventory locations. It can track tools and material movements, but it is not a field-service ERP, route planner, or accounting package.",
+      "Before driving to a job, check which van holds the hammer drill and how many connectors are left. Record withdrawals and deliveries; minimum quantities help you plan reorders.",
     imageAlt:
       "A service technician documenting tool cases in the used shelving of a work vehicle",
     challenge:
-      "Tools and material are distributed across a workshop, vehicles, and job sites. Without a quick transaction at the point of use, the central list cannot explain which team has a tool or what must be replenished before the next job.",
+      "The hammer drill is in the other van, and connectors are running low. Track tools and supplies by vehicle to see what is missing before leaving.",
     promises: [
       "View quantity by vehicle, central store, and temporary job location",
       "Assign serialised tools to a person, team, or project with history",
@@ -741,28 +656,7 @@ const englishCopyBySlug = {
         status: "Assigned",
       },
     ],
-    steps: [
-      {
-        title: "Capture on site",
-        description:
-          "Start from a photo or existing code and review the proposed record before it becomes inventory data.",
-      },
-      {
-        title: "Assign the location",
-        description:
-          "Treat each van, store, and relevant job site as a structured location with its own stock distribution.",
-      },
-      {
-        title: "Book the movement",
-        description:
-          "Assign serialised tools and record quantity increases, decreases, or transfers as dated transactions.",
-      },
-      {
-        title: "Plan replenishment",
-        description:
-          "Review minimum stock, observed consumption, lead time, and open orders instead of relying on an unexplained number.",
-      },
-    ],
+    steps: [{"title":"Create a vehicle storage location","description":"Assign tools and supplies to the vehicle. Add the compartment so another team member can find them."},{"title":"Record a transfer","description":"When the hammer drill moves to another van, record the location change."},{"title":"Record parts used","description":"Deduct installed connectors from the vehicle’s stock."},{"title":"Plan replenishment","description":"Set a minimum quantity and lead time. Review the reorder suggestion alongside outstanding deliveries."}],
     features: [
       {
         icon: "locations",
@@ -820,11 +714,11 @@ const englishCopyBySlug = {
     cardCopy:
       "Organise instruments, components, and prototype parts with serial data, locations, relationships, and an open API.",
     description:
-      "Open Inventory is an open inventory component for technical labs and prototyping spaces. It is not a LIMS: it does not manage samples, analytical results, or regulated laboratory processes.",
+      "Keep an instrument, its probes and power supply easy to find together. Link accessories, record the bench and add fields such as inspection date or revision.",
     imageAlt:
       "An engineer documenting a used test instrument at a realistic electronics bench",
     challenge:
-      "Shared instruments, components, and prototype assemblies move between benches. Serial data, accessories, revision, and current location need to stay connected without forcing the lab into a closed specialist inventory product.",
+      "The oscilloscope has moved to another bench, but the probes are still in the cupboard. The instrument record shows its location and which accessories belong to it.",
     promises: [
       "Connect instruments, probes, fixtures, and parts through relationships or bills of materials",
       "Use typed custom fields for calibration, procurement, revision, or ownership data",
@@ -851,7 +745,7 @@ const englishCopyBySlug = {
       {
         title: "Photograph the instrument",
         description:
-          "Capture the device, nameplate, accessories, and condition in several ordered images, then review suggested fields.",
+          "Photograph the instrument and nameplate so the model and serial number remain readable.",
       },
       {
         title: "Add typed fields",
@@ -861,7 +755,7 @@ const englishCopyBySlug = {
       {
         title: "Connect the assembly",
         description:
-          "Use relationships or bills of materials to link instruments, probes, fixtures, and consumed prototype parts.",
+          "Link the oscilloscope to its probes and mount. Record where each is stored.",
       },
       {
         title: "Record use and movement",
@@ -886,7 +780,7 @@ const englishCopyBySlug = {
         icon: "relations",
         title: "Relationships and bills of materials",
         description:
-          "Link accessories and prototype components; assembly transactions can consume component stock atomically.",
+          "Link instruments and accessories. For prototypes, keep a bill of materials and deduct the components used from stock.",
       },
       {
         icon: "locations",
@@ -898,7 +792,7 @@ const englishCopyBySlug = {
         icon: "history",
         title: "Movements and count cycles",
         description:
-          "Retain transfers, assignments, and recurring reconciliation results rather than overwriting the previous state.",
+          "The history shows when equipment changed benches and which quantities were recorded during stock counts.",
       },
       {
         icon: "api",
@@ -932,21 +826,6 @@ export const englishUseCases: UseCase[] = germanUseCases.map((useCase) => {
 export function getEnglishUseCase(slug: string) {
   return englishUseCases.find((useCase) => useCase.slug === slug);
 }
-
-const featureIcons: Record<UseCaseIcon, LucideIcon> = {
-  api: Braces,
-  camera: Camera,
-  csv: FileSpreadsheet,
-  history: History,
-  labels: ScanLine,
-  languages: Languages,
-  locations: MapPinned,
-  orders: PackageCheck,
-  relations: Network,
-  roles: ShieldCheck,
-  sharing: Share2,
-  stock: Boxes,
-};
 
 const cardSpans = [
   "md:col-span-2 lg:col-span-7",
@@ -1344,299 +1223,6 @@ export function EnglishUseCasesPage() {
                     Browse the code
                   </a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <MarketingFooter />
-    </div>
-  );
-}
-
-function EnglishHeroVisual({ useCase }: { useCase: UseCase }) {
-  return (
-    <Image
-      src={useCase.image ?? "/og.png"}
-      alt={useCase.imageAlt ?? `${useCase.name} inventory workflow`}
-      fill
-      priority
-      sizes="(max-width: 1024px) 100vw, 52vw"
-      className="object-cover"
-    />
-  );
-}
-
-function EnglishMockInventory({ useCase }: { useCase: UseCase }) {
-  return (
-    <figure className="overflow-hidden rounded-2xl border border-border bg-[#17181d] p-2.5 shadow-[var(--shadow-md)]">
-      <div className="flex h-9 items-center gap-1.5 px-3">
-        <span className="size-2 rounded-full bg-white/20" />
-        <span className="size-2 rounded-full bg-white/20" />
-        <span className="size-2 rounded-full bg-white/20" />
-        <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.14em] text-white/65">
-          Real web app capture · demo data
-        </span>
-      </div>
-      <Image
-        src={useCaseWebCaptures[useCase.slug] ?? "/marketing/screenshots/web-inventory.png"}
-        width={1440}
-        height={960}
-        sizes="(max-width: 1024px) 100vw, 58vw"
-        alt={`Real Open Inventory web capture with photo-rich demo records for ${useCase.name}`}
-        className="h-auto w-full rounded-2xl"
-      />
-      <figcaption className="px-3 pb-2 pt-3 text-[10px] leading-5 text-white/65">
-        Unaltered capture from the running web app. Every visible record was
-        created specifically for this demo.
-      </figcaption>
-    </figure>
-  );
-}
-
-function EnglishIosPhone({ useCase }: { useCase: UseCase }) {
-  return (
-    <figure className="mx-auto w-[270px]">
-      <div className="overflow-hidden rounded-[49px] border-[8px] border-[#090a0c] bg-[#090a0c] p-[3px] shadow-[0_35px_90px_rgba(0,0,0,0.45)]">
-        <Image
-          src={useCaseIOSCaptures[useCase.slug] ?? "/marketing/screenshots/ios-inventory.png"}
-          width={1206}
-          height={2622}
-          sizes="270px"
-          alt={`Real native Open Inventory app capture with demo data for ${useCase.name}`}
-          className="h-auto w-full rounded-[37px]"
-        />
-      </div>
-      <figcaption className="mt-4 text-center text-[10px] leading-5 text-white/65">
-        Real app capture from the iOS Simulator · demo data
-      </figcaption>
-    </figure>
-  );
-}
-
-export function EnglishUseCaseDetailPage({ useCase }: { useCase: UseCase }) {
-  const currentIndex = englishUseCases.findIndex((item) => item.slug === useCase.slug);
-  const nextUseCase = englishUseCases[(currentIndex + 1) % englishUseCases.length];
-
-  return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <MarketingHeader />
-
-      <main id="main-content">
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="site-shell relative pb-20 pt-8 sm:pb-28 sm:pt-12">
-            <Link href={enHref("/use-cases")} className="inline-flex items-center gap-2 rounded-lg text-xs font-semibold text-muted transition hover:text-foreground">
-              <ArrowLeft className="size-3.5" aria-hidden="true" />
-              All use cases
-            </Link>
-
-            <div className="mt-10 grid gap-14 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-12">
-              <div className="relative z-10 max-w-[660px]">
-                <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>
-                  Open Inventory for {useCase.name}
-                </p>
-                <h1 className="site-title mt-5">
-                  {useCase.title}
-                </h1>
-                <p className="mt-7 text-[17px] leading-7 text-muted sm:text-[19px] sm:leading-8">{useCase.description}</p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href={enHref("/docs#docker")} className="site-button site-button-primary">
-                    <Container className="size-4" aria-hidden="true" />
-                    Self-host the open-source stack
-                  </Link>
-                  <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary">
-                    <Github className="size-4" aria-hidden="true" />
-                    Browse GitHub
-                  </a>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold text-muted">
-                  {["MIT license", "Self-hosted", "Native iOS app"].map((item) => (
-                    <span key={item} className="flex items-center gap-1.5">
-                      <Check className="size-3 text-success" strokeWidth={2.5} aria-hidden="true" />
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-md)]">
-                  <EnglishHeroVisual useCase={useCase} />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-2xl border border-white/15 bg-black/45 p-3.5 text-white backdrop-blur-md">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-inverse/20 text-brand-inverse">
-                      <Sparkles className="size-4" aria-hidden="true" />
-                    </span>
-                    <div>
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65">Capture path</p>
-                      <p className="mt-0.5 text-xs font-semibold">Take a photo · review the draft · save the record</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="site-shell grid gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20">
-            <div>
-              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>Operational problem</p>
-              <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">Less reconstruction, more traceable state.</h2>
-              <p className="mt-6 text-[16px] leading-7 text-muted">{useCase.challenge}</p>
-              <ul className="mt-8 grid gap-3">
-                {useCase.promises.map((promise) => (
-                  <li key={promise} className="flex items-start gap-3 text-sm leading-6 text-muted-strong">
-                    <span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${useCase.softAccent}`}>
-                      <Check className="size-3" strokeWidth={2.5} aria-hidden="true" />
-                    </span>
-                    {promise}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <EnglishMockInventory useCase={useCase} />
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="max-w-3xl">
-              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>A workflow at the point of use</p>
-              <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">From a physical object to a usable record.</h2>
-              <p className="mt-5 text-[16px] leading-7 text-muted sm:text-[18px]">
-                Capture starts with a camera or an existing code. Structured fields and deeper workflows are added without hiding the transaction being made.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {useCase.steps.map((step, index) => (
-                <article key={step.title} className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6">
-                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-brand">0{index + 1}</span>
-                  <h3 className="mt-10 text-xl font-semibold tracking-[-0.035em]">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-muted">{step.description}</p>
-                  {index < useCase.steps.length - 1 ? <ArrowRight className="absolute right-5 top-5 hidden size-4 text-border-strong lg:block" aria-hidden="true" /> : null}
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
-              <div>
-                <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${useCase.accent}`}>Relevant capabilities</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">The data model behind this use case.</h2>
-              </div>
-              <p className="max-w-2xl text-[16px] leading-7 text-muted lg:justify-self-end">
-                These capabilities are part of the same MIT-licensed application. Open Inventory does not split them into closed industry editions.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {useCase.features.map((feature) => {
-                const Icon = featureIcons[feature.icon];
-                return (
-                  <article key={feature.title} className="group rounded-2xl border border-border bg-surface p-6 transition duration-300 hover:shadow-[var(--shadow-md)] sm:p-7">
-                    <span className={`grid size-11 place-items-center rounded-2xl ${useCase.softAccent}`}>
-                      <Icon className="size-5" strokeWidth={1.9} aria-hidden="true" />
-                    </span>
-                    <h3 className="mt-10 text-[22px] font-semibold tracking-[-0.035em]">{feature.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted">{feature.description}</p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden bg-[#121318] py-20 text-white sm:py-28">
-          <div className="mx-auto grid max-w-[1120px] gap-16 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-            <div className="relative order-2 lg:order-1">
-              <EnglishIosPhone useCase={useCase} />
-            </div>
-            <div className="order-1 lg:order-2">
-              <div className="flex items-center gap-3">
-                <Image src="/marketing/ios-app-icon-current.png" width={48} height={48} alt="Open Inventory app icon" className="rounded-[13px] shadow-lg" />
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-inverse">Native iOS app</p>
-                  <p className="mt-1 text-xs text-white/65">SwiftUI · included in the repository</p>
-                </div>
-              </div>
-              <h2 className="mt-7 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[62px]">{useCase.iosTitle}</h2>
-              <p className="mt-6 text-[16px] leading-7 text-white/65 sm:text-[18px] sm:leading-8">{useCase.iosCopy}</p>
-              <ul className="mt-8 grid gap-3">
-                {useCase.iosPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-sm leading-6 text-white/70">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-inverse/15 text-brand-inverse">
-                      <Check className="size-3" aria-hidden="true" />
-                    </span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-semibold text-white/65">
-                <CircleDot className="size-3 text-brand-inverse" aria-hidden="true" />
-                Camera and scanner operations run on a physical iPhone
-              </div>
-              <Link href={enHref("/app")} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-brand-inverse">
-                Read the iOS implementation notes
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="relative overflow-hidden rounded-2xl border border-brand-border bg-brand-soft px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
-              <div className="relative grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-center">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Open source is part of the operating model</p>
-                  <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[58px]">{useCase.openSourceTitle}</h2>
-                  <p className="mt-6 max-w-3xl text-[16px] leading-7 text-muted-strong">{useCase.openSourceCopy}</p>
-                </div>
-                <div className="grid gap-3 rounded-2xl border border-brand-border bg-surface/65 p-5 backdrop-blur sm:p-6">
-                  {[
-                    [Github, "MIT-licensed source"],
-                    [Container, "Docker setup with PostgreSQL"],
-                    [Braces, "Checked-in OpenAPI 3.1 contract"],
-                    [Smartphone, "Native iOS source included"],
-                  ].map(([Icon, label]) => {
-                    const ItemIcon = Icon as LucideIcon;
-                    return (
-                      <div key={label as string} className="flex items-center gap-3 text-sm font-semibold">
-                        <span className="grid size-9 place-items-center rounded-xl bg-brand-solid text-on-brand">
-                          <ItemIcon className="size-4" aria-hidden="true" />
-                        </span>
-                        {label as string}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-surface-subtle py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">Run it on your infrastructure</p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[64px]">Start with one reviewed record.</h2>
-                <p className="mt-5 text-[16px] leading-7 text-muted">
-                  Start the Docker stack, photograph one real object, and inspect the resulting fields and media before choosing a wider rollout.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href={enHref("/docs#docker")} className="site-button site-button-primary">
-                  <Container className="size-4" aria-hidden="true" /> Docker guide
-                </Link>
-                <Link href={enHref(`/use-cases/${nextUseCase.slug}`)} className="site-button site-button-secondary">
-                  Next use case: {nextUseCase.name}
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
               </div>
             </div>
           </div>

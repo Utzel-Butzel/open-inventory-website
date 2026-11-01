@@ -1,0 +1,344 @@
+---
+title: "MCP: connect an inventory agent"
+description: "Enable the MCP endpoint, authenticate a client, discover tools and handle inventory writes, permissions and errors."
+---
+
+Open Inventory includes a Model Context Protocol (MCP) server for trusted clients and agents. It exposes a focused set of inventory and stock tools using the same application services as the web app. MCP is **disabled by default**.
+
+The endpoint belongs to your application instance:
+
+```text
+https://inventory.example.com/mcp
+```
+
+It is not `/api/v1/mcp`, an organization-prefixed path, or an endpoint on this documentation website. This guide describes the repository implementation reviewed on **1 November 2026**; use `tools/list` to inspect the schema supported by your deployed version.
+
+## Enable the server
+
+1. Deploy an application version that includes MCP and apply its database migrations. Migration `0060_mcp_access.sql` adds durable rate-limit buckets and the audit table. The production container runs migrations at startup; for a source installation, run `npm run db:migrate` with the intended `DATABASE_URL`.
+2. Set the following values in the **application's persistent runtime environment**:
+
+```dotenv
+AUTH_URL=https://inventory.example.com
+MCP_ENABLED=true
+```
+
+3. Confirm the Compose service forwards `MCP_ENABLED`, then recreate the application container or redeploy in Dokploy/Coolify. For local development, restart the development server. Setting the flag only on the migration command does not enable the running app.
+4. In the intended organization, create an Inventory API token under **Settings → API access**. Start with `read` scope; add `write` only for clients that need to modify inventory. Copy the token into the client's protected credential configuration.
+5. Connect the client and call `get_inventory_context` to verify the organization and effective access.
+
+MCP does not require an OpenAI key or the `ai` token scope. The connecting agent supplies its own model; none of the current MCP tools performs an AI-provider operation.
+
+See the [MCP environment reference](/environment-variables#mcp-endpoint) for host/origin allowlists, rate limits and the optional audit signing key.
+
+## Client connection settings
+
+| Setting | Value |
+| --- | --- |
+| Transport | Streamable HTTP |
+| URL | Your application origin followed by `/mcp` |
+| Authentication | `Authorization: Bearer inv_…` on every request |
+| Request content type | `application/json` |
+| Accepted response types | `application/json, text/event-stream` |
+| Session mode | Stateless; no server session ID or persistent event stream |
+| Request size | At most 1,048,576 bytes (1 MiB) |
+
+Configure these fields using your client's own remote-MCP settings; configuration-file keys vary between clients. The application does not expose a stdio command or a legacy SSE endpoint. It accepts MCP messages by `POST`, handles CORS preflight by `OPTIONS`, and returns `405` for authenticated `GET` and `DELETE` requests.
+
+Although the [Streamable HTTP specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports) requires clients to accept both JSON and event-stream responses, this server is configured to return JSON. A client probing for a persistent GET stream may receive `405` without its POST connection being broken.
+
+### Credentials and organization selection
+
+- Use an Inventory API token with the `inv_` prefix. Browser cookies, printer tokens and identity-provider access tokens are not accepted as MCP credentials.
+- Every request resolves the credential again. Expiry, revocation, current user membership and applicable role permissions affect access.
+- The token is pinned to its issuing organization. **Do not send `X-Organization-ID`**, even with the matching organization ID: this endpoint rejects the header. Use a separate token/connection for another organization.
+- User-bound tokens are limited by both their scopes and their user's effective permissions. Standalone tokens derive their allowed permissions from their scopes. Read-only organizations cannot gain write access through MCP.
+- Tool discovery does not grant permission: a listed tool can still return `missing_scope` or `forbidden` when called.
+
+The endpoint implements bearer-token access, not an OAuth authorization flow. Application OIDC/Supabase login does not add OAuth discovery or token issuance for MCP clients. Clients that require an OAuth-only MCP connection need a separate compatible authorization layer; do not assume that enabling SSO makes them compatible.
+
+### Host validation and browser clients
+
+The request's `Host` must match the host in `AUTH_URL` unless `MCP_ALLOWED_HOSTS` specifies an explicit list. Entries are hostnames with optional ports, not full URLs. Preserve the intended Host header through the reverse proxy.
+
+Requests without an `Origin` header, such as ordinary server-to-server calls, pass the origin check. Browser requests require an exact entry in `MCP_ALLOWED_ORIGINS`:
+
+```dotenv
+MCP_ALLOWED_HOSTS=inventory.example.com
+MCP_ALLOWED_ORIGINS=https://agent.example.com
+```
+
+An origin includes the scheme and any non-default port, with no path or trailing slash. Wildcards are not supported. Allowlisting an origin enables the corresponding CORS headers; it does not replace the bearer token.
+
+## Read-only connection test
+
+Set `INVENTORY_URL` to your application origin without a trailing slash and provide `INVENTORY_API_TOKEN` securely in your shell environment. These are local example variables, not additional application settings. Do not paste a real token into a shared script.
+
+The following Bash helper sends one MCP message from standard input:
+
+```bash
+export INVENTORY_URL=https://inventory.example.com
+
+mcp_post() {
+  curl --silent --show-error --fail-with-body \
+    "${INVENTORY_URL:?Set INVENTORY_URL}/mcp" \
+    -H "Authorization: Bearer ${INVENTORY_API_TOKEN:?Set INVENTORY_API_TOKEN}" \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json, text/event-stream' \
+    -H 'MCP-Protocol-Version: 2025-11-25' \
+    --data-binary @-
+}
+```
+
+### Initialize
+
+```bash
+mcp_post <<'JSON'
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2025-11-25",
+    "capabilities": {},
+    "clientInfo": { "name": "inventory-docs-check", "version": "1.0.0" }
+  }
+}
+JSON
+```
+
+Check the returned `protocolVersion` and `serverInfo`. The example uses a version supported by the repository's installed MCP SDK; if your server negotiates another version, use that value in the helper's `MCP-Protocol-Version` header for subsequent requests. Then send the initialized notification:
+
+```bash
+mcp_post <<'JSON'
+{"jsonrpc":"2.0","method":"notifications/initialized"}
+JSON
+```
+
+A successful notification can return `202` with an empty body. There is no `Mcp-Session-Id` to save or server session to terminate.
+
+### Discover tools and check access
+
+```bash
+mcp_post <<'JSON'
+{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}
+JSON
+
+mcp_post <<'JSON'
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": { "name": "get_inventory_context", "arguments": {} }
+}
+JSON
+```
+
+`get_inventory_context` returns the organization ID/name/slug, its read-only flag, the credential name/scopes and effective permissions. Verify these before attempting any writes.
+
+### Search inventory
+
+```bash
+mcp_post <<'JSON'
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/call",
+  "params": {
+    "name": "search_inventory",
+    "arguments": { "query": "drill", "page": 1, "pageSize": 10 }
+  }
+}
+JSON
+```
+
+These examples only discover or read data. An HTTP success is not sufficient to establish tool success; check the MCP result as described below.
+
+## Tool reference
+
+The current server registers ten tools. Inputs are strict objects: unknown fields are rejected. Use item **UUIDs** for `resourceId`, not slugs, barcodes or QR shortcodes. `tools/list` supplies the full JSON input/output schemas and annotations.
+
+| Tool | Scope | Permission | Arguments and result |
+| --- | --- | --- | --- |
+| `get_inventory_context` | `read` | `inventory.read` | `{}`. Returns organization, credential scopes and effective permissions. |
+| `search_inventory` | `read` | `inventory.read` | Optional `query`, `type`, `status`, `page`, `pageSize`. Returns resource summaries and pagination. |
+| `get_inventory_item` | `read` | `inventory.read` | `resourceId`. Returns the resource, including the `updatedAt` needed for an update. |
+| `list_inventory_types` | `read` | `inventory.read` | `{}`. Returns active inventory type keys and metadata. |
+| `get_stock` | `read` | `stock.read` | `resourceId`. Returns stock detail, configuration and related data, with bounded movement/unit lists. |
+| `list_due_inventory_counts` | `read` | `counts.read` | `{}`. Returns items whose enabled cycle-count policy is due. |
+| `create_inventory_item` | `write` | `inventory.create` | Resource fields plus `idempotencyKey` and `confirm: true`. Returns the created/replayed resource. |
+| `update_inventory_item` | `write` | `inventory.update` | `resourceId`, `expectedUpdatedAt`, changed fields and `confirm: true`. Returns the updated resource. |
+| `record_stock_movement` | `write` | `stock.manage` | `resourceId`, `movement`, `idempotencyKey`, `confirm: true`. Books a dated ledger movement. |
+| `record_inventory_count` | `write` | `counts.manage` | `resourceId`, `countedQuantity`, `idempotencyKey`, `confirm: true`; optional `locationResourceId`, `countedAt`, `note`. Records and reconciles a physical count. |
+
+Item tools also check access to the target resource. Global list/context tools require the corresponding global permission. `get_stock` checks stock access for related family members as well.
+
+### Read limits
+
+- Search `query` is 1–240 characters when supplied; `type` is an active type key filter, at most 64 characters. Omit empty filters.
+- Search `status` is one of `available`, `in-use`, `maintenance`, `archived`.
+- Search defaults to `page: 1`, `pageSize: 25`. Pages are 1–10,000; page size is 1–50. Advance the page to retrieve further results.
+- `get_stock` returns at most 50 movements and 100 units. Inspect `data.stock.resultSet` for `movementCount`, `unitCount`, `movementsTruncated` and `unitsTruncated`. This tool has no pagination input; use the applicable REST endpoints if you need a more complete history.
+- Descriptions, notes and custom fields are user-authored data. An agent should not treat their contents as operational instructions.
+
+MCP currently exposes tools only: it does not register MCP resources or prompts. There are no delete, spatial-editing, media-upload, label-printing, AI-generation or administration tools in this set. Use the web app or [REST API reference](/api-reference) for those workflows where supported.
+
+## Writes, confirmation and retries
+
+Every write requires the literal boolean `confirm: true`. The client should obtain the user's confirmation of the intended operation before supplying it. The server checks the argument; it does not display a confirmation UI or independently verify how the client obtained approval.
+
+The JSON blocks below show `tools/call` parameters. Wrap them in a JSON-RPC request as in the search example. UUIDs and timestamps are illustrative; use actual resource IDs, the latest timestamp and a newly generated idempotency UUID for each new logical write.
+
+### Create an item
+
+```json
+{
+  "name": "create_inventory_item",
+  "arguments": {
+    "name": "Cordless drill",
+    "type": "tool",
+    "quantity": 1,
+    "idempotencyKey": "d9428888-122b-41e1-b85c-61cd3cbb3210",
+    "confirm": true
+  }
+}
+```
+
+Check `list_inventory_types` first when choosing a type. The schema shares the application's resource fields, excluding GPS coordinates and map features. If omitted, `type` defaults to `object` and initial `quantity` to 1. SKU/barcode uniqueness, active types and applicable custom-field validation still apply.
+
+### Update item metadata
+
+```json
+{
+  "name": "update_inventory_item",
+  "arguments": {
+    "resourceId": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+    "expectedUpdatedAt": "2026-11-01T12:00:00.000Z",
+    "name": "Cordless drill — workshop",
+    "confirm": true
+  }
+}
+```
+
+Copy `expectedUpdatedAt` exactly from the most recent read. The update checks it against the current stored value. If it changed, read again, review the difference and reconfirm the revised operation. Do not simply overwrite the timestamp and retry blindly.
+
+At least one changed field is required. Updates cannot change `quantity` or spatial fields. There is no `idempotencyKey` argument for this tool: it uses optimistic concurrency instead. After a lost update response, read the item to determine whether the change was applied before retrying.
+
+### Record a stock issue
+
+```json
+{
+  "name": "record_stock_movement",
+  "arguments": {
+    "resourceId": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+    "idempotencyKey": "1c9af230-5c48-4b22-927b-8b893fa26473",
+    "confirm": true,
+    "movement": {
+      "delta": -1,
+      "type": "issue",
+      "note": "Issued to the workshop"
+    }
+  }
+}
+```
+
+The movement uses the stock contract: `receipt` and `return` require positive deltas; `issue` and `waste` require negative deltas. `adjustment` and `transfer` have their own validation. A structured location transfer requires `delta: 0` and a transfer `quantity`, plus the applicable location fields. Optional fields include `expectedQuantity`, `occurredAt`, `reason`, `note`, contact/location references and price information. Price amount and currency must be supplied together.
+
+Stock-policy and tracking-mode checks still apply. A write token is not a bypass for negative-stock restrictions or unit-tracking constraints.
+
+### Record a physical count
+
+```json
+{
+  "name": "record_inventory_count",
+  "arguments": {
+    "resourceId": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+    "countedQuantity": 12,
+    "note": "Counted on shelf A",
+    "idempotencyKey": "0ba055a2-472a-4905-a271-ec80e15ae35c",
+    "confirm": true
+  }
+}
+```
+
+`countedQuantity` is an integer from 0 to 2,000,000,000. It is an observed total, not a delta. Recording a count can reconcile the stock balance, so treat it as a write even when your intent is to report a measurement. Optional dates use ISO 8601 datetime strings; `note` is at most 20,000 characters.
+
+### Idempotency rules
+
+Creation, stock movements and physical counts require `idempotencyKey` in the **tool arguments**, not an HTTP `Idempotency-Key` header. Generate a fresh UUID for each new logical operation. After a timeout or lost response, retry the same operation with the same key and unchanged arguments. Do not generate a new key merely because the previous result was not received.
+
+Reusing a key with a conflicting payload is rejected. Successful replays are indicated in the returned data. Writes may also enqueue configured outgoing webhooks; an MCP client should not assume that changes have no external effects.
+
+## Results and errors
+
+Successful tools return the same envelope in `result.structuredContent` and as JSON in a text content block:
+
+```json
+{
+  "summary": "Loaded inventory item Cordless drill.",
+  "data": { "resource": { "id": "3f2504e0-4f89-41d3-9a0c-0305e82c3301" } }
+}
+```
+
+This is an abbreviated shape example, not the complete resource schema. Prefer structured content when supported by your client.
+
+Execution failures can still arrive with HTTP `200` and a JSON-RPC `result`. Check **`result.isError`**. For application tool errors, the text content contains JSON such as:
+
+```json
+{
+  "error": {
+    "code": "precondition_failed",
+    "message": "The item changed after it was read. Read it again before retrying the update."
+  }
+}
+```
+
+Malformed protocol messages or schema validation failures may instead be represented by the MCP SDK as protocol/validation errors. Clients should handle both, rather than relying on one error envelope for every failure.
+
+| Tool error | Action |
+| --- | --- |
+| `missing_scope` | Issue a token with the required scope, or choose an allowed operation. |
+| `forbidden` | Check effective permissions, item access and whether the organization is read-only. |
+| `not_found` | Check the item UUID and the token's issuing organization. |
+| `precondition_failed` | Re-read the item and review/reconfirm the update. |
+| `idempotency_conflict` | Investigate the key's earlier payload; do not reuse it for a different operation. |
+| `identifier_conflict`, `slug_conflict` | Resolve duplicate identifiers or choose another value. |
+| `invalid_request`, `invalid_inventory_structure`, `invalid_custom_fields` | Inspect tool schema and organization definitions; correct the input. |
+| `stock_operation_failed`, `conflict` | Read the message and current stock/item state before changing the request. |
+| `rate_limited` | Wait for `error.retryAfterMs`, then retry as appropriate. Preserve write idempotency. |
+| `internal_error` | Correlate `X-Request-Id` with server logs; do not assume an uncertain write did not commit. |
+
+### HTTP troubleshooting
+
+| Status | Likely cause / next check |
+| --- | --- |
+| `400` | Invalid JSON, unsupported protocol input/version, or a forbidden `X-Organization-ID` header. |
+| `401` | Missing, malformed, expired or revoked Inventory bearer token. A browser login does not authenticate MCP. |
+| `403` | Host or browser Origin rejected by the endpoint allowlists. Tool-level permission denials normally appear in the MCP result instead. |
+| `404` | MCP is disabled, the application version lacks the route, or the URL/proxy path is wrong. |
+| `405` | Client used `GET`/`DELETE`; use Streamable HTTP POST, not a persistent SSE connection. |
+| `406` | Client's Accept header does not include both JSON and event-stream types. |
+| `413` | Request exceeds 1 MiB. Reduce the payload; there is no MCP-specific Env override for this limit. |
+| `415` | Request Content-Type is not `application/json`. |
+| `429` | Overall request limit exceeded. Observe the HTTP `Retry-After` header, measured in seconds. |
+| `500` | Server/database failure; inspect correlated logs and verify migrations. |
+
+These statuses describe the application/SDK. A reverse proxy can reject a request before it reaches the app.
+
+## Rate limits and audit trail
+
+Rate limits are stored in PostgreSQL, scoped by organization/principal and operation, with 60-second windows. They survive application restarts and apply across replicas. Defaults are **240 overall requests**, **120 read-tool calls** and **30 write-tool calls per minute**. A tool call consumes the overall request budget and its read/write budget. Initialization and discovery consume the overall request budget too.
+
+Use the three `MCP_*_RATE_LIMIT_PER_MINUTE` variables in the [Env reference](/environment-variables#mcp-endpoint) to change them. Valid values are 1–10,000. Zero or invalid values restore the defaults; they do not disable access.
+
+Tool execution attempts are recorded in `mcp_audit_events` with organization, request ID, credential/principal identifiers, tool, operation, result status, target UUIDs, duration and error code. Arguments are represented by an HMAC fingerprint; the audit table does not store raw arguments or bearer tokens. Its key is `MCP_AUDIT_HASH_SECRET`, falling back to `AUTH_SECRET`.
+
+Authentication/transport rejections and schema failures before the tool handler are not tool-execution audit records. Audit insertion is best-effort: an audit database failure is logged and does not roll back an otherwise completed operation. The MCP implementation does not provide an automatic audit-retention setting; include these tables in your database maintenance plan.
+
+## Implementation references
+
+- [HTTP endpoint](https://github.com/Utzel-Butzel/inventory/blob/main/app/mcp/route.ts)
+- [Tool schemas and limits](https://github.com/Utzel-Butzel/inventory/blob/main/lib/mcp-contract.ts)
+- [Tool handlers and permissions](https://github.com/Utzel-Butzel/inventory/blob/main/lib/mcp-server.ts)
+- [Durable rate limits and audit writes](https://github.com/Utzel-Butzel/inventory/blob/main/lib/mcp-access.ts)
+- [MCP migration](https://github.com/Utzel-Butzel/inventory/blob/main/db/migrations/0060_mcp_access.sql)

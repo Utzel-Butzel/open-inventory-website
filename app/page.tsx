@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Github, ScanLine, Server, ShieldCheck } from "lucide-react";
 
-import { AppDownloads } from "@/components/marketing/app-downloads";
+import { AiPhotoExample } from "@/components/marketing/ai-photo-example";
+import { OpenSourceBadge } from "@/components/marketing/open-source-badge";
+import { AppStoreBadges } from "@/components/marketing/app-store-badges";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
 import { marketingHref, marketingOgLocale, marketingPathAlternates } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
@@ -17,7 +19,11 @@ const content = {
     title: "Open Inventory – Wissen, was da ist.",
     description: "Geräte und Material erfassen, Standorte finden und Bestände und Ausleihen nachvollziehen. Open Source, selbst hostbar und mit nativen Apps für iPhone und Android.",
     headline: ["Wissen, was da ist.", "Und wo."],
+    aiTitle: "Dein Inventar beginnt mit einem Foto.",
+    aiEyebrow: "Mit KI erfassen",
+    aiLink: "Mehr zur Fotoerfassung",
     intro: "Geräte, Werkzeug und Material an einem Ort verwalten. Finde, was du brauchst, sieh den verfügbaren Bestand und behalte Ausleihen im Blick.",
+    aiIntro: "Fotografiere Werkzeug, Geräte und Material. Die KI stellt Bilder frei und schlägt Titel und Beschreibungen vor. Du prüfst, ergänzt den Standort – und kannst die Dinge später wiederfinden und verleihen.",
     demo: "Live-Demo öffnen", host: "Selbst hosten", facts: ["Open Source · MIT-Lizenz", "Auf deinem Server", "Web, iPhone & Android"],
     photoAlt: "Eine Person lötet an einer Platine an einem benutzten Werkstatttisch",
     searchAlt: "Echte iPhone-App mit der Suche nach Löt: Lötstation Weller WE1010, verfügbar im Elektroniklabor an Bank 3",
@@ -25,7 +31,7 @@ const content = {
     strap: "Für die Dinge, mit denen ihr arbeitet.",
     audiences: ["Werkstätten", "Makerspaces", "Technikteams", "Vereine & Verleih"],
     workflowEyebrow: "Vom ersten Foto bis zur Rückgabe",
-    workflowTitle: "Ein Eintrag. Im Alltag immer dabei.",
+    workflowTitle: "Vom Foto zur dokumentierten Ausleihe",
     workflowIntro: "Foto, Standort und Bestand gehören zusammen. Damit dein Team beim Suchen, Ausgeben und Zurücknehmen auf dieselben Informationen zugreift.",
     steps: [
       { title: "Erfassen", copy: "Mit einem Foto oder vorhandenen Daten beginnen. Die optionale KI schlägt Angaben vor, die du prüfen und ergänzen kannst.", link: "Fotoerfassung ansehen", href: "/features/erfassen" },
@@ -34,28 +40,27 @@ const content = {
     ],
     stockEyebrow: "Geräte und Verbrauchsmaterial",
     stockTitle: "Der Bohrer wird verliehen. Die Schrauben werden weniger.",
-    stockCopy: "Einzelne Geräte und Mengenbestände brauchen unterschiedliche Abläufe. Open Inventory führt beides mit Standorten, Verfügbarkeit und einer nachvollziehbaren Historie.",
-    stockPoints: ["Bestände auf mehrere Lagerorte verteilen", "Reservierungen und Ausleihen nachvollziehen", "Verbrauch und Lieferungen für Nachbestellungen planen"],
+    stockCopy: "Bei einem Gerät willst du wissen, wo es ist und wer es gerade nutzt. Bei Teilen zählt, wie viele noch da sind. Erfasse Lieferungen und Verbrauch, lege Mindestbestände fest und sieh, wann Nachschub nötig wird.",
+    stockPoints: ["Menge je Lagerort nachsehen","Ausgaben und Rückgaben mit Datum sehen","Nachbestellungen anhand von Verbrauch und Lieferzeit planen"],
     stockLink: "Bestandsverwaltung kennenlernen",
-    stockAlt: "Bestandsübersicht der Web-App mit Mengen, erwarteten Lieferungen und Artikeln mit niedrigem Bestand",
-    webCaption: "Open Inventory im Browser · Beispieldaten",
+    stockAlt: "Echte Open-Inventory-Demo in der Kartenansicht mit Sidebar: Bohrschrauber in Benutzung, Schrauben mit 126 Einheiten und weitere Werkzeuge mit Standort und Bestand",
     mobileEyebrow: "Direkt am Regal",
     mobileTitle: "Das Inventar kommt mit.",
-    mobileCopy: "Ein Etikett scannen, den Standort nachsehen oder einen Zugang buchen. Die nativen Apps für iPhone und Android verbinden die Arbeit vor Ort mit deiner eigenen Instanz.",
-    mobileLink: "Die iPhone-App ansehen", mobileNote: "iOS 17+ · Android 8.0+",
+    mobileCopy: "Ein Etikett scannen, den Standort nachsehen oder einen Zugang buchen. Mit den Apps für iPhone und Android verwaltest du dein Inventar direkt vor Ort.",
+    mobileLink: "Apps und Verfügbarkeit",
     mobileAlt: "iPhone-Detailansicht der Lötstation mit Foto, Standort Elektroniklabor Bank 3 und Bestand zwei",
     scenariosEyebrow: "Im Einsatz gedacht",
-    scenariosTitle: "Jeder Ort hat sein eigenes Inventar.",
+    scenariosTitle: "Wo Open Inventory helfen kann",
     scenarios: [
       { title: "Werkstatt & Service", copy: "Werkzeug zwischen Regal, Fahrzeug und Einsatzort verfolgen.", href: "/use-cases/handwerk" },
-      { title: "Makerspace", copy: "Gemeinsame Maschinen, Leihgeräte und Kleinteile organisieren.", href: "/use-cases/makerspace" },
+      { title: "Makerspace", copy: "Nachsehen, welche Werkzeuge es überhaupt gibt und wo sie liegen.", href: "/use-cases/makerspace" },
       { title: "Technikteam", copy: "Prüfgeräte zuordnen und Material für die nächste Arbeit finden.", href: "/use-cases/startup" },
     ],
     scenarioLink: "Alle Einsatzbereiche", scenarioPhotoAlt: "Hände an einem gebrauchten Werkzeugkoffer auf einem Holztisch",
     scenarioCaption: "Werkzeug im Arbeitsalltag · Foto: Anete Lusina / Pexels",
-    ownershipEyebrow: "Offene Software. Eigener Betrieb.",
-    ownershipTitle: "Dein Inventar. Deine Infrastruktur.",
-    ownershipCopy: "Open Inventory läuft auf deinem Server. Quellcode, Dokumentation und Schnittstellen sind offen – damit du selbst entscheiden kannst, wie dein Inventar verwaltet wird.",
+    ownershipEyebrow: "Open Source",
+    ownershipTitle: "Open Inventory auf deinem Server",
+    ownershipCopy: "Der Quellcode steht auf GitHub unter der MIT-Lizenz. Du kannst die Anwendung auf deinem Server installieren, anpassen und weitergeben.",
     ownershipItems: [
       { title: "Selbst betreiben", copy: "Mit Docker Compose starten. Backups, Updates und Zugang verwaltest du selbst." },
       { title: "Daten mitnehmen", copy: "Vorhandene Listen importieren, Daten exportieren und eigene Systeme per API anbinden." },
@@ -70,20 +75,24 @@ const content = {
       { q: "Funktioniert die Anwendung ohne KI?", a: "Ja. Inventar, Standorte und Bestände lassen sich ohne KI verwalten. Wenn du KI-Funktionen aktivierst, werden die dafür benötigten Inhalte an den konfigurierten Dienst gesendet.", href: "/open-source", link: "Datenfluss nachvollziehen" },
       { q: "Wie bekomme ich die Apps?", a: "Die Android-Vorabversion kannst du direkt als APK herunterladen (Android 8.0+). App Store und Google Play folgen. Die iPhone-App benötigt iOS 17+. Beide Apps verbinden sich mit deiner eigenen Open-Inventory-Instanz.", href: "/app#app-downloads", link: "Zu den App-Downloads" },
     ],
-    closingTitle: "Mach dir selbst ein Bild.", closingCopy: "Öffne die Demo mit Beispieldaten oder richte Open Inventory auf deinem Server ein.", github: "Quellcode auf GitHub",
+    closingTitle: "Open Inventory ausprobieren", closingCopy: "Öffne die Demo mit Beispieldaten oder richte Open Inventory auf deinem Server ein.", github: "Quellcode auf GitHub",
   },
   en: {
     title: "Open Inventory – Know what you have.",
     description: "Catalogue equipment and supplies, find locations and keep track of stock and loans. Open source, self-hosted and with native iPhone and Android apps.",
     headline: ["Know what you have.", "And where it is."],
+    aiTitle: "Your inventory starts with a photo.",
+    aiEyebrow: "Capture with AI",
+    aiLink: "Explore photo capture",
     intro: "Keep equipment, tools and supplies in one place. Find what you need, check available stock and keep track of what is on loan.",
+    aiIntro: "Photograph tools, equipment and supplies. AI removes backgrounds and suggests titles and descriptions. Review the draft, add a location, then find and lend the things you have.",
     demo: "Open live demo", host: "Host it yourself", facts: ["Open source · MIT license", "On your server", "Web, iPhone & Android"],
     photoAlt: "A person soldering a circuit board at a well-used workshop bench",
     searchAlt: "Actual iPhone app searching for a soldering station, showing availability and its location at electronics lab bench 3",
     captureLabel: "Found in the electronics lab.", captureNote: "iPhone app · Demo data · German interface",
     strap: "For the things your team works with.", audiences: ["Workshops", "Makerspaces", "Technical teams", "Clubs & lending"],
     workflowEyebrow: "From the first photo to the return",
-    workflowTitle: "One record. Part of every working day.",
+    workflowTitle: "From a photo to a recorded loan",
     workflowIntro: "Photos, locations and stock belong together. Your team works with the same information when finding, handing over and returning equipment.",
     steps: [
       { title: "Capture", copy: "Start with a photo or your existing data. Optional AI suggests details for you to review and complete.", link: "Explore photo capture", href: "/features/erfassen" },
@@ -91,24 +100,23 @@ const content = {
       { title: "Hand over", copy: "Record loans, returns and stock movements. Keep a history of what was issued and what came back.", link: "Stock & lending", href: "/features/bestand-ausleihe" },
     ],
     stockEyebrow: "Equipment and consumables", stockTitle: "The drill goes on loan. The screws get used up.",
-    stockCopy: "Individual equipment and bulk supplies need different workflows. Open Inventory tracks both, with locations, availability and a clear history.",
-    stockPoints: ["Distribute stock across storage locations", "Keep track of reservations and loans", "Use consumption and deliveries to plan replenishment"],
-    stockLink: "Explore stock management", stockAlt: "Web stock overview with quantities, expected deliveries and low-stock items",
-    webCaption: "Open Inventory in the browser · Demo data · German interface",
+    stockCopy: "For a device, you need to know where it is and who is using it. For parts, you need the quantity left. Record deliveries and consumption, set minimum stock levels and see when more supplies are needed.",
+    stockPoints: ["Check quantities by storage location","See dated records of issues and returns","Plan reorders using consumption and lead time"],
+    stockLink: "Explore stock management", stockAlt: "Actual Open Inventory demo in card view with sidebar: drill in use, 126 screws and other tools with locations and quantities",
     mobileEyebrow: "Right at the shelf", mobileTitle: "Take your inventory with you.",
-    mobileCopy: "Scan a label, check a location or record incoming stock. The native iPhone and Android apps connect work in the field to your own instance.",
-    mobileLink: "Explore the iPhone app", mobileNote: "iOS 17+ · Android 8.0+",
+    mobileCopy: "Scan a label, check a location or record incoming stock. Use the iPhone and Android apps to manage your inventory on site.",
+    mobileLink: "Apps and availability",
     mobileAlt: "iPhone detail view of a soldering station with its photo, electronics lab location and two units in stock",
-    scenariosEyebrow: "Everyday settings", scenariosTitle: "Every place has its own inventory.",
+    scenariosEyebrow: "Everyday settings", scenariosTitle: "Where Open Inventory can help",
     scenarios: [
       { title: "Workshops & service", copy: "Follow tools between the shelf, the van and the job site.", href: "/use-cases/handwerk" },
-      { title: "Makerspaces", copy: "Organise shared machines, loan equipment and small parts.", href: "/use-cases/makerspace" },
+      { title: "Makerspaces", copy: "See which tools the workshop has and where to find them.", href: "/use-cases/makerspace" },
       { title: "Technical teams", copy: "Assign test equipment and find supplies for the next job.", href: "/use-cases/startup" },
     ],
     scenarioLink: "All use cases", scenarioPhotoAlt: "Hands opening a used tool case on a wooden workbench",
     scenarioCaption: "Tools in everyday work · Photo: Anete Lusina / Pexels",
-    ownershipEyebrow: "Open software. Your own infrastructure.", ownershipTitle: "Your inventory. Your server.",
-    ownershipCopy: "Open Inventory runs on your server. The source code, documentation and interfaces are open, so you can decide how to manage your inventory.",
+    ownershipEyebrow: "Open source", ownershipTitle: "Run Open Inventory on your server",
+    ownershipCopy: "The source code is on GitHub under the MIT license. Install the application on your own server, adapt it and share it.",
     ownershipItems: [
       { title: "Run it yourself", copy: "Get started with Docker Compose. Manage your own backups, updates and access." },
       { title: "Keep your data portable", copy: "Import existing lists, export your data and connect your own systems through the API." },
@@ -173,35 +181,34 @@ export default async function HomePage() {
           <div className={`site-shell ${styles.audienceInner}`}><p>{c.strap}</p><ul>{c.audiences.map(item => <li key={item}>{item}</li>)}</ul></div>
         </div>
 
-        <section className="site-section" id="workflow">
-          <div className="site-shell">
-            <div className={styles.sectionIntro}>
-              <div><p className="site-eyebrow">{c.workflowEyebrow}</p><h2 className="site-heading mt-4">{c.workflowTitle}</h2></div>
-              <p className={styles.bodyCopy}>{c.workflowIntro}</p>
-            </div>
-            <ol className={styles.steps}>{c.steps.map((step, index) => (
-              <li key={step.title}><span className={styles.stepNumber}>0{index + 1}</span><h3>{step.title}</h3><p>{step.copy}</p><Link className="site-link" href={href(step.href)}>{step.link}<ArrowRight aria-hidden="true" /></Link></li>
-            ))}</ol>
-          </div>
-        </section>
-
         <section className={`site-section ${styles.stockSection}`}>
           <div className={`site-shell ${styles.stockGrid}`}>
             <div><p className="site-eyebrow">{c.stockEyebrow}</p><h2 className="site-heading mt-4">{c.stockTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.stockCopy}</p>
               <ul className={styles.checklist}>{c.stockPoints.map(point => <li key={point}><Check aria-hidden="true" />{point}</li>)}</ul>
               <Link className="site-link mt-7" href={href("/features/bestand-ausleihe")}>{c.stockLink}<ArrowRight aria-hidden="true" /></Link>
             </div>
-            <figure className="site-product-frame"><Image src="/marketing/screenshots/web-stock-home.png" alt={c.stockAlt} width={1148} height={735} sizes="(max-width: 900px) 90vw, 58vw" className="h-auto w-full" /><figcaption className={styles.productCaption}>{c.webCaption}</figcaption></figure>
+            <figure className="site-product-frame"><Image src="/marketing/screenshots/web-inventory-cards-demo.png" alt={c.stockAlt} width={1440} height={1266} sizes="(max-width: 900px) 90vw, 58vw" className="h-auto w-full" /></figure>
           </div>
         </section>
 
-        <section className="site-section">
+        <section className="site-section" id="ki-werkzeuge">
+          <div className={`site-shell ${styles.photoExampleGrid}`}>
+            <div>
+              <p className="site-eyebrow">{c.aiEyebrow}</p>
+              <h2 className="site-heading mt-4">{c.aiTitle}</h2>
+              <p className={`${styles.bodyCopy} mt-6`}>{c.aiIntro}</p>
+              <Link className="site-link mt-7" href={href("/features/erfassen")}>{c.aiLink}<ArrowRight aria-hidden="true" /></Link>
+            </div>
+            <AiPhotoExample locale={locale} animated />
+          </div>
+        </section>
+
+        <section className={`site-section ${styles.mobileSection}`}>
           <div className={`site-shell ${styles.mobileGrid}`}>
             <figure className={styles.mobileFigure}>
-              <div className={styles.phone}><Image src="/marketing/screenshots/ios-item-detail.png" alt={c.mobileAlt} width={1206} height={2622} sizes="280px" className="h-auto w-full" /></div>
-              <figcaption>{c.captureNote}</figcaption>
+              <Image src="/marketing/devices/iphone-in-hand-v3.png" alt={locale === "de" ? "Eine Hand hält ein iPhone mit der Open-Inventory-Detailansicht einer Lötstation" : "A hand holding an iPhone displaying a soldering station in Open Inventory"} width={1254} height={1254} sizes="(max-width: 767px) 90vw, 560px" className={styles.handheldPhone} />
             </figure>
-            <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/app")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><p className={styles.availability}>{c.mobileNote}</p><AppDownloads locale={locale} /></div>
+            <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/app")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><AppStoreBadges locale={locale} /></div>
           </div>
         </section>
 
@@ -218,6 +225,7 @@ export default async function HomePage() {
         <section className="site-section">
           <div className="site-shell">
             <div className={styles.sectionIntro}><div><p className="site-eyebrow">{c.ownershipEyebrow}</p><h2 className="site-heading mt-4">{c.ownershipTitle}</h2></div><div><p className={styles.bodyCopy}>{c.ownershipCopy}</p><Link href={href("/open-source")} className="site-link mt-5">{c.ownershipLink}<ArrowRight aria-hidden="true" /></Link></div></div>
+            <div className="mt-8"><OpenSourceBadge locale={locale} /></div>
             <div className={styles.ownershipGrid}>{c.ownershipItems.map((item, index) => { const Icon = [Server, ArrowUpRight, ShieldCheck][index]; return <div key={item.title}><Icon aria-hidden="true" /><h3>{item.title}</h3><p>{item.copy}</p></div>; })}</div>
           </div>
         </section>

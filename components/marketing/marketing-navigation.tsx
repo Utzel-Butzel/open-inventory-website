@@ -21,9 +21,9 @@ type DropdownItem = {
 
 const featureItemsDe: DropdownItem[] = [
   {
-    label: "Inventar erfassen",
+    label: "Foto & KI-Erfassung",
     href: "/features/erfassen", icon: Camera,
-    description: "Per Foto erfassen und Vorschläge prüfen.",
+    description: "Freistellen, Titel und Beschreibung vorschlagen lassen.",
   },
   {
     label: "Inventar strukturieren",
@@ -53,7 +53,7 @@ const featureItemsDe: DropdownItem[] = [
 ];
 
 const featureItemsEn: DropdownItem[] = [
-  { label: "Capture inventory", href: "/features/erfassen", icon: Camera, description: "Capture by photo and review suggestions." },
+  { label: "Photo & AI capture", href: "/features/erfassen", icon: Camera, description: "Remove backgrounds and draft titles and descriptions." },
   { label: "Structure inventory", href: "/features/strukturieren", icon: Shapes, description: "Model types, variants, options and relations." },
   { label: "Stock & operations", href: "/features/bestand-ausleihe", icon: PackageCheck, description: "Track stock and loans, plan replenishment and production." },
   { label: "Labels, printing & API", href: "/features/labels-api", icon: Printer, description: "Design labels, print locally or share a printer, and connect the API." },
@@ -290,23 +290,23 @@ export function DesktopMarketingNavigation({
   const copy = locale === "de"
     ? {
         navigation: "Hauptnavigation",
-        features: "Produkt",
+        features: "Funktion",
         allFeatures: "Alle Funktionen",
         featuresDescription: "Erfassen, wiederfinden und gemeinsam nutzen.",
         useCases: "Einsatzbereiche",
         allUseCases: "Alle Einsatzbereiche",
         useCasesDescription: "Für Werkstätten, Teams und gemeinsame Ausrüstung.",
-        ios: "Inventar unterwegs verwalten: die iOS-App",
+        ios: "Apps für iPhone und Android",
       }
     : {
         navigation: "Main navigation",
-        features: "Product",
+        features: "Features",
         allFeatures: "All features",
         featuresDescription: "Capture, find and share your inventory.",
         useCases: "Use cases",
         allUseCases: "All use cases",
         useCasesDescription: "For workshops, teams and shared equipment.",
-        ios: "Manage inventory on the go with the iOS app",
+        ios: "Apps for iPhone and Android",
       };
 
   return (
@@ -453,25 +453,25 @@ export function MobileMarketingNavigation({
         close: "Navigation schließen",
         open: "Navigation öffnen",
         mobile: "Mobile Navigation",
-        features: "Produkt",
+        features: "Funktion",
         allFeatures: "Alle Funktionen",
         useCases: "Einsatzbereiche",
         allUseCases: "Alle Einsatzbereiche",
         openApp: "Live-Demo öffnen",
         docker: "Selbst hosten",
-        ios: "iOS-App",
+        ios: "Mobile Apps",
       }
     : {
         close: "Close navigation",
         open: "Open navigation",
         mobile: "Mobile navigation",
-        features: "Product",
+        features: "Features",
         allFeatures: "All features",
         useCases: "Use cases",
         allUseCases: "All use cases",
         openApp: "Open live demo",
         docker: "Self-hosting",
-        ios: "iOS app",
+        ios: "Mobile apps",
       };
 
   const closeNavigation = () => {

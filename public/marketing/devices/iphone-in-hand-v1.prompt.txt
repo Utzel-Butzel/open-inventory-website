@@ -1,0 +1,14 @@
+Generated with the built-in image_gen tool on 2026-11-01.
+Input: public/marketing/screenshots/ios-item-detail.png
+Output: iphone-in-hand-v1.png (1024 × 1536, transparent PNG)
+Experimental homepage variant; original device frame and screenshot are retained.
+
+Use case: product-mockup
+Asset type: photorealistic transparent website image for Open Inventory, section "Das Inventar kommt mit".
+Primary request: A real human hand naturally holding a modern dark titanium iPhone upright, displaying the attached exact inventory app screenshot.
+Input image 1: supporting compositing input, the actual app screenshot. Place this screenshot on the phone display, preserving its layout, icons, German text and soldering-station photo. Do not invent a different interface.
+Subject: one anatomically correct adult hand and lower wrist, neutral natural skin, short nails, real pores and subtle skin creases, holding the phone securely from the lower side/back. Thumb rests against the side bezel without covering the app content. The other fingers curve naturally behind the phone. No face, no body, no jewelry.
+Composition: portrait 2:3 image, full phone visible with comfortable transparent space around its top and sides; wrist enters from bottom edge. Phone fills about two thirds of image height. Nearly front-facing display with only a slight natural tilt, so UI is readable. Premium but candid product photography, not an illustrated or plastic-looking hand.
+Lighting: soft realistic studio daylight, subtle titanium highlights and natural contact shadows between fingers and device; avoid heavy glare on display.
+Background: genuinely transparent alpha, no white rectangle, no checkerboard, no backdrop, no floor or props.
+Constraints: convincing physical grip, five anatomically plausible fingers, no duplicated fingers, no extra hand, no floating phone, preserve the app screenshot faithfully, no added labels or watermark.

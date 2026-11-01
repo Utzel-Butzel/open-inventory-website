@@ -70,13 +70,13 @@ export const useCaseIOSCaptures: Record<string, string> = {
 
 export const useCaseWebCaptures: Record<string, string> = {
   makerspace: "/marketing/screenshots/web-stock.png",
-  familie: "/marketing/screenshots/web-inventory.png",
-  startup: "/marketing/screenshots/web-api-tokens.png",
-  verein: "/marketing/screenshots/web-orders.png",
+  familie: "/marketing/screenshots/web-label-designer.png",
+  startup: "/marketing/screenshots/web-item-detail.png",
+  verein: "/marketing/screenshots/web-stock.png",
   sammlung: "/marketing/screenshots/web-item-detail.png",
-  schule: "/marketing/screenshots/web-settings-access.png",
+  schule: "/marketing/screenshots/web-stock.png",
   handwerk: "/marketing/screenshots/web-locations.png",
-  labor: "/marketing/screenshots/web-dashboard.png",
+  labor: "/marketing/screenshots/web-locations.png",
 };
 
 export const useCases: UseCase[] = [
@@ -86,9 +86,9 @@ export const useCases: UseCase[] = [
     eyebrow: "Werkstatt & geteilte Technik",
     title: "Werkzeug finden, ausleihen und vollständig zurückbekommen.",
     cardCopy:
-      "Maschinen, Handwerkzeug und Verbrauchsmaterial mit QR-Codes, Standorten und nachvollziehbaren Bewegungen organisieren.",
+      "Nachsehen, welche Werkzeuge es gibt, wo sie liegen und ob sie gerade ausgeliehen sind.",
     description:
-      "Open Inventory verbindet Werkzeugkatalog, Lagerbestand und Ausgabe in einem selbst gehosteten System. Neue Gegenstände starten mit einem Foto; Mitglieder finden anschließend das richtige Werkzeug, den Lagerort und den aktuellen Bestand.",
+      "Nicht alle kennen jede Schublade. In einem gemeinsamen Katalog kann auch ein neues Mitglied nachsehen, welche Werkzeuge vorhanden sind und wo sie liegen. Ausleihen stehen direkt am Gerät.",
     image: "/marketing/photography/workshop-team.webp",
     imageAlt:
       "Ein Team arbeitet gemeinsam an einem realen Werkstatttisch",
@@ -96,7 +96,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#5f55e8]",
     softAccent: "bg-[#eeedff] text-[#5147d9]",
     challenge:
-      "In einer offenen Werkstatt wechseln Geräte, Einzelteile und Verbrauchsmaterial ständig den Ort. Tabellen zeigen selten, wer etwas hat, welche Seriennummer betroffen ist oder wann Bestand nachbestellt werden sollte.",
+      "Jemand sucht einen Akkuschrauber und weiß nicht, ob es überhaupt einen gibt. Die Suche zeigt das Gerät, seinen Platz an der Werkzeugwand und ob es ausgeliehen ist. Ein Foto hilft, das richtige Modell zu erkennen.",
     promises: [
       "Werkzeug per Suche, QR-Code oder Barcode direkt finden",
       "Mengenware und einzelne Maschinen getrennt nachverfolgen",
@@ -121,32 +121,28 @@ export const useCases: UseCase[] = [
     ],
     steps: [
       {
-        title: "Foto aufnehmen",
-        description:
-          "Mit Browser oder iPhone fotografierst du ein neues Werkzeug. Die optionale KI schlägt Titel, Beschreibung, Typ und Tags zur Prüfung vor.",
+        title: "Werkzeug aufnehmen",
+        description: "Fotografiere den Akkuschrauber und ergänze Modell, Seriennummer und den Platz an der Werkzeugwand.",
       },
       {
-        title: "Bestand festlegen",
-        description:
-          "Verbrauchsteile führst du als Menge, Maschinen als einzeln identifizierte Einheiten mit Code, Zustand und Standort.",
+        title: "Etikett aufkleben",
+        description: "Drucke ein QR-Etikett für das Gerät. Ein Scan öffnet später den Eintrag.",
       },
       {
-        title: "Etikett anbringen",
-        description:
-          "Erstelle wiederverwendbare Etiketten mit kompaktem QR-Link, Code 128, Text und optionalem Objektbild direkt im Browser.",
+        title: "Ausleihe buchen",
+        description: "Wähle bei der Ausgabe den Empfänger aus und halte fest, welches Gerät mitgenommen wird.",
       },
       {
-        title: "Bewegung buchen",
-        description:
-          "Scans führen zu geprüften Ausgabe-, Rückgabe- oder Standortabläufen. Der datierte Bewegungsverlauf bleibt nachvollziehbar.",
-      },
+        title: "Rückgabe eintragen",
+        description: "Buche das Werkzeug zurück. Falls es jetzt an einem anderen Platz liegt, ändere auch den Standort.",
+      }
     ],
     features: [
       {
         icon: "stock",
         title: "Mengen & Einzelgeräte",
         description:
-          "Schrauben werden als Mengenbestand geführt, Fräsen oder Messgeräte als serialisierte Einheiten mit eigenem Status und Standort.",
+          "Schrauben zählst du als Menge. Für jede Fräse oder jedes Messgerät kannst du Zustand, Seriennummer und Standort einzeln festhalten.",
       },
       {
         icon: "labels",
@@ -158,7 +154,7 @@ export const useCases: UseCase[] = [
         icon: "history",
         title: "Ausgabe mit Verlauf",
         description:
-          "Bestand kann an Nutzer, Inventarobjekte oder Freitext-Empfänger ausgegeben, reserviert oder fest zugewiesen werden.",
+          "Halte fest, an wen ein Werkzeug ausgegeben wurde. Ausgabe und Rückgabe bleiben mit Datum im Verlauf sichtbar.",
       },
       {
         icon: "locations",
@@ -176,7 +172,7 @@ export const useCases: UseCase[] = [
         icon: "roles",
         title: "Präzise Zugriffsrechte",
         description:
-          "Eigene Rollen, granulare Berechtigungen und bedingte Regeln trennen Ausgabe, Bearbeitung, Einkauf und Administration.",
+          "Lege fest, wer Werkzeuge ausgeben, Einträge bearbeiten oder Einstellungen ändern darf.",
       },
     ],
     iosTitle: "Die Werkzeugausgabe passt in die Hosentasche.",
@@ -199,7 +195,7 @@ export const useCases: UseCase[] = [
     cardCopy:
       "Keller, Dachboden, Dokumente und geteilte Dinge ohne komplizierte Listen gemeinsam übersichtlich halten.",
     description:
-      "Open Inventory macht aus Fotos ein durchsuchbares Familieninventar. Orte, Behälter, Bilder und eigene Felder schaffen Ordnung, ohne dass jedes Familienmitglied zuerst ein Warenwirtschaftssystem lernen muss.",
+      "Fotografiere, was du einpackst, und ergänze Kiste und Standort. Später findest du den Campingkocher über die Suche, ohne alle Kartons zu öffnen. Auch verliehene Dinge kannst du festhalten.",
     image: "/marketing/photography/home-labels.webp",
     imageAlt:
       "Ein Mann prüft gedruckte Beschriftungen an Umzugskartons",
@@ -207,7 +203,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",
     challenge:
-      "Saisonales, geliehene Dinge und Erinnerungsstücke verschwinden schnell in Schränken und Kisten. Eine gute Lösung muss schnell genug für den Alltag sein und trotzdem Details und Fotos bewahren.",
+      "Der Campingkocher kommt nach dem Urlaub in die Outdoor-Kiste im Keller. Ein Foto und der Standort am Eintrag reichen, um ihn vor der nächsten Reise wiederzufinden.",
     promises: [
       "Vom Foto zum prüfbaren Eintrag, ohne lange Formulare",
       "Kisten, Räume und enthaltene Gegenstände miteinander verknüpfen",
@@ -232,32 +228,28 @@ export const useCases: UseCase[] = [
     ],
     steps: [
       {
-        title: "Einfach fotografieren",
-        description:
-          "Nimm ein oder mehrere Bilder auf. Die optionale Bildanalyse erstellt Vorschläge; Originalfotos bleiben am Datensatz erhalten.",
+        title: "Inhalt fotografieren",
+        description: "Fotografiere Kocher und Zubehör, bevor sie in die Kiste wandern. Die Bilder bleiben am Eintrag.",
       },
       {
-        title: "Ort kurz ergänzen",
-        description:
-          "Raum, Kiste oder Schrank werden als Standort oder Beziehung hinterlegt. Eigene Felder erfassen etwa Größe, Garantie oder Besitzer.",
+        title: "Kiste und Standort ergänzen",
+        description: "Ordne den Kocher der Outdoor-Kiste zu und hinterlege Keller, Regal 2 als Standort.",
       },
       {
-        title: "Bei Bedarf markieren",
-        description:
-          "Für Boxen und häufig geteilte Dinge kannst du QR- oder Barcode-Etiketten direkt im Browser gestalten und drucken.",
+        title: "Kiste beschriften",
+        description: "Ein QR-Etikett an der Kiste öffnet den zugehörigen Eintrag. Du kannst Etiketten im Browser gestalten und drucken.",
       },
       {
-        title: "Später sofort finden",
-        description:
-          "Suche nach Name, SKU, Seriennummer, Tags, Kategorien und weiteren Daten — oder öffne den Datensatz mit einem Scan.",
-      },
+        title: "Vor der Reise suchen",
+        description: "Suche nach Campingkocher. Am Eintrag findest du die Fotos und den hinterlegten Lagerort.",
+      }
     ],
     features: [
       {
         icon: "camera",
         title: "Fotos statt Tipparbeit",
         description:
-          "Mehrere Medien pro Gegenstand, EXIF-Ortserkennung und clientseitige Bildoptimierung machen die Erfassung alltagstauglich.",
+          "Lege mehrere Fotos am Gegenstand ab, etwa eine Gesamtansicht, das Typenschild und den Kaufbeleg.",
       },
       {
         icon: "relations",
@@ -269,7 +261,7 @@ export const useCases: UseCase[] = [
         icon: "locations",
         title: "Standorte & Karten",
         description:
-          "Speichere Räume, Textorte, GPS-Positionen oder Geometrien. So funktioniert das Inventar in der Wohnung und unterwegs.",
+          "Ergänze den Raum, das Regal oder die Kiste am Eintrag. Auch ein Standort auf der Karte lässt sich hinterlegen.",
       },
       {
         icon: "sharing",
@@ -281,7 +273,7 @@ export const useCases: UseCase[] = [
         icon: "csv",
         title: "Daten mitnehmen",
         description:
-          "Validierter UTF-8-CSV-Import und -Export erleichtert den Einstieg aus einer Liste und hält einen einfachen Ausweg offen.",
+          "Übernimm eine vorhandene Liste als CSV-Datei. Deine Einträge kannst du auch wieder exportieren und in einer Tabelle weiterverwenden.",
       },
       {
         icon: "roles",
@@ -308,9 +300,9 @@ export const useCases: UseCase[] = [
     eyebrow: "Assets & wachsende Teams",
     title: "Assets sauber verwalten, bevor die erste Tabelle kippt.",
     cardCopy:
-      "Laptops, Testgeräte, Büroausstattung und Einkauf mit Rollen, Seriennummern und offener API skalierbar organisieren.",
+      "Vor dem nächsten Arbeitsstart sehen, welcher Laptop frei ist und ob Netzteil und Dock vorhanden sind.",
     description:
-      "Open Inventory gibt jungen Teams früh einen belastbaren Überblick: Wer nutzt welches Gerät? Was ist unterwegs? Was kommt mit der nächsten Bestellung? Der Einstieg bleibt schnell, die Struktur wächst mit.",
+      "Wer nutzt welchen Laptop? Welches Testgerät liegt noch im Schrank? Halte Seriennummer, Zubehör und Empfänger zusammen fest, damit die nächste Ausgabe oder Rückgabe nicht mit einer Suche beginnt.",
     image: "/marketing/photography/server-rack.webp",
     imageAlt:
       "Reale Netzwerkverkabelung in einem bestückten Serverschrank",
@@ -318,7 +310,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#aa4b08]",
     softAccent: "bg-[#fff1df] text-[#9a4308]",
     challenge:
-      "Wenn ein Team wächst, werden Kaufbelege, Gerätezuordnung und Seriennummern schnell über mehrere Tabellen verteilt. Spätestens beim Onboarding, Offboarding oder Audit fehlen verlässliche Antworten.",
+      "Ein neues Teammitglied braucht einen Laptop mit Netzteil und Dock. Du suchst ein verfügbares Gerät, stellst das Zubehör zusammen und hältst fest, an wen es ausgegeben wird.",
     promises: [
       "Seriennummer, Nutzer, Zustand und Standort pro Gerät sehen",
       "Wareneingänge und offene Bestellungen nachvollziehen",
@@ -341,34 +333,13 @@ export const useCases: UseCase[] = [
         status: "Nachbestellen",
       },
     ],
-    steps: [
-      {
-        title: "Bestand übernehmen",
-        description:
-          "Importiere eine validierte UTF-8-CSV oder erfasse neue Geräte per Foto. Jede Zeile und jeder KI-Vorschlag kann geprüft werden.",
-      },
-      {
-        title: "Struktur definieren",
-        description:
-          "Inventartypen, eigene Felder, Tags und Kategorien bilden Team, Kostenstelle, Garantie oder Gerätekonfiguration ab.",
-      },
-      {
-        title: "Geräte zuweisen",
-        description:
-          "Serialisierte Einheiten erhalten Code, Status, Standort und Metadaten. Zuweisungen und Bewegungen bleiben historisch nachvollziehbar.",
-      },
-      {
-        title: "Abläufe verbinden",
-        description:
-          "Dokumentierte REST-Endpunkte und scoped API-Tokens binden Inventardaten an interne Tools und Automationen an.",
-      },
-    ],
+    steps: [{"title":"Laptop erfassen","description":"Fotografiere das Gerät und ergänze seine Seriennummer. Hänge den Kaufbeleg an den Eintrag."},{"title":"Zubehör zuordnen","description":"Verknüpfe Netzteil und Dock mit dem Laptop, damit bei der Übergabe klar ist, was dazugehört."},{"title":"An Teammitglied ausgeben","description":"Wähle den Empfänger und buche die Ausgabe. Der Verlauf zeigt, wann das Gerät übergeben wurde."},{"title":"Rückgabe festhalten","description":"Buche zurückgegebene Geräte und ergänze ihren Zustand. So siehst du, was für die nächste Ausgabe bereitliegt."}],
     features: [
       {
         icon: "stock",
         title: "Asset- und Bestandsmodell",
         description:
-          "Führe Einzelgeräte serialisiert und Zubehör als Mengenbestand — jeweils mit Standort, Status und vollständigem Bewegungsverlauf.",
+          "Erfasse jedes Gerät mit seiner Seriennummer. Zubehör führst du als Menge; Standort und Buchungen bleiben am Eintrag sichtbar.",
       },
       {
         icon: "history",
@@ -421,7 +392,7 @@ export const useCases: UseCase[] = [
     cardCopy:
       "Vom Veranstaltungskabel bis zum Trikot: Ausgabe, Lagerorte und Berechtigungen so dokumentieren, dass Ehrenamt einfach bleibt.",
     description:
-      "Open Inventory schafft einen gemeinsamen, durchsuchbaren Materialstand für Vereinsheim, Lager und Veranstaltungen. Einfache Scan-Abläufe helfen bei der Ausgabe; Rollen schützen sensible Änderungen.",
+      "Für das nächste Fest braucht ihr Pavillon, Kabel und Mikrofone. Seht nach, was im Vereinslager liegt, reserviert die Ausrüstung und haltet fest, wer sie mitnimmt.",
     image: "/marketing/photography/qr-package-scan.webp",
     imageAlt:
       "Ein Mann fotografiert das Etikett eines realen Pakets mit seinem Smartphone",
@@ -429,7 +400,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",
     challenge:
-      "Vereinsmaterial wandert zwischen Lager, Veranstaltungen und Mitgliedern. Verantwortliche wechseln, Übergaben passieren nebenbei — und trotzdem soll der Bestand für alle verständlich bleiben.",
+      "Das Sommerfest ist vorbei, aber ein Mikrofonkoffer fehlt noch. Im Ausleihvorgang seht ihr den Empfänger und welche Sachen schon zurück sind. Die letzte Rückgabe könnt ihr später ergänzen.",
     promises: [
       "Materialkatalog lesbar teilen, Bearbeitung gezielt vergeben",
       "Ausgaben und Rückgaben mit Empfänger dokumentieren",
@@ -452,28 +423,7 @@ export const useCases: UseCase[] = [
         status: "Ausgegeben",
       },
     ],
-    steps: [
-      {
-        title: "Vorhandenes erfassen",
-        description:
-          "Starte per CSV, Browser oder iPhone-Kamera. Kategorien und eigene Felder passen den Katalog an Sport, Kultur oder Technik an.",
-      },
-      {
-        title: "Lager sichtbar machen",
-        description:
-          "Ordne Material Orten, Behältern und miteinander verbundenen Gegenständen zu. Bilder erleichtern die eindeutige Auswahl.",
-      },
-      {
-        title: "Ausgabe vereinfachen",
-        description:
-          "Ein Scan öffnet den passenden Eintrag. Ausgabe und Rückgabe werden bestätigt und mit Nutzer oder Freitext-Empfänger gespeichert.",
-      },
-      {
-        title: "Verantwortung verteilen",
-        description:
-          "Eigene Rollen geben Teams genau die Rechte, die sie brauchen; ein öffentlicher Leselink kann den Katalog separat zeigen.",
-      },
-    ],
+    steps: [{"title":"Ausrüstung zusammenstellen","description":"Suche Pavillon, Kabel und Mikrofone im Katalog. Fotos zeigen, welche Koffer und Sets gemeint sind."},{"title":"Für den Termin reservieren","description":"Reserviere die benötigten Geräte für die Veranstaltung. Im Kalender siehst du weitere Belegungen."},{"title":"An das Veranstaltungsteam ausgeben","description":"Buche die Ausgabe mit Empfänger. Mehrere Gegenstände lassen sich in einem Vorgang zusammenfassen."},{"title":"Rückläufer abhaken","description":"Buche zurückgegebene Teile ein. Bleibt ein Koffer beim Team, ist diese Position weiter offen."}],
     features: [
       {
         icon: "sharing",
@@ -532,7 +482,7 @@ export const useCases: UseCase[] = [
     cardCopy:
       "Fotos, Zustand, Standort, Beziehungen und eigene Metadaten in einem offenen, durchsuchbaren Katalog bewahren.",
     description:
-      "Open Inventory verbindet visuelle Dokumentation mit frei konfigurierbaren Daten. So entsteht aus vielen Einzelobjekten ein konsistenter Katalog, der privat bleiben oder gezielt lesbar geteilt werden kann.",
+      "Zu einem Sammlungsstück gehören mehr als ein Name und ein Foto. Bewahre Herkunft, Kaufdatum, Zustand und Fundort am selben Eintrag auf – auch wenn das Stück später in eine andere Vitrine wandert.",
     image: "/marketing/photography/home-labels.webp",
     imageAlt:
       "Ein Mann ordnet gedruckte Beschriftungen für reale Aufbewahrungsboxen",
@@ -540,7 +490,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#aa4b08]",
     softAccent: "bg-[#fff1df] text-[#9a4308]",
     challenge:
-      "Bei wachsenden Sammlungen reichen Dateinamen und Regalnummern nicht aus. Zustand, Herkunft, Beziehungen und mehrere Ansichten eines Objekts sollen zusammenbleiben und exportierbar sein.",
+      "Eine analoge Kamera kommt zur Sammlung. Du möchtest später noch wissen, woher sie stammt, welches Objektiv dazugehört und welche Gebrauchsspuren schon beim Kauf vorhanden waren.",
     promises: [
       "Mehrere Fotos und strukturierte Metadaten pro Objekt bewahren",
       "Objekte über Orte, Behälter und Beziehungen erschließen",
@@ -608,7 +558,7 @@ export const useCases: UseCase[] = [
         icon: "languages",
         title: "Mehrsprachige Inhalte",
         description:
-          "Eine kanonische Sprache und prüfbare KI-Übersetzungen können Beschreibungen, passende eigene Felder und Alt-Texte ergänzen.",
+          "Schreibe Beschreibungen in deiner Sprache und ergänze bei Bedarf KI-Übersetzungen, die du vor dem Übernehmen prüfst.",
       },
       {
         icon: "sharing",
@@ -643,7 +593,7 @@ export const useCases: UseCase[] = [
     cardCopy:
       "Tablets, Experimentierkoffer und Fachraumausstattung schnell erfassen, ausgeben und regelmäßig prüfen.",
     description:
-      "Open Inventory verbindet Fotodokumentation, Gerätewagen, Etiketten und Inventurzyklen in einer selbst gehosteten Anwendung. Lehrkräfte finden Ausstattung schnell, während Verwaltung und Technik verlässliche Bestandsdaten behalten.",
+      "Lehrkräfte können nachsehen, in welchem Raum der Beamer steht und ob er verfügbar ist. Kabel und Fernbedienung gehören zum Eintrag; Ausgabe und Rückgabe halten fest, wer das Gerät gerade nutzt.",
     image: "/marketing/photography/workshop-team.webp",
     imageAlt:
       "Mehrere Personen arbeiten gemeinsam an einem Werkstattprojekt",
@@ -651,7 +601,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#3f5fc7]",
     softAccent: "bg-[#e8edff] text-[#3955b8]",
     challenge:
-      "Geräte wechseln zwischen Klassen, Fachräumen und Ausleihe. Wenn Seriennummern, Zustände und Rückgaben nur in einzelnen Listen stehen, fehlt bei Übergaben schnell der gemeinsame Überblick.",
+      "Für die nächste Stunde wird ein Beamer gebraucht. Am Eintrag steht, wo er liegt und ob er ausgegeben ist. Das Zubehör ist verknüpft, damit nicht erst im Klassenraum auffällt, dass das Kabel fehlt.",
     promises: [
       "Gerätewagen und Einzelgeräte per Foto oder Code erfassen",
       "Ausgabe, Rückgabe und nächsten Inventurtermin nachvollziehen",
@@ -662,12 +612,7 @@ export const useCases: UseCase[] = [
       { name: "Mikroskop Schülerplatz 12", meta: "Biologie · Schrank B", status: "Zu prüfen" },
       { name: "Experimentierkoffer Elektrik", meta: "Physik · Ausgabe an 9b", status: "Ausgegeben" },
     ],
-    steps: [
-      { title: "Wagen fotografieren", description: "Erfasse neue Geräte direkt im Fachraum. Fotos und prüfbare Vorschläge verkürzen den Start, ohne Daten ungeprüft zu übernehmen." },
-      { title: "Einheiten serialisieren", description: "Jedes Tablet oder Messgerät erhält einen eigenen Code, Status und Standort; Verbrauchsteile bleiben als Mengenbestand handlich." },
-      { title: "Ausgabe scannen", description: "Ein Code führt zum richtigen Gerät. Ausgabe und Rückgabe werden bestätigt und mit Empfänger oder Raum dokumentiert." },
-      { title: "Inventur planen", description: "Wiederkehrende Prüfzyklen zeigen fällige Geräte und halten den gezählten Bestand je Standort nachvollziehbar." },
-    ],
+    steps: [{"title":"Beamer aufnehmen","description":"Fotografiere das Gerät und halte Seriennummer sowie den Platz im Medienschrank fest."},{"title":"Zubehör verknüpfen","description":"Ordne Fernbedienung, Kabel und Transporttasche zu. Ein Foto zeigt, was zum Set gehört."},{"title":"Ausgabe eintragen","description":"Scanne das Etikett und buche das Gerät auf die ausleihende Person."},{"title":"Rückgabe und Zustand notieren","description":"Buche den Beamer zurück. Ergänze einen Hinweis, wenn ein Kabel fehlt oder das Gerät beschädigt ist."}],
     features: [
       { icon: "stock", title: "Geräte & Mengenbestand", description: "Verwalte Tablets als einzelne Einheiten und Kabel, Sensoren oder Verbrauchsmaterial als Mengenbestand im selben System." },
       { icon: "labels", title: "QR- und Barcode-Etiketten", description: "Eigene Vorlagen verbinden Geräte, Wagen und Schränke mit dem passenden offenen Datensatz." },
@@ -694,9 +639,9 @@ export const useCases: UseCase[] = [
     eyebrow: "Fahrzeuge & Baustellen",
     title: "Werkzeug dort buchen, wo es gerade eingesetzt wird.",
     cardCopy:
-      "Fahrzeugbestände, Elektrowerkzeuge und Verbrauchsmaterial mobil erfassen und verlässlich nachbestellen.",
+      "Werkzeug im Fahrzeug finden, verbrauchte Teile abbuchen und Nachschub fürs Lager planen.",
     description:
-      "Open Inventory macht Servicefahrzeuge und Lager zu nachvollziehbaren Standorten. Mitarbeitende scannen oder fotografieren vor Ort; Bestand, Ausgabe und Nachbestellung greifen im selbst gehosteten System zusammen.",
+      "Vor der Fahrt zur Baustelle nachsehen, in welchem Fahrzeug der Bohrhammer liegt und wie viele Klemmen noch da sind. Entnahmen und Lieferungen aktualisieren den Bestand; Mindestmengen helfen beim Nachbestellen.",
     image: "/marketing/photography/warehouse-scan.webp",
     imageAlt:
       "Ein Lagermitarbeiter scannt einen realen Artikel direkt am Regal",
@@ -704,7 +649,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#a54c0b]",
     softAccent: "bg-[#fff0df] text-[#914108]",
     challenge:
-      "Werkzeug und Material verteilen sich auf Werkstatt, Fahrzeuge und Baustellen. Ohne einfache Buchung bleibt unklar, welches Team etwas nutzt und was vor dem nächsten Einsatz fehlt.",
+      "Der Bohrhammer liegt im anderen Fahrzeug, die Klemmen sind fast aufgebraucht. Wenn ihr Werkzeug und Teile je Fahrzeug führt, könnt ihr vor dem Losfahren nachsehen, was fehlt.",
     promises: [
       "Bestand je Fahrzeug, Lager und Baustelle sehen",
       "Werkzeuge serialisieren und Mitarbeitenden zuweisen",
@@ -715,15 +660,10 @@ export const useCases: UseCase[] = [
       { name: "WAGO-Klemmen 221", meta: "Zentrallager · 86 Stück", status: "Nachbestellen" },
       { name: "Kabelprüfgerät", meta: "SN KP-1048 · Team Nord", status: "Zugewiesen" },
     ],
-    steps: [
-      { title: "Vor Ort erfassen", description: "Foto oder bestehender Code startet den Eintrag. Der Vorschlag wird geprüft, bevor das Gerät oder Material gespeichert wird." },
-      { title: "Fahrzeug zuordnen", description: "Fahrzeuge, Lager und Baustellen werden zu strukturierten Standorten mit eigener Bestandsverteilung." },
-      { title: "Nutzung buchen", description: "Serialisierte Werkzeuge lassen sich zuweisen; Verbrauchsmaterial wird als Zu- oder Abgang mit Verlauf gebucht." },
-      { title: "Nachschub planen", description: "Mindestbestand, Verbrauchsrate und offene Bestellungen ergeben einen nachvollziehbaren Vorschlag statt einer Bauchentscheidung." },
-    ],
+    steps: [{"title":"Fahrzeug als Lagerort anlegen","description":"Ordne Werkzeug und Material dem Fahrzeug zu. Ergänze das Fach, damit auch Vertretungen es finden."},{"title":"Umladen buchen","description":"Wechselt der Bohrhammer in ein anderes Fahrzeug, buche den Standortwechsel."},{"title":"Verbrauch eintragen","description":"Buche verbaute Klemmen als Abgang aus dem Fahrzeugbestand."},{"title":"Nachschub planen","description":"Hinterlege Mindestbestand und Lieferzeit. Prüfe den Bestellvorschlag zusammen mit den noch offenen Lieferungen."}],
     features: [
       { icon: "locations", title: "Bestand je Fahrzeug", description: "Führe jeden Servicewagen und jedes Lager als eigenen Standort, ohne die Gesamtmenge aus dem Blick zu verlieren." },
-      { icon: "stock", title: "Bulk & serialisiert", description: "Schrauben und Kabel als Menge, Mess- und Elektrowerkzeuge als einzelne Einheit mit Status und Code." },
+      { icon: "stock", title: "Mengen und Einzelgeräte", description: "Schrauben und Kabel als Menge, Mess- und Elektrowerkzeuge als einzelne Einheit mit Status und Code." },
       { icon: "history", title: "Zuweisung mit Verlauf", description: "Buche Werkzeuge an Teams, Nutzer oder Projekte und dokumentiere Rückgabe oder Transfer append-only." },
       { icon: "orders", title: "Mindestbestand & Einkauf", description: "Verbrauch, Lieferzeit und Bestellungen fließen in Warnungen und begründete Nachbestellmengen ein." },
       { icon: "labels", title: "Robuste Scan-Abläufe", description: "QR, Code 128 und weitere Codes öffnen den passenden Gegenstand oder eine vorkonfigurierte Lageraktion." },
@@ -749,7 +689,7 @@ export const useCases: UseCase[] = [
     cardCopy:
       "Geräte, Komponenten und Prototypteile mit Seriennummer, Standort, Stückliste und offenen Schnittstellen organisieren.",
     description:
-      "Open Inventory ist kein LIMS, sondern ein offener Inventarbaustein für technische Labore und Prototyping. Messgeräte, Teileboxen und Baugruppen werden fotografiert, strukturiert und nachvollziehbar bewegt.",
+      "Messgerät, Tastköpfe und Netzteil sollen zusammen auffindbar sein. Verknüpfe das Zubehör, halte den Arbeitsplatz fest und ergänze eigene Felder etwa für Prüfdatum oder Revision.",
     image: "/marketing/photography/lab-pipette.webp",
     imageAlt:
       "Nahaufnahme einer Person bei der Arbeit mit realer Laborausstattung",
@@ -757,7 +697,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#08765e]",
     softAccent: "bg-[#e0f8ef] text-[#08765e]",
     challenge:
-      "In gemeinsam genutzten Laboren wandern Messgeräte, Komponenten und Prototypteile zwischen Arbeitsplätzen. Seriennummer, Zubehör und aktueller Aufbau sollen zusammenbleiben, ohne ein geschlossenes Spezialprodukt zu erzwingen.",
+      "Das Oszilloskop wurde an einen anderen Messplatz gebracht, die Tastköpfe liegen noch im Schrank. Am Geräteeintrag seht ihr den Standort und welches Zubehör dazugehört.",
     promises: [
       "Messgeräte und Zubehör als Beziehungen oder Stückliste verbinden",
       "Eigene Felder für Prüf- und Beschaffungsdaten nutzen",
@@ -769,17 +709,17 @@ export const useCases: UseCase[] = [
       { name: "Netzteil 0–30 V", meta: "Messplatz 1 · Prüfung 11/2026", status: "Zugewiesen" },
     ],
     steps: [
-      { title: "Gerät fotografieren", description: "Erfasse Typenschild, Zubehör und Zustand mit mehreren Bildern. Vorschläge bleiben vor der Übernahme prüfbar." },
+      { title: "Gerät fotografieren", description: "Fotografiere Gerät und Typenschild, damit Modell und Seriennummer später lesbar bleiben." },
       { title: "Felder ergänzen", description: "Eigene Typen und Felder bilden Prüfdatum, Herstellerdaten, Revision oder Verantwortungsbereich passend zum Labor ab." },
-      { title: "Aufbau verbinden", description: "Beziehungen und Stücklisten verbinden Gerät, Tastkopf, Halterung und verbrauchte Komponenten zu einem nachvollziehbaren Aufbau." },
+      { title: "Aufbau verbinden", description: "Verknüpfe das Oszilloskop mit seinen Tastköpfen und der Halterung. Speichere den jeweiligen Aufbewahrungsort." },
       { title: "Nutzung dokumentieren", description: "Zuweisung, Standortwechsel und Inventur werden datiert gespeichert; offene Datenwege ermöglichen weitere Auswertung." },
     ],
     features: [
       { icon: "camera", title: "Mehrere Ansichten", description: "Dokumentiere Gerät, Typenschild, Zubehör und Zustand mit geordneten Fotos und zugänglichen Alt-Texten." },
       { icon: "stock", title: "Geräte & Teilemengen", description: "Seriennummern für Messgeräte, Mengenbestand für Sensoren, Stecker und andere gleichartige Teile." },
-      { icon: "relations", title: "Beziehungen & Stücklisten", description: "Verknüpfe Zubehör, Gegenstücke und Prototypkomponenten; Montagebuchungen verbrauchen Teile atomar." },
+      { icon: "relations", title: "Beziehungen & Stücklisten", description: "Verknüpfe Gerät und Zubehör. Für Prototypen kannst du eine Stückliste hinterlegen und die verbauten Teile vom Bestand abbuchen." },
       { icon: "locations", title: "Arbeitsplätze & Räume", description: "Strukturierte Orte und optional räumliche Erfassung helfen bei gemeinsam genutzten Arbeitsbereichen." },
-      { icon: "history", title: "Bewegungen & Inventur", description: "Transfers, Zuweisungen und wiederkehrende Zählungen bleiben nachvollziehbar, ohne ältere Werte zu überschreiben." },
+      { icon: "history", title: "Bewegungen & Inventur", description: "Im Verlauf siehst du, wann Geräte den Arbeitsplatz gewechselt haben und welche Mengen bei der Inventur gezählt wurden." },
       { icon: "api", title: "OpenAPI-Vertrag", description: "Die eingecheckte Spezifikation und widerrufbare Tokens machen eigene Auswertungen und Automationen planbar." },
     ],
     iosTitle: "Erfassen direkt am Messplatz.",

@@ -18,7 +18,6 @@ import {
   HardDrive,
   Heart,
   KeyRound,
-  LockKeyhole,
   Server,
   Settings2,
   ShieldCheck,
@@ -27,6 +26,7 @@ import {
   Workflow,
 } from "lucide-react";
 
+import { FounderStory } from "@/components/marketing/founder-story";
 import { CopyInstallCommand } from "@/components/marketing/copy-install-command";
 import {
   MarketingFooter,
@@ -94,97 +94,6 @@ const principles: Principle[] = [
   },
 ];
 
-const evidence: Array<{
-  icon: LucideIcon;
-  eyebrow: string;
-  title: string;
-  copy: string;
-  links: Array<{ label: string; href: string }>;
-}> = [
-  {
-    icon: FileCode2,
-    eyebrow: "Lizenz",
-    title: "MIT im Wortlaut",
-    copy: "Der vollständige Lizenztext liegt im Repository. Er erlaubt Nutzung, Änderung und Weitergabe unter den dort genannten Bedingungen.",
-    links: [
-      { label: "LICENSE ansehen", href: `${githubUrl}/blob/main/LICENSE` },
-    ],
-  },
-  {
-    icon: Container,
-    eyebrow: "Betrieb",
-    title: "Docker-Konfiguration zum Nachlesen",
-    copy: "Compose beschreibt PostgreSQL, den Migrationsschritt, persistente Volumes und Healthchecks. Das Dockerfile zeigt den Produktions-Build und den unprivilegierten Laufzeitbenutzer.",
-    links: [
-      {
-        label: "docker-compose.yml",
-        href: `${githubUrl}/blob/main/docker-compose.yml`,
-      },
-      { label: "Dockerfile", href: `${githubUrl}/blob/main/Dockerfile` },
-      { label: "Installationsskript", href: `${githubUrl}/blob/main/scripts/install.sh` },
-      { label: "Dokploy", href: dokployDeployUrl },
-      { label: "Coolify", href: coolifyDeployUrl },
-    ],
-  },
-  {
-    icon: Braces,
-    eyebrow: "Schnittstelle",
-    title: "OpenAPI 3.1 eingecheckt",
-    copy: "Der maschinenlesbare Vertrag beschreibt die versionierte Bearer-Token-API direkt neben der Implementierung.",
-    links: [
-      {
-        label: "OpenAPI YAML ansehen",
-        href: `${githubUrl}/blob/main/public/openapi.yaml`,
-      },
-    ],
-  },
-  {
-    icon: Smartphone,
-    eyebrow: "Native App",
-    title: "iOS-Code im selben Projekt",
-    copy: "SwiftUI-Oberfläche, Kamera-, Scan-, Upload- und API-Code der nativen App liegen unter ios/Inventory.",
-    links: [
-      {
-        label: "iOS-Quellen öffnen",
-        href: `${githubUrl}/tree/main/ios/Inventory`,
-      },
-    ],
-  },
-  {
-    icon: Eye,
-    eyebrow: "iOS-Datenschutz",
-    title: "Privacy Manifest prüfbar",
-    copy: "Das eingecheckte Apple Privacy Manifest deklariert kein Tracking, keine Tracking-Domains und keine gesammelten Datentypen. Es ist ein Quellbeleg, kein unabhängiges Datenschutzaudit.",
-    links: [
-      {
-        label: "PrivacyInfo.xcprivacy",
-        href: `${githubUrl}/blob/main/ios/Inventory/Inventory/PrivacyInfo.xcprivacy`,
-      },
-    ],
-  },
-  {
-    icon: Database,
-    eyebrow: "Datenmodell",
-    title: "Migrationen sind versioniert",
-    copy: "Die Änderungen am PostgreSQL-Schema liegen als nachvollziehbare SQL-Dateien im Repository.",
-    links: [
-      {
-        label: "Migrationen ansehen",
-        href: `${githubUrl}/tree/main/db/migrations`,
-      },
-    ],
-  },
-  {
-    icon: Workflow,
-    eyebrow: "Qualität",
-    title: "Tests liegen neben dem Code",
-    copy: "Der Tests-Ordner enthält automatisierbare Vertrags- und Verhaltensprüfungen für zentrale Serverfunktionen.",
-    links: [
-      { label: "Tests ansehen", href: `${githubUrl}/tree/main/tests` },
-    ],
-  },
-];
-
 const englishPrinciples: Principle[] = [
   {
     icon: Eye,
@@ -205,91 +114,6 @@ const englishPrinciples: Principle[] = [
     icon: Braces,
     title: "Integrable",
     copy: "A checked-in OpenAPI 3.1 specification and scoped bearer tokens connect Open Inventory to your own apps, scripts and automations.",
-  },
-];
-
-const englishEvidence: typeof evidence = [
-  {
-    icon: FileCode2,
-    eyebrow: "License",
-    title: "The MIT terms, in full",
-    copy: "The complete license text is part of the repository. It permits use, modification and redistribution under the conditions stated there.",
-    links: [
-      { label: "View LICENSE", href: `${githubUrl}/blob/main/LICENSE` },
-    ],
-  },
-  {
-    icon: Container,
-    eyebrow: "Operations",
-    title: "Readable Docker configuration",
-    copy: "The Compose file defines PostgreSQL, the migration step, persistent volumes and health checks. The Dockerfile shows the production build and its unprivileged runtime user.",
-    links: [
-      {
-        label: "docker-compose.yml",
-        href: `${githubUrl}/blob/main/docker-compose.yml`,
-      },
-      { label: "Dockerfile", href: `${githubUrl}/blob/main/Dockerfile` },
-      { label: "Install script", href: `${githubUrl}/blob/main/scripts/install.sh` },
-      { label: "Dokploy", href: dokployDeployUrl },
-      { label: "Coolify", href: coolifyDeployUrl },
-    ],
-  },
-  {
-    icon: Braces,
-    eyebrow: "Interface",
-    title: "OpenAPI 3.1 checked in",
-    copy: "The machine-readable contract describes the versioned bearer-token API next to its implementation.",
-    links: [
-      {
-        label: "View OpenAPI YAML",
-        href: `${githubUrl}/blob/main/public/openapi.yaml`,
-      },
-    ],
-  },
-  {
-    icon: Smartphone,
-    eyebrow: "Native app",
-    title: "iOS source in the same project",
-    copy: "The SwiftUI interface and the camera, scanning, upload and API code for the native app live under ios/Inventory.",
-    links: [
-      {
-        label: "Open iOS sources",
-        href: `${githubUrl}/tree/main/ios/Inventory`,
-      },
-    ],
-  },
-  {
-    icon: Eye,
-    eyebrow: "iOS privacy",
-    title: "Inspectable privacy manifest",
-    copy: "The checked-in Apple privacy manifest declares no tracking, no tracking domains and no collected data types. It is source evidence, not an independent privacy audit.",
-    links: [
-      {
-        label: "PrivacyInfo.xcprivacy",
-        href: `${githubUrl}/blob/main/ios/Inventory/Inventory/PrivacyInfo.xcprivacy`,
-      },
-    ],
-  },
-  {
-    icon: Database,
-    eyebrow: "Data model",
-    title: "Versioned migrations",
-    copy: "PostgreSQL schema changes are stored as reviewable SQL files in the repository.",
-    links: [
-      {
-        label: "View migrations",
-        href: `${githubUrl}/tree/main/db/migrations`,
-      },
-    ],
-  },
-  {
-    icon: Workflow,
-    eyebrow: "Quality",
-    title: "Tests live next to the code",
-    copy: "The tests directory contains automatable contract and behavior checks for core server functions.",
-    links: [
-      { label: "View tests", href: `${githubUrl}/tree/main/tests` },
-    ],
   },
 ];
 
@@ -416,9 +240,8 @@ function EnglishOpenSourcePage() {
                 MIT open source
               </div>
               <h1 className="site-title mt-7">
-                Your inventory.
-                <span className="block text-brand-inverse">Your stack.</span>
-                Your code.
+                Run Open Inventory
+                <span className="block text-brand-inverse">on your server.</span>
               </h1>
               <p className="mt-7 max-w-[580px] text-[17px] leading-8 text-white/65 sm:text-[19px]">
                 Open Inventory is open source, self-hostable and documented —
@@ -457,6 +280,8 @@ function EnglishOpenSourcePage() {
           </div>
         </section>
 
+        <FounderStory locale="en" />
+
         <section className="border-b border-border bg-surface py-20 sm:py-24">
           <div className="site-shell">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -468,68 +293,6 @@ function EnglishOpenSourcePage() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="border-b border-border py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid items-end gap-8 lg:grid-cols-[1fr_0.68fr]">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Evidence, not claims
-                </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[58px]">
-                  Inspect the foundations in the repository.
-                </h2>
-              </div>
-              <p className="text-[15px] leading-7 text-muted">
-                License, deployment definition, API contract, native app,
-                migrations and tests are all source artifacts. The links below
-                lead to the relevant files and directories.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {englishEvidence.map(({ icon: Icon, eyebrow, title, copy, links }) => (
-                <article
-                  key={title}
-                  className="flex min-h-[250px] flex-col rounded-2xl border border-border bg-surface p-6"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
-                      <Icon className="size-[18px]" aria-hidden="true" />
-                    </span>
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-muted">
-                      {eyebrow}
-                    </span>
-                  </div>
-                  <h3 className="mt-7 text-[19px] font-semibold tracking-[-0.035em]">
-                    {title}
-                  </h3>
-                  <p className="mt-2 text-[13px] leading-6 text-muted">{copy}</p>
-                  <div className="mt-auto flex flex-wrap gap-x-4 gap-y-2 pt-6">
-                    {links.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand transition hover:text-brand-hover"
-                      >
-                        {link.label}
-                        <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                      </a>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <p className="mt-5 text-xs leading-6 text-muted">
-              The linked files show the current state of the code. They do not
-              replace your own operational review or an independent security or
-              privacy assessment.
-            </p>
           </div>
         </section>
 
@@ -784,10 +547,10 @@ function EnglishOpenSourcePage() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                [Braces, "OpenAPI 3.1", "A machine-readable contract for resources, stock, scans, shares, roles and other API areas."],
-                [KeyRound, "Scoped tokens", "Tokens are hashed, scope-limited, optionally expiring and revocable."],
-                [LockKeyhole, "Two protection layers", "Token scopes limit transport access; roles and conditional rules remain the domain-level authorization layer."],
-                [Workflow, "Safe retries", "Idempotent mutations protect important capture, stock and iOS flows from duplicate execution."],
+                [Braces, "REST API", "Connect your own apps, scripts and automations to inventory and stock data through the documented REST API."],
+                [FileCode2, "OpenAPI 3.1", "Use the machine-readable specification in YAML or JSON to explore endpoints and build API clients."],
+                [Sparkles, "MCP", "Connect AI assistants through the optional Model Context Protocol server to search inventory and update stock with scoped access."],
+                [Workflow, "CSV import & export", "Import existing inventory and export data for spreadsheets, reports or exchange with other systems."],
               ].map(([Icon, title, copy]) => {
                 const ApiIcon = Icon as LucideIcon;
                 return (
@@ -863,9 +626,8 @@ export default async function OpenSourcePage() {
                 MIT Open Source
               </div>
               <h1 className="site-title mt-7">
-                Dein Bestand.
-                <span className="block text-brand-inverse">Dein Stack.</span>
-                Dein Code.
+                Open Inventory
+                <span className="block text-brand-inverse">selbst betreiben.</span>
               </h1>
               <p className="mt-7 max-w-[580px] text-[17px] leading-8 text-white/65 sm:text-[19px]">
                 Open Inventory ist offen, selbst betreibbar und dokumentiert –
@@ -904,6 +666,8 @@ export default async function OpenSourcePage() {
           </div>
         </section>
 
+        <FounderStory locale="de" />
+
         <section className="border-b border-border bg-surface py-20 sm:py-24">
           <div className="site-shell">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -915,68 +679,6 @@ export default async function OpenSourcePage() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="border-b border-border py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid items-end gap-8 lg:grid-cols-[1fr_0.68fr]">
-              <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Belege statt Versprechen
-                </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[58px]">
-                  Prüfe die Grundlage direkt im Repository.
-                </h2>
-              </div>
-              <p className="text-[15px] leading-7 text-muted">
-                Lizenz, Betriebsdefinition, API-Vertrag, native App, Migrationen
-                und Tests sind keine Marketinggrafik. Die folgenden Links führen
-                zu den jeweiligen Quelldateien und Verzeichnissen.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {evidence.map(({ icon: Icon, eyebrow, title, copy, links }) => (
-                <article
-                  key={title}
-                  className="flex min-h-[250px] flex-col rounded-2xl border border-border bg-surface p-6"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
-                      <Icon className="size-[18px]" aria-hidden="true" />
-                    </span>
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-muted">
-                      {eyebrow}
-                    </span>
-                  </div>
-                  <h3 className="mt-7 text-[19px] font-semibold tracking-[-0.035em]">
-                    {title}
-                  </h3>
-                  <p className="mt-2 text-[13px] leading-6 text-muted">{copy}</p>
-                  <div className="mt-auto flex flex-wrap gap-x-4 gap-y-2 pt-6">
-                    {links.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand transition hover:text-brand-hover"
-                      >
-                        {link.label}
-                        <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                      </a>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <p className="mt-5 text-xs leading-6 text-muted">
-              Die verlinkten Dateien zeigen den Stand des Codes. Sie ersetzen
-              weder eine eigene Betriebsprüfung noch eine unabhängige
-              Sicherheits- oder Datenschutzbewertung.
-            </p>
           </div>
         </section>
 
@@ -1224,10 +926,10 @@ export default async function OpenSourcePage() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                [Braces, "OpenAPI 3.1", "Maschinenlesbarer Vertrag für Ressourcen, Lager, Scans, Freigaben, Rollen und weitere API-Bereiche."],
-                [KeyRound, "Begrenzte Tokens", "Tokens sind gehasht, mit Scopes versehen, optional befristet und widerrufbar."],
-                [LockKeyhole, "Zwei Schutzebenen", "Token-Scopes begrenzen den Transport; Rollen und bedingte Regeln bleiben die fachliche Zugriffskontrolle."],
-                [Workflow, "Sichere Wiederholungen", "Idempotente Mutationen schützen wichtige Erfassungs-, Lager- und iOS-Abläufe vor doppelter Ausführung."],
+                [Braces, "REST-API", "Verbinde eigene Apps, Skripte und Automationen über die dokumentierte REST-API mit Inventar- und Bestandsdaten."],
+                [FileCode2, "OpenAPI 3.1", "Nutze die maschinenlesbare Spezifikation als YAML oder JSON, um Endpunkte zu erkunden und API-Clients zu erstellen."],
+                [Sparkles, "MCP", "Binde KI-Assistenten über den optional aktivierbaren Model-Context-Protocol-Server an, um Inventar zu durchsuchen und Bestände mit gezielten Zugriffsrechten zu ändern."],
+                [Workflow, "CSV-Import & -Export", "Übernimm vorhandenes Inventar und exportiere Daten für Tabellen, Auswertungen oder den Austausch mit anderen Systemen."],
               ].map(([Icon, title, copy]) => {
                 const ApiIcon = Icon as LucideIcon;
                 return (

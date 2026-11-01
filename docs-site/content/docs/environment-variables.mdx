@@ -1,0 +1,451 @@
+---
+title: "Environment variable reference"
+description: "Application settings, defaults, secrets, dependencies and build-time configuration for self-hosted Open Inventory."
+---
+
+This reference covers all 155 entries in the application's `.env.example`, plus relevant runtime and compatibility settings. It was checked against the repository configuration and readers on **1 November 2026**. Older deployed images may not support every setting, including the recently added branding options.
+
+These variables belong to your **Open Inventory application**, not to this documentation website. See [Configure your instance](/configuration) for a short introduction and the [example environment file](https://github.com/Utzel-Butzel/inventory/blob/main/.env.example) for a starting point.
+
+## Reading this reference
+
+- **Default** means the behavior when the variable is absent, not necessarily the value supplied by `.env.example` or a deployment template. Differences are called out below.
+- **Required** means required by the production startup script. **Conditional** means required only for the named feature. Other settings are optional.
+- **Secret** marks credentials or sensitive configuration. Do not commit their real values or expose them through `NEXT_PUBLIC_` variables. An unmarked value may still contain private infrastructure information.
+- Unless a section says **Build**, **Compose** or **Tool**, settings are **Runtime** settings. Restart the application process after changing them; recreate containers to load a changed container environment. Some settings are initialized only at startup.
+- Use `true` or `false` for booleans. Numeric timeouts are milliseconds unless the name or table explicitly says seconds, minutes, hours or days. Limits described as **clamped** are restricted to the stated range.
+- An empty string is not universally equivalent to an absent variable: numeric readers can interpret it as zero. Omit optional numeric overrides to retain their defaults, or provide an explicit valid number.
+
+## Load settings and apply changes
+
+For local development, put values in `.env.local` in the application repository root and restart `npm run dev`. Next.js prioritizes the process environment, then environment-specific local files, `.env.local`, environment-specific files and `.env`. `.env.local` is excluded in test mode.
+
+For Docker Compose, `.env` supplies values for Compose interpolation. It does **not** automatically pass every variable into the container. Verify that the application service forwards the setting under `environment`, or add a mapping:
+
+```yaml
+services:
+  app:
+    environment:
+      APP_NAME: ${APP_NAME:-}
+      APP_LOGO_URL: ${APP_LOGO_URL:-}
+```
+
+The root Compose service is named `app`; the Dokploy and Coolify templates use `inventory`. The templates forward different subsets of settings. In particular, a setting described here may require an additional mapping in an older or custom deployment definition.
+
+After runtime changes, recreate the application using the same Compose files used to deploy it. For the repository's local port override:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --force-recreate app
+```
+
+In Dokploy or Coolify, save the environment and Compose mappings, then redeploy. `docker restart` alone does not change the container's environment. Build-time map settings require a new application build; see [Maps](#maps).
+
+Keep bcrypt hashes in single quotes in Compose `.env` files so their dollar signs are preserved. Base64 is an encoding, not encryption.
+
+## Core application and branding
+
+All settings in this table are **Runtime**.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `DATABASE_URL` | None in production | PostgreSQL URL; **Required, Secret** | Used by the app and migrations. Accepts `postgres:` or `postgresql:`. Development fallback: `postgresql://inventory:inventory@localhost:5432/inventory`; do not use these example credentials in production. |
+| `AUTH_SECRET` | None in production | Random string, at least 32 characters; **Required, Secret** | Auth.js session secret and fallback for some signed application tokens. Known example placeholders are rejected. Keep consistent across replicas. |
+| `AUTH_URL` | None in production | Absolute public URL; **Required** | Canonical application address, for example `https://inventory.example.com`. Production startup requires HTTPS except for localhost. Also supplies default origins/hosts for several integrations. |
+| `AUTH_TRUST_HOST` | Deployment templates set `true` | Boolean | Auth.js host/proxy handling. Use a reverse proxy that controls forwarded host headers. |
+| `WEBSITE_URL` | Repository website link | HTTP(S) URL | Destination of public website links from the application. The shell falls back to `https://github.com/Utzel-Butzel/open-inventory-website`. |
+| `APP_NAME` | Built-in translated name | Non-empty text | Display name in navigation, sign-in and browser metadata; applies to every organization. Whitespace-only values use the built-in name. |
+| `APP_LOGO_URL` | Built-in logo | Public HTTP(S) image URL | Navigation and sign-in logo. URLs containing credentials are rejected; invalid or unavailable images use the built-in icon. Use HTTPS on HTTPS installations. Does not change the favicon. |
+| `NODE_ENV` | `production` in the container | `production`, `development` or `test` | Runtime mode. Keep `production` for deployed containers. |
+| `PORT` | `3000` in the container | Port number | Port of the standalone application server inside the container. If changed, update routing and healthchecks too. |
+| `HOSTNAME` | `0.0.0.0` in the container | Bind address | Address on which the standalone server listens. |
+| `NEXT_TELEMETRY_DISABLED` | `1` in the Dockerfile | `1` disables telemetry | Used during build and runtime to disable Next.js telemetry. |
+
+[Branding examples](/configuration#app-name-and-logo) · [Production startup validation](https://github.com/Utzel-Butzel/inventory/blob/main/scripts/start-production.mjs)
+
+## Password login and bootstrap
+
+Runtime. Bootstrap configuration creates the first database-backed administrator only while no users exist; it is not a password-reset mechanism for existing users. Prefer database-managed users after initialization.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `AUTH_PASSWORD_ENABLED` | `true` | Boolean | Enables password sign-in, including the native password-to-token endpoint. Configure and test another login method before disabling it. |
+| `BOOTSTRAP_ADMIN_EMAIL` | `SIMPLE_AUTH_EMAIL`, then `admin@inventory.local` | Email address | First administrator's email, normalized to lowercase. |
+| `BOOTSTRAP_ADMIN_NAME` | `SIMPLE_AUTH_NAME`, then `Inventory admin` | Text | First administrator's display name. |
+| `BOOTSTRAP_ADMIN_PASSWORD_HASH` | `SIMPLE_AUTH_PASSWORD_HASH`, then unset | Bcrypt hash; **Conditional, Secret** | Initial administrator credential. Generate with `npm run auth:hash -- "your password"`. Do not combine with `BOOTSTRAP_ADMIN_PASSWORD`. |
+| `BOOTSTRAP_ADMIN_PASSWORD` | Unset | At least 12 characters; **Conditional, Secret** | One-time plaintext bootstrap input. Production accepts it only with `BOOTSTRAP_ADMIN_PASSWORD_ONCE=true`; startup hashes it before loading the app. |
+| `BOOTSTRAP_ADMIN_PASSWORD_ONCE` | `false` | Boolean | Enables one-time plaintext handling. After creating the admin, remove both plaintext bootstrap settings from the deployment and change the password in the app. |
+| `SIMPLE_AUTH_EMAIL` | `admin@inventory.local` | Email address | Legacy fallback for bootstrap email. |
+| `SIMPLE_AUTH_NAME` | `Inventory admin` | Text | Legacy fallback for bootstrap display name. |
+| `SIMPLE_AUTH_PASSWORD_HASH` | Unset | Bcrypt hash; **Secret** | Legacy fallback when the bootstrap hash is absent. |
+| `SIMPLE_AUTH_PASSWORD` | Unset | Text; **Secret; development only** | Legacy plaintext input. The production startup script rejects it. |
+| `NATIVE_TOKEN_TTL_DAYS` | `30` | Integer, 1–365 days | Lifetime of newly issued native login tokens. Invalid values fall back to 30. |
+
+The production entrypoint removes plaintext bootstrap values from the app process after hashing; it cannot remove them from the saved deployment environment. Remove them there yourself after initialization.
+
+## External sign-in
+
+Runtime. These providers require pre-existing active application users and organization memberships; they do not replace application authorization. Supply a complete provider configuration. Partial configurations fail production startup. See [Sign-in and access](/authentication) and the detailed [provider guide](https://github.com/Utzel-Butzel/inventory/blob/main/AUTHPROVIDERS.md).
+
+### Auth0
+
+Register `https://inventory.example.com/api/auth/callback/auth0`, replacing the origin with your instance.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `AUTH0_CLIENT_ID` | Unset | Client ID; **Conditional** | Required to enable Auth0. |
+| `AUTH0_CLIENT_SECRET` | Unset | Credential; **Conditional, Secret** | Required to enable Auth0. |
+| `AUTH0_DOMAIN` | Unset | Tenant hostname | Required unless an explicit issuer URL is supplied. Used to construct the HTTPS issuer. |
+| `AUTH0_ISSUER_BASE_URL` | Derived from `AUTH0_DOMAIN` | Issuer URL | Explicit issuer override; takes precedence over the domain. |
+
+### Generic OpenID Connect
+
+Register `/api/auth/callback/<provider-id>` on your application origin. The provider must supply a verified email matching the existing user.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `AUTH_OIDC_PROVIDER_ID` | `oidc` | 1–32 lowercase letters, digits or hyphens; starts with a letter | Callback identifier. `auth0`, `credentials`, `demo` and `local` are reserved. Do not use `supabase` when the dedicated Supabase provider is also enabled. |
+| `AUTH_OIDC_PROVIDER_NAME` | `OpenID Connect` | Text, at most 64 characters | Sign-in button label. |
+| `AUTH_OIDC_ISSUER` | Unset | Issuer URL; **Conditional** | Required with client ID and secret. HTTPS except for localhost; no query or fragment. |
+| `AUTH_OIDC_CLIENT_ID` | Unset | Client ID; **Conditional** | OAuth client registered with the issuer. |
+| `AUTH_OIDC_CLIENT_SECRET` | Unset | Credential; **Conditional, Secret** | OAuth client secret. |
+| `AUTH_OIDC_SCOPES` | `openid email profile` | Space-separated scopes | OIDC scopes requested during sign-in. |
+
+### Dedicated Supabase OAuth
+
+This is separate from generic OIDC and supports self-hosted gateways. Register `/api/auth/callback/supabase` with `client_secret_basic`. Supply all four connection values together.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `AUTH_SUPABASE_URL` | Unset | HTTPS origin; **Conditional** | Supabase origin without path, query, fragment or credentials. HTTP is permitted only on localhost. |
+| `AUTH_SUPABASE_ANON_KEY` | Unset | Supabase anon API key; **Conditional** | Gateway API key. This is not the OAuth client secret or a service-role key. |
+| `AUTH_SUPABASE_CLIENT_ID` | Unset | Client ID; **Conditional** | Registered OAuth client. |
+| `AUTH_SUPABASE_CLIENT_SECRET` | Unset | Credential; **Conditional, Secret** | Registered OAuth secret. |
+| `AUTH_SUPABASE_PROVIDER_NAME` | `Supabase` | Text, at most 64 characters | Sign-in button label. |
+
+## Organizations and public demo
+
+Runtime. These settings affect the deployment, not just one organization's preferences.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `SUPERADMIN_EMAILS` | Unset | Comma-separated email addresses | Deployment superadmins can administer all organizations. Use the accounts' lowercase email addresses. |
+| `USERS_CAN_CREATE_ORGANIZATIONS` | `false` | Boolean | Allows regular signed-in users to create organizations. Superadmins retain that capability independently. |
+| `DEMO_ACCESS_ENABLED` | `false` | Boolean | Enables public demo sign-in; production startup reconciles the dedicated read-only demo organization. |
+| `DEMO_ORGANIZATION_SLUG` | `demo` | Lowercase URL slug | Demo organization's URL segment; must match the seeded organization. |
+| `DEMO_USER_EMAIL` | `demo@inventory.invalid` | Email address | Dedicated demo account; must match the seeded account. |
+
+Disabling demo access hides the entry point; it does not delete demo data. Follow the [demo deployment guide](https://github.com/Utzel-Butzel/inventory/tree/main/deploy/demo) for removal.
+
+## Storage and upload limits
+
+Runtime. Paths are resolved inside the app process/container. Mount persistent storage where the process can write; the standard container uses UID/GID 1001.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `STORAGE_PROVIDER` | `local` | `local` or `openinary` | Selects upload storage. |
+| `STORAGE_LOCAL_PATH` | `data/uploads` under the working directory | Filesystem path | Local uploads. The root Compose file fixes this to `/app/data/uploads`; changing `.env` alone does not override that mapping. |
+| `IMAGE_VARIANT_CACHE_PATH` | `.variants` under the local storage path | Filesystem path | Cache of resized images. Add an environment mapping if your deployment template does not forward it. |
+| `MAX_UPLOAD_MB` | `25` | Number, clamped to 1–100 MiB | General file-upload limit. Despite the suffix, units are multiples of 1024² bytes. |
+| `MAX_USDZ_UPLOAD_MB` | `100` | Number, clamped to 10–500 MiB | Object Capture USDZ upload limit; these models require local storage. |
+| `MAX_ROOM_SCAN_UPLOAD_MB` | `100` | Number, clamped to 10–500 MiB | Combined room-scan upload budget for world map, USDZ and guide images. |
+| `OPENINARY_BASE_URL` | Unset | Service URL; **Conditional** | Required when using Openinary. |
+| `OPENINARY_API_KEY` | Unset | Credential; **Conditional, Secret** | Required when using Openinary. |
+
+Raising an application limit does not change reverse-proxy limits or endpoint-specific checks. The Next.js Server Actions body limit is configured separately in code.
+
+## Maps
+
+**Build.** All three map variables are public client-bundle settings. Set them before `next build`; the Dockerfile accepts them as build arguments. Changing the runtime environment of a prebuilt image does not update maps. Never place private credentials in these variables.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` | Unset | Public Mapbox token | When present, Mapbox streets/satellite tiles take precedence over the fallback URLs. |
+| `NEXT_PUBLIC_MAP_STYLE_URL` | `https://tiles.openfreemap.org/styles/liberty` | MapLibre-compatible style URL | Street/room map fallback when no Mapbox token is configured. |
+| `NEXT_PUBLIC_SATELLITE_TILE_URL` | `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}` | Raster tile URL template | Satellite fallback when no Mapbox token is configured. |
+
+For a source-based Docker deployment, set the values in `.env` and rebuild with the same Compose files used for installation, adding `--build` to `up -d`. For an image-based platform template, publish/use an image built with the intended values.
+
+## AI providers, models and timeouts
+
+Runtime. AI is optional; setting a model does not configure credentials or grant access to that model. IDs below are application defaults, not a guarantee of provider availability for your account. Credentials stay on the server.
+
+Saved organization settings under **Settings → AI** take precedence over the environment defaults for inventory analysis, research and output language. Changing those Env defaults does not overwrite saved organization settings.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `OPENAI_API_KEY` | Unset | Credential; **Conditional, Secret** | Enables OpenAI/OpenAI-compatible analysis, extraction, research, translation and OpenAI cover generation. |
+| `OPENAI_BASE_URL` | SDK's OpenAI endpoint | API base URL | Optional compatible endpoint. It must implement the APIs needed by the selected feature, including web-search support for research where used. |
+| `OPENAI_SCAN_EXTRACTION_MODEL` | `gpt-5.6-luna` | Model ID | Structured document/scan extraction. |
+| `OPENAI_VISION_MODEL` | `gpt-4.1-mini` | Model ID | Inventory image analysis default; also used by recognition-related requests. |
+| `OPENAI_RESEARCH_MODEL` | `gpt-5.6-terra` | Model ID | Web-grounded inventory research default. |
+| `OPENAI_TRANSLATION_MODEL` | `gpt-5.6-terra` | Model ID | Content translation. |
+| `OPENAI_ROOM_VISION_MODEL` | `gpt-5.6-terra` | Model ID | Multi-photo room analysis. |
+| `OPENAI_BULK_COUNT_MODEL` | Organization's analysis model | Model ID | Optional model override for estimating bin contents from multiple photos. |
+| `AI_OUTPUT_LANGUAGE` | `English` | Language name | Default generated-content language; distinct from the interface language. |
+| `OPENAI_RESEARCH_TIMEOUT_MS` | `90000` | Integer, clamped to 10000–110000 ms | Research provider request timeout. |
+| `OPENAI_TRANSLATION_TIMEOUT_MS` | `120000` | Integer, clamped to 10000–300000 ms | Translation provider request timeout; also affects the minimum job lease. |
+| `OPENAI_ROOM_VISION_TIMEOUT_MS` | `55000` | Integer, clamped to 15000–58000 ms | Room-photo analysis request timeout. |
+| `OPENAI_ROOM_CONSOLIDATION_TIMEOUT_MS` | `95000` | Integer, clamped to 30000–110000 ms | Room-analysis consolidation request timeout. |
+| `OPENAI_RECOGNITION_TIMEOUT_MS` | `35000` | Integer, clamped to 5000–50000 ms | Per-request recognition timeout. Recognition provider calls disable automatic SDK retries. |
+| `AI_RECOGNITION_MAX_CATALOG_ITEMS` | `2000` | Integer, clamped to 1–5000 | Bounds the recognition candidate catalog. |
+
+### Cover-image generation
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `IMAGE_EDIT_PROVIDER` | `openai` | `openai` or `google` | Provider used by the single-model fallback when `IMAGE_EDIT_MODELS` is absent. |
+| `OPENAI_IMAGE_EDIT_MODEL` | `gpt-image-2.5-sunburst` | Model ID | OpenAI single-model fallback. Requires `OPENAI_API_KEY`. |
+| `GOOGLE_AI_API_KEY` | Falls back to `GOOGLE_API_KEY` | Credential; **Conditional, Secret** | Enables Google cover generation. |
+| `GOOGLE_API_KEY` | Unset | Credential; **Secret** | Compatibility fallback for the Google credential; prefer `GOOGLE_AI_API_KEY`. |
+| `GOOGLE_IMAGE_EDIT_MODEL` | `gemini-2.5-flash-image` | Model ID | Google single-model fallback. |
+| `IMAGE_EDIT_MODELS` | Single model from provider settings | Comma-separated `provider:model` entries | Allowlist shown to users. Valid providers are `openai` and `google`; entries are available only when that provider has credentials. The example Env file explicitly supplies a larger catalog. |
+| `IMAGE_EDIT_DEFAULT_MODEL` | First available configured model | `provider:model` entry | Preferred model from the allowlist. If unavailable, the first available entry is used. The example file explicitly chooses `openai:gpt-image-2.5-sunburst`. |
+
+Example of a restricted catalog:
+
+```dotenv
+IMAGE_EDIT_MODELS=openai:gpt-image-1,google:gemini-2.5-flash-image
+IMAGE_EDIT_DEFAULT_MODEL=openai:gpt-image-1
+```
+
+### Paid-AI request limits
+
+Per-identity request limits are separate from provider billing limits. Integers from 0 to 1,000,000 are accepted. **Zero disables the operation. A malformed explicit value also disables it.**
+
+For analysis, research, recognition and counting, precedence is: operation-specific value → `AI_RATE_LIMIT_PER_MINUTE` → built-in operation default. Blank overrides are skipped. The example file and root Compose template explicitly set the legacy limit to 10, so research inherits **10**, rather than its built-in default of **5**, unless overridden.
+
+| Variable | Default when absent | Format | Operation |
+| --- | --- | --- | --- |
+| `AI_RATE_LIMIT_PER_MINUTE` | Per-operation defaults below | Integer / minute | Legacy fallback shared by four operations; example/template value is 10. |
+| `AI_ANALYSIS_RATE_LIMIT_PER_MINUTE` | Legacy value, otherwise `10` | Integer / minute | Image analysis. |
+| `AI_RESEARCH_RATE_LIMIT_PER_MINUTE` | Legacy value, otherwise `5` | Integer / minute | Web research. |
+| `AI_RECOGNITION_RATE_LIMIT_PER_MINUTE` | Legacy value, otherwise `10` | Integer / minute | Item recognition. |
+| `AI_COUNT_RATE_LIMIT_PER_MINUTE` | Legacy value, otherwise `10` | Integer / minute | Photo counting. |
+| `AI_TRANSLATION_RATE_LIMIT_PER_MINUTE` | `30` | Integer / minute | Content translation; no legacy fallback. |
+| `AI_IMAGE_RATE_LIMIT_PER_HOUR` | `60` | Integer / hour | Cover generation; no legacy fallback. |
+
+[Rate-limit policy source](https://github.com/Utzel-Butzel/inventory/blob/main/lib/ai-rate-limit-policy.ts)
+
+## Replicate photo counting
+
+Runtime. A Replicate key is required for hosted counting models. Models must be pinned as `owner/model:version`, where the version is a 64-character hexadecimal identifier; an unversioned model path is rejected. The four built-in pins are listed separately below.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `REPLICATE_API_TOKEN` | Unset | Credential; **Conditional, Secret** | Hosted counting provider token. |
+| `REPLICATE_COUNT_DEFAULT_MODEL` | `grounding-dino` | `grounding-dino`, `yolo-world`, `sam-2` or `sam-3` | Initial counting model selection. Unknown values fall back to Grounding DINO. |
+| `REPLICATE_GROUNDING_DINO_MODEL` | Built-in Grounding DINO pin | Pinned model reference | Override for Grounding DINO. |
+| `REPLICATE_YOLO_WORLD_MODEL` | Built-in YOLO World pin | Pinned model reference | Override for YOLO World. |
+| `REPLICATE_SAM2_MODEL` | Built-in SAM 2 pin | Pinned model reference | Override for SAM 2. |
+| `REPLICATE_COUNT_MODEL` | Built-in SAM 3 pin | Pinned model reference | SAM 3 override; this is not the default-model selector. |
+| `REPLICATE_COUNT_DEADLINE_SECONDS` | `300` | Number, clamped to 30–600 seconds | Lifetime/deadline of the asynchronous prediction. |
+| `REPLICATE_COUNT_JOB_SECRET` | `AUTH_SECRET` | At least 32 characters if set; **Secret** | Optional independent signing secret for asynchronous job tokens. |
+| `REPLICATE_COUNT_CONFIDENCE` | `0.5` | Number, clamped to 0–1 | Confidence threshold. |
+| `REPLICATE_COUNT_MAX_MASKS` | `100` | Number, rounded and clamped to 1–100 | Maximum returned masks. |
+
+Built-in pins at the time of this reference:
+
+```dotenv
+REPLICATE_GROUNDING_DINO_MODEL=adirik/grounding-dino:efd10a8ddc57ea28773327e881ce95e20cc1d734c589f7dd01d2036921ed78aa
+REPLICATE_YOLO_WORLD_MODEL=ultralytics/yolov8s-worldv2:5e89b91b497fa7329dc88dbf820923190236ef7bc5a9b4aa1b7192b206656650
+REPLICATE_SAM2_MODEL=meta/sam-2:fe97b453a6455861e3bac769b441ca1f1086110da7466dbb65cf1eecfd60dc83
+REPLICATE_COUNT_MODEL=yodagg/sam3-image-seg:29c8e52db92a11c64f8939244d6b3a047ce2af24412b7971309008b9a61e2f6e
+```
+
+## Experimental local 3D estimation
+
+Runtime. This feature requires a separate Python/GPU installation and model weights; the standard app image does not include them. Setting the flag alone is insufficient. See the [3D runtime setup](https://github.com/Utzel-Butzel/inventory/tree/main/services/bulk-3d).
+
+In the table, `ROOT` means the resolved `BULK_3D_DATA_PATH`, not a separate variable to set.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `BULK_3D_ENABLED` | `false` | Exact string `true` enables it | Enables the experimental feature when its runtime is available. |
+| `BULK_3D_DATA_PATH` | `~/.local/share/open-inventory/bulk-3d` | Filesystem path | Runtime/data root; keep it outside the source checkout. The default uses the process user's home directory. |
+| `BULK_3D_PYTHON` | `ROOT/runtime/bin/python` | Executable path | Python interpreter with the required dependencies. |
+| `BULK_3D_SOURCE_PATH` | `ROOT/map-anything` | Directory path | MapAnything source checkout. |
+| `BULK_3D_WEIGHTS_PATH` | `ROOT/weights/model.safetensors` | File path | Model weights. |
+| `BULK_3D_MODEL_CONFIG_PATH` | `ROOT/weights/config.json` | File path | Model configuration. |
+
+## Translation worker
+
+Runtime. Durable jobs are stored in PostgreSQL and processed by the application worker. Disable it only if another running worker is responsible for those jobs.
+
+| Variable | Default | Format | Purpose and notes |
+| --- | --- | --- | --- |
+| `TRANSLATION_WORKER_ENABLED` | `true` | Boolean | Starts the translation worker in the Node.js process. |
+| `TRANSLATION_WORKER_POLL_MS` | `2000` | Integer, clamped to 500–60000 ms | Queue polling interval. |
+| `TRANSLATION_WORKER_CONCURRENCY` | `1` | Integer, clamped to 1–8 | Concurrent jobs per app process. |
+| `TRANSLATION_JOB_LEASE_SECONDS` | `180` | Number, clamped to 30–1800 seconds | Requested lease; the effective lease is at least the provider timeout plus 30 seconds. |
+| `TRANSLATION_JOB_MAX_ATTEMPTS` | `5` | Integer, clamped to 1–10 | Maximum attempts before giving up. |
+
+## Notifications
+
+Runtime. The in-app inbox works independently of external delivery. Configuring an external channel does not opt users into it; preferences still apply.
+
+### Worker and encryption
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `NOTIFICATION_WORKER_ENABLED` | `true` | Boolean | Runs the built-in notification cycle. |
+| `NOTIFICATION_WORKER_POLL_MS` | `900000` | Integer, clamped to 60000–86400000 ms | Polling interval; default is 15 minutes. |
+| `NOTIFICATION_CRON_SECRET` | Unset | Bearer secret; **Conditional, Secret** | Required when an external scheduler calls `POST /api/v1/notifications/run`. |
+| `NOTIFICATION_ENCRYPTION_KEY` | Unset | Independent 32-byte key; **Conditional, Secret** | Encrypts stored Web Push subscription details. Use base64url or 64 hexadecimal characters; required for push. |
+
+### Email
+
+Email requires `SMTP_HOST` and `NOTIFICATION_EMAIL_FROM`. Supply credentials if your mail server requires authentication.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `SMTP_HOST` | Unset | Hostname; **Conditional** | SMTP server. |
+| `SMTP_PORT` | `587` | Port number | SMTP connection port. |
+| `SMTP_SECURE` | `false` | Boolean | Immediate TLS, commonly used with port 465. `false` is used for STARTTLS-capable connections such as port 587. |
+| `SMTP_USER` | Unset | Username; **Conditional** | Enables SMTP authentication when provided. |
+| `SMTP_PASSWORD` | Unset | Credential; **Conditional, Secret** | SMTP password. |
+| `NOTIFICATION_EMAIL_FROM` | Unset | Sender email/header; **Conditional** | For example `Inventory <inventory@example.com>`. |
+
+### Web Push
+
+All three VAPID values and `NOTIFICATION_ENCRYPTION_KEY` are required. Generate the VAPID pair with `npx web-push generate-vapid-keys`.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `WEB_PUSH_PUBLIC_KEY` | Unset | VAPID public key; **Conditional** | Sent to browsers for subscription. Public by design. |
+| `WEB_PUSH_PRIVATE_KEY` | Unset | VAPID private key; **Conditional, Secret** | Server-side push signing. |
+| `WEB_PUSH_SUBJECT` | Unset | VAPID contact URI; **Conditional** | Use your own `mailto:` or HTTPS contact. `.env.example` supplies the placeholder `mailto:admin@example.com`; the code has no default. |
+
+### Team delivery targets
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `NOTIFICATION_SLACK_WEBHOOK_URL` | Unset | Incoming webhook URL; **Secret** | Deployment-wide Slack notification target. |
+| `NOTIFICATION_TEAMS_WEBHOOK_URL` | Unset | Incoming webhook URL; **Secret** | Deployment-wide Teams notification target. |
+| `NOTIFICATION_WEBHOOK_URL` | Unset | Endpoint URL; **Secret** | Deployment-wide generic notification target. |
+| `NOTIFICATION_WEBHOOK_SIGNING_SECRET` | Unset | HMAC secret; **Secret** | Optional signing secret for generic notification delivery. |
+
+These notification targets are separate from the outgoing event-webhook system below.
+
+## Outgoing event webhooks
+
+Runtime. Configure subscriptions in **Settings → Webhooks**. Their signing secrets are encrypted at rest. The database-backed worker can run on multiple app replicas.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `WEBHOOK_ENCRYPTION_KEY` | Unset | Exactly 32 random bytes as base64url or 64 hex characters; **Conditional, Secret** | Required to encrypt/decrypt webhook signing secrets. Use a key distinct from auth and notification keys. |
+| `WEBHOOK_WORKER_ENABLED` | `true` | Boolean | Starts the delivery worker. |
+| `WEBHOOK_WORKER_POLL_MS` | `2000` | Integer, clamped to 500–60000 ms | Queue polling interval. |
+| `WEBHOOK_WORKER_CONCURRENCY` | `4` | Integer, clamped to 1–20 | Concurrent deliveries per worker process. |
+| `WEBHOOK_DELIVERY_TIMEOUT_MS` | `10000` | Integer, clamped to 1000–60000 ms | Timeout per delivery attempt. |
+| `WEBHOOK_MAX_ATTEMPTS` | `8` | Integer, clamped to 1–20 | Maximum delivery attempts. |
+| `WEBHOOK_RETENTION_DAYS` | `30` | Integer, clamped to 1–365 days | Retention for terminal delivery history and payload snapshots. |
+| `WEBHOOK_ALLOW_PRIVATE_NETWORKS` | `false` | Boolean | Allows intentionally trusted private-network targets when enabled. Keep disabled for ordinary public targets. |
+| `WEBHOOK_CRON_SECRET` | Unset | Bearer secret; **Conditional, Secret** | Required for an external scheduler calling `POST /api/v1/webhooks/run`. |
+
+## WooCommerce and connection encryption
+
+Runtime. Configure actual store connections and credentials under **Settings → WooCommerce**.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `INTEGRATION_ENCRYPTION_KEY` | Unset | Exactly 32 random bytes as base64url or 64 hex characters; **Conditional, Secret** | Required for storing encrypted integration credentials. Use a distinct key. |
+| `INTEGRATION_ALLOW_PRIVATE_NETWORKS` | `false` | Boolean | Allows a deliberately trusted private-network shop. HTTPS is still required. |
+| `WP_URL` | Unset | URL; template-only input | Listed in `.env.example` and forwarded by some templates, but not read by the current WooCommerce connection implementation. Does not create a store connection. |
+| `WC_KEY` | Unset | Credential; **Secret; template-only input** | Not read by the current connection implementation; enter the consumer key in the application's connection settings. |
+| `WC_SECRET` | Unset | Credential; **Secret; template-only input** | Not read by the current connection implementation; enter the consumer secret in the application's connection settings. |
+
+The distinction above reflects the current [WooCommerce implementation](https://github.com/Utzel-Butzel/inventory/blob/main/lib/woocommerce.ts); the mere presence of a variable in a Compose template does not make it an active feature setting.
+
+## MCP endpoint
+
+Runtime. Enable the optional endpoint at `POST /mcp`. It accepts Inventory API bearer tokens scoped to their issuing organization, not browser sessions or `X-Organization-ID` overrides.
+
+For client setup, tool schemas, write confirmation, retries and troubleshooting, see the [MCP integration guide](/mcp).
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `MCP_ENABLED` | `false` | Boolean | Enables the endpoint. |
+| `MCP_ALLOWED_HOSTS` | Host from `AUTH_URL` | Comma-separated `host[:port]` values | Accepted request hosts. Use hostnames, not full URLs. |
+| `MCP_ALLOWED_ORIGINS` | No browser origins allowed | Comma-separated exact origins | Browser clients must match this list. Server-to-server requests without an Origin header are permitted by the origin check. |
+| `MCP_REQUEST_RATE_LIMIT_PER_MINUTE` | `240` | Integer, 1–10000 | Overall request limit. Invalid values use the default. |
+| `MCP_READ_RATE_LIMIT_PER_MINUTE` | `120` | Integer, 1–10000 | Read-operation limit. Invalid values use the default. |
+| `MCP_WRITE_RATE_LIMIT_PER_MINUTE` | `30` | Integer, 1–10000 | Write-operation limit. Invalid values use the default. |
+| `MCP_AUDIT_HASH_SECRET` | `AUTH_SECRET` | Independent random secret; **Secret** | HMAC key for audit argument fingerprints; use at least 32 random bytes when configuring it separately. |
+
+Unlike AI limits, an MCP limit of zero does not disable an operation: it falls back to the default. Use endpoint configuration and token permissions to restrict access.
+
+## QZ Tray signing
+
+Runtime. Supply both a certificate and private key to enable signing. File paths take precedence over Base64 values for each item. Mount files where the app user can read them. This configuration does not install QZ Tray or configure the printer on the user's computer.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `QZ_CERTIFICATE_PATH` | Unset | Path to PEM certificate | Certificate to present to QZ Tray. |
+| `QZ_PRIVATE_KEY_PATH` | Unset | Path to PEM private key; **Secret material** | Server-side signing key. |
+| `QZ_CERTIFICATE_BASE64` | Unset | Base64-encoded PEM certificate | Alternative to the certificate file. |
+| `QZ_PRIVATE_KEY_BASE64` | Unset | Base64-encoded PEM private key; **Secret** | Alternative to the private-key file. |
+
+The certificate must be trusted on the printing computer. Without signing, QZ's approval prompts remain part of the workflow. See [Labels and printing](/printing).
+
+## Docker Compose and platform inputs
+
+**Compose/platform**, not general application readers. These variables configure database credentials, port publishing or platform-generated values. The full [root Compose file](https://github.com/Utzel-Butzel/inventory/blob/main/docker-compose.yml) and platform templates remain authoritative for the selected installation method.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `POSTGRES_PASSWORD` | None | Strong URL-safe password; **Required for bundled PostgreSQL, Secret** | Used by PostgreSQL and interpolated into `DATABASE_URL`. Changing it in `.env` does not change an existing database user's password. |
+| `APP_PORT` | `3000` | Host port number | Used by the installer and `docker-compose.local.yml`; binds `127.0.0.1:APP_PORT` to container port 3000. Does not change the app's internal port. |
+| `SERVICE_PASSWORD_POSTGRES` | Generated by Coolify | Credential; **Secret** | Coolify template's PostgreSQL password. |
+| `SERVICE_PASSWORD_64_AUTH` | Generated by Coolify | Credential; **Secret** | Coolify template's source for `AUTH_SECRET`. |
+| `SERVICE_PASSWORD_64_ADMIN` | Generated by Coolify | Credential; **Secret** | Coolify template's initial administrator password. Remove bootstrap inputs after initialization. |
+| `SERVICE_FQDN_INVENTORY` | Supplied by Coolify | Hostname | Used by the bundled template to form the application's HTTPS URL. |
+| `SERVICE_URL_INVENTORY_3000` | Supplied by Coolify | Service URL | Platform service-routing value. |
+
+`POSTGRES_DB` and `POSTGRES_USER` are set in the database service itself; the root template fixes both to `inventory`. The Dokploy import template generates its own password/secret inputs and maps them into the application environment.
+
+## Optional SSH database tunnel
+
+**Tool.** These settings are consumed by `npm run db:tunnel` on the machine opening the tunnel, not by the production app. Restart the tunnel after changes. The helper loads `.env.tunnel.local`, `.env.local` and `.env` in that order without replacing already set process values.
+
+Use exactly one remote target: host, Docker container or Docker Swarm service. The local listener must remain on loopback.
+
+| Variable | Default | Format / requirement | Purpose and notes |
+| --- | --- | --- | --- |
+| `DB_TUNNEL_SSH_HOST` | Unset | Hostname or SSH config alias; **Conditional** | Required to open a tunnel. |
+| `DB_TUNNEL_SSH_USER` | SSH default/config | Username | Optional remote SSH user. |
+| `DB_TUNNEL_SSH_PORT` | `22` | Integer, 1–65535 | SSH server port. |
+| `DB_TUNNEL_IDENTITY_FILE` | SSH default/config | File path | Optional SSH identity file; `~/` is expanded. |
+| `DB_TUNNEL_SSH_JUMP` | Unset | Hostname or SSH alias | Optional jump host passed through SSH's `-J` option. |
+| `DB_TUNNEL_LOCAL_HOST` | `127.0.0.1` | `127.0.0.1`, `localhost` or `::1` | Local bind address. |
+| `DB_TUNNEL_LOCAL_PORT` | `15432` | Integer, 1–65535 | Local database port. |
+| `DB_TUNNEL_REMOTE_HOST` | Unset | Hostname/address | Database host as seen by the SSH server; alternative to Docker lookup. |
+| `DB_TUNNEL_DOCKER_CONTAINER` | Unset | Container name/ID | Lookup target for an unexposed database container. |
+| `DB_TUNNEL_DOCKER_SERVICE` | Unset | Swarm service name | Lookup target for a database service, for example on Dokploy. |
+| `DB_TUNNEL_REMOTE_PORT` | `5432` | Integer, 1–65535 | Database listener port on the remote target. |
+| `DB_TUNNEL_DATABASE_USER` | `inventory` | Database username | Used in the helper's connection instructions. |
+| `DB_TUNNEL_DATABASE_NAME` | `inventory` | Database name | Used in the helper's connection instructions. |
+
+Point the local app's `DATABASE_URL` at the forwarded host/port when using the tunnel. Tunnel settings alone do not change the application's database connection.
+
+## Compatibility settings and scope
+
+| Variable | Default | Status |
+| --- | --- | --- |
+| `NEXTAUTH_SECRET` | Unset | Legacy fallback used in session compatibility handling. **Secret.** Use `AUTH_SECRET` for new deployments; production startup still requires `AUTH_SECRET`. |
+| `NEXTAUTH_URL` | Unset | Legacy fallback in session handling. Use `AUTH_URL`; production startup still requires `AUTH_URL`. |
+
+This page does not catalog test-only `SMOKE_*` inputs, benchmark controls, native mobile build credentials or Next.js internal variables such as `NEXT_PHASE` and `NEXT_RUNTIME`. They are not production application configuration.
+
+## Secrets and verification
+
+Generate a new value separately for each encryption purpose. For variables requiring 32 random bytes as 64 hexadecimal characters:
+
+```bash
+openssl rand -hex 32
+```
+
+Preserve encryption keys together with protected deployment backups. Replacing `WEBHOOK_ENCRYPTION_KEY`, `INTEGRATION_ENCRYPTION_KEY` or `NOTIFICATION_ENCRYPTION_KEY` without a migration/re-enrollment plan can make existing encrypted data unreadable. Changing signing secrets can invalidate sessions or pending signed jobs.
+
+After applying changes, check `/api/health` and the feature you configured. A healthy database/storage check does not verify SMTP credentials, model access, OAuth callbacks or a remote logo. Review application logs for validation errors without publishing environment dumps or rendered Compose secrets.
+
+When updating this reference, compare `.env.example`, the relevant code readers and the deployment mappings. Keep example values distinct from built-in defaults, and verify newly added settings against the version you deploy.

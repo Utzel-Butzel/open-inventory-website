@@ -1,0 +1,6 @@
+Built-in image_gen edit, 2026-11-01.
+Input: iphone-in-hand-v1.png
+Output: iphone-in-hand-v2.png, transparent 1024 × 1536 PNG.
+Selected retouch: complete left wrist contour, wrist exits bottom only.
+
+Edit the attached photo. REQUIRED VISIBLE CHANGE: replace the entire lower forearm/wrist region below the base of the thumb. The existing forearm angles to the lower LEFT and is cropped by the left border. Make the wrist point STRAIGHT DOWN instead, so its LEFT skin contour curves inward to x=120 near the bottom and its RIGHT skin contour ends near x=420 at the bottom (on the 1024 px wide image). There must be at least 60 pixels of completely TRANSPARENT space along the ENTIRE LEFT border. The hand and forearm must never touch the left border. The wrist exits ONLY the BOTTOM edge. This requires reconstructing the lower left wrist and removing the cropped triangular skin wedge along the left edge. Natural anatomy and matching skin texture. Keep phone, all app text, grip/fingers, lighting, dimensions 1024x1536 and top part absolutely unchanged. Transparent alpha background. Do not return the original diagonal cropped wrist.

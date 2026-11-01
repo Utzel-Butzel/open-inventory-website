@@ -5,6 +5,17 @@ not generated or reconstructed marketing artwork.
 
 ## Web application
 
+### Public demo capture, 2026-11-01
+
+`web-inventory-cards-demo.png` is an unaltered 1440 × 1266 browser screenshot
+from https://demo.openinventory.polyxo.de/demo/inventory, captured through the
+public read-only demo. The German UI uses its Raster/card view in dark mode,
+including the sidebar, navigation, quantities and availability. The item photos
+are the demo's existing AI-generated sample photos. This replaces the cropped
+stock screenshot on the homepage; no interface pixels were reconstructed.
+
+### Earlier local captures
+
 Captured from the locally running application at 1440 × 960 with Playwright on
 2026-08-15. The first capture set used eight purpose-built inventory records and
 four licensed real photographs. The expanded set used the same isolated preview

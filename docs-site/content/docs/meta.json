@@ -5,6 +5,7 @@
     "---Setup---",
     "installation",
     "configuration",
+    "environment-variables",
     "authentication",
     "---Guides---",
     "printing",
@@ -13,6 +14,7 @@
     "operations",
     "---API---",
     "api",
+    "mcp",
     "api-reference",
     "reference"
   ]

@@ -1,0 +1,8 @@
+Built-in image_gen edit, 2026-11-01.
+Input: iphone-in-hand-v1.png (original diagonal wrist).
+Output: iphone-in-hand-v3.png, transparent square PNG.
+Outpainting to the left preserves the diagonal wrist and adds its missing contour.
+
+Create a WIDE SQUARE 1536 × 1536 transparent PNG canvas. Do NOT use a portrait canvas.
+Use the attached original hand-held iPhone photo as an unchanged compositing insert in the RIGHT TWO THIRDS of this new square canvas. The original insert is 1024 × 1536; add 512 pixels of extra canvas on the LEFT. Preserve the phone size and height, all screen text, fingers, skin, and especially the original DIAGONAL wrist angle. No bending or straightening the wrist.
+Outpaint ONLY the previously clipped lower-left wedge of forearm into this added left space. Continue its diagonal left silhouette smoothly until it exits the BOTTOM of the square canvas. There should be visible transparent space on BOTH left and right borders for the full height, all fingertips fully inside the frame. Wrist exits through bottom only. Most of the new upper-left area remains transparent. No extra objects. Actual alpha transparency, no gradient or background. The result must be SQUARE, wider than the original, not a rearranged portrait image.

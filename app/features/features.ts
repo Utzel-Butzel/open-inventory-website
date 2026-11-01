@@ -108,19 +108,19 @@ export const featureGroups: FeatureGroup[] = [
     eyebrow: "01 · Erfassen",
     title: "Vom Foto zum Datensatz",
     intro:
-      "Der schnellste Weg ins Inventar beginnt mit der Kamera. Vorschläge bleiben überprüfbar, Originale bleiben erhalten.",
+      "Ein Foto genügt für den Anfang. Die KI kann den Hintergrund entfernen und Titel, Beschreibung und Schlagwörter vorschlagen. Du prüfst den Entwurf, statt jedes Feld selbst auszufüllen.",
     description:
-      "Inventar in Sekunden erfassen: Kamera-first Batch-Aufnahme, prüfbare Bildanalyse, Fotozählung und eine native Open-Source-iOS-App.",
+      "Inventar mit KI erfassen: Bilder freistellen, Titel und Beschreibung vorschlagen lassen, Produktdetails recherchieren und mehrere Gegenstände nacheinander aufnehmen.",
     detailIntro:
-      "Open Inventory trennt den kurzen Moment am Gegenstand von der Verarbeitung im Hintergrund. Du fotografierst, gibst gemeinsame Vorgaben einmal für die Serie an und gehst direkt zum nächsten Objekt. Analyse, Upload und Cover-Erstellung bleiben als sichtbare Aufträge nachvollziehbar.",
+      "Ein volles Regal soll keinen Nachmittag Schreibarbeit bedeuten. Lege einen gemeinsamen Standort fest, fotografiere die Gegenstände und lass die optionale KI Bilder und Angaben vorbereiten. Danach prüfst und ergänzt du die Einträge.",
     outcomes: [
       "Mehrere Gegenstände nacheinander aufnehmen, ohne auf jeden Verarbeitungsschritt zu warten",
       "KI-Vorschläge prüfen und korrigieren, bevor sie zum verlässlichen Datensatz werden",
       "Originalfotos und strukturierte Angaben gemeinsam am Eintrag behalten",
     ],
-    workflowTitle: "Ein flüssiger Ablauf statt sechs Formulare",
+    workflowTitle: "Fotografieren, prüfen, speichern",
     workflowIntro:
-      "Gemeinsame Angaben werden vor einer Aufnahmeserie gesetzt. Danach konzentriert sich jeder Schritt auf das, was direkt am Objekt entschieden werden muss.",
+      "Wähle den Standort einmal für die ganze Serie. Fotografiere die Gegenstände nacheinander und sieh dir anschließend die Vorschläge an.",
     workflow: [
       {
         title: "Serie vorbereiten",
@@ -132,11 +132,11 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         title: "Im Hintergrund verarbeiten",
-        copy: "Uploads, Bildanalyse und Cover-Erstellung laufen als sichtbare Aufträge. Idempotente Wiederholungen verhindern versehentliche Dubletten.",
+        copy: "Die Bilder werden hochgeladen, während die KI Angaben und auf Wunsch ein freigestelltes Bild vorbereitet. Den Fortschritt kannst du verfolgen und fehlgeschlagene Schritte erneut starten.",
       },
       {
         title: "Gesammelt prüfen",
-        copy: "Kontrolliere Titel, Typ, Tags, Menge und Bilder. Erst deine Korrektur macht aus einem Vorschlag einen belastbaren Inventareintrag.",
+        copy: "Sieh dir die vorgeschlagenen Angaben und Bilder an. Ergänze Menge und Standort und korrigiere, was die KI falsch erkannt hat.",
       },
     ],
     example: {
@@ -152,14 +152,14 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-batch.png",
       alt: "Echte Open-Inventory-Serienerfassung mit einem realen Werkstattfoto in der Fotoablage",
-      caption: "Direkt aus der Web-App · reales Foto und eigens angelegte Demo-Daten",
+      caption: "Fotoerfassung mit einem Werkstattbild · Beispieldaten",
     },
     ios: {
       title: "Die Kamera ist dort, wo die Dinge sind.",
-      copy: "Die native SwiftUI-App nimmt Fotos direkt am Regal auf und legt jeden Vorgang in einer dauerhaften Outbox ab. Sie arbeitet gegen deine eigene Open-Inventory-Instanz.",
+      copy: "Mit der iPhone-App fotografierst du direkt am Regal. Aufnahmen und ausstehende Uploads bleiben auch bei einer Unterbrechung erhalten. Die App verbindet sich mit deiner eigenen Open-Inventory-Instanz.",
       points: [
         "Bis zu zwölf Fotos aufnehmen oder aus der Mediathek wählen",
-        "Aufträge bei unterbrochener Verbindung kontrolliert fortsetzen",
+        "Uploads nach einer unterbrochenen Verbindung fortsetzen",
         "Code scannen, Datensatz öffnen und Ergebnis vor Ort prüfen",
       ],
     },
@@ -174,18 +174,23 @@ export const featureGroups: FeatureGroup[] = [
     items: [
       {
         icon: Camera,
-        title: "Kamera-first Batch-Erfassung",
+        title: "Mehrere Gegenstände erfassen",
         copy: "Nimm mehrere Gegenstände nacheinander auf. Dauerhafte Hintergrundaufträge verarbeiten die Einträge weiter, während du schon das nächste Objekt fotografierst.",
       },
       {
         icon: Sparkles,
-        title: "KI-Entwurf aus Bildern",
-        copy: "Eine optionale OpenAI- oder kompatible Bildanalyse schlägt Titel, Beschreibung, Typ, Tags, Alt-Text und eine Konfidenz vor. Du prüfst den Entwurf vor der Übernahme.",
+        title: "Titel und Beschreibung vorschlagen",
+        copy: "Die KI liest sichtbare Merkmale und Beschriftungen aus deinen Fotos und schlägt Titel, Beschreibung, Typ und Schlagwörter vor.",
       },
       {
         icon: WandSparkles,
-        title: "Saubere Produkt-Cover",
-        copy: "OpenAI oder Google können aus einem Foto ein quadratisches Cover im Studio-Look erzeugen. Das Originalfoto bleibt daneben vollständig erhalten.",
+        title: "Bilder freistellen",
+        copy: "Aus dem Werkstattfoto wird ein übersichtliches Vorschaubild mit weißem oder transparentem Hintergrund. Das Originalfoto bleibt daneben erhalten.",
+      },
+      {
+        icon: Search,
+        title: "Produktdetails recherchieren",
+        copy: "Die KI sucht im Web nach fehlenden Produktangaben, etwa zu einem Modell auf dem Typenschild. Die Ergebnisse kannst du in den Eintrag übernehmen.",
       },
       {
         icon: ScanLine,
@@ -194,13 +199,13 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         icon: ImageIcon,
-        title: "Medien ohne Umwege",
-        copy: "JPG, PNG, WebP, AVIF, HEIC, MP4, MOV, WebM, PDF und USDZ lassen sich geordnet am Eintrag ablegen. Bilder werden clientseitig optimiert; EXIF-Positionen können übernommen werden.",
+        title: "Fotos und Anleitungen am Gegenstand",
+        copy: "Weitere Fotos, Videos, Anleitungen als PDF und 3D-Dateien lassen sich am Eintrag ablegen. So bleiben die hilfreichen Details beim Gegenstand.",
       },
       {
         icon: Smartphone,
         title: "Native iPhone-Erfassung",
-        copy: "Die offene SwiftUI-App fotografiert, scannt Codes und überträgt Aufträge mit einer absturzsicheren Warteschlange. Netzwerk-Wiederholungen erzeugen dank Idempotenz keine Dubletten.",
+        copy: "Fotografieren, Codes scannen und direkt vor Ort weiterarbeiten. Nach einer unterbrochenen Verbindung lassen sich Uploads fortsetzen.",
       },
       {
         icon: Boxes,
@@ -225,13 +230,13 @@ export const featureGroups: FeatureGroup[] = [
       "Kisten, Räume, Geräte, Personen und Projekte nachvollziehbar verbinden",
       "Auch große Bestände über Suche, Filter und Sammelaktionen pflegen",
     ],
-    workflowTitle: "Erst ein klares Modell, dann schnelle Pflege",
+    workflowTitle: "Eigene Felder und Ablageorte einrichten",
     workflowIntro:
-      "Die beste Struktur enthält nur Angaben, die später gesucht, gefiltert oder automatisiert werden. Open Inventory lässt sie schrittweise wachsen.",
+      "Für ein Messgerät brauchst du vielleicht einen Kalibriertermin, für eine Kiste nur den Inhalt und einen Standort. Lege die Felder an, die du tatsächlich verwendest.",
     workflow: [
       {
         title: "Inventartypen festlegen",
-        copy: "Starte mit vorhandenen Typen oder definiere eigene Typen mit stabilen Schlüsseln für Oberfläche und API.",
+        copy: "Wähle einen vorhandenen Typ wie Werkzeug oder Möbel. Für andere Gegenstände kannst du einen eigenen Typ anlegen.",
       },
       {
         title: "Felder ergänzen",
@@ -239,7 +244,7 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         title: "Zusammenhänge verbinden",
-        copy: "Bilde Enthaltensein, Zugehörigkeit oder räumliche Beziehungen gerichtet und nachvollziehbar ab.",
+        copy: "Lege fest, in welcher Kiste ein Gerät liegt und welches Zubehör dazugehört.",
       },
       {
         title: "Suchen und gemeinsam ändern",
@@ -259,15 +264,15 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-item-detail.png",
       alt: "Echte Open-Inventory-Detailansicht mit Objektfoto, strukturierten Feldern und Demo-Daten",
-      caption: "Medien, Stammdaten und Bestandsinformationen direkt am Demo-Eintrag",
+      caption: "Fotos, Angaben und Bestand am Eintrag · Beispieldaten",
     },
     ios: {
-      title: "Struktur bleibt auch mobil verständlich.",
+      title: "Am Gegenstand nachsehen und Angaben ergänzen.",
       copy: "Die native iOS-App sucht und filtert dieselben Inventareinträge wie die Web-App. Beim Erfassen lassen sich Standort und weitere Angaben direkt am Gegenstand ergänzen.",
       points: [
         "Nach Name, SKU, Tag oder Ort suchen",
-        "Einträge mit authentifizierten Bildern öffnen und bearbeiten",
-        "Karte, Details und Einstellungen nativ in SwiftUI nutzen",
+        "Fotos und Angaben zu einem Eintrag öffnen und bearbeiten",
+        "Den Standort auf der Karte nachsehen",
       ],
     },
     trustTitle: "Dein Datenmodell bleibt lesbar und übertragbar.",
@@ -281,8 +286,8 @@ export const featureGroups: FeatureGroup[] = [
     items: [
       {
         icon: Boxes,
-        title: "Einträge mit vollständigen Details",
-        copy: "Verwalte Menge, Status, SKU, Seriennummer, Wert, Kategorien, Tags, Standort, Notizen, Priorität, GPS- und GeoJSON-Daten sowie geordnete Medien pro Eintrag.",
+        title: "Angaben zum Gegenstand",
+        copy: "Speichere Seriennummer, Zustand, Wert und Standort direkt am Eintrag. Fotos und Notizen helfen dabei, ähnliche Geräte auseinanderzuhalten.",
       },
       {
         icon: Tags,
@@ -291,18 +296,18 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         icon: ListChecks,
-        title: "Typisierte eigene Felder",
-        copy: "Ergänze Text, Langtext, Zahl, Ja/Nein, Datum, Datum mit Uhrzeit, Auswahl, Mehrfachauswahl, E-Mail, URL und dynamische Referenzen – auch für serialisierte Einheiten.",
+        title: "Eigene Felder hinzufügen",
+        copy: "Ergänze zum Beispiel ein Kaufdatum, einen Kalibriertermin oder eine Auswahl für den Zustand. Du bestimmst, ob ein Feld Text, eine Zahl, ein Datum oder eine Auswahl enthält.",
       },
       {
         icon: Link2,
-        title: "Beziehungen & Enthaltensein",
-        copy: "Konfigurierbare gerichtete Beziehungen verbinden Einträge. Manuelle Zuordnung und automatische Punkt-in-Polygon-Erkennung bilden Räume, Schränke, Maschinen oder Projekte nachvollziehbar ab.",
+        title: "Inhalt und Zubehör zuordnen",
+        copy: "Verbinde eine Kiste mit ihrem Inhalt oder eine Maschine mit ihrem Zubehör. So kannst du vom Gerät zum passenden Koffer oder Ersatzteil wechseln.",
       },
       {
         icon: Languages,
         title: "Mehrsprachige Inhalte",
-        copy: "Eine kanonische Sprache, feldgenaue Aktualität, Terminologiehinweise und Hintergrund-Regeneration halten KI-gestützte Übersetzungen kontrollierbar und konsistent.",
+        copy: "Hinterlege Titel und Beschreibungen in mehreren Sprachen. Die optionale KI übersetzt die Ausgangstexte; du kannst die Übersetzungen bearbeiten.",
       },
       {
         icon: Heart,
@@ -327,35 +332,35 @@ export const featureGroups: FeatureGroup[] = [
     eyebrow: "03 · Lagern & bewegen",
     title: "Bestände buchen und vorausplanen",
     intro:
-      "Open Inventory verbindet schnelle Alltagsaktionen mit einer nachvollziehbaren Historie – vom einzelnen Kabel bis zu Einkauf, Verkauf und Ausleihe.",
+      "Buche Lieferungen, Verbrauch und Ausleihen. Im Verlauf steht, wann sich der Bestand geändert hat und was ausgegeben oder zurückgenommen wurde.",
     description:
       "Bestände und Vorgänge verwalten: Mengen- und Einzelbestand, Bewegungen, Inventur, interne Anfragen, Einkauf, Verkauf, Ausleihe, Kosten und Stücklisten.",
     detailIntro:
       "Schrauben brauchen eine Menge, ein Laptop eine eigene Identität. Open Inventory führt beides im selben System und schreibt jede Veränderung als datierte Bewegung fort. So bleiben aktueller Bestand und sein Zustandekommen gemeinsam nachvollziehbar.",
     outcomes: [
-      "Bulk-Artikel und einzelne Geräte passend zu ihrem tatsächlichen Ablauf führen",
+      "Verbrauchsmaterial als Menge und einzelne Geräte mit Seriennummer führen",
       "Ausgabe, Rückgabe, Transfer und Korrektur ohne überschriebene Historie buchen",
       "Anfragen, Bestellungen, Verkäufe, Ausleihen, Kosten und Baugruppen zusammen denken",
     ],
-    workflowTitle: "Jede Bewegung hat einen klaren Anlass",
+    workflowTitle: "Eine Lieferung einbuchen und Teile entnehmen",
     workflowIntro:
-      "Eine Buchung verändert nicht nur eine Zahl. Sie hält fest, was wann, wo und für welchen Empfänger passiert ist.",
+      "Am Beispiel einer Kiste Schrauben: Halte Lieferungen und Entnahmen fest, damit der angezeigte Bestand zum Lager passt.",
     workflow: [
       {
-        title: "Bestandsmodell wählen",
-        copy: "Nutze Mengenbestand für austauschbare Teile und serialisierte Einheiten für Geräte mit eigener Identität.",
+        title: "Artikel anlegen",
+        copy: "Lege die Schrauben als Mengenbestand an und wähle die Einheit Stück.",
       },
       {
-        title: "Lagerorte zuordnen",
-        copy: "Verteile Bestand auf Räume, Schränke oder Fahrzeuge, ohne die globale Verfügbarkeit aus dem Blick zu verlieren.",
+        title: "Lieferung einbuchen",
+        copy: "Zähle die gelieferten Schrauben und buche sie als Zugang in das passende Lagerfach.",
       },
       {
-        title: "Bewegung buchen",
-        copy: "Zugang, Abgang, Transfer, Ausgabe oder Rückgabe werden geprüft und als neuer Historieneintrag angelegt.",
+        title: "Entnahme buchen",
+        copy: "Wer Schrauben entnimmt, bucht die Menge als Abgang. Im Verlauf stehen Datum, Menge und Lagerort.",
       },
       {
-        title: "Bedarf rechtzeitig sehen",
-        copy: "Mindestmenge, Verbrauch und Lieferzeit machen knappe Bestände sichtbar und unterstützen die Nachbestellung.",
+        title: "Nachbestellung planen",
+        copy: "Hinterlege Mindestbestand und Lieferzeit. Sieh anhand des bisherigen Verbrauchs nach, wann Nachschub nötig wird.",
       },
     ],
     example: {
@@ -371,7 +376,7 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-stock.png",
       alt: "Echte Open-Inventory-Bestandsverwaltung mit Buchungsformular, Lagerorten und Bewegungshistorie",
-      caption: "Bestand, Zu- und Abgänge sowie Historie in der laufenden Web-App · Demo-Daten",
+      caption: "Bestandsbuchung und Verlauf · Beispieldaten",
     },
     ios: {
       title: "Bestand direkt am Regal buchen.",
@@ -409,7 +414,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: PackageOpen,
         title: "Sammel- oder Einzelbestand",
-        copy: "Führe identische Teile als Bulk-Bestand oder jede physische Einheit separat mit UUID, lesbarem Code, eigenem Status, Standort, Metadaten und Anschaffungsdatum.",
+        copy: "Zähle gleiche Teile wie Schrauben als Menge. Geräte mit eigener Seriennummer führst du einzeln, jeweils mit Zustand und Standort.",
       },
       {
         icon: History,
@@ -419,7 +424,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: MapPinned,
         title: "Bestand je Lagerort",
-        copy: "Jeder geeignete Inventareintrag kann zum strukturierten Lagerort werden. Globale Menge und Verteilung auf Räume, Schränke oder Fahrzeuge bleiben gemeinsam sichtbar.",
+        copy: "Sieh die Gesamtmenge eines Artikels und wie sie sich auf Räume, Schränke oder Fahrzeuge verteilt. Buche einen Transfer, wenn Material den Ort wechselt.",
       },
       {
         icon: ClipboardCheck,
@@ -429,17 +434,17 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Users,
         title: "Ausleihen & mehrteilige Vorgänge",
-        copy: "Bündele mehrere Mengen oder Seriennummern pro Kontakt. Ausgabe, Fälligkeit, Teilrückgaben und Storno bleiben für jede Position nachvollziehbar.",
+        copy: "Gib mehrere Geräte oder Materialmengen gemeinsam an einen Kontakt aus. Du siehst, was bis wann zurückkommen soll und welche Teile schon zurückgegeben wurden.",
       },
       {
         icon: PackageCheck,
         title: "Bestandsprognose & Nachbestellung",
-        copy: "Mindestmenge, Bestellmenge, Lieferzeit und Verbrauchsrate ergeben Warnungen, ein geschätztes Ausverkaufsdatum und einen begründeten Nachbestellvorschlag.",
+        copy: "Lege Mindestbestand und Lieferzeit fest. Aus Bestand, Verbrauch und offenen Lieferungen berechnet die Anwendung, wann die Teile voraussichtlich ausgehen und wann du nachbestellen solltest.",
       },
       {
         icon: ShoppingCart,
         title: "Einkauf & Verkauf",
-        copy: "Erfasse mehrteilige Einkaufs- und Verkaufsaufträge mit Kontakten, Preisen und Teilmengen. Wareneingang und Ausgabe fließen kontrolliert in die Bewegungshistorie ein.",
+        copy: "Erfasse Bestellungen mit Artikeln, Mengen, Preisen und Lieferanten oder Kunden. Trifft nur ein Teil der Bestellung ein, buchst du diese Menge und siehst, was noch aussteht.",
       },
       {
         icon: CalendarRange,
@@ -454,7 +459,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Layers3,
         title: "Stücklisten & Baugruppen",
-        copy: "Hinterlege Komponenten einer Baugruppe und verbrauche sie bei der Montage atomar – entweder vollständig oder gar nicht.",
+        copy: "Hinterlege die benötigten Teile einer Baugruppe. Bei der Montage werden alle Komponenten zusammen vom Bestand abgezogen; schlägt die Buchung fehl, bleibt der Bestand unverändert.",
       },
     ],
   },
@@ -508,10 +513,10 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-label-designer.png",
       alt: "Echter Open-Inventory-Labeldesigner mit QR- und Code-128-Vorschau",
-      caption: "Druckbare QR- und Barcode-Vorschau direkt aus der Web-App · Demo-Daten",
+      caption: "QR- und Barcode-Etiketten im Designer · Beispieldaten",
     },
     ios: {
-      title: "Das iPhone wird zum offenen Scanner.",
+      title: "Etiketten mit dem iPhone scannen.",
       copy: "Die native App erkennt QR, EAN-8/13, UPC-E, Code 128, Data Matrix, PDF417 und Aztec und verbindet sich direkt mit deiner eigenen Instanz.",
       points: [
         "Inventarlink, UUID, SKU oder Seriennummer auflösen",
@@ -546,12 +551,12 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Barcode,
         title: "Eigene Etiketten",
-        copy: "Gestalte QR-Codes, Barcodes, mehrere Textfelder, Untertitel und eigene Bilder. Nutze Schrift- und Zuschnittoptionen, invertierten Druck und automatische Etikettenlänge. Entwürfe lassen sich testdrucken und als Kopie speichern.",
+        copy: "Gestalte Etiketten mit Name, Code und weiteren Angaben im Browser. Speichere die Vorlage für den nächsten Druck.",
       },
       {
         icon: FileSpreadsheet,
         title: "CSV-Import & -Export",
-        copy: "Importiere und exportiere UTF-8-CSV. Zeilengenaue Validierung benennt Probleme klar; wiederholte Importe können idempotent verarbeitet werden.",
+        copy: "Importiere vorhandene Listen als CSV und exportiere deinen Bestand für andere Programme. Bei fehlerhaften Werten zeigt der Import die betroffene Zeile.",
       },
       {
         icon: Fingerprint,
@@ -588,7 +593,7 @@ export const featureGroups: FeatureGroup[] = [
       "„Im Lager“ reicht selten, wenn ein Gegenstand schnell gefunden werden soll. Open Inventory verbindet Textorte, strukturierte Lagerorte, Kartenkoordinaten und optionale Raumscans. Einfache Bestände bleiben einfach; räumliche Tiefe kommt nur dort hinzu, wo sie wirklich hilft.",
     outcomes: [
       "Inventar mit Kartenpunkten, Flächen und strukturierten Lagerorten verbinden",
-      "Räumliche Beziehungen aus Geometrien ableiten und weiterhin manuell übersteuern",
+      "Gegenstände auf der Karte einem Raum oder Lagerbereich zuordnen",
       "Kompatible iPhones optional für RoomPlan-Scans und Platzierung nutzen",
     ],
     workflowTitle: "Vom groben Ort zum konkreten Fundplatz",
@@ -625,7 +630,7 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-locations.png",
       alt: "Echte Open-Inventory-Ansicht mit Beständen an drei angelegten Demo-Lagerorten",
-      caption: "Bestandsmengen an konfigurierten Orten in der laufenden Web-App · Demo-Daten",
+      caption: "Bestände an drei Lagerorten · Beispieldaten",
     },
     ios: {
       title: "Raumerfassung ist nativ – und bewusst optional.",
@@ -642,7 +647,7 @@ export const featureGroups: FeatureGroup[] = [
     trustPoints: [
       "Web-Viewer und native Raumerfassung offen im Repository",
       "Explizite Trennung manueller und automatisch abgeleiteter Platzierung",
-      "Optionale Provider-Grenzen statt versteckter Abhängigkeiten",
+      "Zusätzliche Dienste für Karten oder 3D-Funktionen bei Bedarf einrichten",
     ],
     items: [
       {
@@ -653,7 +658,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Layers3,
         title: "Automatische räumliche Zuordnung",
-        copy: "Liegt ein Kartenpunkt in einem Container-Polygon, kann Open Inventory daraus eine räumliche Beziehung ableiten. Eine manuelle Platzierung hat bewusst Vorrang.",
+        copy: "Zeichne einen Bereich auf der Karte ein. Gegenstände mit einem Kartenpunkt darin können diesem Bereich automatisch zugeordnet werden. Eine von Hand gesetzte Zuordnung hat Vorrang.",
       },
       {
         icon: Smartphone,
@@ -663,7 +668,7 @@ export const featureGroups: FeatureGroup[] = [
       {
         icon: Search,
         title: "Navigierbare Räume 3D",
-        copy: "Der Web-Viewer zeigt die gemessene RoomPlan-Struktur, durchsuchbare Inventarmarker und optional bereitgestellte fotorealistische Derivate – mit klarer Trennung der Koordinatensysteme.",
+        copy: "Öffne einen gescannten Raum im Browser und suche darin nach Inventareinträgen. Optional lassen sich auch fotorealistisch aufbereitete Ansichten anzeigen.",
       },
       {
         icon: WandSparkles,
@@ -688,13 +693,13 @@ export const featureGroups: FeatureGroup[] = [
       "Rollen, granulare Berechtigungen und bedingte Zugriffsregeln festlegen",
       "Datenbank, Dateien, Secrets, Backups und optionale Provider bewusst verwalten",
     ],
-    workflowTitle: "Ein offener Stack braucht klare Betriebsentscheidungen",
+    workflowTitle: "Server, Zugang und Backups einrichten",
     workflowIntro:
       "Der schnelle Compose-Start ist der Anfang. Für einen dauerhaft erreichbaren Dienst gehören Identität, Datensicherung und Updates zum gewählten Betriebsmodell.",
     workflow: [
       {
         title: "Instanz starten",
-        copy: "Nutze Docker Compose, PostgreSQL, Migrationen und Healthcheck als nachvollziehbare Grundlage.",
+        copy: "Starte die Anwendung mit Docker Compose. Die Installationsanleitung beschreibt Datenbank, Speicher und die Prüfung, ob der Dienst läuft.",
       },
       {
         title: "Zugriff begrenzen",
@@ -706,12 +711,12 @@ export const featureGroups: FeatureGroup[] = [
       },
       {
         title: "Updates pflegen",
-        copy: "Prüfe Änderungen im Repository, aktualisiere Images und Migrationen kontrolliert und beobachte den Healthcheck.",
+        copy: "Lies vor einem Update die Änderungen und sichere deine Daten. Aktualisiere die Installation nach Anleitung und prüfe anschließend, ob sie erreichbar ist.",
       },
     ],
     example: {
       eyebrow: "Beispiel · Eigene Instanz",
-      title: "Ein Stack mit sichtbaren Grenzen",
+      title: "Was auf deinem Server gespeichert wird",
       copy: "Web-App und API laufen im Container, strukturierte Daten liegen in PostgreSQL und Uploads im persistenten Volume. Externe Auth-, KI- oder Speicheranbieter kommen nur hinzu, wenn du sie konfigurierst.",
       facts: [
         { label: "Anwendung", value: "Web · API · Jobs" },
@@ -722,7 +727,7 @@ export const featureGroups: FeatureGroup[] = [
     screenshot: {
       src: "/marketing/screenshots/web-settings-access.png",
       alt: "Echte Open-Inventory-Zugriffsverwaltung mit Rollen und Mitgliedern einer Demo-Organisation",
-      caption: "Rollen, Mitglieder und Zugriffsregeln in der laufenden selbst gehosteten Web-App",
+      caption: "Rollen und Mitglieder im Arbeitsbereich · Beispieldaten",
     },
     ios: {
       title: "Auch die iOS-App spricht mit deiner Instanz.",
@@ -739,7 +744,7 @@ export const featureGroups: FeatureGroup[] = [
     trustPoints: [
       "MIT-Lizenz und vollständiger Quellcode für Web, API und iOS",
       "Docker Compose, Migrationen, Healthcheck und persistente Volumes",
-      "Offene Issues und Pull Requests als nachvollziehbarer Beteiligungsweg",
+      "Fehler melden und Änderungen über GitHub vorschlagen",
     ],
     items: [
       {

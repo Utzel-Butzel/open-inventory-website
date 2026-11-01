@@ -1,0 +1,28 @@
+.page h1 { max-width: 15ch; font-size: clamp(2.5rem, 4.2vw, 3.75rem); line-height: 1.08; letter-spacing: -.04em; font-weight: 600; text-wrap: balance; }
+.page h2 { max-width: 26ch; font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; letter-spacing: -.025em; font-weight: 600; text-wrap: balance; }
+.hero { padding-block: 2rem 5rem; }
+.heroGrid { display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: 3rem; margin-top: 3rem; }
+.heroGrid > *, .workflowGrid > * { min-width: 0; }
+.label { font-size: .8rem; color: var(--color-muted); margin-bottom: 1rem; }
+.intro, .body { margin-top: 1.5rem; font-size: 1rem; line-height: 1.8; color: var(--color-muted-strong); max-width: 60ch; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 1.8rem; }
+.note, .product figcaption { color: var(--color-muted); font-size: .75rem; line-height: 1.6; margin-top: 1rem; }
+.product img { border: 1px solid var(--color-border); border-radius: 6px; }
+.workflow { background: var(--color-surface-subtle); border-block: 1px solid var(--color-border); padding-block: 4rem; }
+.workflowGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+.promises { padding-left: 1.1rem; list-style: disc; margin-top: 1.5rem; font-size: .875rem; line-height: 1.7; color: var(--color-muted-strong); }
+.promises li + li { margin-top: .65rem; }
+.steps { border-top: 1px solid var(--color-border-strong); }
+.steps li { display: grid; grid-template-columns: 2.2rem 1fr; gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--color-border); }
+.number { font: .75rem/1.8 var(--font-inventory-mono); color: var(--color-muted); }
+.steps h3, .featureList dt { font-size: 1rem; font-weight: 600; }
+.steps p, .featureList dd { margin-top: .5rem; color: var(--color-muted-strong); font-size: .875rem; line-height: 1.75; }
+.features { padding-block: 4rem; }
+.featureList { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4rem; margin-block: 2rem; }
+.featureList > div { border-top: 1px solid var(--color-border); padding-block: 1.35rem; }
+.closing { border-top: 1px solid var(--color-border); padding-block: 3.5rem; }
+.related { border-left: 1px solid var(--color-border); padding-left: 2rem; align-self: start; }
+.related > p:not(.label) { font-size: .875rem; line-height: 1.75; color: var(--color-muted-strong); }
+.related a { display: flex; width: fit-content; margin-top: 1.25rem; }
+@media (max-width: 900px) { .heroGrid, .workflowGrid { grid-template-columns: 1fr; gap: 2.5rem; } .page h1 { max-width: 22ch; } .hero { padding-bottom: 3rem; } .product { max-width: 720px; } .related { border-left: 0; border-top: 1px solid var(--color-border); padding: 1.5rem 0 0; } }
+@media (max-width: 600px) { .featureList { grid-template-columns: 1fr; } .heroGrid { margin-top: 2rem; } .workflow, .features { padding-block: 2.5rem; } }

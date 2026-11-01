@@ -4,6 +4,8 @@ title: "Configure your instance"
 
 AUTH_URL is the public HTTPS address of your application. Use a unique AUTH_SECRET for each installation. Database data and uploads need persistent storage.
 
+For defaults, required values, secrets, dependencies and restart/build behavior, use the [Environment variable reference](/environment-variables).
+
 
 ```text
 AUTH_URL=https://inventory.example.com
@@ -17,4 +19,39 @@ AUTH_TRUST_HOST=true
 
 - Maps: default maps load external tiles; you can configure your own compatible tile URLs.
 
-[All environment variables →](https://github.com/Utzel-Butzel/inventory/blob/main/.env.example)
+## App name and logo
+
+Set these optional environment variables on the application to customize its branding:
+
+```dotenv
+APP_NAME="My Inventory"
+APP_LOGO_URL=https://example.com/logo.png
+```
+
+| Variable | Purpose | When empty |
+| --- | --- | --- |
+| `APP_NAME` | Display name in desktop and mobile navigation, on the sign-in page, and in browser titles. | Keeps the built-in name. |
+| `APP_LOGO_URL` | Image URL for the logo beside the name in navigation and on the sign-in page. | Keeps the built-in logo. |
+
+These settings apply to the entire installation and all its organizations. You can change the name and logo independently.
+
+Use a publicly accessible HTTP(S) image URL without embedded credentials. For an HTTPS installation, use an HTTPS image URL. The browser loads the image directly, and the logo is fitted without cropping or stretching. Invalid URLs and images that fail to load fall back to the built-in logo. This setting changes the displayed logo, not the browser favicon.
+
+### Apply changes
+
+First deploy a version of the application that includes these settings. Subsequent branding changes are read at runtime and do not require rebuilding the application image. Use `APP_NAME` and `APP_LOGO_URL` exactly as shown, without a `NEXT_PUBLIC_` prefix.
+
+- **Local development:** add the values to `.env.local`, then restart the development server.
+- **Docker Compose:** add the values to `.env`, then recreate the application container with `docker compose up -d --force-recreate app`. A container restart alone does not reload its environment.
+- **Dokploy or Coolify:** add the values to the application's environment settings, then redeploy the `inventory` service.
+
+The current Docker Compose, Dokploy, Coolify and Konglomerat definitions forward both variables to the application. If your installation uses an older or custom Compose definition, add these entries under the application service's `environment` mapping:
+
+```yaml
+APP_NAME: ${APP_NAME:-}
+APP_LOGO_URL: ${APP_LOGO_URL:-}
+```
+
+After restarting or redeploying, reload the application and check the sign-in page and navigation. To restore the original branding, clear the corresponding variable and apply the same steps again.
+
+[Environment variable reference →](/environment-variables) · [Example environment file →](https://github.com/Utzel-Butzel/inventory/blob/main/.env.example)

@@ -28,4 +28,6 @@ User-bound credentials can select an active membership with X-Organization-ID. S
 
 For endpoints using Idempotency-Key, assign a new UUID to each operation and reuse it only for the same request. For 409, inspect the conflict or running operation; for 422, check the input; for 429, check the rate limit. Print submissions use the UUID in the id field instead.
 
+For agent access through the separate `/mcp` endpoint, see the [MCP integration guide](/mcp). Its bearer credentials are pinned to the issuing organization and do not accept `X-Organization-ID`.
+
 [Interactive reference →](/api-reference) · [OpenAPI JSON →](/openapi.json) · [OpenAPI YAML →](/openapi.yaml)

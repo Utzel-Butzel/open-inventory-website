@@ -1,7 +1,7 @@
 const fallbackAppUrl = "http://localhost:3001";
 
 export const publicDemoUrl =
-  "https://inventory.paperlesspaper.de/login?demo=1";
+  "https://demo.openinventory.polyxo.de/login?demo=1";
 
 export function appHref(path = "/") {
   const baseUrl = (

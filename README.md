@@ -4,6 +4,9 @@ Public website, technical documentation and blog for
 [Open Inventory](https://github.com/Utzel-Butzel/inventory).
 
 Production: [openinventory.polyxo.de](https://openinventory.polyxo.de).
+Public demo: [demo.openinventory.polyxo.de](https://demo.openinventory.polyxo.de/login?demo=1),
+hosted as a separate Dokploy service on `tools.paperlesspaper.de`.
+All marketing demo buttons use `publicDemoUrl` in `lib/site-config.ts`.
 Set `SITE_URL=https://openinventory.polyxo.de` in Dokploy. The previous host,
 `inventory.rollingtime.de`, stays attached for permanent redirects; paths and
 query parameters are preserved.

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { MarketingLocale } from "@/lib/marketing-i18n";
+import { OldStoragePhotos } from "@/components/marketing/old-storage-photos";
 import styles from "./ai-story.module.css";
 
 export function FounderStory({ locale }: { locale: MarketingLocale }) {
@@ -22,6 +23,7 @@ export function FounderStory({ locale }: { locale: MarketingLocale }) {
           <a className="site-link" href="https://github.com/Utzel-Butzel/inventory">{de ? "Zum Projekt auf GitHub →" : "View the project on GitHub →"}</a>
         </div>
       </div>
+      <OldStoragePhotos locale={locale} />
       <div className={`site-shell ${styles.storyPhotos}`}>
         <figure>
           <a href="https://paperlesspaper.de/buy-7-inch-epaper-picture-frame">

@@ -11,8 +11,9 @@ not generated or reconstructed marketing artwork.
 from https://demo.openinventory.polyxo.de/demo/inventory, captured through the
 public read-only demo. The German UI uses its Raster/card view in dark mode,
 including the sidebar, navigation, quantities and availability. The item photos
-are the demo's existing AI-generated sample photos. This replaces the cropped
-stock screenshot on the homepage; no interface pixels were reconstructed.
+are the demo's existing AI-generated sample photos. This was the homepage's
+stock illustration before the [UI walkthrough video](../videos/README.md)
+replaced it; no interface pixels were reconstructed.
 
 ### Earlier local captures
 

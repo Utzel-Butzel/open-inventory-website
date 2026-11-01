@@ -1,0 +1,21 @@
+.root { display: flex; align-items: center; gap: 8px; width: min(100%, 820px); min-width: 0; }
+.viewport { flex: 1; min-width: 0; overflow: hidden; mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.track { display: flex; width: max-content; animation: drift 104s linear infinite; }
+.list { display: flex; align-items: center; flex-shrink: 0; margin: 0; padding: 0; list-style: none; }
+.list li { display: flex; align-items: center; gap: 28px; padding-right: 28px; white-space: nowrap; font-size: 13px; font-weight: 600; }
+.list li::after { content: ""; width: 3px; height: 3px; border-radius: 50%; background: var(--color-muted); opacity: .4; }
+.toggle { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; color: var(--color-muted); cursor: pointer; transition: color 160ms, background 160ms; }
+.toggle svg { width: 12px; height: 12px; }
+.toggle:hover { color: var(--color-foreground); background: var(--color-surface); }
+.toggle:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+.root[data-paused="true"] .track, .root:hover .track, .root:focus-within .track { animation-play-state: paused; }
+@keyframes drift { to { transform: translateX(-50%); } }
+@media (max-width: 767px) {
+  .list li { gap: 20px; padding-right: 20px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .viewport { overflow: visible; mask-image: none; }
+  .track { width: auto; animation: none; }
+  .list { flex: 1 1 0; min-width: 0; flex-wrap: wrap; gap: 12px 0; }
+  .copy, .toggle { display: none; }
+}

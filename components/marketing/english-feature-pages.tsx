@@ -18,6 +18,7 @@ import { publicDemoUrl } from "@/lib/site-config";
 import { AiPhotoExample } from "@/components/marketing/ai-photo-example";
 import { AiWorkflow } from "@/components/marketing/ai-workflow";
 import { BusinessFlow } from "@/components/marketing/business-flow";
+import { RealWorldLabels } from "@/components/marketing/real-world-labels";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 const licenseUrl = `${githubUrl}/blob/main/LICENSE`;
@@ -871,6 +872,7 @@ export function FeatureDetailContent({ locale, group }: { locale: MarketingLocal
         </section>
 
         {group.slug === "erfassen" && <AiWorkflow locale={locale} />}
+        {group.slug === "labels-api" && <RealWorldLabels locale={locale} printingLink />}
         {group.slug === "labels-api" && (
           <section className="site-section border-b border-border bg-surface" id="mcp">
             <div className="site-shell grid gap-10 lg:grid-cols-2 lg:gap-20">

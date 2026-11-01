@@ -4,8 +4,11 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Github, ScanLine, Server, ShieldCheck } from "lucide-react";
 
 import { AiPhotoExample } from "@/components/marketing/ai-photo-example";
+import { AudienceTicker } from "@/components/marketing/audience-ticker";
 import { OpenSourceBadge } from "@/components/marketing/open-source-badge";
 import { AppStoreBadges } from "@/components/marketing/app-store-badges";
+import { RealWorldLabels } from "@/components/marketing/real-world-labels";
+import { StockWalkthrough } from "@/components/marketing/stock-walkthrough";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
 import { marketingHref, marketingOgLocale, marketingPathAlternates } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
@@ -27,9 +30,9 @@ const content = {
     demo: "Live-Demo öffnen", host: "Selbst hosten", facts: ["Open Source · MIT-Lizenz", "Auf deinem Server", "Web, iPhone & Android"],
     photoAlt: "Eine Person lötet an einer Platine an einem benutzten Werkstatttisch",
     searchAlt: "Echte iPhone-App mit der Suche nach Löt: Lötstation Weller WE1010, verfügbar im Elektroniklabor an Bank 3",
-    captureLabel: "Gefunden im Elektroniklabor.", captureNote: "iPhone-App · Beispieldaten",
-    strap: "Für die Dinge, mit denen ihr arbeitet.",
-    audiences: ["Werkstätten", "Makerspaces", "Technikteams", "Vereine & Verleih"],
+    captureLabel: "Gefunden im Elektroniklabor.",
+    strap: "Für alle Dinge.",
+    audiences: ["Werkstätten", "Makerspaces", "Technikteams", "Vereine & Verleih", "Familien", "Sammlungen", "Schulen", "Labore", "Startups", "Büros", "Fotostudios", "Veranstaltungstechnik", "Repair-Cafés", "Hochschulen", "Sportvereine", "Musikstudios", "Gemeinschaftsgärten", "Museen"],
     workflowEyebrow: "Vom ersten Foto bis zur Rückgabe",
     workflowTitle: "Vom Foto zur dokumentierten Ausleihe",
     workflowIntro: "Foto, Standort und Bestand gehören zusammen. Damit dein Team beim Suchen, Ausgeben und Zurücknehmen auf dieselben Informationen zugreift.",
@@ -43,7 +46,6 @@ const content = {
     stockCopy: "Bei einem Gerät willst du wissen, wo es ist und wer es gerade nutzt. Bei Teilen zählt, wie viele noch da sind. Erfasse Lieferungen und Verbrauch, lege Mindestbestände fest und sieh, wann Nachschub nötig wird.",
     stockPoints: ["Menge je Lagerort nachsehen","Ausgaben und Rückgaben mit Datum sehen","Nachbestellungen anhand von Verbrauch und Lieferzeit planen"],
     stockLink: "Bestandsverwaltung kennenlernen",
-    stockAlt: "Echte Open-Inventory-Demo in der Kartenansicht mit Sidebar: Bohrschrauber in Benutzung, Schrauben mit 126 Einheiten und weitere Werkzeuge mit Standort und Bestand",
     mobileEyebrow: "Direkt am Regal",
     mobileTitle: "Das Inventar kommt mit.",
     mobileCopy: "Ein Etikett scannen, den Standort nachsehen oder einen Zugang buchen. Mit den Apps für iPhone und Android verwaltest du dein Inventar direkt vor Ort.",
@@ -56,8 +58,7 @@ const content = {
       { title: "Makerspace", copy: "Nachsehen, welche Werkzeuge es überhaupt gibt und wo sie liegen.", href: "/use-cases/makerspace" },
       { title: "Technikteam", copy: "Prüfgeräte zuordnen und Material für die nächste Arbeit finden.", href: "/use-cases/startup" },
     ],
-    scenarioLink: "Alle Einsatzbereiche", scenarioPhotoAlt: "Hände an einem gebrauchten Werkzeugkoffer auf einem Holztisch",
-    scenarioCaption: "Werkzeug im Arbeitsalltag · Foto: Anete Lusina / Pexels",
+    scenarioLink: "Alle Einsatzbereiche", scenarioPhotoAlt: "Eine Person nimmt eine beschriftete blaue Teilebox mit Schrauben aus einem Werkstattregal",
     ownershipEyebrow: "Open Source",
     ownershipTitle: "Open Inventory auf deinem Server",
     ownershipCopy: "Der Quellcode steht auf GitHub unter der MIT-Lizenz. Du kannst die Anwendung auf deinem Server installieren, anpassen und weitergeben.",
@@ -68,8 +69,8 @@ const content = {
     ],
     ownershipLink: "Mehr zu Betrieb und Daten", faqEyebrow: "Vor dem Start", faqTitle: "Gut zu wissen.",
     faqs: [
-      { q: "Wie drucke ich Etiketten?", a: "Im Browser-Druckdialog, per QZ Tray am lokalen Brother PT-P710BT oder über einen gemeinsamen Bürodrucker mit Windows-Agent. Du kannst Artikel und Einzelgeräte auswählen, Vorlagen gestalten und Drucklisten speichern.", href: "/docs#printing", link: "Drucker einrichten" },
-      { q: "Was kostet Open Inventory?", a: "Die Software ist unter der MIT-Lizenz kostenlos nutzbar. Kosten können für deinen Server und optional verwendete externe Dienste entstehen.", href: "/open-source", link: "Lizenz und Betrieb" },
+      { q: "Wie drucke ich Etiketten?", a: "Du kannst Etiketten für Artikel und Einzelgeräte erstellen, Vorlagen individuell gestalten und über den Browser ausdrucken. Drucklisten lassen sich für die spätere Verwendung speichern.", href: "/docs#printing", link: "Mehr zum Etikettendruck" },
+      { q: "Ist Open Inventory kostenlos? (Open Source)", a: "Die Software ist unter der MIT-Lizenz kostenlos nutzbar. Kosten können für deinen Server und optional verwendete externe Dienste entstehen.", href: "/open-source", link: "Lizenz und Betrieb" },
       { q: "Was brauche ich zum Selbst-Hosting?", a: "Einen Server mit Docker Compose sowie Speicher für Datenbank und Bilder. Für den laufenden Betrieb gehören Backups, Updates und ein sicherer Zugang dazu. Die Dokumentation führt dich durch die Einrichtung.", href: "/docs#docker", link: "Zur Installationsanleitung" },
       { q: "Kann ich meine vorhandenen Listen übernehmen?", a: "Ja. Du kannst Inventar als CSV-Datei importieren. Verwende dafür die vorgesehenen Spaltennamen. Listen aus Excel kannst du zuerst als CSV speichern.", href: "/docs", link: "Dokumentation öffnen" },
       { q: "Funktioniert die Anwendung ohne KI?", a: "Ja. Inventar, Standorte und Bestände lassen sich ohne KI verwalten. Wenn du KI-Funktionen aktivierst, werden die dafür benötigten Inhalte an den konfigurierten Dienst gesendet.", href: "/open-source", link: "Datenfluss nachvollziehen" },
@@ -89,8 +90,8 @@ const content = {
     demo: "Open live demo", host: "Host it yourself", facts: ["Open source · MIT license", "On your server", "Web, iPhone & Android"],
     photoAlt: "A person soldering a circuit board at a well-used workshop bench",
     searchAlt: "Actual iPhone app searching for a soldering station, showing availability and its location at electronics lab bench 3",
-    captureLabel: "Found in the electronics lab.", captureNote: "iPhone app · Demo data · German interface",
-    strap: "For the things your team works with.", audiences: ["Workshops", "Makerspaces", "Technical teams", "Clubs & lending"],
+    captureLabel: "Found in the electronics lab.",
+    strap: "For all things.", audiences: ["Workshops", "Makerspaces", "Technical teams", "Clubs & lending", "Families", "Collections", "Schools", "Labs", "Startups", "Offices", "Photo studios", "Event production", "Repair cafés", "Universities", "Sports clubs", "Music studios", "Community gardens", "Museums"],
     workflowEyebrow: "From the first photo to the return",
     workflowTitle: "From a photo to a recorded loan",
     workflowIntro: "Photos, locations and stock belong together. Your team works with the same information when finding, handing over and returning equipment.",
@@ -102,7 +103,7 @@ const content = {
     stockEyebrow: "Equipment and consumables", stockTitle: "The drill goes on loan. The screws get used up.",
     stockCopy: "For a device, you need to know where it is and who is using it. For parts, you need the quantity left. Record deliveries and consumption, set minimum stock levels and see when more supplies are needed.",
     stockPoints: ["Check quantities by storage location","See dated records of issues and returns","Plan reorders using consumption and lead time"],
-    stockLink: "Explore stock management", stockAlt: "Actual Open Inventory demo in card view with sidebar: drill in use, 126 screws and other tools with locations and quantities",
+    stockLink: "Explore stock management",
     mobileEyebrow: "Right at the shelf", mobileTitle: "Take your inventory with you.",
     mobileCopy: "Scan a label, check a location or record incoming stock. Use the iPhone and Android apps to manage your inventory on site.",
     mobileLink: "Apps and availability",
@@ -113,8 +114,7 @@ const content = {
       { title: "Makerspaces", copy: "See which tools the workshop has and where to find them.", href: "/use-cases/makerspace" },
       { title: "Technical teams", copy: "Assign test equipment and find supplies for the next job.", href: "/use-cases/startup" },
     ],
-    scenarioLink: "All use cases", scenarioPhotoAlt: "Hands opening a used tool case on a wooden workbench",
-    scenarioCaption: "Tools in everyday work · Photo: Anete Lusina / Pexels",
+    scenarioLink: "All use cases", scenarioPhotoAlt: "A person taking a labelled blue bin of screws from a workshop shelf",
     ownershipEyebrow: "Open source", ownershipTitle: "Run Open Inventory on your server",
     ownershipCopy: "The source code is on GitHub under the MIT license. Install the application on your own server, adapt it and share it.",
     ownershipItems: [
@@ -124,7 +124,7 @@ const content = {
     ],
     ownershipLink: "About hosting and data", faqEyebrow: "Before you start", faqTitle: "Good to know.",
     faqs: [
-      { q: "How do I print labels?", a: "Use the browser print dialog, QZ Tray on a local Brother PT-P710BT or a shared Office printer with a Windows agent. Choose items or individual units, design templates and save print lists.", href: "/docs#printing", link: "Set up printing" },
+      { q: "How do I print labels?", a: "Create labels for items and individual units, customise templates and print from your browser. Save print lists to use again later.", href: "/docs#printing", link: "More about label printing" },
       { q: "What does Open Inventory cost?", a: "The software is free to use under the MIT license. Your server and any optional external services may have their own costs.", href: "/open-source", link: "License and hosting" },
       { q: "What do I need to self-host?", a: "A server with Docker Compose and storage for the database and images. Operating your instance includes backups, updates and secure access. The documentation walks you through setup.", href: "/docs#docker", link: "Read the installation guide" },
       { q: "Can I import my existing lists?", a: "Yes. You can import inventory from a CSV file using the supported column names. Save existing Excel lists as CSV before importing.", href: "/docs", link: "Open the documentation" },
@@ -172,22 +172,21 @@ export default async function HomePage() {
                 <div className={styles.captureBar}><ScanLine aria-hidden="true" /><span>{c.captureLabel}</span></div>
                 <Image src="/marketing/screenshots/ios-search-home.png" alt={c.searchAlt} width={1206} height={980} sizes="(max-width: 767px) 75vw, 360px" loading="eager" className={styles.searchImage} />
               </div>
-              <figcaption className={styles.heroCaption}>{c.captureNote}</figcaption>
             </figure>
           </div>
         </section>
 
         <div className={styles.audienceStrip}>
-          <div className={`site-shell ${styles.audienceInner}`}><p>{c.strap}</p><ul>{c.audiences.map(item => <li key={item}>{item}</li>)}</ul></div>
+          <div className={`site-shell ${styles.audienceInner}`}><p>{c.strap}</p><AudienceTicker items={c.audiences} locale={locale} /></div>
         </div>
 
         <section className={`site-section ${styles.stockSection}`}>
           <div className={`site-shell ${styles.stockGrid}`}>
+            <StockWalkthrough locale={locale} />
             <div><p className="site-eyebrow">{c.stockEyebrow}</p><h2 className="site-heading mt-4">{c.stockTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.stockCopy}</p>
               <ul className={styles.checklist}>{c.stockPoints.map(point => <li key={point}><Check aria-hidden="true" />{point}</li>)}</ul>
               <Link className="site-link mt-7" href={href("/features/bestand-ausleihe")}>{c.stockLink}<ArrowRight aria-hidden="true" /></Link>
             </div>
-            <figure className="site-product-frame"><Image src="/marketing/screenshots/web-inventory-cards-demo.png" alt={c.stockAlt} width={1440} height={1266} sizes="(max-width: 900px) 90vw, 58vw" className="h-auto w-full" /></figure>
           </div>
         </section>
 
@@ -203,10 +202,12 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <RealWorldLabels locale={locale} />
+
         <section className={`site-section ${styles.mobileSection}`}>
           <div className={`site-shell ${styles.mobileGrid}`}>
             <figure className={styles.mobileFigure}>
-              <Image src="/marketing/devices/iphone-in-hand-v3.png" alt={locale === "de" ? "Eine Hand hält ein iPhone mit der Open-Inventory-Detailansicht einer Lötstation" : "A hand holding an iPhone displaying a soldering station in Open Inventory"} width={1254} height={1254} sizes="(max-width: 767px) 90vw, 560px" className={styles.handheldPhone} />
+              <Image src="/marketing/devices/iphone-in-hand-v3.png" alt={locale === "de" ? "Eine Hand hält ein iPhone mit der Open-Inventory-Detailansicht einer Lötstation" : "A hand holding an iPhone displaying a soldering station in Open Inventory"} width={1254} height={1254} sizes="(max-width: 767px) 112vw, (max-width: 1280px) 60vw, 700px" className={styles.handheldPhone} />
             </figure>
             <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/app")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><AppStoreBadges locale={locale} /></div>
           </div>
@@ -214,11 +215,11 @@ export default async function HomePage() {
 
         <section className={`site-section ${styles.scenarioSection}`}>
           <div className={`site-shell ${styles.scenarioGrid}`}>
-            <figure><div className={styles.scenarioPhoto}><Image src="/marketing/photography/trades-tool-case.webp" alt={c.scenarioPhotoAlt} fill sizes="(max-width: 767px) 90vw, 45vw" className="object-cover" /></div><figcaption className={styles.photoCaption}>{c.scenarioCaption}</figcaption></figure>
             <div><p className="site-eyebrow">{c.scenariosEyebrow}</p><h2 className="site-heading mt-4">{c.scenariosTitle}</h2>
               <div className={styles.scenarioList}>{c.scenarios.map(item => <Link key={item.href} href={href(item.href)}><div><h3>{item.title}</h3><p>{item.copy}</p></div><ArrowUpRight aria-hidden="true" /></Link>)}</div>
               <Link className="site-link mt-6" href={href("/use-cases")}>{c.scenarioLink}<ArrowRight aria-hidden="true" /></Link>
             </div>
+            <figure><div className={styles.scenarioPhoto}><Image src="/marketing/generated/workshop-parts-bin.webp" alt={c.scenarioPhotoAlt} fill sizes="(max-width: 767px) 90vw, 45vw" className="object-cover" /></div></figure>
           </div>
         </section>
 

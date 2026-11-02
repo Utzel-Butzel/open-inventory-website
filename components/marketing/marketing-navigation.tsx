@@ -12,6 +12,12 @@ import {
 
 type DropdownKey = "features" | "use-cases";
 
+const desktopNavigationItemClassName =
+  "inline-flex h-10 items-center whitespace-nowrap rounded-md px-1 text-[13px] font-medium transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
+const mobileNavigationItemClassName =
+  "flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border";
+
 type DropdownItem = {
   icon: LucideIcon;
   label: string;
@@ -167,8 +173,8 @@ function DesktopDropdown({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={onToggle}
-        className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-md px-1 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-          isOpen ? "text-foreground" : "text-muted hover:text-foreground"
+        className={`${desktopNavigationItemClassName} gap-1 ${
+          isOpen ? "text-foreground" : "text-muted"
         }`}
       >
         {label}
@@ -353,7 +359,7 @@ export function DesktopMarketingNavigation({
           key={link.href}
           href={link.href}
           onClick={closeDropdown}
-          className="inline-flex h-10 items-center whitespace-nowrap rounded-md text-[13px] font-medium text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className={`${desktopNavigationItemClassName} text-muted`}
         >
           {link.label}
         </Link>
@@ -390,7 +396,7 @@ function MobileAccordion({
         aria-expanded={expanded}
         aria-controls={panelId}
         onClick={onToggle}
-        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm font-semibold text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+        className={mobileNavigationItemClassName}
       >
         {label}
         <ChevronDown
@@ -583,7 +589,7 @@ export function MobileMarketingNavigation({
               key={link.href}
               href={link.href}
               onClick={closeNavigation}
-              className="block rounded-md px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
+              className={mobileNavigationItemClassName}
             >
               {link.label}
             </Link>

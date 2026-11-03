@@ -1,83 +1,307 @@
 ---
 title: "Design and print labels"
+description: "Choose a printing method, set up your printer, and print your first label — through the browser, QZ Tray, or a shared Print Agent."
 ---
 
-Choose a print destination for your workspace. Design templates and prepare labels in the web app.
+Open **Labels** in Open Inventory. The **Print using** menu determines where your labels go. Start by choosing a method below, then follow its setup and first-print steps.
+
+## Choose your printing method
+
+| What do you want to do? | Choose in **Print using** | What you need |
+| --- | --- | --- |
+| Print on an installed office or label printer, use label sheets, or save a PDF | **Print from this computer** | A working printer driver on this computer; no printer needed for PDF download |
+| Print directly to a Brother PT-P710BT over USB, without the browser print dialog | **Brother PT-P710BT · USB / QZ Tray** | QZ Tray and a dedicated printer queue on the computer running your browser |
+| Let several people print to a printer connected to another computer | **Shared printer** | Inventory Print Agent on the printer computer; no QZ or printer driver needed on users’ devices |
+
+**Not sure? Start with [the browser print dialog](#browser-print-dialog).** It works with printers already available to your operating system and needs no additional Inventory helper.
+
+“Direct printing” in this guide means sending a job through **QZ Tray** without opening the browser print dialog. QZ Tray is the desktop application sometimes called “QZ Print”. Open Inventory currently uses it for the **PT-P710BT over USB**, not as a general PDF or office-printer integration.
+
+<figure>
+  <a href="/images/printing/printing-methods.svg" aria-label="Open diagram at full size">
+    <img src="/images/printing/printing-methods.svg" alt="Three paths: browser preview to the system print dialog; browser through local QZ Tray to the USB P-touch; or any user's browser through the Inventory server to a Print Agent on the printer computer." width="960" height="680" />
+  </a>
+  <figcaption>Choose by where the printer is connected and whether you want a print dialog. QZ Tray and Print Agent are separate printing paths.</figcaption>
+</figure>
+
+## Prepare your first label
+
+These steps apply to all three methods. You can prepare labels before a printer is connected.
+
+### Choose an item or individual unit
+
+1. Open **Labels**, or use the print shortcut on an item.
+2. Under **Select items**, select one item for your first test. For serialized stock, select an individual unit if its QR code should open that exact unit.
+3. Set **Copies** to **1**. You can increase it after checking the first print.
+
+Renaming a unit’s human-readable code does not change its QR link.
+
+### Design a template
+
+1. Under **Preview & template**, choose a label setup that fits your paper or tape.
+2. Use **Design** to adjust its dimensions, text, QR codes, barcodes or images. Dimensions are in millimeters.
+3. Check the preview with a real item. Keep QR codes clear of images and leave enough space for long text.
+
+For a PT-P710BT, start with the P-touch preset matching your tape. **24 mm tape has about 18 mm of printable height**; the template describes the printed area, not the full tape width. Other tape widths have smaller printable areas.
+
+### Check text and copies
+
+You can override a label’s title or subtitle without changing the inventory item. In the designer, test-print a draft before saving it, then save the template or a separate copy when satisfied.
+
+Continue with your chosen printing method below. Always measure the first label and scan its QR code before printing a batch.
 
 ## Browser print dialog
 
-For installed printers and other label formats. Choose the printer in the system dialog, select the matching paper size and 100% scale, then check a test label.
+Use this for printers installed on your computer, individual labels, label sheets and PDF downloads. **QZ Tray and Print Agent are not required.**
 
-Requires a printer configured on this computer.
+### Set up the printer and paper
 
-## Brother PT-P710BT · QZ Tray
+1. Install the printer using its normal operating-system driver. Check that it can print from another application.
+2. In Open Inventory, choose **Print using → Print from this computer**.
+3. Under **Paper and label format**, choose **Individual label / roll** or **Label sheet**.
 
-Direct USB printing from a desktop browser. QZ Tray runs on the same computer as the browser and printer. Select the loaded tape width, connect QZ and choose the correct print queue.
+For **Individual label / roll**, each label becomes its own page at the template’s physical dimensions. Your printer driver must support that paper size; create or select the matching custom size in the driver if necessary.
 
-The dedicated macOS queue setup is linked below. Without signing, QZ asks for approval when accessed.
+For **Label sheet**, start with A4, Letter or custom dimensions. Copy the label width, height, rows, columns, gaps and top/left margins from the sheet manufacturer’s specifications. The A4 and Letter presets are starting points, not a guarantee that they match your particular label stock. The template must fit inside one cell; Open Inventory does not shrink it automatically.
 
-## Shared Office printer
+**Using a partly used sheet?** Set **First free position** to the next unused label. Positions count from 1, left to right and then down. On a three-column sheet, position 4 is the first label of the second row. Only the first sheet skips those positions; later sheets start at position 1.
 
-A Windows PC receives jobs through the print agent and sends them to its connected PT-P710BT. Other users submit through the web app without installing QZ Tray on their devices.
+<figure>
+  <a href="/images/printing/label-sheet.svg" aria-label="Open diagram at full size">
+    <img src="/images/printing/label-sheet.svg" alt="A three-column label sheet numbered across each row. Positions 1 to 3 are used, and printing starts at position 4. Left and top margins, gaps and label size come from the sheet specifications. Print at 100 percent actual size with headers and footers off." width="960" height="680" />
+  </a>
+  <figcaption>Sheet layout example, not a scale template. Match the actual stock dimensions before printing.</figcaption>
+</figure>
 
-The printer PC must stay awake and online. Setup currently supports 24 mm tape.
+### Print one label or download a PDF
 
-## Choose an item or individual unit
+1. Select your item, template and one copy, then click **Print 1 label**.
+2. Review **Print preview**. For sheets, check the first occupied position and use **Previous / Next** to inspect additional pages.
+3. Choose **Print / Send** to open the browser print dialog, or **Download PDF** to save the document for later.
+4. In the browser dialog, select the intended printer and the same paper size as the preview. Set **100% / Actual size**, turn off **Fit to page**, and disable **headers and footers**. Avoid adding extra margins in the dialog; the sheet layout already includes them. The names of these settings vary by browser and driver.
+5. Print and check the physical result. When printing a downloaded PDF, use the same paper size and actual-size settings in your PDF viewer.
 
-Open Labels or the print shortcut on an item. For serialized stock, select individual units. Their QR codes open that exact unit; renaming its code does not change the link.
+Use **Test scale** to print a calibration page and measure its 5 mm ticks. If dimensions are wrong, fix scaling or paper size first. If the whole sheet is the correct size but shifted, adjust **X correction** (horizontal) and **Y correction** (vertical). These move the grid without scaling it.
 
-## Design a template
+Hardware margins still apply: a preview reaching the paper edge does not mean the printer supports borderless printing. For sheets, a plain-paper test held against the label stock helps check alignment before using adhesive labels.
 
-Set the dimensions and position QR codes, barcodes, images and text. Use multiple text fields, subtitles, fonts, alignment, image cropping and inverted printing. One text field can automatically adjust the label length to its content.
+The prepared list stays available after browser/PDF output. Opening the dialog or downloading a PDF does not confirm that anything was printed.
 
-## Check text and copies
+<span id="brother-pt-p710bt--qz-tray" />
 
-Override a title or subtitle for printing without changing the item. Set the copy count. Test-print a draft, then save it as a template or a separate copy.
+## Direct printing with QZ Tray
 
-## Prepare a print list
+Use this for a **Brother PT-P710BT connected by USB to the computer running your browser**. QZ Tray forwards Open Inventory’s label data to a local print queue. P-touch Editor is not required for this workflow.
 
-For P-touch and shared printing, collect items using different templates. Preview, text and print data are saved together. Your personal list is stored per organization and survives reloads; later template edits do not change prepared labels.
+The Inventory server can be hosted elsewhere. Install QZ Tray on your **printing computer**, not on the web server. This path needs neither the Inventory Print Agent nor SumatraPDF. Bluetooth printing is not part of this integration.
 
-## Print the series
+<figure>
+  <a href="/images/printing/qz-setup.svg" aria-label="Open diagram at full size">
+    <img src="/images/printing/qz-setup.svg" alt="QZ setup: on one computer, Open Inventory in the browser connects to a running QZ Tray app, which sends data to a RAW queue named Brother_PT_P710BT_RAW. That queue connects by USB to the PT-P710BT. Install and start QZ, create the queue, connect in Labels, then print one test label." width="960" height="680" />
+  </a>
+  <figcaption>The browser, QZ Tray and the printer queue belong on the same computer. The printer connects to that computer by USB.</figcaption>
+</figure>
 
-Every label in a series needs the same tape width; lengths and layouts may differ. Each job supports up to 100 labels and 4 MB of print data. Review the list and send it to the selected destination.
+<span id="set-up-qz-tray-and-optional-signing" />
 
-## Set up a shared printer
+### 1. Install and start QZ Tray
 
-- On the Windows PC, create a dedicated Generic / Text Only queue on the PT-P710BT USB port with RAW/winprint. Load 24 mm tape.
+Download the installer for your operating system from the [official QZ Tray download page](https://qz.io/download/).
 
-- With tokens.manage, create the shared printer in the web app and download config.json. This file grants access to that printer and belongs only on the printer PC.
+| Operating system | Install and start |
+| --- | --- |
+| Windows | Run the installer, then open **QZ Tray** from the Start menu. Look for its icon in the notification area, including hidden icons. |
+| macOS | Run the downloaded installer, follow its prompts, including QZ’s certificate setup for HTTPS connections, then launch **QZ Tray** from Applications. Its icon appears in the menu bar. |
+| Linux | Run the Linux installer following its instructions, then launch **QZ Tray** from the applications menu. |
 
-- Place config.json beside both PowerShell scripts from scripts/print-agent. Run Install-InventoryPrintAgent.ps1 as an administrator under your local PowerShell policy.
+Keep QZ Tray running while printing. Enable automatic startup if you use it regularly. See QZ’s [getting-started guide](https://qz.io/docs/getting-started) for installation help and a separate connection demo.
 
-- The installer creates a task that runs at startup. Wait for Online in the web app, then print a test label. No inbound firewall rule is needed.
+### 2. Create the USB printer queue
 
-[Installation and maintenance →](https://github.com/Utzel-Butzel/inventory/tree/main/scripts/print-agent)
+A **printer queue** is the printer entry your operating system sends jobs to. This integration needs a queue that passes Open Inventory’s printer commands through unchanged, also called **RAW** printing.
 
-## Set up QZ Tray and optional signing
+Connect the PT-P710BT by USB, switch it on, and load tape. Name the dedicated queue **`Brother_PT_P710BT_RAW`**. Its name must contain **`P710BT`**: Open Inventory filters the QZ printer list by that model name.
 
-Install QZ Tray, connect the PT-P710BT by USB and create the dedicated queue using the linked guide. The selected tape width must match the loaded tape. On 24 mm tape the printable height is about 18 mm; start with the matching P-touch preset.
+#### Windows queue
 
-Optionally, the server can sign QZ requests using a certificate trusted on the printing computer. Set QZ_CERTIFICATE_PATH and QZ_PRIVATE_KEY_PATH, or their _BASE64 equivalents. Keep the private key on the server only.
+1. Install the Brother driver if Windows has not already created the USB printer port.
+2. Open **Printers & scanners → Add device → Add manually**, then add a local printer using the **existing USB port** assigned to the Brother. Find the port under the original Brother printer’s **Printer properties → Ports** if needed.
+3. Select **Generic → Generic / Text Only** and name the new queue `Brother_PT_P710BT_RAW`.
+4. In the new queue’s **Printer properties → Advanced → Print Processor**, check **winprint / RAW**. Keep the original Brother queue for other software.
 
-[USB setup and tape formats →](https://github.com/Utzel-Butzel/inventory/blob/main/docs/ptouch-printing.md)
+Windows labels vary by version. QZ’s [Windows RAW queue guide](https://qz.io/docs/setting-up-a-raw-printer-in-windows) illustrates the setup. Test this queue from Open Inventory with one label.
 
-## Job accepted, but no label?
+#### macOS queue
 
-Acceptance by QZ or Windows does not confirm physical printing. Check power, tape and the queue on the printer computer. For Outcome uncertain, inspect the actual output before resubmitting. You can cancel your own waiting shared-printer jobs; they expire after ten minutes.
+The following setup has been tested with the PT-P710BT. Open Terminal and list the available printer connections:
 
-Printing requires labels.read and a browser session. Saving and editing templates requires labels.manage; managing shared printers requires tokens.manage. Saved lists, printers and jobs are documented under Label printing in the API reference.
+```sh
+/usr/sbin/lpinfo -v
+```
 
-## How a job moves through the printing API
+Find the entry beginning with `usb://Brother/PT-P710BT`. Replace the example URI below with the complete URI shown for your own printer, then create the dedicated queue:
 
-- Read templates from /label-setups. The browser renders the labels and checks QR readability and tape fit. /label-workspace stores the prepared personal list.
+```sh
+sudo /usr/sbin/lpadmin -p Brother_PT_P710BT_RAW -E \
+  -v 'usb://Brother/PT-P710BT?serial=YOUR_SERIAL' \
+  -m 'drv:///sample.drv/generic.ppd' \
+  -D 'Brother PT-P710BT (Inventory / QZ)'
+```
 
-- POST /label-print-jobs accepts id, printerId, tape and labels. labels contains base64-encoded P-touch raster data, not PNG images. Reuse the same id for the same submission.
+Recent macOS versions reject queues created with `-m raw`. This command uses a generic printer description; Open Inventory asks QZ to bypass it and send the original commands. Use this queue for Open Inventory’s P-touch output. Send ordinary PDF or browser jobs through a normal printer-driver queue.
 
-- The Windows agent uses its printer token to retrieve a job from /label-print-agent/claim and acknowledge it through /label-print-agent/ack. An ordinary API token is not valid here.
+#### Linux queue
 
-- GET /label-print-jobs lists your latest jobs. queued means waiting, claimed means retrieved and submitted means accepted by Windows. failed indicates a failure; uncertain indicates an ambiguous outcome and is never automatically reprinted.
+In your distribution’s printer settings, add the connected Brother USB device and select a **Generic Raw Queue** where supported. Use `lpinfo -v` to find the actual USB device URI and name the queue `Brother_PT_P710BT_RAW`.
 
-All paths are under /api/v1. With local QZ printing, the browser sends the job directly to QZ Tray; the server endpoints /labels/qz-certificate and /labels/qz-sign only provide optional signing.
+Follow QZ’s illustrated [Ubuntu/Linux RAW queue guide](https://qz.io/docs/setting-up-a-raw-printer-in-ubuntu-linux) for the detailed steps. Queue options vary with the distribution and CUPS version; the requirement is unchanged RAW output. Confirm the setup with a single label before printing a batch.
 
-[Open the printing API →](/api-reference) · [Product: labels and API →](https://openinventory.polyxo.de/features/labels-api)
+### 3. Connect Open Inventory to QZ
+
+1. Open Open Inventory in a desktop browser on the computer where QZ is running.
+2. In **Labels → Print using**, select **Brother PT-P710BT · USB / QZ Tray**.
+3. Set **Loaded tape** to the width physically installed in the printer. Tape width is selected manually; Open Inventory does not read it from the device.
+4. Click **Connect QZ Tray**. Approve the QZ access request for your Inventory site.
+5. Select `Brother_PT_P710BT_RAW` from the printer list. If several matching queues appear, choose the dedicated RAW queue you just created.
+
+### 4. Print directly
+
+1. Select one item and a P-touch template that fits the loaded tape. Set one copy.
+2. Click **Print 1 label** and approve any QZ print request.
+3. Wait for the label, check its dimensions and scan its QR code.
+4. For a batch, prepare your labels and use [Print as a series](#print-the-series).
+
+There is no browser print dialog in this path. “Submitted to the local printer queue” means the job was handed off; it does not prove that a physical label was printed. Check the output before sending the same job again.
+
+### Optional: print without repeated QZ approval prompts
+
+You can use QZ Tray with approval prompts without purchasing a signing certificate. Skipping the browser print dialog does **not** automatically remove QZ’s security prompts.
+
+For silent printing, an administrator must configure request signing with a certificate trusted by QZ on each printing computer. Use QZ’s [certificate and signing workflow](https://qz.io/docs/signing), then configure both values on the **Inventory server**:
+
+```dotenv
+QZ_CERTIFICATE_PATH=/run/secrets/qz-certificate.pem
+QZ_PRIVATE_KEY_PATH=/run/secrets/qz-private-key.pem
+```
+
+For deployments without secret file mounts, use `QZ_CERTIFICATE_BASE64` and `QZ_PRIVATE_KEY_BASE64` instead. These contain base64-encoded PEM contents; file paths take precedence if both forms are set. Restart or redeploy the application after changing its environment.
+
+Keep the private key on the server, outside the repository and public web directory. Never use a `NEXT_PUBLIC_*` variable for it. Trust and allow the matching certificate in QZ on each printing computer, then reconnect and test. Detailed trust options are in the [P-touch signing guide](https://github.com/Utzel-Butzel/inventory/blob/main/docs/ptouch-printing.md#qz-approval-prompts-and-optional-signing).
+
+<span id="shared-office-printer" />
+
+## Shared printer with Print Agent
+
+Choose this when the printer is connected to another computer, or several people need to use the same printer. Users submit jobs in the web app; **Inventory Print Agent** retrieves them and prints on the printer computer. Users’ devices need neither QZ Tray nor a printer driver.
+
+The agent supports **Windows, macOS and Linux**, with system-driver printers for PDF output and dedicated P-touch queues for label output. The printer computer must stay awake, online and able to reach your Inventory server. QZ Tray does not retrieve these shared jobs.
+
+### Use an existing shared printer
+
+1. In **Labels → Print using**, choose **Shared printer**, then select the printer.
+2. Check for **Print Agent connected**. If it is offline, contact the person responsible for that printer computer.
+3. Choose the items, template and copies. For a system printer, configure the sheet or individual-label format as described in [Browser print dialog](#browser-print-dialog). For P-touch, use a template matching the shared printer’s configured tape.
+4. Click **Print labels**. For a system printer, review the preview and choose **Print / Send**. The agent handles output on the other computer.
+5. Follow **Your recent print jobs** and collect the labels at that printer.
+
+### Set up a shared printer
+
+This is a one-time administrator task requiring `tokens.manage`.
+
+1. On the printer computer, install and test the printer. Use a normal driver queue for a system printer or a dedicated RAW queue for the PT-P710BT.
+2. In Open Inventory, choose **Shared printer → Set up shared printer**. Enter a display name, location, printer type and the exact **Operating system queue name**.
+3. For **System printer (driver / PDF)**, enter the maximum paper width and height this shared destination should accept. These limits do not configure the physical tray or driver. For P-touch, choose the tape width loaded in that printer.
+4. Click **Create printer**, then **Download agent configuration**. Save `config.json` on the printer computer. It contains a private token for this printer; do not share it with other users.
+5. Download `inventory_print_agent.py` from the [print-agent folder](https://github.com/Utzel-Butzel/inventory/tree/main/scripts/print-agent), then follow the operating-system steps below.
+
+#### macOS / Linux agent
+
+Install Python 3.10 or later and ensure CUPS commands `lp` and `lpstat` are available. No additional Python packages are needed. In the folder containing the script and downloaded configuration, run:
+
+```sh
+python3 inventory_print_agent.py --list-printers
+chmod 600 config.json
+python3 inventory_print_agent.py --config config.json --state-dir ./agent-state
+```
+
+Use the first command to check the queue name in your configuration. Leave the agent running for the first test. For automatic startup, configure launchd on macOS or systemd on Linux using absolute paths and the same persistent state directory. The service user must have access to the printer.
+
+#### Windows agent
+
+Install Python 3.10 or later. For **system-printer/PDF jobs**, also install a current [SumatraPDF](https://www.sumatrapdfreader.org/) version supporting custom paper sizes and `disable-auto-rotation`.
+
+Download `Install-SystemPrintAgent.ps1` from the same [print-agent folder](https://github.com/Utzel-Butzel/inventory/tree/main/scripts/print-agent). Put it beside `inventory_print_agent.py` and `config.json`. Open PowerShell in that folder and run the following, replacing the executable paths with your actual installation paths:
+
+```powershell
+.\Install-SystemPrintAgent.ps1 -PythonExe 'C:\Path\To\pythonw.exe' -PdfPrinter 'C:\Program Files\SumatraPDF\SumatraPDF.exe'
+```
+
+For a P-touch-only configuration, omit `-PdfPrinter`; SumatraPDF is not needed. The installer creates a task for the current user’s logon and starts it. That user must stay signed in, although the screen can be locked. It does not change your PowerShell execution policy.
+
+For existing installations using `Install-InventoryPrintAgent.ps1`, follow the [legacy Windows P-touch agent guide](https://github.com/Utzel-Butzel/inventory/tree/main/scripts/print-agent#readme). Do not run the old and new agents for the same printer at the same time.
+
+#### Confirm the setup
+
+Return to **Labels**, select the shared printer and wait for **Print Agent connected**. Submit one label and check the actual output. Only outbound access to the Inventory server is needed; no inbound firewall rule is required.
+
+For multiple printers, driver-specific paper names, automatic startup and migration details, see the [general printing administration guide](https://github.com/Utzel-Butzel/inventory/blob/main/docs/printing.md#shared-system-printers).
+
+## Prepare and print a batch
+
+### Prepare a print list
+
+Use **Prepare labels** to collect items with their chosen text, copies and templates. Repeat with other items or templates as needed. The **Prepared labels** list is private to your account and organization and survives reloads after a successful save.
+
+Prepared labels retain their content and layout. Later template edits do not change them. You can change the destination afterwards, provided the labels fit that destination’s paper or tape.
+
+### Print the series
+
+1. Review the prepared previews and copy counts; remove unwanted labels.
+2. Check the destination and loaded paper or tape again.
+3. Set **Copies of the entire list** if you need multiple sets. Copies count toward the limit of **100 labels per job**.
+4. Click **Print as a series**. For browser/PDF or shared system output, review the page preview before printing or sending.
+
+For **P-touch**, all labels in a series must use the same tape width; lengths and layouts may differ. The RAW job limit is 4 MB. A series groups labels into one job and reduces the leading tape offcut compared with sending each label separately.
+
+For a **shared system printer**, each job must have one paper size. Put labels of different sizes on a common sheet, or send separate jobs.
+
+Browser/PDF output retains the prepared list; accepted direct P-touch submission clears it. Check the physical output before repeating any job.
+
+## Troubleshooting
+
+| What you see | What to check or do |
+| --- | --- |
+| QZ cannot connect | Start QZ Tray on the same computer as the browser. Check its tray/menu-bar icon and whether access for your Inventory site was denied. Retry **Connect QZ Tray** after allowing access. |
+| QZ connects, but no printer appears | Check the OS queue, USB cable and power. The queue name must contain **P710BT**, for example `Brother_PT_P710BT_RAW`. Reconnect QZ after correcting the queue. |
+| QZ asks for approval again | This is expected without trusted signing. Approve the request, or ask your administrator to configure [optional signing](#optional-print-without-repeated-qz-approval-prompts). |
+| P-touch rejects the job or says the template is too large | Match **Loaded tape** to the actual tape. Use the corresponding P-touch preset; 24 mm tape has only about 18 mm of printable height. |
+| Labels are too small or too large | Match the driver’s paper size to the preview. Use **100% / Actual size**, disable fit/shrink options and measure **Test scale**. |
+| Sheet labels are shifted or drift across the page | Check cell dimensions, rows, columns, gaps and margins first. Use X/Y correction only for a consistent shift of the entire grid. |
+| Edges are cut off | Check the printer’s unprintable margins and whether the driver supports the selected custom size. Move content inside the printable area. |
+| Shared printer is offline | Wake the printer computer, check its network connection and start Print Agent. On Windows, the user running the general agent must remain signed in. |
+| QR code does not scan | Enlarge it, keep images clear of it, use strong contrast and verify physical print size. Try wider tape if the code is too dense. |
+
+### Job accepted, but no label?
+
+Check the printer’s power, tape or paper, and the operating-system queue on the computer connected to it. QZ or agent acceptance confirms a handoff, not a finished print.
+
+| Shared-job status | Meaning and next action |
+| --- | --- |
+| **Waiting for Print Agent** | The job is queued. You can cancel your own waiting jobs; they expire after ten minutes. |
+| **Sending to printer** | An agent has claimed the job. Check that printer computer if progress stops. |
+| **Submitted to printer** | The local print system accepted the job. Collect and check the physical output. |
+| **Output uncertain – check printer** | Output may already have happened. Inspect the printer, queue and labels before submitting another job. It is not automatically reprinted. |
+| **Failed** | Review the error and fix the setup or data before retrying. |
+| **Cancelled / Expired** | The waiting job will not be printed. Submit a new job if still needed. |
+
+## Permissions and API reference
+
+Printing requires `labels.read` and a browser session. Saving or editing templates requires `labels.manage`; managing shared printers requires `tokens.manage`. If controls are missing, ask your administrator to check your permissions.
+
+### How a job moves through the printing API
+
+Templates and personal prepared lists use `/api/v1/label-setups` and `/api/v1/label-workspace`. Shared printers and jobs use `/api/v1/label-printers` and `/api/v1/label-print-jobs`. Payloads differ between P-touch and system-printer output; use the current [printing API reference](/api-reference) for the request schemas.
+
+The agent claims and acknowledges jobs through `/api/v1/label-print-agent/claim` and `/api/v1/label-print-agent/ack` using the printer-specific token from its configuration. An ordinary API token cannot replace it.
+
+With local QZ printing, the browser sends the job directly to QZ Tray. The server endpoints `/api/v1/labels/qz-certificate` and `/api/v1/labels/qz-sign` provide optional signing; they do not run a shared print queue.

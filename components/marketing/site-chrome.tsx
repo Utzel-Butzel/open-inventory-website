@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Boxes } from "lucide-react";
+import { ArrowUpRight, Boxes, Github } from "lucide-react";
 
 import {
   DesktopMarketingNavigation,
@@ -90,9 +90,12 @@ export async function MarketingHeader() {
             darkLabel={copy.darkTheme}
             pendingLabel={copy.toggleTheme}
           />
-          <div className="hidden xl:block">
+          <div className="hidden items-center gap-2 xl:flex">
             <a href={publicDemoUrl} className="site-button site-button-primary !min-h-10 !px-3 !text-sm">
               {copy.openApp}<ArrowUpRight className="size-3.5" aria-hidden="true" />
+            </a>
+            <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary !min-h-10 !px-3 !text-sm">
+              <Github aria-hidden="true" />GitHub
             </a>
           </div>
           <div className="xl:hidden">

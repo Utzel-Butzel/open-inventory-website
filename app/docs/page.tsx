@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowUpRight, BookOpen } from "lucide-react";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
@@ -29,6 +30,18 @@ export default async function DocsPage() {
         <p className="site-eyebrow">{de ? "Einrichten & loslegen" : "Set up & get started"}</p>
         <h1 className="site-title mt-5 max-w-4xl">{de ? "Dein Inventar. Dein Hosting." : "Your inventory. Your hosting."}</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">{de ? "Wähle die passende Option für deinen Rechner, deinen Server oder die Cloud. Für Dokploy, Coolify, Docker und Portainer kannst du direkt mit der Einrichtung beginnen." : "Choose the right option for your computer, your server or the cloud. Ready-to-use setup instructions are available for Dokploy, Coolify, Docker and Portainer."}</p>
+        <a
+          href={technicalDocsHref()}
+          className="group mt-8 flex items-start gap-4 rounded-xl border border-brand-border bg-brand-soft p-6 transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:items-center sm:gap-6 sm:p-8"
+        >
+          <BookOpen aria-hidden="true" className="hidden size-10 shrink-0 text-brand sm:block" />
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl font-semibold tracking-tight text-brand sm:text-3xl">{de ? <>Entwickler<wbr />dokumentation</> : "Developer documentation"}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-7 text-muted sm:text-base">{de ? "API-Referenz, Integrationen und technische Anleitungen – alles, um Open Inventory anzubinden und zu erweitern." : "API reference, integrations and technical guides — everything you need to connect and extend Open Inventory."}</p>
+            <span className="mt-4 inline-block font-semibold text-brand group-hover:underline">{de ? "Zur Entwicklerdoku" : "Open developer docs"}</span>
+          </div>
+          <ArrowUpRight aria-hidden="true" className="size-6 shrink-0 text-brand sm:size-8" />
+        </a>
       </div></section>
       <div className="site-shell grid gap-10 py-12 lg:grid-cols-[200px_minmax(0,760px)] lg:justify-between">
         <aside><nav aria-label={de ? "Auf dieser Seite" : "On this page"} className="flex flex-wrap gap-2 lg:sticky lg:top-24 lg:grid">{[["hosting", de ? "Hosting wählen" : "Choose hosting"], ["docker", "Dokploy / Coolify"], ["docker-installer", "Docker"], ["railway", "Railway"], ["portainer", "Portainer"], ["first-steps", de ? "Erste Schritte" : "First steps"], ["help", de ? "Wenn etwas hakt" : "Troubleshooting"]].map(([id, text]) => <a key={id} href={`#${id}`} className="rounded-lg px-3 py-2 text-sm text-muted hover:bg-surface hover:text-foreground">{text}</a>)}</nav></aside>

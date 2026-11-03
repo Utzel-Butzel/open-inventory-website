@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Camera, Shapes, PackageCheck, Printer, MapPin, ShieldCheck, Wrench, House, Rocket, Users, Archive, GraduationCap, Hammer, FlaskConical, type LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Github, Menu, X, Camera, Shapes, PackageCheck, Printer, MapPin, ShieldCheck, Wrench, House, Rocket, Users, Archive, GraduationCap, Hammer, FlaskConical, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { MarketingLanguageSwitcher } from "@/components/marketing/marketing-language-switcher";
@@ -549,10 +549,20 @@ export function MobileMarketingNavigation({
         <a
           href={appUrl}
           onClick={closeNavigation}
-          className="site-button site-button-primary mb-3 w-full !justify-between"
+          className="site-button site-button-primary mb-2 w-full !justify-between"
         >
           {copy.openApp}
           <ArrowUpRight className="size-4" aria-hidden="true" />
+        </a>
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          onClick={closeNavigation}
+          className="site-button site-button-secondary mb-3 w-full"
+        >
+          <Github aria-hidden="true" />GitHub
+          <ArrowUpRight className="ml-auto size-4" aria-hidden="true" />
         </a>
         <MobileAccordion
           accordionKey="features"
@@ -598,16 +608,6 @@ export function MobileMarketingNavigation({
             <Link href={marketingHref(locale, "/app")} onClick={closeNavigation} className="hover:text-foreground">{copy.ios}</Link>
             <Link href={marketingHref(locale, "/blog")} onClick={closeNavigation} className="hover:text-foreground">Blog</Link>
           </div>
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            onClick={closeNavigation}
-            className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border"
-          >
-            GitHub
-            <ArrowUpRight className="size-3.5" aria-hidden="true" />
-          </a>
           <Link
             href={marketingHref(locale, "/docs#docker")}
             onClick={closeNavigation}

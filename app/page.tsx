@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, Check, ChevronDown, Github, ScanLine, Server,
 
 import { AiPhotoExample } from "@/components/marketing/ai-photo-example";
 import { AudienceTicker } from "@/components/marketing/audience-ticker";
+import { FeatureExplorer } from "@/components/marketing/feature-explorer";
 import { OpenSourceBadge } from "@/components/marketing/open-source-badge";
 import { AppStoreBadges } from "@/components/marketing/app-store-badges";
 import { RealWorldLabels } from "@/components/marketing/real-world-labels";
@@ -160,6 +161,7 @@ export default async function HomePage() {
               <p className={styles.lead}>{c.intro}</p>
               <div className={styles.actions}>
                 <a className="site-button site-button-primary" href={publicDemoUrl}>{c.demo}<ArrowUpRight aria-hidden="true" /></a>
+                <a className="site-button site-button-secondary" href={githubUrl} target="_blank" rel="noreferrer"><Github aria-hidden="true" />GitHub</a>
                 <Link className="site-button site-button-secondary" href={href("/docs#docker")}>{c.host}</Link>
               </div>
               <ul className={styles.facts}>{c.facts.map(fact => <li key={fact}><Check aria-hidden="true" />{fact}</li>)}</ul>
@@ -212,6 +214,8 @@ export default async function HomePage() {
             <div className={styles.mobileCopy}><p className="site-eyebrow">{c.mobileEyebrow}</p><h2 className="site-heading mt-4">{c.mobileTitle}</h2><p className={`${styles.bodyCopy} mt-6`}>{c.mobileCopy}</p><Link href={href("/app")} className="site-link mt-7">{c.mobileLink}<ArrowRight aria-hidden="true" /></Link><AppStoreBadges locale={locale} /></div>
           </div>
         </section>
+
+        <FeatureExplorer locale={locale} />
 
         <section className={`site-section ${styles.scenarioSection}`}>
           <div className={`site-shell ${styles.scenarioGrid}`}>

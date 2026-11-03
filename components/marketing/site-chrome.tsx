@@ -9,6 +9,7 @@ import {
   MarketingDocumentLanguage,
   MarketingLanguageSwitcher,
 } from "@/components/marketing/marketing-language-switcher";
+import { SiteSearch } from "@/components/marketing/site-search";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { OpenSourceBadge } from "@/components/marketing/open-source-badge";
 import {
@@ -72,7 +73,7 @@ export async function MarketingHeader() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-3 focus:text-sm focus:text-background">
         {copy.skip}
       </a>
-      <div className="site-shell flex h-[72px] items-center justify-between gap-6">
+      <div className="site-shell flex h-[80px] items-center justify-between gap-3">
         <OpenInventoryBrand
           href={marketingHref(locale, "/")}
           homeLabel={copy.home}
@@ -80,34 +81,23 @@ export async function MarketingHeader() {
 
         <DesktopMarketingNavigation locale={locale} />
 
-        <div className="hidden shrink-0 items-center gap-2 lg:flex">
-          <MarketingLanguageSwitcher locale={locale} />
-          <ThemeToggle
-            lightLabel={copy.lightTheme}
-            darkLabel={copy.darkTheme}
-            pendingLabel={copy.toggleTheme}
-          />
-          <a
-            href={publicDemoUrl}
-            className="site-button site-button-primary ml-2 !min-h-10 !px-4 !text-[13px]"
-          >
-            {copy.openApp}
-            <ArrowUpRight className="size-3.5" aria-hidden="true" />
-          </a>
-        </div>
-
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <SiteSearch locale={locale} />
+          <div className="hidden xl:block"><MarketingLanguageSwitcher locale={locale} /></div>
           <ThemeToggle
             className="size-10"
             lightLabel={copy.lightTheme}
             darkLabel={copy.darkTheme}
             pendingLabel={copy.toggleTheme}
           />
-          <MobileMarketingNavigation
-            appUrl={publicDemoUrl}
-            githubUrl={githubUrl}
-            locale={locale}
-          />
+          <div className="hidden xl:block">
+            <a href={publicDemoUrl} className="site-button site-button-primary !min-h-10 !px-3 !text-sm">
+              {copy.openApp}<ArrowUpRight className="size-3.5" aria-hidden="true" />
+            </a>
+          </div>
+          <div className="xl:hidden">
+            <MobileMarketingNavigation appUrl={publicDemoUrl} githubUrl={githubUrl} locale={locale} />
+          </div>
         </div>
       </div>
     </header>

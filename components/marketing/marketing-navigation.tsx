@@ -13,10 +13,10 @@ import {
 type DropdownKey = "features" | "use-cases";
 
 const desktopNavigationItemClassName =
-  "inline-flex h-10 items-center whitespace-nowrap rounded-md px-1 text-[13px] font-medium transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "inline-flex h-10 items-center whitespace-nowrap rounded-md px-1 text-base font-medium transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const mobileNavigationItemClassName =
-  "flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border";
+  "flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-base font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border";
 
 type DropdownItem = {
   icon: LucideIcon;
@@ -318,7 +318,7 @@ export function DesktopMarketingNavigation({
   return (
     <nav
       ref={navigationRef}
-      className="hidden items-center gap-4 lg:flex xl:gap-5"
+      className="hidden items-center gap-3 xl:flex 2xl:gap-5"
       aria-label={copy.navigation}
     >
       <DesktopDropdown

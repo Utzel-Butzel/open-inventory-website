@@ -1,13 +1,13 @@
 import Image from "next/image";
 
 import type { MarketingLocale } from "@/lib/marketing-i18n";
+import { appStoreUrl } from "@/lib/site-config";
 
-// Store listings are not configured yet; keep the badges disabled until launch.
 export function AppStoreBadges({ locale }: { locale: MarketingLocale }) {
   const de = locale === "de";
   return (
     <div className="mt-7 flex flex-wrap items-center gap-4" aria-label={de ? "Apps herunterladen" : "Download apps"}>
-      <button type="button" disabled className="shrink-0 cursor-not-allowed border-0 bg-transparent p-0" aria-label={`App Store – ${de ? "demnächst verfügbar" : "coming soon"}`}>
+      <a href={appStoreUrl} className="shrink-0" aria-label={de ? "Laden im App Store" : "Download on the App Store"}>
         <Image
           src={`/marketing/store-badges/app-store-${locale}.svg`}
           alt={de ? "Laden im App Store" : "Download on the App Store"}
@@ -16,7 +16,7 @@ export function AppStoreBadges({ locale }: { locale: MarketingLocale }) {
           className="h-14 w-auto"
           unoptimized
         />
-      </button>
+      </a>
       <button type="button" disabled className="shrink-0 cursor-not-allowed border-0 bg-transparent p-0" aria-label={`Google Play – ${de ? "demnächst verfügbar" : "coming soon"}`}>
         <Image
           src={`/marketing/store-badges/google-play-${locale}.svg`}

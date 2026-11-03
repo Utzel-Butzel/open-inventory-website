@@ -1,5 +1,8 @@
 const fallbackAppUrl = "http://localhost:3001";
 
+export const appStoreUrl =
+  "https://apps.apple.com/us/app/open-inventory-by-polyxo/id6830115776";
+
 export const publicDemoUrl =
   "https://demo.openinventory.polyxo.de/login?demo=1";
 

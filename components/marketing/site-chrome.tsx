@@ -16,7 +16,7 @@ import {
   marketingHref,
 } from "@/lib/marketing-i18n";
 import { getMarketingLocale } from "@/lib/marketing-locale";
-import { appHref, publicDemoUrl } from "@/lib/site-config";
+import { appHref, appStoreUrl, publicDemoUrl } from "@/lib/site-config";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
@@ -175,6 +175,7 @@ export async function MarketingFooter() {
               <Link href={href("/features")} className="w-fit transition-colors hover:text-foreground">{copy.features}</Link>
               <Link href={href("/app")} className="w-fit transition-colors hover:text-foreground">Apps</Link>
               <Link href={href("/app#app-downloads")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "App-Downloads" : "App downloads"}</Link>
+              <a href={appStoreUrl} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "iPhone-App im App Store" : "iPhone app on the App Store"}</a>
               <Link href={href("/open-source")} className="w-fit transition-colors hover:text-foreground">Open Source</Link>
               <Link href={href("/docs")} className="w-fit transition-colors hover:text-foreground">{copy.docs}</Link>
               <Link href={href("/api-docs")} className="w-fit transition-colors hover:text-foreground">{copy.api}</Link>

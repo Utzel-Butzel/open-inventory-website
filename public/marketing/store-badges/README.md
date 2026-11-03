@@ -16,5 +16,6 @@ at 56 px high, with the App Store first and at least 14 px clear space.
 - `GetItOnGooglePlay_Badge_Web_color_German.svg` → `google-play-de.svg`
 - `GetItOnGooglePlay_Badge_Web_color_English.svg` → `google-play-en.svg`
 
-Store listings are not configured yet. The badges retain their disabled state
-and accessible “coming soon” labels until the store URLs are available.
+The App Store badge links to the published listing configured as `appStoreUrl`
+in `lib/site-config.ts`. The Google Play badge retains its disabled state and
+accessible “coming soon” label until its store URL is available.

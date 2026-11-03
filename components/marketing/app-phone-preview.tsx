@@ -51,7 +51,7 @@ export function AppPhonePreview({
   }, [paused, showVideo]);
 
   return (
-    <div ref={container} className="relative aspect-[388/800] drop-shadow-[0_18px_24px_rgba(28,25,45,0.22)]">
+    <div ref={container} className="group/phone relative aspect-[388/800] drop-shadow-[0_18px_24px_rgba(28,25,45,0.22)]">
       {artwork && !showVideo ? (
         <Image src={artwork} alt={alt} fill sizes="(max-width: 639px) 45vw, 260px" loading={eager ? "eager" : "lazy"} className="object-contain" />
       ) : (
@@ -84,7 +84,7 @@ export function AppPhonePreview({
             if (!playing) void video.current?.play().catch(() => setPlaying(false));
           }}
           aria-label={`${locale === "de" ? (playing ? "Video pausieren" : "Video abspielen") : (playing ? "Pause video" : "Play video")}: ${alt}`}
-          className="absolute -right-3 top-1/2 z-20 flex size-9 items-center justify-center rounded-full border border-black/10 bg-white text-zinc-800 shadow-sm transition hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          className="absolute -right-3 top-1/2 z-20 flex size-9 items-center justify-center rounded-full border border-black/10 bg-white text-zinc-800 shadow-sm opacity-0 pointer-events-none transition group-hover/phone:opacity-100 group-hover/phone:pointer-events-auto hover:bg-zinc-100 focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
         >
           {playing ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
         </button>

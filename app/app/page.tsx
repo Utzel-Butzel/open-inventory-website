@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { AppPhonePreview } from "@/components/marketing/app-phone-preview";
 import { AppDownloads } from "@/components/marketing/app-downloads";
 import {
   MarketingFooter,
@@ -127,6 +128,8 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
   const captures = [
     {
       src: "/marketing/devices/iphone-inventory-cutout-v1.webp",
+      name: "inventory",
+      screenshot: "/marketing/screenshots/ios-inventory.png",
       label: isEnglish ? "Inventory" : "Inventarliste",
       alt: isEnglish
         ? "Photorealistic iPhone mockup showing the Open Inventory list"
@@ -134,6 +137,8 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
     },
     {
       src: "/marketing/devices/iphone-detail-cutout-v1.webp",
+      name: "detail",
+      screenshot: "/marketing/screenshots/ios-item-detail.png",
       label: isEnglish ? "Item detail" : "Eintragsdetail",
       alt: isEnglish
         ? "Photorealistic iPhone mockup showing an item in Open Inventory"
@@ -149,16 +154,7 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
             key={capture.src}
             className={index === 1 ? "translate-y-6 sm:translate-y-10" : undefined}
           >
-            <div className="relative aspect-[1/2.08] drop-shadow-[0_28px_28px_rgba(0,0,0,0.35)]">
-              <Image
-                src={capture.src}
-                alt={capture.alt}
-                loading="eager"
-                fill
-                sizes="(max-width: 639px) 45vw, (max-width: 1023px) 260px, 220px"
-                className="object-contain"
-              />
-            </div>
+            <AppPhonePreview name={capture.name} artwork={capture.src} screenshot={capture.screenshot} alt={capture.alt} locale={locale} eager />
             <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65 sm:text-[10px]">
               {capture.label}
             </p>
@@ -174,6 +170,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
   const captures = [
     {
       src: "/marketing/screenshots/ios-search.png",
+      name: "search",
       label: isEnglish ? "Search" : "Suche",
       alt: isEnglish
         ? "Actual native Open Inventory search with demo records"
@@ -181,6 +178,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
     },
     {
       src: "/marketing/screenshots/ios-stock-management.png",
+      name: "stock",
       label: isEnglish ? "Stock" : "Bestand",
       alt: isEnglish
         ? "Actual native Open Inventory stock management with demo data"
@@ -188,6 +186,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
     },
     {
       src: "/marketing/screenshots/ios-map.png",
+      name: "map",
       label: isEnglish ? "Map" : "Karte",
       alt: isEnglish
         ? "Actual native Open Inventory map with purpose-built demo locations"
@@ -222,26 +221,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
               key={capture.src}
               className="mx-auto w-full max-w-[260px]"
             >
-              <div className="relative aspect-[388/800] drop-shadow-[0_18px_24px_rgba(28,25,45,0.17)]">
-                <Image
-                  src="/marketing/devices/iphone-16-pro-max-frame.png"
-                  alt=""
-                  aria-hidden="true"
-                  fill
-                  sizes="260px"
-                  className="pointer-events-none z-10 object-contain"
-                />
-                {/* Match the frame's 388×800 source: screen inset 16×13 px, corner radius 59 px. */}
-                <div className="absolute inset-x-[4.1237%] inset-y-[1.625%] overflow-hidden rounded-[16.573%/7.623%]">
-                  <Image
-                    src={capture.src}
-                    fill
-                    sizes="(max-width: 639px) 244px, 24vw"
-                    alt={capture.alt}
-                    className="object-fill"
-                  />
-                </div>
-              </div>
+              <AppPhonePreview name={capture.name} screenshot={capture.src} alt={capture.alt} locale={locale} />
               <figcaption className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.13em] text-muted sm:text-[10px]">
                 {capture.label}
               </figcaption>

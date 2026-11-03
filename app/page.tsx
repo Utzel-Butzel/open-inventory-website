@@ -20,9 +20,9 @@ const githubUrl = "https://github.com/Utzel-Butzel/inventory";
 
 const content = {
   de: {
-    title: "Open Inventory – Wissen, was da ist.",
+    title: "Open Inventory – Inventarisieren in Sekunden statt Stunden.",
     description: "Geräte und Material erfassen, Standorte finden und Bestände und Ausleihen nachvollziehen. Open Source, selbst hostbar und mit nativen Apps für iPhone und Android.",
-    headline: ["Wissen, was da ist.", "Und wo."],
+    headline: ["Inventarisieren", "in Sekunden statt Stunden."],
     aiTitle: "Dein Inventar beginnt mit einem Foto.",
     aiEyebrow: "Mit KI erfassen",
     aiLink: "Mehr zur Fotoerfassung",
@@ -80,9 +80,9 @@ const content = {
     closingTitle: "Open Inventory ausprobieren", closingCopy: "Öffne die Demo mit Beispieldaten oder richte Open Inventory auf deinem Server ein.", github: "Quellcode auf GitHub",
   },
   en: {
-    title: "Open Inventory – Know what you have.",
+    title: "Open Inventory – Inventory in seconds, not hours.",
     description: "Catalogue equipment and supplies, find locations and keep track of stock and loans. Open source, self-hosted and with native iPhone and Android apps.",
-    headline: ["Know what you have.", "And where it is."],
+    headline: ["Inventory in seconds,", "not hours."],
     aiTitle: "Your inventory starts with a photo.",
     aiEyebrow: "Capture with AI",
     aiLink: "Explore photo capture",
@@ -157,7 +157,7 @@ export default async function HomePage() {
         <section className={styles.hero}>
           <div className={`site-shell ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              <h1 className={`site-title ${styles.heroTitle}`}>{c.headline[0]}<span>{c.headline[1]}</span></h1>
+              <h1 className={`site-title ${styles.heroTitle}`}>{c.headline[0]}{" "}<span>{c.headline[1]}</span></h1>
               <p className={styles.lead}>{c.intro}</p>
               <div className={styles.actions}>
                 <a className="site-button site-button-primary" href={publicDemoUrl}>{c.demo}<ArrowUpRight aria-hidden="true" /></a>

@@ -25,6 +25,12 @@ export type UseCase = {
   title: string;
   cardCopy: string;
   description: string;
+  example?: {
+    name: string;
+    url: string;
+    sectionTitle: string;
+    photoCaption?: string;
+  };
   image?: string;
   imageAlt?: string;
   visual:
@@ -83,12 +89,12 @@ export const useCases: UseCase[] = [
   {
     slug: "makerspace",
     name: "Makerspace",
-    eyebrow: "Werkstatt & geteilte Technik",
-    title: "Werkzeug finden, ausleihen und vollständig zurückbekommen.",
+    eyebrow: "Makerspace · Konglomerat e.V.",
+    title: "Was gibt es eigentlich alles im Rosenwerk?",
     cardCopy:
-      "Nachsehen, welche Werkzeuge es gibt, wo sie liegen und ob sie gerade ausgeliehen sind.",
+      "Konglomerat e.V.: Werkzeuge und Geräte über mehrere Werkbereiche hinweg finden.",
     description:
-      "Nicht alle kennen jede Schublade. In einem gemeinsamen Katalog kann auch ein neues Mitglied nachsehen, welche Werkzeuge vorhanden sind und wo sie liegen. Ausleihen stehen direkt am Gerät.",
+      "Im Rosenwerk des Konglomerat e.V. in Dresden wird unter anderem mit Holz, Textilien und Elektronik gearbeitet. Wer neu dazukommt, kennt weder alle Geräte noch deren Plätze. Genau diese Suche war einer der Anlässe für Open Inventory.",
     image: "/marketing/photography/workshop-team.webp",
     imageAlt:
       "Ein Team arbeitet gemeinsam an einem realen Werkstatttisch",
@@ -96,7 +102,7 @@ export const useCases: UseCase[] = [
     accent: "text-[#5f55e8]",
     softAccent: "bg-[#eeedff] text-[#5147d9]",
     challenge:
-      "Jemand sucht einen Akkuschrauber und weiß nicht, ob es überhaupt einen gibt. Die Suche zeigt das Gerät, seinen Platz an der Werkzeugwand und ob es ausgeliehen ist. Ein Foto hilft, das richtige Modell zu erkennen.",
+      "Ein gemeinsamer Katalog macht die Ausstattung der einzelnen Werkbereiche auffindbar. Auch wer bisher nur in der Holzwerkstatt war, kann darin nach einem Gerät für das nächste Elektronikprojekt suchen.",
     promises: [
       "Werkzeug per Suche, QR-Code oder Barcode direkt finden",
       "Mengenware und einzelne Maschinen getrennt nachverfolgen",
@@ -139,40 +145,14 @@ export const useCases: UseCase[] = [
     ],
     features: [
       {
-        icon: "stock",
-        title: "Mengen & Einzelgeräte",
-        description:
-          "Schrauben zählst du als Menge. Für jede Fräse oder jedes Messgerät kannst du Zustand, Seriennummer und Standort einzeln festhalten.",
-      },
-      {
-        icon: "labels",
-        title: "QR- und Barcode-Etiketten",
-        description:
-          "Gestalte Druckvorlagen im Browser und scanne Codes per Kamera, Foto oder Handscanner. Änderungen werden vor dem Buchen geprüft.",
-      },
-      {
-        icon: "history",
-        title: "Ausgabe mit Verlauf",
-        description:
-          "Halte fest, an wen ein Werkzeug ausgegeben wurde. Ausgabe und Rückgabe bleiben mit Datum im Verlauf sichtbar.",
+        icon: "camera",
+        title: "Mit einem Foto anfangen",
+        description: "Gerät fotografieren, vorgeschlagene Angaben prüfen und speichern. So lässt sich die Sammlung nach und nach erfassen, auch neben dem Werkstattbetrieb.",
       },
       {
         icon: "locations",
-        title: "Standorte & Karten",
-        description:
-          "Ordne Dinge Werkstätten und Lagerorten zu. Karten, Beziehungen und die iOS-Raumerfassung helfen bei komplexeren Räumen.",
-      },
-      {
-        icon: "orders",
-        title: "Nachschub & Baugruppen",
-        description:
-          "Mindestbestände, Bestellungen und Teilwareneingänge machen Nachschub sichtbar; Stücklisten dokumentieren verbautes Material.",
-      },
-      {
-        icon: "roles",
-        title: "Präzise Zugriffsrechte",
-        description:
-          "Lege fest, wer Werkzeuge ausgeben, Einträge bearbeiten oder Einstellungen ändern darf.",
+        title: "Den Platz dazuschreiben",
+        description: "Werkbereich, Regal und Fach am Eintrag hinterlegen. Ein QR-Etikett am Gerät führt direkt zu seinen Angaben.",
       },
     ],
     iosTitle: "Die Werkzeugausgabe passt in die Hosentasche.",
@@ -186,6 +166,11 @@ export const useCases: UseCase[] = [
     openSourceTitle: "Werkstattwissen gehört der Werkstatt.",
     openSourceCopy:
       "Open Inventory ist MIT-lizenziert und selbst hostbar. Datenmodell, API und native iOS-App sind einsehbar; eigene Integrationen können auf der dokumentierten OpenAPI aufbauen.",
+    example: {
+      name: "Konglomerat e.V.",
+      url: "https://konglomerat.org",
+      sectionTitle: "Die Werkstatt kennenlernen, bevor man jede Schublade kennt.",
+    },
   },
   {
     slug: "familie",
@@ -297,20 +282,20 @@ export const useCases: UseCase[] = [
   {
     slug: "startup",
     name: "Startup",
-    eyebrow: "Assets & wachsende Teams",
-    title: "Assets sauber verwalten, bevor die erste Tabelle kippt.",
+    eyebrow: "Hardware-Startup · paperlesspaper",
+    title: "Reichen die Teile für die nächsten Bilderrahmen?",
     cardCopy:
-      "Vor dem nächsten Arbeitsstart sehen, welcher Laptop frei ist und ob Netzteil und Dock vorhanden sind.",
+      "paperlesspaper: Bauteile für E-Paper-Bilderrahmen im Blick behalten und rechtzeitig nachbestellen.",
     description:
-      "Wer nutzt welchen Laptop? Welches Testgerät liegt noch im Schrank? Halte Seriennummer, Zubehör und Empfänger zusammen fest, damit die nächste Ausgabe oder Rückgabe nicht mit einer Suche beginnt.",
-    image: "/marketing/photography/server-rack.webp",
+      "Bei paperlesspaper bauen wir E-Paper-Bilderrahmen. Dafür brauchen wir Displays, Platinen und Gehäuseteile. Uns fehlte die Übersicht: Wie viel ist noch da, was müssen wir nachbestellen? Auch aus diesem Bedarf ist Open Inventory entstanden.",
+    image: "/marketing/paperlesspaper/circuit-boards.jpg",
     imageAlt:
-      "Reale Netzwerkverkabelung in einem bestückten Serverschrank",
+      "Platinen von paperlesspaper mit USB-C-Anschlüssen und Tastern",
     visual: "startup",
     accent: "text-[#aa4b08]",
     softAccent: "bg-[#fff1df] text-[#9a4308]",
     challenge:
-      "Ein neues Teammitglied braucht einen Laptop mit Netzteil und Dock. Du suchst ein verfügbares Gerät, stellst das Zubehör zusammen und hältst fest, an wen es ausgegeben wird.",
+      "Für die nächste Montage zählt der Bestand jedes einzelnen Bauteils. Genug Displays helfen wenig, wenn die passenden Platinen fehlen. Open Inventory führt diese Teile mit ihren Mengen und offenen Bestellungen zusammen.",
     promises: [
       "Seriennummer, Nutzer, Zustand und Standort pro Gerät sehen",
       "Wareneingänge und offene Bestellungen nachvollziehen",
@@ -337,39 +322,13 @@ export const useCases: UseCase[] = [
     features: [
       {
         icon: "stock",
-        title: "Asset- und Bestandsmodell",
-        description:
-          "Erfasse jedes Gerät mit seiner Seriennummer. Zubehör führst du als Menge; Standort und Buchungen bleiben am Eintrag sichtbar.",
-      },
-      {
-        icon: "history",
-        title: "Zuweisung & Rückgabe",
-        description:
-          "Geräte lassen sich Nutzern, anderen Assets oder Freitext-Empfängern zuweisen, reservieren oder zeitweise ausgeben.",
+        title: "Bauteile getrennt führen",
+        description: "Displays und Platinen erhalten eigene Einträge. Varianten unterscheiden die Ausführungen; Entnahmen für die Montage werden am jeweiligen Bestand gebucht.",
       },
       {
         icon: "orders",
-        title: "Bestellungen & Wareneingang",
-        description:
-          "Offene Bestellmengen fließen in die Prognose ein; Teilwareneingänge reduzieren sie und erzeugen nachvollziehbare Zugänge.",
-      },
-      {
-        icon: "roles",
-        title: "Rollen bis auf Aktionsebene",
-        description:
-          "Konfiguriere Rollen für IT, Operations und Mitarbeitende mit granularen Rechten und bedingten Regeln auf Inventardaten.",
-      },
-      {
-        icon: "api",
-        title: "OpenAPI & scoped Tokens",
-        description:
-          "Die eingecheckte OpenAPI-Spezifikation dokumentiert die REST-API; Tokens sind gehasht, widerrufbar, befristbar und einschränkbar.",
-      },
-      {
-        icon: "csv",
-        title: "CSV ohne Blindflug",
-        description:
-          "Importe werden zeilenweise validiert und überschreiben bestehende Einträge nicht stillschweigend. Exporte halten die Daten portabel.",
+        title: "Nachschub im Blick behalten",
+        description: "Mindestbestände zeigen, wo es knapp wird. Offene Bestellungen und Teillieferungen halten fest, was noch unterwegs und was schon angekommen ist.",
       },
     ],
     iosTitle: "Onboarding direkt am ausgepackten Gerät.",
@@ -383,6 +342,12 @@ export const useCases: UseCase[] = [
     openSourceTitle: "Eine Asset-Basis, die das Team kontrolliert.",
     openSourceCopy:
       "Open Inventory ist MIT-lizenzierte Open-Source-Software. Self-Hosting mit Docker, offenes Datenmodell und dokumentierte API verhindern, dass der frühe Prozess zur späteren Sackgasse wird.",
+    example: {
+      name: "paperlesspaper",
+      url: "https://paperlesspaper.de",
+      sectionTitle: "Vom Bauteil zur nächsten Bestellung.",
+      photoCaption: "Platinen für unsere Bilderrahmen. Foto: paperlesspaper",
+    },
   },
   {
     slug: "verein",

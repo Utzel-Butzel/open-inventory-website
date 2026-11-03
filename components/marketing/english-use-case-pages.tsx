@@ -44,6 +44,7 @@ type EnglishUseCaseCopy = Pick<
   | "cardCopy"
   | "description"
   | "imageAlt"
+  | "example"
   | "challenge"
   | "promises"
   | "mockData"
@@ -59,16 +60,16 @@ type EnglishUseCaseCopy = Pick<
 const englishCopyBySlug = {
   makerspace: {
     name: "Makerspace",
-    eyebrow: "Workshop and shared equipment",
-    title: "Find tools, record checkouts, and get complete kits back.",
+    eyebrow: "Makerspace · Konglomerat e.V.",
+    title: "What’s in the Rosenwerk?",
     cardCopy:
-      "See which tools you have, where they belong and whether they are on loan.",
+      "Konglomerat e.V.: finding tools and equipment across shared workshops.",
     description:
-      "Not everyone knows every drawer. A shared catalogue lets new members see which tools are available and where to find them. Loans are recorded on each tool.",
+      "At Konglomerat e.V.’s Rosenwerk in Dresden, people work with wood, textiles and electronics, among other things. New arrivals don’t know every machine or where it belongs. That problem helped inspire Open Inventory.",
     imageAlt:
       "Staff working in a used community workshop with labelled tools and machines",
     challenge:
-      "Someone needs a cordless drill and doesn’t know whether the workshop has one. Search shows the tool, its place on the tool wall and whether it is on loan. A photo helps identify the right model.",
+      "A shared catalogue makes equipment from each workshop discoverable. Someone who has only used the wood workshop can look up a device for their next electronics project.",
     promises: [
       "Find tools by name, QR code or barcode",
       "Count consumables and track individual machines",
@@ -111,40 +112,14 @@ const englishCopyBySlug = {
     ],
     features: [
       {
-        icon: "stock",
-        title: "Quantity and serial tracking",
-        description:
-          "Keep screws and cable ties as quantities while machines receive their own serial number, code, state, and assignment history.",
-      },
-      {
-        icon: "labels",
-        title: "QR and barcode labels",
-        description:
-          "Build physical labels in millimetres and link them to inventory records or configured scan actions.",
-      },
-      {
-        icon: "history",
-        title: "Checkout history",
-        description:
-          "Reservations, issues, returns, and transfers are dated events rather than a single overwritten status field.",
+        icon: "camera",
+        title: "Start with a photo",
+        description: "Photograph a tool, check the suggested details and save it. Build the catalogue a few items at a time alongside regular workshop activity.",
       },
       {
         icon: "locations",
-        title: "Shelves and work areas",
-        description:
-          "Model storage locations and map positions so a search result describes where an item should actually be found.",
-      },
-      {
-        icon: "orders",
-        title: "Reordering and assemblies",
-        description:
-          "Combine stock thresholds, purchase orders, and bills of materials for workshop kits and repeatable builds.",
-      },
-      {
-        icon: "roles",
-        title: "Task-specific permissions",
-        description:
-          "Separate browsing, editing, stock operations, and administration for members, maintainers, and workshop staff.",
+        title: "Record where it belongs",
+        description: "Add the workshop, shelf and compartment to the record. A QR label on the device opens its details.",
       },
     ],
     iosTitle: "Run a checkout at the shelf, not at a desk.",
@@ -158,6 +133,11 @@ const englishCopyBySlug = {
     openSourceTitle: "Workshop knowledge stays with the workshop.",
     openSourceCopy:
       "The web application, PostgreSQL migrations, OpenAPI contract, and iOS source are published under the MIT license. Self-hosting also means the operator remains responsible for backups, updates, TLS, and any optional external AI or storage provider.",
+    example: {
+      name: "Konglomerat e.V.",
+      url: "https://konglomerat.org",
+      sectionTitle: "Get to know the workshop without opening every drawer.",
+    },
   },
   familie: {
     name: "Family",
@@ -263,16 +243,16 @@ const englishCopyBySlug = {
   },
   startup: {
     name: "Startup",
-    eyebrow: "Assets and growing teams",
-    title: "Track devices and prototype parts without another spreadsheet workflow.",
+    eyebrow: "Hardware startup · paperlesspaper",
+    title: "Enough parts for the next batch of picture frames?",
     cardCopy:
-      "Before someone starts, check which laptop is free and whether a charger and dock are available.",
+      "paperlesspaper: tracking parts for E-Paper picture frames and knowing when to reorder.",
     description:
-      "Who is using each laptop? Which test device is still in the cupboard? Keep serial number, accessories and recipient together so you can prepare the next handover.",
+      "At paperlesspaper, we build E-Paper picture frames using displays, circuit boards and enclosure parts. We needed to know how many parts were left and when to reorder. That need also helped shape Open Inventory.",
     imageAlt:
-      "A small engineering team checking laptops and prototype equipment in a working office",
+      "Paperlesspaper circuit boards with USB-C ports and buttons",
     challenge:
-      "A new team member needs a laptop, charger and dock. Find an available device, gather the accessories and record who receives them.",
+      "For the next assembly run, every component counts. Having enough displays doesn’t help if the matching circuit boards are missing. Open Inventory brings together quantities and outstanding orders for those parts.",
     promises: [
       "Assign serialised assets to people while keeping a dated return history",
       "Track bulk parts, purchase orders, receipts, and minimum stock",
@@ -299,39 +279,13 @@ const englishCopyBySlug = {
     features: [
       {
         icon: "stock",
-        title: "Assets and component stock",
-        description:
-          "Use serialised units for devices and quantity tracking for interchangeable parts within the same data model.",
-      },
-      {
-        icon: "history",
-        title: "Assignment and return",
-        description:
-          "Keep the current assignee and previous assignments as dated records rather than editing history away.",
+        title: "Track each component",
+        description: "Displays and circuit boards get separate records, with variants for different versions. Parts taken for assembly are booked against the relevant stock.",
       },
       {
         icon: "orders",
-        title: "Purchasing and receipts",
-        description:
-          "Track ordered and received quantities and apply receipts to stock through explicit transactions.",
-      },
-      {
-        icon: "roles",
-        title: "Granular access",
-        description:
-          "Separate viewing, editing, stock, token, and administrative permissions and apply conditional access where needed.",
-      },
-      {
-        icon: "api",
-        title: "OpenAPI and scoped tokens",
-        description:
-          "Use revocable bearer tokens for scripts and integrations instead of sharing an administrator session.",
-      },
-      {
-        icon: "csv",
-        title: "Validated CSV exchange",
-        description:
-          "Preview validation errors before import and export core inventory data for further processing.",
+        title: "Keep track of incoming parts",
+        description: "Minimum stock levels flag shortages. Open orders and partial deliveries show what’s still on its way and what has arrived.",
       },
     ],
     iosTitle: "Register equipment where onboarding happens.",
@@ -345,6 +299,12 @@ const englishCopyBySlug = {
     openSourceTitle: "An asset layer the company can inspect and operate.",
     openSourceCopy:
       "The deployment uses Next.js, PostgreSQL, migrations, and persistent media storage. The source and API contract are open; operations, backups, upgrades, and any optional provider remain explicit responsibilities rather than hidden service behaviour.",
+    example: {
+      name: "paperlesspaper",
+      url: "https://paperlesspaper.de",
+      sectionTitle: "From components to the next order.",
+      photoCaption: "Circuit boards for our picture frames. Photo: paperlesspaper",
+    },
   },
   verein: {
     name: "Club and lending group",

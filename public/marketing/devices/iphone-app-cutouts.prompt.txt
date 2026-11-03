@@ -1,0 +1,11 @@
+Generated with the built-in image_gen tool, 2026-11-03.
+Final assets: iphone-inventory-cutout-v1.webp and iphone-detail-cutout-v1.webp.
+Transparent device cutouts for /app and /de/app. No hands, scenery or stands.
+Original PNG outputs remain in Codex generated_images; website assets are alpha-preserving WebP exports, cropped to the visible device bounds.
+These are generated product mockups based on existing Open Inventory screenshots, not unedited screenshots. The lower workflow section uses original screenshots with the licensed photographic device frame.
+
+Inventory prompt:
+Use case: background-extraction. Edit the input into a premium isolated product cutout. Keep ONLY the complete iPhone, preserving its photographic black titanium frame, glass highlights and exact existing app screen. Remove the entire workshop background, bench, ALL supporting stand pieces and all cast ground shadows. Reconstruct the small lower phone edge previously hidden by the stand. Absolutely no hands, humans, supports or props outside the phone. Truly transparent alpha background, not a checkerboard, not white, not black. Tight portrait canvas with about 3% transparent padding around the whole phone. The entire phone must fit without cropping. No changes to UI text or layout.
+
+Detail prompt:
+Use case: precise-object-edit. Edit the input into a premium isolated iPhone product cutout. REMOVE ALL HANDS, ALL FINGERS and ALL ARM outside the phone. Keep ONLY the complete iPhone, preserving its existing exact photographic black titanium frame, glass highlights, orientation and existing app screenshot including its photograph inside the screen. Reconstruct ONLY the tiny outer frame edges hidden by the fingers. No background, no hands, humans, supports, stands or props outside the phone. Truly transparent alpha background, not a checkerboard, not white, not black. Tight portrait canvas with about 3% transparent padding around the whole phone. The entire phone must fit without cropping. Keep all original UI text and layout exactly unchanged.

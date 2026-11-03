@@ -126,18 +126,18 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
   const isEnglish = locale === "en";
   const captures = [
     {
-      src: "/marketing/screenshots/ios-inventory.png",
+      src: "/marketing/devices/iphone-inventory-cutout-v1.webp",
       label: isEnglish ? "Inventory" : "Inventarliste",
       alt: isEnglish
-        ? "Real capture of the native Open Inventory iOS app showing inventory records with demo data"
-        : "Echte Aufnahme der nativen Open-Inventory-iOS-App mit Inventareinträgen und Demo-Daten",
+        ? "Photorealistic iPhone mockup showing the Open Inventory list"
+        : "Freigestelltes, fotorealistisches iPhone mit der Open-Inventory-Inventarliste",
     },
     {
-      src: "/marketing/screenshots/ios-item-detail.png",
+      src: "/marketing/devices/iphone-detail-cutout-v1.webp",
       label: isEnglish ? "Item detail" : "Eintragsdetail",
       alt: isEnglish
-        ? "Real capture of the native Open Inventory iOS app showing an item detail with demo data"
-        : "Echte Aufnahme der nativen Open-Inventory-iOS-App mit einem Eintragsdetail und Demo-Daten",
+        ? "Photorealistic iPhone mockup showing an item in Open Inventory"
+        : "Freigestelltes, fotorealistisches iPhone mit der Open-Inventory-Eintragsansicht",
     },
   ];
 
@@ -149,19 +149,15 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
             key={capture.src}
             className={index === 1 ? "translate-y-6 sm:translate-y-10" : undefined}
           >
-            <div className="relative rounded-[clamp(1.65rem,5vw,3.25rem)] border-[clamp(4px,0.8vw,7px)] border-[#2c2d31] bg-black p-[clamp(3px,0.6vw,5px)] shadow-[0_35px_80px_rgba(0,0,0,0.38),inset_0_0_0_1px_rgba(255,255,255,0.18)]">
-              <span className="absolute -left-[9px] top-[18%] h-[11%] w-[3px] rounded-l bg-[#424349]" />
-              <span className="absolute -right-[9px] top-[24%] h-[13%] w-[3px] rounded-r bg-[#424349]" />
-              <div className="relative aspect-[1206/2622] overflow-hidden rounded-[clamp(1.25rem,4vw,2.65rem)] bg-[#f2f2f7]">
-                <Image
-                  src={capture.src}
-                  alt={capture.alt}
-                  loading="eager"
-                  fill
-                  sizes="(max-width: 639px) 45vw, (max-width: 1023px) 260px, 220px"
-                  className="object-cover"
-                />
-              </div>
+            <div className="relative aspect-[1/2.08] drop-shadow-[0_28px_28px_rgba(0,0,0,0.35)]">
+              <Image
+                src={capture.src}
+                alt={capture.alt}
+                loading="eager"
+                fill
+                sizes="(max-width: 639px) 45vw, (max-width: 1023px) 260px, 220px"
+                className="object-contain"
+              />
             </div>
             <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65 sm:text-[10px]">
               {capture.label}
@@ -226,15 +222,24 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
               key={capture.src}
               className="mx-auto w-full max-w-[260px]"
             >
-              <div className="overflow-hidden rounded-[28px] border-[5px] border-[#17181d] bg-[#17181d] p-1 shadow-[0_18px_48px_rgba(28,25,45,0.17)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_64px_rgba(28,25,45,0.24)] sm:rounded-[36px] sm:border-[6px]">
+              <div className="relative aspect-[388/800] drop-shadow-[0_18px_24px_rgba(28,25,45,0.17)]">
                 <Image
-                  src={capture.src}
-                  width={1206}
-                  height={2622}
-                  sizes="(max-width: 639px) 260px, 30vw"
-                  alt={capture.alt}
-                  className="h-auto w-full rounded-[20px] sm:rounded-[27px]"
+                  src="/marketing/devices/iphone-16-pro-max-frame.png"
+                  alt=""
+                  aria-hidden="true"
+                  fill
+                  sizes="260px"
+                  className="object-contain"
                 />
+                <div className="absolute inset-x-[3.1%] inset-y-[1.65%] overflow-hidden rounded-[15%/7%]">
+                  <Image
+                    src={capture.src}
+                    fill
+                    sizes="(max-width: 639px) 244px, 24vw"
+                    alt={capture.alt}
+                    className="object-fill"
+                  />
+                </div>
               </div>
               <figcaption className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.13em] text-muted sm:text-[10px]">
                 {capture.label}

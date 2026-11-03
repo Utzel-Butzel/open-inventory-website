@@ -7,3 +7,14 @@
 - License stated by the provider: personal and commercial use permitted, no attribution required; modification and cropping permitted; resale or redistribution of the standalone file prohibited.
 
 Used as a device overlay with Open Inventory's own application screenshot on the website. The frame is not covered by this repository's software license. Device names and trademarks belong to their owners.
+
+## App-page cutouts
+
+`iphone-inventory-cutout-v1.webp` and `iphone-detail-cutout-v1.webp` are generated,
+photorealistic iPhone cutouts with actual alpha transparency, used in the app-page
+hero. They were created with built-in Imagegen from Open Inventory screen references
+and the homepage device photo. No hands, stands or scenery surround the devices.
+The full prompts and provenance are in `iphone-app-cutouts.prompt.txt`.
+
+The search, stock and map previews use the original app screenshots inside the
+licensed photographic frame above, preserving the interface without generation.

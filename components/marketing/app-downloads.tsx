@@ -14,16 +14,16 @@ export function AppDownloads({ locale, dark = false }: { locale: MarketingLocale
           <dt className="font-semibold">Android <span className={`ml-2 text-xs font-normal ${muted}`}>{de ? "Vorabversion" : "Preview"}</span></dt>
           <dd className={`mt-2 leading-6 ${muted}`}>
             <p>{de ? "Ab Android 8.0. Als APK verfügbar; Google Play folgt." : "Android 8.0 or later. Available as an APK; Google Play release to follow."}</p>
-            <a href={androidApkUrl} className={`mt-2 inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4 ${dark ? "text-brand-inverse" : "text-brand"}`}><Download className="size-4" aria-hidden="true" />{de ? "Android-APK herunterladen" : "Download Android APK"}</a>
+            <a href={androidApkUrl} target="_blank" rel="noopener noreferrer" className={`mt-2 inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4 ${dark ? "text-brand-inverse" : "text-brand"}`}><Download className="size-4" aria-hidden="true" />{de ? "Android-APK herunterladen" : "Download Android APK"}</a>
           </dd>
         </div>
         <div>
           <dt className="font-semibold">iPhone <span className={`ml-2 text-xs font-normal ${muted}`}>{de ? "Im App Store verfügbar" : "Available on the App Store"}</span></dt>
           <dd className={`mt-2 leading-6 ${muted}`}>
             <p>{de ? "Ab iOS 17. Jetzt im App Store herunterladen und mit deiner eigenen Instanz verbinden." : "iOS 17 or later. Download from the App Store and connect to your own instance."}</p>
-            <a href={appStoreUrl} className={`mt-2 inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4 ${dark ? "text-brand-inverse" : "text-brand"}`}><Download className="size-4" aria-hidden="true" />{de ? "iPhone-App im App Store laden" : "Download iPhone app on the App Store"}</a>
+            <a href={appStoreUrl} target="_blank" rel="noopener noreferrer" className={`mt-2 inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4 ${dark ? "text-brand-inverse" : "text-brand"}`}><Download className="size-4" aria-hidden="true" />{de ? "iPhone-App im App Store laden" : "Download iPhone app on the App Store"}</a>
             <br />
-            <a href="https://github.com/Utzel-Butzel/inventory/tree/main/ios/Inventory" className="mt-2 inline-flex min-h-11 items-center underline underline-offset-4">{de ? "iPhone-App auf GitHub" : "iPhone app on GitHub"}</a>
+            <a href="https://github.com/Utzel-Butzel/inventory/tree/main/ios/Inventory" target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline underline-offset-4">{de ? "iPhone-App auf GitHub" : "iPhone app on GitHub"}</a>
           </dd>
         </div>
       </dl>

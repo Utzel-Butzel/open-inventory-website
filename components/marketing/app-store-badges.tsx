@@ -7,7 +7,7 @@ export function AppStoreBadges({ locale }: { locale: MarketingLocale }) {
   const de = locale === "de";
   return (
     <div className="mt-7 flex flex-wrap items-center gap-4" aria-label={de ? "Apps herunterladen" : "Download apps"}>
-      <a href={appStoreUrl} className="shrink-0" aria-label={de ? "Laden im App Store" : "Download on the App Store"}>
+      <a href={appStoreUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" aria-label={de ? "Laden im App Store" : "Download on the App Store"}>
         <Image
           src={`/marketing/store-badges/app-store-${locale}.svg`}
           alt={de ? "Laden im App Store" : "Download on the App Store"}

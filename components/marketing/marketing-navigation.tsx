@@ -13,7 +13,7 @@ import {
 type DropdownKey = "features" | "use-cases";
 
 const desktopNavigationItemClassName =
-  "inline-flex h-10 items-center whitespace-nowrap rounded-md px-1 text-base font-medium transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "site-control inline-flex items-center whitespace-nowrap rounded-md px-1 text-base font-medium transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const mobileNavigationItemClassName =
   "flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-base font-medium text-muted-strong transition hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border";
@@ -525,7 +525,7 @@ export function MobileMarketingNavigation({
           setIsOpen((current) => !current);
           if (isOpen) setExpandedAccordion(null);
         }}
-        className="grid size-10 place-items-center rounded-md border border-border text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="site-control grid w-10 place-items-center rounded-md border border-border text-foreground transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-border focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {isOpen ? (
           <X className="size-5" aria-hidden="true" />

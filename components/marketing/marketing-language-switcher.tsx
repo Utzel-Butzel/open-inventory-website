@@ -38,7 +38,7 @@ export function MarketingLanguageSwitcher({
 
   return (
     <div
-      className={`inline-flex h-9 items-center gap-0.5 rounded-md p-0.5 text-[11px] font-medium uppercase tracking-[0.04em] ${
+      className={`site-control inline-flex items-center gap-0.5 rounded-md text-[11px] font-medium uppercase tracking-[0.04em] ${
         inverse
           ? "text-white/70"
           : "text-muted"
@@ -55,7 +55,7 @@ export function MarketingLanguageSwitcher({
           title={item === "de" ? "Deutsch" : "English"}
           lang={item}
           aria-current={locale === item ? "page" : undefined}
-          className={`grid h-8 min-w-8 place-items-center rounded px-1.5 transition-colors ${
+          className={`grid h-full min-w-8 place-items-center rounded px-1.5 transition-colors ${
             locale === item
               ? inverse
                 ? "bg-white text-[#111216]"

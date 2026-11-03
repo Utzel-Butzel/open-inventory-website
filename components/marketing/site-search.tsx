@@ -114,7 +114,7 @@ export function SiteSearch({ locale }: { locale: MarketingLocale }) {
   const total = (displayed?.website.length ?? 0) + (displayed?.documentation.length ?? 0);
 
   return <>
-    <button type="button" className={styles.trigger} onClick={showSearch} aria-label={title} title={`${title} (Ctrl/⌘ K)`} aria-haspopup="dialog">
+    <button type="button" className={`site-control ${styles.trigger}`} onClick={showSearch} aria-label={title} title={`${title} (Ctrl/⌘ K)`} aria-haspopup="dialog">
       <Search aria-hidden="true" /><span>{de ? "Suche" : "Search"}</span>
     </button>
     <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId} onClose={() => setOpen(false)} onClick={(event) => {

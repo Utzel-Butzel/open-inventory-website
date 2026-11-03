@@ -1,4 +1,4 @@
-.trigger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 8px; border: 1px solid var(--color-border); border-radius: 7px; color: var(--color-muted-strong); font-size: 15px; font-weight: 500; }
+.trigger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding-inline: 8px; border: 1px solid var(--color-border); border-radius: 7px; color: var(--color-muted-strong); font-size: 15px; font-weight: 500; }
 .trigger:hover { background: var(--color-surface-muted); color: var(--color-foreground); }
 .trigger svg { width: 18px; height: 18px; flex-shrink: 0; }
 .dialog { position: fixed; inset: 0; width: min(680px, calc(100% - 32px)); max-width: none; max-height: min(760px, calc(100dvh - 48px)); margin: auto; padding: 0; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); color: var(--color-foreground); box-shadow: 0 24px 80px rgb(0 0 0 / .24); }

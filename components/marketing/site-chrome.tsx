@@ -85,16 +85,16 @@ export async function MarketingHeader() {
           <SiteSearch locale={locale} />
           <div className="hidden xl:block"><MarketingLanguageSwitcher locale={locale} /></div>
           <ThemeToggle
-            className="size-10"
+            className="site-control w-10"
             lightLabel={copy.lightTheme}
             darkLabel={copy.darkTheme}
             pendingLabel={copy.toggleTheme}
           />
           <div className="hidden items-center gap-2 xl:flex">
-            <a href={publicDemoUrl} className="site-button site-button-primary !min-h-10 !px-3 !text-sm">
+            <a href={publicDemoUrl} className="site-button site-button-primary site-control !px-3 !text-sm">
               {copy.openApp}<ArrowUpRight className="size-3.5" aria-hidden="true" />
             </a>
-            <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary !min-h-10 !px-3 !text-sm">
+            <a href={githubUrl} target="_blank" rel="noreferrer" className="site-button site-button-secondary site-control !px-3 !text-sm">
               <Github aria-hidden="true" />GitHub
             </a>
           </div>

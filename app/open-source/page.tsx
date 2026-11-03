@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 
 import { FounderStory } from "@/components/marketing/founder-story";
-import { CopyInstallCommand } from "@/components/marketing/copy-install-command";
 import {
   MarketingFooter,
   MarketingHeader,
@@ -39,11 +38,6 @@ import {
 import { getMarketingLocale } from "@/lib/marketing-locale";
 
 const githubUrl = "https://github.com/Utzel-Butzel/inventory";
-const quickStartCommand = `git clone ${githubUrl}.git
-cd inventory
-./scripts/install.sh`;
-const dokployDeployUrl = `${githubUrl}/tree/main/deploy/dokploy`;
-const coolifyDeployUrl = `${githubUrl}/tree/main/deploy/coolify`;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
@@ -408,112 +402,6 @@ function EnglishOpenSourcePage() {
           </div>
         </section>
 
-        <section id="docker" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid items-center gap-14 lg:grid-cols-[0.82fr_1.18fr]">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Docker, Dokploy and Coolify
-                </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">
-                  Three direct routes to your own stack.
-                </h2>
-                <p className="mt-6 text-[16px] leading-7 text-muted">
-                  On a Docker host, the install script handles secrets, the
-                  initial account and the Compose startup. Equivalent,
-                  catalog-ready import templates are available for Dokploy and
-                  Coolify.
-                </p>
-                <div className="mt-7 space-y-3">
-                  {[
-                    "PostgreSQL, migrations, health checks and persistent volumes are included",
-                    "The install script generates secrets and the bootstrap password automatically",
-                    "The production process runs as an unprivileged user inside the container",
-                    "Back up PostgreSQL and uploads together, on a regular schedule",
-                  ].map((item) => (
-                    <p key={item} className="flex items-start gap-2.5 text-sm leading-6 text-muted">
-                      <Check className="mt-1 size-3.5 shrink-0 text-success" strokeWidth={2.6} aria-hidden="true" />
-                      {item}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#17181d] shadow-[0_26px_70px_rgba(24,20,38,0.22)]">
-                <div className="flex h-12 items-center border-b border-white/10 px-4">
-                  <div className="flex gap-1.5">
-                    <span className="size-2 rounded-full bg-[#ff6a64]" />
-                    <span className="size-2 rounded-full bg-[#f7c84d]" />
-                    <span className="size-2 rounded-full bg-[#67d68c]" />
-                  </div>
-                  <span className="ml-3 font-mono text-[9px] text-white/65">Docker quick start</span>
-                  <div className="ml-auto">
-                    <CopyInstallCommand
-                      command={quickStartCommand}
-                      ariaLabel="Copy installation command"
-                      copyLabel="Copy"
-                      copiedLabel="Copied"
-                    />
-                  </div>
-                </div>
-                <pre className="overflow-x-auto p-5 font-mono text-[12px] leading-7 text-white/72 sm:p-7">
-                  <code>
-                    <span className="text-brand-inverse">$ </span>
-                    git clone {githubUrl}.git{"\n"}
-                    <span className="text-brand-inverse">$ </span>
-                    cd inventory{"\n"}
-                    <span className="text-brand-inverse">$ </span>
-                    ./scripts/install.sh
-                  </code>
-                </pre>
-                <p className="border-t border-white/10 px-5 py-3 text-[9px] leading-5 text-white/65">
-                  The terminal prints the admin email and the generated
-                  bootstrap password. After the first sign-in, change the
-                  password under Settings → Users.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {[
-                {
-                  title: "Import into Dokploy once",
-                  copy: "The prepared template includes the application, PostgreSQL, persistent uploads and a health check, and is ready for catalog use.",
-                  href: dokployDeployUrl,
-                  label: "Open the Dokploy directory",
-                },
-                {
-                  title: "Import into Coolify once",
-                  copy: "The equivalent service definition uses the same application, database and storage model and is ready for catalog use.",
-                  href: coolifyDeployUrl,
-                  label: "Open the Coolify directory",
-                },
-              ].map((option) => (
-                <article key={option.title} className="rounded-2xl border border-border bg-surface p-6">
-                  <Container className="size-5 text-brand" aria-hidden="true" />
-                  <h3 className="mt-6 text-lg font-semibold tracking-[-0.03em]">{option.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{option.copy}</p>
-                  <a href={option.href} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-brand transition hover:text-brand-hover">
-                    {option.label}
-                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                  </a>
-                </article>
-              ))}
-            </div>
-
-            <div className="mt-5 flex items-start gap-3 rounded-2xl border border-success-border bg-success-soft p-4 text-[13px] leading-6 text-success">
-              <KeyRound className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              The default email for the Docker quick start is
-              <code className="font-mono text-[12px]">admin@inventory.local</code>.
-              Dokploy and Coolify store the generated password as a secret in
-              their environment view. Open Inventory hashes the bootstrap value
-              before the server starts and removes the cleartext value from the
-              running process. Change the password after the first sign-in; the
-              bootstrap account cannot replace an existing account.
-            </div>
-          </div>
-        </section>
-
         <section className="border-y border-border bg-[#17181d] py-20 text-white sm:py-28">
           <div className="site-shell grid gap-14 lg:grid-cols-[0.78fr_1.22fr]">
             <div>
@@ -784,111 +672,6 @@ export default async function OpenSourcePage() {
               Die Open-Source-Dokumentation benennt diese Grenzen. Für deinen
               Betrieb bleiben Datenschutzprüfung, Secrets, TLS, Backups,
               Updates und die Auswahl vertrauenswürdiger Provider bei dir.
-            </div>
-          </div>
-        </section>
-
-        <section id="docker" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="site-shell">
-            <div className="grid items-center gap-14 lg:grid-cols-[0.82fr_1.18fr]">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-                  Docker, Dokploy & Coolify
-                </p>
-                <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">
-                  Drei einfache Wege zum eigenen Stack.
-                </h2>
-                <p className="mt-6 text-[16px] leading-7 text-muted">
-                  Auf einem Docker-Host übernimmt das Installationsskript
-                  Secrets, Erstzugang und Compose-Start. Für Dokploy und Coolify
-                  liegen gleichwertige, katalogfertige Importvorlagen bereit.
-                </p>
-                <div className="mt-7 space-y-3">
-                  {[
-                    "PostgreSQL, Migrationen, Healthcheck und persistente Volumes sind enthalten",
-                    "Das Installationsskript erzeugt Secrets und das Bootstrap-Passwort automatisch",
-                    "Der Produktionsprozess läuft im Container als unprivilegierter Benutzer",
-                    "PostgreSQL und Uploads gemeinsam und regelmäßig sichern",
-                  ].map((item) => (
-                    <p key={item} className="flex items-start gap-2.5 text-sm leading-6 text-muted">
-                      <Check className="mt-1 size-3.5 shrink-0 text-success" strokeWidth={2.6} aria-hidden="true" />
-                      {item}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#17181d] shadow-[0_26px_70px_rgba(24,20,38,0.22)]">
-                <div className="flex h-12 items-center border-b border-white/10 px-4">
-                  <div className="flex gap-1.5">
-                    <span className="size-2 rounded-full bg-[#ff6a64]" />
-                    <span className="size-2 rounded-full bg-[#f7c84d]" />
-                    <span className="size-2 rounded-full bg-[#67d68c]" />
-                  </div>
-                  <span className="ml-3 font-mono text-[9px] text-white/65">Docker-Schnellstart</span>
-                  <div className="ml-auto">
-                    <CopyInstallCommand
-                      command={quickStartCommand}
-                      ariaLabel="Installationsbefehl kopieren"
-                      copyLabel="Kopieren"
-                      copiedLabel="Kopiert"
-                    />
-                  </div>
-                </div>
-                <pre className="overflow-x-auto p-5 font-mono text-[12px] leading-7 text-white/72 sm:p-7">
-                  <code>
-                    <span className="text-brand-inverse">$ </span>
-                    git clone {githubUrl}.git{"\n"}
-                    <span className="text-brand-inverse">$ </span>
-                    cd inventory{"\n"}
-                    <span className="text-brand-inverse">$ </span>
-                    ./scripts/install.sh
-                  </code>
-                </pre>
-                <p className="border-t border-white/10 px-5 py-3 text-[9px] leading-5 text-white/65">
-                  Das Terminal zeigt die Admin-E-Mail und das automatisch
-                  erzeugte Bootstrap-Passwort. Nach dem ersten Login das
-                  Passwort unter Einstellungen → Benutzer ändern.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {[
-                {
-                  title: "Dokploy einmal importieren",
-                  copy: "Die vorbereitete Vorlage enthält Anwendung, PostgreSQL, persistente Uploads und Healthcheck und ist katalogfertig.",
-                  href: dokployDeployUrl,
-                  label: "Zum Dokploy-Verzeichnis",
-                },
-                {
-                  title: "Coolify einmal importieren",
-                  copy: "Die gleichwertige Service-Definition enthält dasselbe App-, Datenbank- und Speichermodell und ist katalogfertig.",
-                  href: coolifyDeployUrl,
-                  label: "Zum Coolify-Verzeichnis",
-                },
-              ].map((option) => (
-                <article key={option.title} className="rounded-2xl border border-border bg-surface p-6">
-                  <Container className="size-5 text-brand" aria-hidden="true" />
-                  <h3 className="mt-6 text-lg font-semibold tracking-[-0.03em]">{option.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{option.copy}</p>
-                  <a href={option.href} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-brand transition hover:text-brand-hover">
-                    {option.label}
-                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                  </a>
-                </article>
-              ))}
-            </div>
-
-            <div className="mt-5 flex items-start gap-3 rounded-2xl border border-success-border bg-success-soft p-4 text-[13px] leading-6 text-success">
-              <KeyRound className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              Beim Docker-Schnellstart lautet die Standard-E-Mail
-              <code className="font-mono text-[12px]">admin@inventory.local</code>.
-              Dokploy und Coolify legen das generierte Passwort als Secret in
-              ihrer Umgebungsansicht ab. Open Inventory hasht den Bootstrap-Wert
-              vor dem Serverstart und entfernt den Klartext aus dem laufenden
-              Prozess. Nach dem ersten Login das Passwort ändern; der
-              Bootstrap-Zugang kann ein vorhandenes Konto nicht ersetzen.
             </div>
           </div>
         </section>

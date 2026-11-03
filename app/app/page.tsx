@@ -388,17 +388,17 @@ export default async function AppPage() {
               {[
                 {
                   icon: Smartphone,
-                  title: isEnglish ? "Made for the iPhone" : "Für das iPhone gemacht",
+                  title: isEnglish ? "Made for your phone" : "Für das Telefon gemacht",
                   copy: isEnglish
-                    ? "Use the iPhone camera to photograph equipment and scan labels directly in the app."
-                    : "Nutze die iPhone-Kamera, um Geräte aufzunehmen und Etiketten direkt in der App zu scannen.",
+                    ? "Use your phone camera to photograph equipment and scan labels directly in the app."
+                    : "Nutze die Kamera deines Telefons, um Geräte aufzunehmen und Etiketten direkt in der App zu scannen.",
                 },
                 {
                   icon: Link2,
                   title: isEnglish ? "One shared inventory" : "Ein gemeinsames Inventar",
                   copy: isEnglish
-                    ? "The iPhone app and web application use the same records, images, permissions, and stock history."
-                    : "iPhone-App und Webanwendung nutzen dieselben Einträge, Bilder, Berechtigungen und Bestandsverläufe.",
+                    ? "The mobile app and web application use the same records, images, permissions, and stock history."
+                    : "App auf dem Telefon und Webanwendung nutzen dieselben Einträge, Bilder, Berechtigungen und Bestandsverläufe.",
                 },
                 {
                   icon: RefreshCw,

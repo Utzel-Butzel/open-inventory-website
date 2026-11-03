@@ -229,9 +229,10 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
                   aria-hidden="true"
                   fill
                   sizes="260px"
-                  className="object-contain"
+                  className="pointer-events-none z-10 object-contain"
                 />
-                <div className="absolute inset-x-[3.1%] inset-y-[1.65%] overflow-hidden rounded-[15%/7%]">
+                {/* Match the frame's 388×800 source: screen inset 16×13 px, corner radius 59 px. */}
+                <div className="absolute inset-x-[4.1237%] inset-y-[1.625%] overflow-hidden rounded-[16.573%/7.623%]">
                   <Image
                     src={capture.src}
                     fill

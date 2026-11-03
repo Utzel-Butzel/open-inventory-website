@@ -5,7 +5,7 @@ import { englishArticles } from "@/app/blog/articles.en";
 import { getEnglishFeatureCopy } from "@/components/marketing/english-feature-pages";
 import { englishUseCases } from "@/components/marketing/english-use-case-pages";
 import { marketingHref, type MarketingLocale } from "@/lib/marketing-i18n";
-import type { SearchDocument } from "@/lib/site-search";
+import { searchFallbackImage, type SearchDocument } from "@/lib/site-search";
 
 // Index the same editorial content used by the pages, including their detailed sections.
 function textContent(value: unknown): string {
@@ -42,13 +42,20 @@ const overviewPages = {
 
 export function websiteSearchDocuments(locale: MarketingLocale): SearchDocument[] {
   const href = (path: string) => marketingHref(locale, path);
+  const overviewImages: Record<string, string> = {
+    "/": "/og.png", "/features": "/og.png", "/app": "/marketing/ios-app-icon-current.png",
+    "/use-cases": "/marketing/photography/workshop-team.webp",
+    "/open-source": "/marketing/photography/server-rack.webp",
+    "/docs": "/marketing/photography/server-rack.webp",
+    "/blog": articles[0].cover.src,
+  };
   return [
-    ...overviewPages[locale].map(([url, title, description]) => ({ url: href(url), title, description, body: description })),
+    ...overviewPages[locale].map(([url, title, description]) => ({ url: href(url), title, description, body: description, image: overviewImages[url] ?? searchFallbackImage(url) })),
     ...featureGroups.map((group) => {
       const content = locale === "de" ? group : getEnglishFeatureCopy(group.slug)!;
-      return { url: href(`/features/${group.slug}`), title: content.title, description: content.description, body: textContent(content) };
+      return { url: href(`/features/${group.slug}`), title: content.title, description: content.description, body: textContent(content), image: group.screenshot.src };
     }),
-    ...(locale === "de" ? useCases : englishUseCases).map((item) => ({ url: href(`/use-cases/${item.slug}`), title: item.name, description: item.description, body: textContent(item) })),
-    ...(locale === "de" ? articles : englishArticles).map((item) => ({ url: href(`/blog/${item.slug}`), title: item.title, description: item.description, body: textContent(item) })),
+    ...(locale === "de" ? useCases : englishUseCases).map((item) => ({ url: href(`/use-cases/${item.slug}`), title: item.name, description: item.description, body: textContent(item), image: item.image ?? "/og.png" })),
+    ...(locale === "de" ? articles : englishArticles).map((item) => ({ url: href(`/blog/${item.slug}`), title: item.title, description: item.description, body: textContent(item), image: item.cover.src })),
   ];
 }

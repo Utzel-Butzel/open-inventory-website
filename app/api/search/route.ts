@@ -1,4 +1,4 @@
-import { documentationQueries, documentationResults, searchDocuments } from "@/lib/site-search";
+import { documentationQueries, documentationResults, searchDocuments, searchFallbackImage } from "@/lib/site-search";
 import { websiteSearchDocuments } from "@/lib/site-search-content";
 
 export async function GET(request: Request) {
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const available = responses.filter((response) => response.status === "fulfilled");
   return Response.json({
     website,
-    documentation: documentationResults(available.map((response) => response.value)),
+    documentation: documentationResults(available.map((response) => response.value), query).map((result) => ({ ...result, image: searchFallbackImage(result.url) })),
     documentationUnavailable: available.length === 0,
   }, { headers: { "Cache-Control": "no-store" } });
 }

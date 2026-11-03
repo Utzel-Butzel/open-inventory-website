@@ -200,6 +200,8 @@ export async function MarketingFooter() {
               <a href={`${githubUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="w-fit transition-colors hover:text-foreground">{copy.license}</a>
               <Link href={href("/blog")} className="w-fit transition-colors hover:text-foreground">Blog</Link>
               <a href={appHref("/login")} className="w-fit transition-colors hover:text-foreground">{copy.openApp}</a>
+              <Link href={href("/app/privacy")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "Datenschutz" : "Privacy"}</Link>
+              <Link href={href("/app/support")} className="w-fit transition-colors hover:text-foreground">{locale === "de" ? "App-Hilfe" : "App support"}</Link>
               <Link href={href("/impressum")} className="w-fit transition-colors hover:text-foreground">{copy.imprint}</Link>
             </div>
           </div>

@@ -34,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocale();
   const title = locale === "de" ? "Open Inventory Apps" : "Open Inventory apps";
   const description = locale === "de"
-    ? "Mobile Apps für Open Inventory: Android-Vorabversion herunterladen, iPhone-Funktionen ansehen und Verfügbarkeit prüfen."
-    : "Mobile apps for Open Inventory: download the Android preview, explore iPhone features and check availability.";
+    ? "Mobile Apps für Open Inventory: Android-Vorabversion herunterladen, App-Funktionen ansehen und Verfügbarkeit prüfen."
+    : "Mobile apps for Open Inventory: download the Android preview, explore mobile app features and check availability.";
   return {
     title: { absolute: title },
     description,
@@ -169,11 +169,6 @@ function IPhoneCaptures({ locale }: { locale: "de" | "en" }) {
           </div>
         ))}
       </div>
-      <figcaption className="mt-10 text-center text-[10px] font-medium text-white/65 sm:mt-14">
-        {isEnglish
-          ? "iPhone app · Demo data, German interface"
-          : "iPhone-App · Beispieldaten"}
-      </figcaption>
     </figure>
   );
 }
@@ -210,7 +205,7 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
         <div className="grid gap-7 lg:grid-cols-[1fr_0.68fr] lg:items-end">
           <div className="max-w-4xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
-              {isEnglish ? "On the iPhone" : "Auf dem iPhone"}
+              {isEnglish ? "On the phone" : "Auf dem Telefon"}
             </p>
             <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
               {isEnglish
@@ -220,8 +215,8 @@ function NativeWorkflowCaptures({ locale }: { locale: "de" | "en" }) {
           </div>
           <p className="text-[15px] leading-7 text-muted">
             {isEnglish
-              ? "Find a record, check stock and look up a location. These views show the iPhone app with demo data."
-              : "Einen Eintrag finden, den Bestand prüfen und den Standort nachsehen. Diese Ansichten zeigen die iPhone-App mit Beispieldaten."}
+              ? "Find a record, check stock and look up a location. These views show the mobile app with demo data and a German interface."
+              : "Einen Eintrag finden, den Bestand prüfen und den Standort nachsehen. Diese Ansichten zeigen die App auf dem Telefon."}
           </p>
         </div>
 
@@ -268,7 +263,7 @@ export default async function AppPage() {
           icon: Smartphone,
           number: "01",
           title: "Open the app",
-          copy: "Start Open Inventory on your iPhone and allow camera access when prompted.",
+          copy: "Start Open Inventory on your phone and allow camera access when prompted.",
         },
         {
           icon: Link2,
@@ -294,7 +289,7 @@ export default async function AppPage() {
           icon: Smartphone,
           number: "01",
           title: "App öffnen",
-          copy: "Starte Open Inventory auf deinem iPhone und erlaube beim ersten Mal den Kamerazugriff.",
+          copy: "Starte Open Inventory auf deinem Telefon und erlaube beim ersten Mal den Kamerazugriff.",
         },
         {
           icon: Link2,
@@ -343,7 +338,7 @@ export default async function AppPage() {
                     {isEnglish ? "Open Inventory apps" : "Open Inventory Apps"}
                   </p>
                   <p className="mt-2 text-sm text-white/65">
-                    {isEnglish ? "iPhone and Android" : "iPhone und Android"}
+                    {isEnglish ? "iOS and Android" : "iOS und Android"}
                   </p>
                 </div>
               </div>
@@ -426,13 +421,13 @@ export default async function AppPage() {
               </p>
               <h2 className="mt-4 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[60px]">
                 {isEnglish
-                  ? "What you can do on the iPhone"
-                  : "Was du auf dem iPhone erledigen kannst"}
+                  ? "What you can do on the phone"
+                  : "Was du auf dem Telefon erledigen kannst"}
               </h2>
               <p className="mt-6 text-[17px] leading-8 text-muted">
                 {isEnglish
-                  ? "The iPhone app uses the same records, permissions, and stock rules as the web application."
-                  : "Die iPhone-App nutzt dieselben Einträge, Berechtigungen und Bestandsregeln wie die Webanwendung."}
+                  ? "The mobile app uses the same records, permissions, and stock rules as the web application."
+                  : "Die App auf dem Telefon nutzt dieselben Einträge, Berechtigungen und Bestandsregeln wie die Webanwendung."}
               </p>
             </div>
 
@@ -510,13 +505,13 @@ export default async function AppPage() {
                 </p>
                 <h2 className="mt-4 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[56px]">
                   {isEnglish
-                    ? "Connect the iPhone app to your server"
-                    : "Die iPhone-App mit deinem Server verbinden"}
+                    ? "Connect the app on your phone to your server"
+                    : "Die App auf deinem Telefon mit deinem Server verbinden"}
                 </h2>
                 <p className="mt-6 max-w-2xl text-[16px] leading-7 text-muted">
                   {isEnglish
-                    ? "On first launch, enter the HTTPS address of your Open Inventory instance and sign in. Photos, scanning, search, stock, and rooms are then ready on your iPhone."
-                    : "Beim ersten Start trägst du einmalig die HTTPS-Adresse deiner Open-Inventory-Instanz ein und meldest dich an. Danach stehen Fotos, Scanner, Suche, Bestände und Räume direkt auf dem iPhone bereit."}
+                    ? "On first launch, enter the HTTPS address of your Open Inventory instance and sign in. Photos, scanning, search, stock, and rooms are then ready on your phone."
+                    : "Beim ersten Start trägst du einmalig die HTTPS-Adresse deiner Open-Inventory-Instanz ein und meldest dich an. Danach stehen Fotos, Scanner, Suche, Bestände und Räume direkt auf dem Telefon bereit."}
                 </p>
               </div>
 
@@ -529,8 +524,8 @@ export default async function AppPage() {
                 </p>
                 <p className="mt-2 text-sm leading-6 text-muted">
                   {isEnglish
-                    ? "The iPhone connects directly to the HTTPS address of your Open Inventory server and uses the same accounts and permissions."
-                    : "Das iPhone verbindet sich direkt mit der HTTPS-Adresse deines Open-Inventory-Servers und nutzt dieselben Konten und Berechtigungen."}
+                    ? "The phone connects directly to the HTTPS address of your Open Inventory server and uses the same accounts and permissions."
+                    : "Das Telefon verbindet sich direkt mit der HTTPS-Adresse deines Open-Inventory-Servers und nutzt dieselben Konten und Berechtigungen."}
                 </p>
               </div>
             </div>
